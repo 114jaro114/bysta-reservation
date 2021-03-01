@@ -1,0 +1,396 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+@import 'libraries'; // @import 'datepicker2';
+@import 'chat.scss';
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+#app {
+  margin: 0;
+}
+
+.md-card {
+  box-shadow: 0 0 1px -2px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
+}
+//colors
+
+.primary-color {
+  color: #007bff;
+}
+
+.secondary-color {
+  color: #000;
+}
+
+.white-color {
+  color: #fff;
+}
+// .v-sheet.v-card:not(.v-sheet--outlined) {
+//   box-shadow: unset !important;
+// }
+//tabs
+
+.theme--dark.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) {
+  color: rgb(255, 255, 255);
+}
+// .v-tabs-slider-wrapper .md-theme-default a:not(.md-button) {
+//   color: rgba(255,255,255, 0.6) !important;
+// }
+//
+// .md-theme-default a:not(.md-button):hover {
+//   color: rgba(255,255,255);
+// }
+
+.v-tabs-slider-wrapper {
+  height: 2px !important;
+}
+
+.v-slide-group__prev {
+  flex: unset !important;
+  min-width: unset !important;
+}
+//
+//media screens
+@media only screen and (max-width: 720px) {
+  .sign-controls {
+    width: 85vw;
+    text-align: center;
+    margin: auto;
+    top: 50vh;
+    right: 0 !important;
+    left: 0;
+    display: block !important;
+  }
+
+  .login-content-btn {
+    width: 100% !important;
+    height: 50px;
+    border: 1px solid #007bff;
+    background-color: #fff;
+    color: #007bff;
+    border-radius: 50px;
+    text-align: center;
+  }
+
+  .login-content-btn:hover {
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .register-content-btn {
+    width: 100% !important;
+    height: 50px;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+  }
+
+  .register-content-btn:hover {
+    border: 1px solid #007bff;
+    background-color: #fff;
+    color: #007bff;
+  }
+
+  .text {
+    display: block !important;
+  }
+
+  .content {
+    top: 20vh !important;
+  }
+}
+@media only screen and (max-width: 960px) {
+  .md-content {
+    padding: 112px 4px 70px 4px !important;
+  }
+}
+@media only screen and (max-width: 630px) {
+  .md-content {
+    padding: 112px 8px 70px 8px !important;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .sign-controls {
+    top: 45vh;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .phone-viewport {
+    display: block !important;
+  }
+
+  .v-speed-dial {
+    display: none;
+  }
+  // .v-card {
+  //   padding-bottom: 56px;
+  // }
+  .v-card-logout.v-card {
+    padding-bottom: 0;
+  }
+
+  .v-footer {
+    display: none !important;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .sign-controls {
+    top: 40vh;
+  }
+}
+@media only screen and (max-width: 350px) {
+  .sign-controls {
+    top: 35vh;
+  }
+}
+
+.menu .show-profile .md-list-item-content {
+  padding: 0 !important;
+}
+// blur effect + loader
+
+.blur-effect {
+  -webkit-filter: blur(5px);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.md-speed-dial-box-shadow {
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-color: rgb(255,255,255);
+}
+// basic settings pages
+/* Demo purposes only */
+.md-drawer {
+  width: 400px;
+  height: 100vh !important;
+}
+
+.md-speed-dial {
+  z-index: 1;
+}
+
+.md-content {
+  min-height: 90vh;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 112px 12px 43px;
+}
+
+.fixed {
+  position: fixed;
+  overflow: hidden;
+}
+
+.logo2 {
+  width: 150px;
+  float: left;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.md-toolbar .md-tabs {
+  padding-left: 0 !important;
+}
+
+.md-toolbar {
+  z-index: 5 !important;
+}
+
+.md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
+  max-width: unset !important;
+  min-width: unset !important;
+}
+
+.menu .md-list-item-content {
+  padding: 6px 0 !important;
+}
+
+.menu-list .md-button {
+  margin: 6px 0 !important;
+}
+
+.menu {
+  padding: 10px;
+}
+
+.menu .md-icon-button {
+  margin: 0 !important;
+}
+
+.md-card-content:last-of-type {
+  padding-bottom: 16px !important;
+}
+/* rate */
+.rating {
+  float: left;
+  transform: rotateY(180deg);
+  display: flex;
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  display: block;
+  cursor: pointer;
+  width: 50px;
+}
+
+.rating label:before {
+  content: '\f005';
+  color: #e1e6ea;
+  font-family: "Font Awesome 5 Free";
+  /* font-family: "FontAwesome"; */
+  position: relative;
+  display: block;
+  font-size: 50px;
+  font-weight: 900;
+}
+
+.rating label::after {
+  content: '\f005';
+  color: #1f9cff;
+  font-family: "Font Awesome 5 Free";
+  /* font-family: "FontAwesome"; */
+  position: absolute;
+  display: block;
+  font-size: 50px;
+  top: 0;
+  opacity: 0;
+  transition: 0.5s;
+  font-weight: 900;
+  /* text-shadow: 0 2px 5px rgba(0,0,0,.5); */
+}
+
+.rating input:checked~label::after,
+.rating label:hover::after,
+.rating label:hover~label::after {
+  opacity: 1;
+}
+//bars
+
+.bar-5 {
+  height: 18px;
+  background-color: #4CAF50;
+}
+
+.bar-4 {
+  width: 30%;
+  height: 18px;
+  background-color: #2196F3;
+}
+
+.bar-3 {
+  width: 10%;
+  height: 18px;
+  background-color: #00bcd4;
+}
+
+.bar-2 {
+  width: 4%;
+  height: 18px;
+  background-color: #ff9800;
+}
+
+.bar-1 {
+  width: 15%;
+  height: 18px;
+  background-color: #f44336;
+}
+
+.side {
+  float: left;
+  width: 15%;
+  margin-top: 7px;
+}
+
+.side-top {
+  float: left;
+  width: 15%;
+}
+
+.middle {
+  margin-top: 7px;
+  float: left;
+  width: 70%;
+}
+
+.middle-top {
+  float: left;
+  width: 70%;
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* The bar container */
+.bar-container {
+  width: 100%;
+  background-color: #f1f1f1;
+  text-align: center;
+  color: white;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 50px;
+}
+
+.star2 {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+}
+
+.star3 {
+  color: #e1e6ea;
+}
+
+.star-under {
+  color: #e1e6ea;
+}
+
+.star-over {
+  color: #1f9cff;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.close {
+  margin-right: 5px;
+}
+
+.log-reg-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.close:focus,
+.col-12:focus {
+  outline: none;
+}
+
+.offset-2 {
+  margin: 0 !important;
+}

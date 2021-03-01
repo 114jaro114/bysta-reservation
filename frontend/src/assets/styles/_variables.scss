@@ -1,0 +1,51 @@
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+// $font-family-sans-serif: 'Nunito', sans-serif;
+// $font-size-base: 0.9rem;
+// $line-height-base: 1.6;
+//
+// // Colors
+// $blue: #3490dc;
+// $indigo: #6574cd;
+// $purple: #9561e2;
+// $pink: #f66d9b;
+// $red: #e3342f;
+// $orange: #f6993f;
+// $yellow: #ffed4a;
+// $green: #38c172;
+// $teal: #4dc0b5;
+// $cyan: #6cb2eb;
+// $black: #000;
+// $white: #fff
+// Variables
+//
+// // Variables should follow the `$component-state-property-size` formula for
+// // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+/* =============================================================
+ * VARIABLES
+ * ============================================================*/
+
+$white: #fff;
+$black: #000;
+$gray: #424b53;
+$primary-text-color: #35343d;
+$lightest-gray: #f3f5f8;
+$primary-color: #00ca9d;
+$primary-color: $primary-color;
+$medium-gray: #999999;
+$light-gray: #d7d9e2;
+$dark-gray: #2d3047;
+$font-16: 16px;
+$font-14: 14px;
+$font-12: 12px;
+/* =============================================================
+  * RESPONSIVE LAYOUT HELPERS
+  * ============================================================*/
+
+$tablet: "(min-width: 480px) and (max-width: 767px)";
+$phone: "(max-width: 479px)";
+$desktop: "(min-width: 768px)";
+$up-to-tablet: "(max-width: 767px)";
+$extra-small-screen: "(max-width: 23em)";

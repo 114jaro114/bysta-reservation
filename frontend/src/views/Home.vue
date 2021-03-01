@@ -1,0 +1,195 @@
+<template>
+<div class="home w-100 h-100 text-uppercase secondary-color">
+  <div class="text-center">
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <v-card class="v-content">
+    <v-toolbar color="white" elevation="2" class="mb-3">
+      <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title class="position-absolute" style="right:14px">
+        <span class="md-title font-weight-bold">
+          <img class="logo2 align-middle" src="/img/logo2.png">
+        </span>
+      </v-toolbar-title>
+      <template v-slot:extension>
+        <v-tabs color="info" class="tabs" grow v-model="activeTab">
+          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
+        </v-tabs>
+      </template>
+    </v-toolbar>
+    <v-tabs-items grow v-model="activeTab" @change="updateRouter($event)">
+      <v-tab-item light v-for="tab in tabs" :key="tab.id" :value="tab.route">
+        <router-view />
+      </v-tab-item>
+      <NavigationDrawer :drawer="drawer" />
+    </v-tabs-items>
+  </v-card>
+  <SpeedDial />
+  <BottomNavigation />
+  <Footer />
+</div>
+</template>
+<script>
+// import axios from 'axios';
+import Footer from "../components/Footer.vue";
+import SpeedDial from "@/components/SpeedDial.vue";
+import NavigationDrawer from "@/components/NavigationDrawer.vue";
+import BottomNavigation from "@/components/BottomNavigation.vue";
+export default {
+  name: "Home",
+  components: {
+    Footer,
+    SpeedDial,
+    NavigationDrawer,
+    BottomNavigation
+  },
+  props: ['drawerNew'],
+  data() {
+    return {
+      username: localStorage.getItem("username"),
+      drawer: false,
+      tab: null,
+      activeTab: '/home',
+      overlay: false,
+      tabs: [{
+        id: 1,
+        name: 'Domov',
+        route: '/home'
+      }, {
+        id: 2,
+        name: 'Lokalita',
+        route: '/home/lokalita'
+      }, {
+        id: 3,
+        name: 'Vybavenie',
+        route: '/home/vybavenie'
+      }, {
+        id: 4,
+        name: 'Recenzie',
+        route: '/home/recenzie'
+      }, ],
+    }
+  },
+  updated() {
+    this.drawer = this.drawerNew;
+  },
+  // computed: {
+  //   test2Function() {
+  //     console.log(this.test2Test2);
+  //     return this.test2Test2;
+  //   }
+  // },
+  methods: {
+    updateRouter(tab) {
+      this.$router.push(tab)
+    },
+    // logout() {
+    //   const api = 'http://127.0.0.1:8000/api/auth/logout';
+    //   const config = {
+    //     headers: {
+    //       Accept: "application/json",
+    //       Authorization: "Bearer " + localStorage.getItem("authToken"),
+    //     },
+    //   };
+    //   axios.post(api, null, config).then((res) => {
+    //     console.log(res);
+    //     localStorage.removeItem("username");
+    //     localStorage.removeItem("authToken");
+    //     this.$router.push("/");
+    //   }).catch(e => {
+    //     console.log(e);
+    //   })
+    // },
+  }
+}
+</script>
+<style type="scss">
+.page-container {
+  min-height: 300px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(#000, .12);
+}
+
+.md-toolbar {
+  z-index: 5 !important;
+}
+
+.border-bottom {
+  border-width: 2px;
+}
+
+.top-video {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  top: 0;
+  background-color: #ff8c1a;
+  z-index: 50;
+  padding-top: 2px;
+}
+
+.rating-video {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  top: 0;
+  right: 0;
+  background-color: #2e3034;
+  z-index: 50;
+  padding-top: 2px;
+}
+
+.fa-heart {
+  position: relative;
+  top: 2px;
+}
+
+.md-card-media .play-video {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  color: rgb(255, 140, 26);
+}
+
+.phone-viewport {
+  display: none;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.md-speed-dial {
+  display: block;
+  position: fixed;
+  bottom: 50px;
+  right: -16px;
+}
+
+.menu-list .md-ripple {
+  justify-content: unset !important;
+}
+
+.menu-list-position {
+  width: 40px;
+}
+
+.menu .edit-profile .md-list-item-content {
+  padding: 0px !important;
+}
+
+.tab-disabled-opacity {
+  opacity: 0 !important;
+}
+
+#tab-disabled-opacity {
+  opacity: 0 !important;
+}
+</style>
