@@ -268,6 +268,13 @@ export default {
         color: "orange",
         username: this.user,
       };
+      this.$store.dispatch('reservationData', {
+        event_name: "rezervácia",
+        start_date: moment(this.range.start).format('YYYY-MM-DDTHH:mm:SS'),
+        end_date: moment(this.range.end).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS'),
+        color: "orange",
+        username: this.user,
+      });
       this.$store.dispatch('successReservation', {
         success: true
       });

@@ -105,6 +105,7 @@ Route::post('/friendships/acceptFriendshipRequest', [FriendshipsController::clas
 Route::post('/friendships/removeFromFriendshipList', [FriendshipsController::class, 'removeFromFriendshipList']);
 // contact form
 Route::post('/contactForm', [FriendshipsController::class, 'contactForm']);
+Route::get('/getContactForm', [FriendshipsController::class, 'getContactForm']);
 
 //
 // Route::get('test', function () {

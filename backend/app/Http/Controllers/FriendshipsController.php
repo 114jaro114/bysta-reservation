@@ -188,8 +188,49 @@ class FriendshipsController extends Controller
         return response()->json($allUsersWithoutFriends);
     }
 
-    public function getAllPossibleFriends(Request $request)
+    public function contactForm(Request $request)
     {
-        return response()->json($request);
+        $surname = $request->surname;
+        $lastname =  $request->lastname;
+        $address = $request->address;
+        $city = $request->city;
+        $postcode = $request->postcode;
+        $country = $request->country;
+        $phone = $request->phone;
+        $note = $request->note;
+
+        $checker = DB::table('users_contact_info')->select('user_id')->where('user_id', auth()->user()->id)->exists();
+        if ($checker) {
+            DB::table('users_contact_info')
+            ->where('user_id', auth()->user()->id)
+            ->update(['surname' => $request->surname,
+                      'lastname' => $request->lastname,
+                      'address' => $request->address,
+                      'city' => $request->city,
+                      'postcode' => $request->postcode,
+                      'country' => $request->country,
+                      'phone' => $request->phone,
+                      'note' => $request->note]);
+            return response()->json('data boli uspesne aktualizovane');
+        } else {
+            DB::table('users_contact_info')->insert([
+                      'user_id' => auth()->user()->id,
+                      'surname' => $request->surname,
+                      'lastname' => $request->lastname,
+                      'address' => $request->address,
+                      'city' => $request->city,
+                      'postcode' => $request->postcode,
+                      'country' => $request->country,
+                      'phone' => $request->phone,
+                      'note' => $request->note]);
+            return response()->json('data boli uspesne ulozene');
+        }
+        return response()->json('error');
+    }
+
+    public function getContactForm()
+    {
+        $getData = DB::table('users_contact_info')->where('user_id', auth()->user()->id)->get();
+        return response()->json($getData);
     }
 }

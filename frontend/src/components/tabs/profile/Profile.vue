@@ -63,42 +63,41 @@
           </v-row>
 
           <v-row justify="center">
-            <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable clear-icon="mdi-close-circle"></v-text-field>
-            <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable clear-icon="mdi-close-circle"></v-text-field>
+            <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
+            <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
             <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
-              :type="show1 ? 'text' : 'password'" clearable clear-icon="mdi-close-circle">
+              :type="show1 ? 'text' : 'password'" clearable>
             </v-text-field>
           </v-row>
         </div>
         <div v-else>
           <v-row justify="center">
             <v-col cols="12" sm="12" md="6" lg="6">
-              <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" :error-messages="errorMessages" label="Meno" clearable clear-icon="mdi-close-circle" required></v-text-field>
+              <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" label="Meno" clearable required></v-text-field>
             </v-col>
 
             <v-col cols="12" sm="12" md="6" lg="6">
-              <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" :error-messages="errorMessages" label="Priezvisko" clearable clear-icon="mdi-close-circle" required></v-text-field>
+              <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" label="Priezvisko" clearable required></v-text-field>
             </v-col>
           </v-row>
 
 
           <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
-                    () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
-                    addressCheck]" label="Adresa" counter="25" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                    () => !!address && address.length <= 25 || 'Address must be less than 25 characters']" label="Adresa" counter="25" clearable required></v-text-field>
           <v-row justify="center">
             <v-col cols="12" sm="12" md="6" lg="6">
-              <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required', addressCheck]" label="Mesto" clearable clear-icon="mdi-close-circle" required></v-text-field>
+              <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required']" label="Mesto" clearable required></v-text-field>
             </v-col>
 
             <v-col cols="12" sm="12" md="6" lg="6">
-              <v-text-field ref="zip" v-model="zip" :rules="[() => !!zip || 'This field is required']" label="PSČ" clearable clear-icon="mdi-close-circle" required></v-text-field>
+              <v-text-field ref="postcode" v-model="postcode" :rules="[() => !!postcode || 'This field is required']" label="PSČ" clearable required></v-text-field>
             </v-col>
           </v-row>
-          <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable clear-icon="mdi-close-circle" required>
+          <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
           </v-autocomplete>
 
-          <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable clear-icon="mdi-close-circle"></VueTelInputVuetify>
-          <div v-if="phone.number" style="color: #e83e8c">
+          <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+          <!-- <div v-if="phone.number" style="color: #e83e8c">
             <span>
               Number:
               <strong>{{ phone.number }}</strong>,&nbsp;
@@ -111,15 +110,15 @@
               Country:
               <strong>{{ phone.country }}</strong>
             </span>
-          </div>
-          <v-textarea v-model="comment" :rules="[() => !!comment && comment.length <= 25 || 'Address must be less than 50 characters']" label=" Poznámka" rows="1" counter="50" clearable clear-icon="mdi-close-circle">
-          </v-textarea>
+          </div> -->
+          <!-- <v-textarea v-model="comment" :rules="[() => !!comment && comment.length <= 25 || 'Address must be less than 50 characters']" label=" Poznámka" rows="1" counter="50" clearable clear-icon="mdi-close-circle">
+          </v-textarea> -->
         </div>
       </v-card-text>
 
       <v-divider />
 
-      <v-card-actions>
+      <v-card-actions class="p-0">
         <div v-if="pu == true">
           <v-btn color="info" :loading="loading" @click.native="update">
             <v-icon left dark>mdi-check</v-icon>
@@ -129,7 +128,7 @@
         <div v-else>
           <v-btn color="info" :loading="loading" @click="updateContactInfo">
             <v-icon left dark>mdi-update</v-icon>
-            Aktualizovať kontaktné informácie
+            Uložiť zmeny
           </v-btn>
         </div>
 
@@ -142,11 +141,16 @@
 <script>
 import axios from 'axios'
 import moment from 'moment';
-// import {
-//   VueTelInputVuetify
-// } from 'vue-tel-input-vuetify';
-
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    // 'Content-Type': 'multipart/form-data',
+    Authorization: "Bearer " + localStorage.getItem("authToken"),
+  },
+};
+
 export default {
   pageTitle: 'Profile',
   components: {
@@ -197,28 +201,23 @@ export default {
       lastname: null,
       address: null,
       city: null,
-      zip: null,
+      postcode: null,
       country: null,
-      myPhone: '',
+      myPhone: null,
       phone: {
         number: '',
         valid: false,
         country: undefined,
       },
-      comment: null,
+      // comment: null,
       formHasErrors: false,
     }
   },
 
   mounted() {
-    this.avatarImageUrl = this.avatarUrl
+    this.avatarImageUrl = this.avatarUrl;
     const api = 'http://127.0.0.1:8000/api/user';
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken"),
-      },
-    };
+
     axios.get(api, config).then((response) => {
       if (response.data.avatar) {
         this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
@@ -226,15 +225,22 @@ export default {
     }).catch((error) => {
       console.log(error)
     })
+
+    const api2 = 'http://127.0.0.1:8000/api/getContactForm';
+
+    axios.get(api2, config)
+      .then(res => {
+        this.surname = res.data[0].surname;
+        this.lastname = res.data[0].lastname;
+        this.address = res.data[0].address;
+        this.city = res.data[0].city;
+        this.postcode = res.data[0].postcode;
+        this.country = res.data[0].country;
+        this.myPhone = res.data[0].phone;
+      });
   },
   async created() {
     const api = 'http://127.0.0.1:8000/api/auth/user';
-    const config = {
-      headers: {
-        Accept: 'application/json',
-        Authorization: "Bearer " + localStorage.getItem("authToken")
-      }
-    }
     try {
       let res = await axios.get(api, config)
       this.email = res.data.email;
@@ -254,21 +260,13 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    // surname: null,
-    // lastname: null,
-    // address: null,
-    // city: null,
-    // zip: null,
-    // country: null,
-    // comment: null,
     console.log(this.surname);
     console.log(this.lastname);
     console.log(this.address);
     console.log(this.city);
-    console.log(this.zip);
+    console.log(this.postcode);
     console.log(this.country);
     console.log(this.phone);
-    console.log(this.comment);
   },
 
   methods: {
@@ -293,18 +291,18 @@ export default {
       };
 
       if (this.$vuetify.breakpoint.smAndDown) {
-        defaultProps.maxHeight = 130;
+        defaultProps.maxHeight = 112;
         defaultProps.top = true;
       }
       return defaultProps;
     },
 
     addressCheck() {
-      this.errorMessages = this.address && !this.name ?
-        `Hey! I'm required` :
-        ''
-
-      return true
+      //   this.errorMessages = this.address && !this.name ?
+      //     `Hey! I'm required` :
+      //     ''
+      //
+      return false
     },
     //
     contact_inf() {
@@ -330,13 +328,6 @@ export default {
         let formData = new FormData();
         formData.append('avatar', event.target.files[0]);
         const api = 'http://127.0.0.1:8000/api/upload_avatar';
-        const config = {
-          headers: {
-            Accept: "application/json",
-            'Content-Type': 'multipart/form-data',
-            Authorization: "Bearer " + localStorage.getItem("authToken"),
-          },
-        };
         // axios.post(api, formData, {
         //     onUploadProgress: (progressEvent) => {
         //       this.uploadPercent = progressEvent.lengthComputable ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
@@ -366,47 +357,36 @@ export default {
     },
 
     updateContactInfo() {
-      // const api = 'http://127.0.0.1:8000/api/contactForm';
-      // const config = {
-      //   headers: {
-      //     Accept: "application/json",
-      //     'Content-Type': 'multipart/form-data',
-      //     Authorization: "Bearer " + localStorage.getItem("authToken"),
-      //   },
-      // };
+      const api = 'http://127.0.0.1:8000/api/contactForm';
 
-      // const bodyParameters = {
-      //   surname: this.surname,
-      //   lastname: this.lastname,
-      //   address: this.address,
-      //   city: this.city,
-      //   postcode: this.zip,
-      //   country: this.country,
-      //   phone: this.phone.number,
-      //   note: this.comment
-      // };
-      axios.post('http://127.0.0.1:8000/api/contactForm', {
-        surname: this.surname,
-        lastname: this.lastname,
-        address: this.address,
-        city: this.city,
-        postcode: this.zip,
-        country: this.country,
-        phone: this.phone.number,
-        note: this.comment
-      }).then(resp => {
-        console.log(resp);
-      }).catch(e => {
-        console.log(e)
-      })
-      // axios.post(api, {
-      //     bodyParameters
-      //   })
-      //   .then((response) => {
-      //     console.log(response);
-      //   }).catch((error) => {
-      //     console.log(error)
-      //   })
+      axios.post(api, {
+            surname: this.surname,
+            lastname: this.lastname,
+            address: this.address,
+            city: this.city,
+            postcode: this.postcode,
+            country: this.country,
+            phone: this.phone.number,
+            // note: this.comment
+          },
+          config
+        )
+        .then(resp => {
+          console.log(resp);
+          const api = 'http://127.0.0.1:8000/api/getContactForm';
+          axios.get(api, config)
+            .then(res => {
+              this.surname = res.data[0].surname;
+              this.lastname = res.data[0].lastname;
+              this.address = res.data[0].address;
+              this.city = res.data[0].city;
+              this.postcode = res.data[0].postcode;
+              this.country = res.data[0].country;
+              this.myPhone = res.data[0].phone;
+            });
+        }).catch(e => {
+          console.log(e)
+        })
     }
   }
 }

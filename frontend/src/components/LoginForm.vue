@@ -86,6 +86,7 @@ export default {
         v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
       ],
       remember: true,
+      error: '',
     }
   },
 

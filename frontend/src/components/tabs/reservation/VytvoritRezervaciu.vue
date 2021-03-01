@@ -211,54 +211,32 @@
               <v-card-text>
                 <v-row justify="center">
                   <v-col cols="12" sm="12" md="6" lg="6">
-                    <v-text-field ref="name" v-model="name" :rules="[() => !!name || 'This field is required']" :error-messages="errorMessages" label="Meno" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                    <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable required></v-text-field>
                   </v-col>
 
                   <v-col cols="12" sm="12" md="6" lg="6">
-                    <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" :error-messages="errorMessages" label="Priezvisko" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                    <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable required></v-text-field>
                   </v-col>
                 </v-row>
 
 
-                <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
-                      () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
-                      addressCheck]" label="Adresa" counter="25" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable required></v-text-field>
                 <v-row justify="center">
                   <v-col cols="12" sm="12" md="6" lg="6">
-                    <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required', addressCheck]" label="Mesto" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                    <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable required></v-text-field>
                   </v-col>
 
                   <v-col cols="12" sm="12" md="6" lg="6">
-                    <v-text-field ref="zip" v-model="zip" :rules="[() => !!zip || 'This field is required']" label="PSČ" clearable clear-icon="mdi-close-circle" required></v-text-field>
+                    <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable required></v-text-field>
                   </v-col>
                 </v-row>
-                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable clear-icon="mdi-close-circle" required>
+                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable required>
                 </v-autocomplete>
-                <v-textarea v-model="comment" :rules="[() => !!comment && comment.length <= 25 || 'Address must be less than 50 characters']" label=" Poznámka" rows="1" counter="50" clearable clear-icon="mdi-close-circle">
+
+                <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+                <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" clearable>
                 </v-textarea>
               </v-card-text>
-              <!-- <v-divider class="mt-12"></v-divider>
-                  <v-card-actions>
-                    <v-btn text>
-                      Cancel
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-slide-x-reverse-transition>
-                      <v-tooltip v-if="formHasErrors" left>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn icon class="my-0" v-bind="attrs" @click="resetForm" v-on="on">
-                            <v-icon>mdi-refresh</v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Refresh form</span>
-                      </v-tooltip>
-                    </v-slide-x-reverse-transition>
-                    <v-btn color="primary" text @click="submit">
-                      Submit
-                    </v-btn>
-                  </v-card-actions> -->
-              <!-- </v-col>
-              </v-row> -->
             </v-card>
 
             <v-btn @click="e1 = 3; backStep3()" class="mr-2">
@@ -273,9 +251,33 @@
           <v-stepper-content step="5">
             <v-card class="m-3" tile>
               Rekapitulácia
+
+              <span>Kontaktné údaje</span>
+              Meno: {{surname}}
+              Priezvisko: {{lastname}}
+              Adresa: {{address}}
+              Mesto: {{city}}
+              PSČ: {{postcode}}
+              Krajina: {{country}}
+              Mobilné čislo: {{myPhone}}
+              <div v-if="note == null">
+                Poznámka: -
+              </div>
+              <div v-else>
+                Poznámka: {{note}}
+              </div>
+
+              <span>pocet osob</span>
+              Dospeli: {{counter1}}
+              Deti od 2 do 10 rokov: {{counter2}}
+              Deti do 2 rokov: {{counter3}}
+
+              <span>datum a cas prichodu a odchodu</span>
+              Datum a cas prichodu: {{start_date}} {{start_time}}
+              Datum a cas odchodu: {{end_date}} {{end_time}}
             </v-card>
 
-            <v-btn @click="e1 = 3; backStep3()" class="mr-2">
+            <v-btn @click="e1 = 4; backStep4()" class="mr-2">
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
@@ -292,11 +294,22 @@
 </template>
 
 <script>
+import axios from 'axios'
+import moment from 'moment';
 import Calendar from "@/components/Calendar.vue";
+import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
+const config = {
+  headers: {
+    Accept: "application/json",
+    // 'Content-Type': 'multipart/form-data',
+    Authorization: "Bearer " + localStorage.getItem("authToken"),
+  },
+};
 export default {
   name: "VytvoritRezervaciu",
   components: {
-    Calendar
+    Calendar,
+    VueTelInputVuetify
   },
   data() {
     return {
@@ -334,24 +347,78 @@ export default {
         'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'
       ],
       errorMessages: '',
-      name: null,
-      lastname: null,
-      address: null,
-      city: null,
-      zip: null,
-      country: null,
+
+      start_date: null,
+      end_date: null,
+
+      phone: {
+        number: '',
+        valid: false,
+        country: undefined,
+      },
       formHasErrors: false,
-      comment: null,
 
-
-      // rules: [
-      //   v => !!v || 'Meno je povinné',
-      //   v => (v && v.length <= 10) || 'Meno musí obsahovať max 10 znakov',
-      // ],
+      surname: null,
+      surnameRules: [
+        v => !!v || 'Meno je povinné',
+        v => (v && v.length <= 10) || 'Meno musí obsahovať max 10 znakov',
+      ],
+      lastname: null,
+      lastnameRules: [
+        v => !!v || 'Priezvisko je povinné',
+      ],
+      address: null,
+      addressRules: [
+        v => !!v || 'Adresa je povinná',
+      ],
+      city: null,
+      cityRules: [
+        v => !!v || 'Mesto je povinné',
+      ],
+      postcode: null,
+      postcodeRules: [
+        v => !!v || 'PSČ je povinné',
+      ],
+      country: null,
+      countryRules: [
+        v => !!v || 'Krajina je povinná',
+      ],
+      myPhone: null,
+      myPhoneRules: [
+        v => !!v || 'Mobilné číslo je povinné',
+      ],
+      note: null,
+      noteRules: [
+        v => v.length <= 50 || 'Poznámka musí obsahovať max 50 znakov',
+      ],
     }
   },
 
+  mounted() {
+    const api = 'http://127.0.0.1:8000/api/getContactForm';
+
+    axios.get(api, config)
+      .then(res => {
+        this.surname = res.data[0].surname;
+        this.lastname = res.data[0].lastname;
+        this.address = res.data[0].address;
+        this.city = res.data[0].city;
+        this.postcode = res.data[0].postcode;
+        this.country = res.data[0].country;
+        this.myPhone = res.data[0].phone;
+      });
+  },
+
   methods: {
+    onInput(formattedNumber, {
+      number,
+      valid,
+      country
+    }) {
+      this.phone.number = number.international;
+      this.phone.valid = valid;
+      this.phone.country = country && country.name;
+    },
     autocompleteMenuProps() {
       // default properties copied from the vuetify-autocomplete docs
       let defaultProps = {
@@ -363,7 +430,7 @@ export default {
       };
 
       if (this.$vuetify.breakpoint.smAndDown) {
-        defaultProps.maxHeight = 130;
+        defaultProps.maxHeight = 112;
         defaultProps.top = true;
       }
       return defaultProps;
@@ -387,6 +454,26 @@ export default {
       } else {
         this.step3 = true;
       }
+    },
+
+    checkStatus4() {
+      if (
+        this.surname == null ||
+        this.lastname == null ||
+        this.address == null ||
+        this.city == null ||
+        this.postcode == null ||
+        this.country == null ||
+        this.myPhone == null
+      ) {
+        this.step4 = false;
+      } else {
+        this.step4 = true;
+      }
+    },
+
+    backStep4() {
+      this.step4 = true;
     },
 
     backStep3() {
@@ -453,11 +540,11 @@ export default {
 
     //contact format
     addressCheck() {
-      this.errorMessages = this.address && !this.name ?
-        `Hey! I'm required` :
-        ''
+      // this.errorMessages = this.address && !this.name ?
+      //   `Hey! I'm required` :
+      //   ''
 
-      return true
+      return false
     },
     resetForm() {
       this.errorMessages = []
@@ -508,10 +595,8 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log(this.$store.getters['successMakeReservation'].success);
-    console.log(this.step1);
-    console.log(this.step2);
-    console.log(this.step3);
+    this.start_date = moment(this.$store.getters['successReservationData'].start_date).format("YYYY-MM-DD");
+    this.end_date = moment(this.$store.getters['successReservationData'].end_date).format("YYYY-MM-DD");
   }
 }
 </script>

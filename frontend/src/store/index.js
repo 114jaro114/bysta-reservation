@@ -21,6 +21,14 @@ export default new Vuex.Store({
     },
     successMakeReservation: {
       success: false
+    },
+
+    successReservationData: {
+      event_name: '',
+      start_date: '',
+      end_date: '',
+      color: '',
+      username: '',
     }
     // userInformations: [],
   },
@@ -35,7 +43,11 @@ export default new Vuex.Store({
 
     successMakeReservation: state => {
       return state.successMakeReservation;
-    }
+    },
+
+    successReservationData: state => {
+      return state.successReservationData;
+    },
   },
   mutations: {
     showProfile: (state, payload) => {
@@ -61,6 +73,14 @@ export default new Vuex.Store({
     successReservation: (state, payload) => {
       Vue.set(state.successMakeReservation, 'success', payload.success);
     },
+
+    reservationData: (state, payload) => {
+      Vue.set(state.successReservationData, 'event_name', payload.event_name);
+      Vue.set(state.successReservationData, 'start_date', payload.start_date);
+      Vue.set(state.successReservationData, 'end_date', payload.end_date);
+      Vue.set(state.successReservationData, 'color', payload.color);
+      Vue.set(state.successReservationData, 'username', payload.username);
+    },
   },
   actions: {
     showProfile: (context, payload) => {
@@ -73,6 +93,10 @@ export default new Vuex.Store({
 
     successReservation: (context, payload) => {
       context.commit('successReservation', payload)
+    },
+
+    reservationData: (context, payload) => {
+      context.commit('reservationData', payload)
     }
   }
 });
