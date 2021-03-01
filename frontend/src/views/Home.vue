@@ -7,7 +7,7 @@
   </div>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-card class="v-content">
-    <v-toolbar color="white" elevation="2" class="mb-3">
+    <v-toolbar elevation="2" class="mb-3">
       <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="position-absolute" style="right:14px">
         <span class="md-title font-weight-bold">
@@ -15,13 +15,13 @@
         </span>
       </v-toolbar-title>
       <template v-slot:extension>
-        <v-tabs color="info" class="tabs" grow v-model="activeTab">
+        <v-tabs class="tabs" v-model="activeTab" grow>
           <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
-    <v-tabs-items grow v-model="activeTab" @change="updateRouter($event)">
-      <v-tab-item light v-for="tab in tabs" :key="tab.id" :value="tab.route">
+    <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
         <router-view />
       </v-tab-item>
       <NavigationDrawer :drawer="drawer" />
@@ -185,11 +185,28 @@ export default {
   padding: 0px !important;
 }
 
-.tab-disabled-opacity {
+/* .tab-disabled-opacity {
   opacity: 0 !important;
 }
 
 #tab-disabled-opacity {
+  opacity: 0 !important;
+} */
+
+
+/*  */
+/* .v-tab--active {
+  background-color: white;
+} */
+
+/* .v-ripple__container {
+    opacity: 0
+} */
+.theme--light.v-tabs .v-tab:hover::before {
+  opacity: 0 !important;
+}
+
+.theme--dark.v-tabs .v-tab:hover::before {
   opacity: 0 !important;
 }
 </style>

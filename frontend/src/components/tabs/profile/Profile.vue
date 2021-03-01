@@ -63,56 +63,53 @@
           </v-row>
 
           <v-row justify="center">
-            <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
-            <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
-            <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
-              :type="show1 ? 'text' : 'password'" clearable>
-            </v-text-field>
+            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+              <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+              <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+              <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
+                :type="show1 ? 'text' : 'password'" clearable>
+              </v-text-field>
+            </v-col>
           </v-row>
         </div>
         <div v-else>
           <v-row justify="center">
-            <v-col cols="12" sm="12" md="6" lg="6">
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
               <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" label="Meno" clearable required></v-text-field>
             </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6">
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
               <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" label="Priezvisko" clearable required></v-text-field>
             </v-col>
-          </v-row>
 
+            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+              <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
+                        () => !!address && address.length <= 25 || 'Address must be less than 25 characters']" label="Adresa" counter="25" clearable required></v-text-field>
+            </v-col>
 
-          <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
-                    () => !!address && address.length <= 25 || 'Address must be less than 25 characters']" label="Adresa" counter="25" clearable required></v-text-field>
-          <v-row justify="center">
-            <v-col cols="12" sm="12" md="6" lg="6">
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
               <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required']" label="Mesto" clearable required></v-text-field>
             </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6">
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
               <v-text-field ref="postcode" v-model="postcode" :rules="[() => !!postcode || 'This field is required']" label="PSČ" clearable required></v-text-field>
             </v-col>
-          </v-row>
-          <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
-          </v-autocomplete>
 
-          <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
-          <!-- <div v-if="phone.number" style="color: #e83e8c">
-            <span>
-              Number:
-              <strong>{{ phone.number }}</strong>,&nbsp;
-            </span>
-            <span>
-              Is valid:
-              <strong>{{ phone.valid }}</strong>,&nbsp;
-            </span>
-            <span>
-              Country:
-              <strong>{{ phone.country }}</strong>
-            </span>
-          </div> -->
-          <!-- <v-textarea v-model="comment" :rules="[() => !!comment && comment.length <= 25 || 'Address must be less than 50 characters']" label=" Poznámka" rows="1" counter="50" clearable clear-icon="mdi-close-circle">
-          </v-textarea> -->
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+              <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
+              </v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+              <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+            </v-col>
+          </v-row>
         </div>
       </v-card-text>
 

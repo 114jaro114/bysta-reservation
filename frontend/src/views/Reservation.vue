@@ -2,7 +2,7 @@
 <div class="reservation w-100 h-100 text-uppercase secondary-color">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-card class="v-content">
-    <v-toolbar color="white" elevation="2" class="mb-3">
+    <v-toolbar elevation="2" class="mb-3">
       <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title class="position-absolute" style="right:14px">
@@ -12,7 +12,7 @@
       </v-toolbar-title>
 
       <template v-slot:extension>
-        <v-tabs color="info" v-model="tab" grow>
+        <v-tabs v-model="tab" grow>
           <v-tab v-for="item in items" :key="item">
             {{ item }}
           </v-tab>

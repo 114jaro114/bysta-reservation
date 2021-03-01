@@ -2,15 +2,15 @@
 <v-card id="create">
   <v-speed-dial v-model="fab" :bottom="bottom" :right="right" :direction="direction" :open-on-hover="hover" :transition="transition">
     <template v-slot:activator>
-      <v-btn v-model="fab" color="blue darken-2" dark fab>
+      <v-btn v-model="fab" fab>
         <v-icon v-if="fab"> mdi-close </v-icon>
         <v-icon v-else> mdi-pencil </v-icon>
       </v-btn>
     </template>
-    <v-btn fab small color="white" to="/messenger">
+    <v-btn fab small to="/messenger">
       <v-icon>mdi-facebook-messenger</v-icon>
     </v-btn>
-    <v-btn fab small color="white" to="/contact_us">
+    <v-btn fab small to="/contact_us">
       <v-icon>mdi-email</v-icon>
     </v-btn>
   </v-speed-dial>

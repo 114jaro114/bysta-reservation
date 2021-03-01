@@ -2,7 +2,7 @@
 <div class='calendar'>
   <!-- <div class="row bb ml-0 mr-0 pt-3"> -->
   <v-card class="m-3" :loading="myloadingvariable" tile>
-    <DatePicker2 ref="DatePicker2" v-model="range" color="blue" mode="date" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone" is-expanded>
+    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="date" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone" is-expanded>
       <!--=========DAY POPOVER HEADER SLOT=========-->
       <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
         {{ getPopoverHeaderLabel(day) }}
@@ -55,7 +55,7 @@
             Dnes
           </v-btn>
           <v-btn color="grey" @click="resetDate">
-            Resetovať
+            Resetovať výber
           </v-btn>
         </div>
       </template>
@@ -200,6 +200,25 @@ export default {
     }).catch((error) => {
       console.log(error)
     })
+
+    // theme
+    const theme = localStorage.getItem("dark_theme");
+    if (theme) {
+      if (theme === "true") {
+        this.$vuetify.theme.dark = true;
+      } else {
+        this.$vuetify.theme.dark = false;
+      }
+    } else if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      this.$vuetify.theme.dark = true;
+      localStorage.setItem(
+        "dark_theme",
+        this.$vuetify.theme.dark.toString()
+      );
+    }
   },
 
   methods: {

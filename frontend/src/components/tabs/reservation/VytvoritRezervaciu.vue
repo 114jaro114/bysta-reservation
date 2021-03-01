@@ -1,6 +1,18 @@
 <template>
 <div class="vytvorit_rezervaciu w-100 h-100 text-uppercase secondary-color">
   <div class="row justify-content-center mr-0 ml-0">
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" :multi-line="multiLine" color="red" :left="true">
+        <v-icon>mdi-alert-circle</v-icon>
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
     <div class="col pl-0 pr-0 mt-3">
       <!-- <v-lazy v-model="isActive" :options="{
           threshold: .8
@@ -49,7 +61,7 @@
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="e1 = 2; checkStatus()">
+            <v-btn color="info" @click="checkStatus()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -115,7 +127,7 @@
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="e1 = 3; checkStatus2()">
+            <v-btn color="info" @click="checkStatus2()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -199,7 +211,7 @@
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="e1 = 4; checkStatus3()">
+            <v-btn color="info" @click="checkStatus3()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -210,32 +222,40 @@
                 <v-col cols="12" sm="12" md="12" lg="6"> -->
               <v-card-text>
                 <v-row justify="center">
-                  <v-col cols="12" sm="12" md="6" lg="6">
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                     <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable required></v-text-field>
                   </v-col>
 
-                  <v-col cols="12" sm="12" md="6" lg="6">
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                     <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable required></v-text-field>
                   </v-col>
-                </v-row>
 
+                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                    <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable required></v-text-field>
+                  </v-col>
 
-                <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable required></v-text-field>
-                <v-row justify="center">
-                  <v-col cols="12" sm="12" md="6" lg="6">
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                     <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable required></v-text-field>
                   </v-col>
 
-                  <v-col cols="12" sm="12" md="6" lg="6">
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                     <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable required></v-text-field>
                   </v-col>
-                </v-row>
-                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable required>
-                </v-autocomplete>
 
-                <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
-                <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" clearable>
-                </v-textarea>
+                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                    <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable required>
+                    </v-autocomplete>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                    <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                    <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" clearable>
+                    </v-textarea>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
 
@@ -243,39 +263,70 @@
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="e1 = 5; checkStatus4()">
+            <v-btn color="info" @click="checkStatus4()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
 
           <v-stepper-content step="5">
             <v-card class="m-3" tile>
-              Rekapitulácia
+              <v-card-title>Rekapitulácia</v-card-title>
+              <v-card-text>
+                <span>Kontaknté údaje</span>
+                <v-divider />
+                <v-row justify="center">
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <v-text-field ref="surname" v-model="surname" label="Meno" readonly></v-text-field>
+                  </v-col>
 
-              <span>Kontaktné údaje</span>
-              Meno: {{surname}}
-              Priezvisko: {{lastname}}
-              Adresa: {{address}}
-              Mesto: {{city}}
-              PSČ: {{postcode}}
-              Krajina: {{country}}
-              Mobilné čislo: {{myPhone}}
-              <div v-if="note == null">
-                Poznámka: -
-              </div>
-              <div v-else>
-                Poznámka: {{note}}
-              </div>
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" readonly></v-text-field>
+                  </v-col>
 
-              <span>pocet osob</span>
-              Dospeli: {{counter1}}
-              Deti od 2 do 10 rokov: {{counter2}}
-              Deti do 2 rokov: {{counter3}}
+                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                    <v-text-field ref="address" v-model="address" label="Adresa" readonly></v-text-field>
+                  </v-col>
 
-              <span>datum a cas prichodu a odchodu</span>
-              Datum a cas prichodu: {{start_date}} {{start_time}}
-              Datum a cas odchodu: {{end_date}} {{end_time}}
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <v-text-field ref="city" v-model="city" label="Mesto" readonly></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
+                    <v-text-field ref="postcode" v-model="postcode" label="PSČ" readonly></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" readonly>
+                    </v-autocomplete>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" readonly></VueTelInputVuetify>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <div v-if="note == null">
+                      <v-textarea value="-" label=" Poznámka" rows="1" readonly>
+                      </v-textarea>
+                    </div>
+                    <div v-else>
+                      <v-textarea v-model="note" label=" Poznámka" rows="1" readonly>
+                      </v-textarea>
+                    </div>
+                  </v-col>
+                </v-row>
+
+                <span>pocet osob</span>
+                Dospeli: {{counter1}}
+                Deti od 2 do 10 rokov: {{counter2}}
+                Deti do 2 rokov: {{counter3}}
+
+                <span>datum a cas prichodu a odchodu</span>
+                Datum a cas prichodu: {{start_date}} {{start_time}}
+                Datum a cas odchodu: {{end_date}} {{end_time}}
+              </v-card-text>
             </v-card>
+
 
             <v-btn @click="e1 = 4; backStep4()" class="mr-2">
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
@@ -305,6 +356,8 @@ const config = {
     Authorization: "Bearer " + localStorage.getItem("authToken"),
   },
 };
+
+const theme = localStorage.getItem("dark_theme");
 export default {
   name: "VytvoritRezervaciu",
   components: {
@@ -342,7 +395,8 @@ export default {
         'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nepal', 'Netherlands',
         'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway', 'Oman', 'Pakistan', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Puerto Rico',
         'Qatar', 'Reunion', 'Romania', 'Russia', 'Rwanda', 'Saint Pierre &amp; Miquelon', 'Samoa', 'San Marino', 'Satellite', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa',
-        'South Korea', 'Spain', 'Sri Lanka', 'St Kitts &amp; Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', `Timor L'Este`, 'Togo',
+        'South Korea', 'Spain', 'Sri Lanka', 'St Kitts &amp; Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', `Timor L'Este`,
+        'Togo',
         'Tonga', 'Trinidad &amp; Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks &amp; Caicos', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam',
         'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'
       ],
@@ -391,6 +445,11 @@ export default {
       noteRules: [
         v => v.length <= 50 || 'Poznámka musí obsahovať max 50 znakov',
       ],
+
+      // Snackbar
+      multiLine: true,
+      snackbar: false,
+      text: '',
     }
   },
 
@@ -407,6 +466,23 @@ export default {
         this.country = res.data[0].country;
         this.myPhone = res.data[0].phone;
       });
+
+    if (theme) {
+      if (theme === "true") {
+        this.$vuetify.theme.dark = true;
+      } else {
+        this.$vuetify.theme.dark = false;
+      }
+    } else if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      this.$vuetify.theme.dark = true;
+      localStorage.setItem(
+        "dark_theme",
+        this.$vuetify.theme.dark.toString()
+      );
+    }
   },
 
   methods: {
@@ -438,21 +514,34 @@ export default {
 
     checkStatus() {
       this.step1 = this.$store.getters['successMakeReservation'].success
+      if (this.step1) {
+        this.e1 = 2;
+      } else {
+        this.step1 = false;
+        this.snackbar = true;
+        this.text = "Je potrebné vybrať dátum začiatku a konca!";
+      }
     },
 
     checkStatus2() {
       if (this.start_time == null || this.end_time == null) {
         this.step2 = false;
+        this.snackbar = true;
+        this.text = "Je potrebné vybrať čas príchodu a odchodu!";
       } else {
         this.step2 = true;
+        this.e1 = 3;
       }
     },
 
     checkStatus3() {
       if (this.counter1 == 0 && this.counter2 == 0 && this.counter3 == 0) {
         this.step3 = false;
+        this.snackbar = true;
+        this.text = "Je potrebné zadať počet osôb!";
       } else {
         this.step3 = true;
+        this.e1 = 4;
       }
     },
 
@@ -467,8 +556,11 @@ export default {
         this.myPhone == null
       ) {
         this.step4 = false;
+        this.snackbar = true;
+        this.text = "Je potrebné vyplniť kontaktné údaje!";
       } else {
         this.step4 = true;
+        this.e1 = 5;
       }
     },
 

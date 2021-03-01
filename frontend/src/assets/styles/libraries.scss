@@ -8,15 +8,15 @@
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
 
 /* vue materialize */
-@import "~vue-material/dist/theme/engine"; // Import the theme engine
-@include md-register-theme("default", (
-  primary: #007bff, // The primary color of your brand
-  secondary: #000000, // The accent or secondary color
-  accent: #fff, // The accent or secondary color
-  // theme: dark
-));
-@import "~vue-material/dist/theme/all"; // Apply the theme
-
-@import "~vue-material/dist/vue-material.min.css";
+// @import "~vue-material/dist/theme/engine"; // Import the theme engine
+// @include md-register-theme("default", (
+//   primary: #007bff, // The primary color of your brand
+//   secondary: #000000, // The accent or secondary color
+//   accent: #fff, // The accent or secondary color
+//   // theme: dark
+// ));
+// @import "~vue-material/dist/theme/all"; // Apply the theme
+//
+// @import "~vue-material/dist/vue-material.min.css";
 // @import "~vue-material/dist/theme/default.css";
 // @import "~vue-material/dist/vue-material.css";
