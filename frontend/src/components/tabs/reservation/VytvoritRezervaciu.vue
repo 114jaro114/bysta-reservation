@@ -1,5 +1,5 @@
 <template>
-<div class="vytvorit_rezervaciu w-100 h-100 text-uppercase secondary-color">
+<div class="vytvorit_rezervaciu w-100 h-100">
   <div class="row justify-content-center mr-0 ml-0">
     <div class="text-center">
       <v-snackbar v-model="snackbar" :multi-line="multiLine" color="red" :left="true">
@@ -19,35 +19,35 @@
         }" min-height="200" transition="fade-transition"> -->
       <v-stepper v-model="e1">
         <v-stepper-header>
-          <v-stepper-step color="info" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
+          <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
             Dátum
             <small v-if="step1 == false">Chyba</small>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
-          <v-stepper-step color="info" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
+          <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
             Čas príchodu a odchodu
             <small v-if="step2 == false">Chyba</small>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
-          <v-stepper-step color="info" :complete="e1 > 3" :rules="[() => step3]" step="3" error-icon="mdi-alert-circle">
+          <v-stepper-step color="primary" :complete="e1 > 3" :rules="[() => step3]" step="3" error-icon="mdi-alert-circle">
             Počet osôb
             <small v-if="step3 == false">Chyba</small>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
-          <v-stepper-step color="info" :complete="e1 > 4" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
+          <v-stepper-step color="primary" :complete="e1 > 4" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
             Kontaktné informácie
             <small v-if="step4 == false">Chyba</small>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
-          <v-stepper-step color="info" :rules="[() => step5]" step="5" error-icon="mdi-alert-circle">
+          <v-stepper-step color="primary" :rules="[() => step5]" step="5" error-icon="mdi-alert-circle">
             Rekapitulácia
             <small v-if="step5 == false">Chyba</small>
           </v-stepper-step>
@@ -57,11 +57,11 @@
           <v-stepper-content step="1">
             <Calendar />
 
-            <v-btn disabled class="mr-2">
+            <v-btn color="accent" disabled class="mr-2" outlined>
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="checkStatus()">
+            <v-btn color="primary" @click="checkStatus()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -123,11 +123,11 @@
               </v-row> -->
             </v-card>
 
-            <v-btn @click="e1 = 1; backStep1()" class="mr-2">
+            <v-btn color="accent" @click="e1 = 1; backStep1()" class="mr-2" outlined>
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="checkStatus2()">
+            <v-btn color="primary" @click="checkStatus2()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -140,13 +140,13 @@
                 </v-row>
 
                 <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="decrementValue1">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue1">
                     <v-icon dark>
                       mdi-minus
                     </v-icon>
                   </v-btn>
                   <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="incrementValue1">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue1">
                     <v-icon dark>
                       mdi-plus
                     </v-icon>
@@ -163,13 +163,13 @@
                 </v-row>
 
                 <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="decrementValue2">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue2">
                     <v-icon dark>
                       mdi-minus
                     </v-icon>
                   </v-btn>
                   <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="incrementValue2">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue2">
                     <v-icon dark>
                       mdi-plus
                     </v-icon>
@@ -186,13 +186,13 @@
                 </v-row>
 
                 <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="decrementValue3">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue3">
                     <v-icon dark>
                       mdi-minus
                     </v-icon>
                   </v-btn>
                   <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="info" @click="incrementValue3">
+                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue3">
                     <v-icon dark>
                       mdi-plus
                     </v-icon>
@@ -207,11 +207,11 @@
               </v-card-text>
             </v-card>
 
-            <v-btn @click="e1 = 2; backStep2()" class="mr-2">
+            <v-btn color="accent" @click="e1 = 2; backStep2()" class="mr-2" outlined>
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="checkStatus3()">
+            <v-btn color="primary" @click="checkStatus3()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -259,11 +259,11 @@
               </v-card-text>
             </v-card>
 
-            <v-btn @click="e1 = 3; backStep3()" class="mr-2">
+            <v-btn color="accent" @click="e1 = 3; backStep3()" class="mr-2" outlined>
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="checkStatus4()">
+            <v-btn color="primary" @click="checkStatus4()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -328,11 +328,11 @@
             </v-card>
 
 
-            <v-btn @click="e1 = 4; backStep4()" class="mr-2">
+            <v-btn color="accent" @click="e1 = 4; backStep4()" class="mr-2" outlined>
               <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
             </v-btn>
 
-            <v-btn color="info" @click="update()">
+            <v-btn color="primary" @click="update()">
               Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-stepper-content>
@@ -357,7 +357,6 @@ const config = {
   },
 };
 
-const theme = localStorage.getItem("dark_theme");
 export default {
   name: "VytvoritRezervaciu",
   components: {
@@ -466,23 +465,6 @@ export default {
         this.country = res.data[0].country;
         this.myPhone = res.data[0].phone;
       });
-
-    if (theme) {
-      if (theme === "true") {
-        this.$vuetify.theme.dark = true;
-      } else {
-        this.$vuetify.theme.dark = false;
-      }
-    } else if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      this.$vuetify.theme.dark = true;
-      localStorage.setItem(
-        "dark_theme",
-        this.$vuetify.theme.dark.toString()
-      );
-    }
   },
 
   methods: {
@@ -723,4 +705,7 @@ export default {
 //         display: flex !important;
 //     }
 // }
+.v-picker--time .theme--dark.v-picker__title {
+    background-color: red !important;
+}
 </style>

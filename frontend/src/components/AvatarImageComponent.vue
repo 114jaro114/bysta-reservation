@@ -5,10 +5,10 @@
       <v-menu bottom min-width="200px" rounded offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon x-large v-on="on">
-            <v-avatar color="blue" size="48" v-if="!avatarImageUrl">
-              <span style="color:white">{{ usernameInitial }}</span>
+            <v-avatar color="primary" size="48" v-if="!avatarImageUrl">
+              <span class="secondary--text">{{ usernameInitial }}</span>
             </v-avatar>
-            <v-avatar color="blue" size="48" v-else>
+            <v-avatar color="primary" size="48" v-else>
               <img :src="avatarImageUrl">
             </v-avatar>
           </v-btn>
@@ -16,11 +16,11 @@
         <v-card class="v-card-logout">
           <v-list-item-content class="justify-center">
             <div class="mx-auto text-center">
-              <v-avatar color="blue">
-                <v-avatar color="blue" size="48" v-if="!avatarImageUrl">
-                  <span style="color:white">{{ usernameInitial }}</span>
+              <v-avatar color="primary">
+                <v-avatar color="primary" size="48" v-if="!avatarImageUrl">
+                  <span class="text-uppercase secondary--text">{{ usernameInitial }}</span>
                 </v-avatar>
-                <v-avatar color="blue" size="48" v-else>
+                <v-avatar color="primary" size="48" v-else>
                   <img :src="avatarImageUrl">
                 </v-avatar>
               </v-avatar>
@@ -188,5 +188,17 @@ input[type="file"] {
 
 .image-upload>input {
   display: none;
+}
+
+.AvatarImageComponent button:focus {
+  outline: 0px !important;
+}
+
+.v-card-logout .theme--dark.v-btn--active {
+  color: #21CFF3;
+}
+
+.v-card-logout .theme--light.v-btn--active {
+  color: #0D47A1;
 }
 </style>

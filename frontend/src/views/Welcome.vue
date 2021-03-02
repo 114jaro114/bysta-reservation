@@ -1,29 +1,48 @@
 <template>
 <div class="welcome vh-100 p-3">
   <!-- SIGN CONTROLS -->
-  <div class="sign-controls float-right p-3">
+  <div class="sign-controls">
     <!-- SIGN IN -->
     <div class="login-content">
       <router-link :to="{ name: 'Login' }">
-        <button type="button" name="button" class="login-content-btn text-uppercase font-weight-bold cursor-pointer text-decoration-none">
-          <i class="fas fa-sign-in-alt"></i> Log in
-        </button>
+        <v-btn color="primary" class="text-uppercase font-weight-bold cursor-pointer text-decoration-none" elevation="2" x-large outlined rounded block>
+          <v-icon class="pr-1">mdi-login</v-icon>Prihlásiť sa
+        </v-btn>
       </router-link>
     </div>
-    <div class="text pb-3"></div>
+    <div class="text pb-5">
+    </div>
     <!-- GET STARTED -->
     <div class="register-content">
       <router-link :to="{ name: 'Register' }">
-        <button type="button" name="button" class="register-content-btn text-uppercase font-weight-bold text-decoration-none">
-          <i class="fas fa-user-plus"></i> Sign up
-        </button>
+        <v-btn color="primary" class="text-uppercase font-weight-bold text-decoration-none" elevation="2" x-large rounded block>
+          <v-icon class="pr-1">mdi-account-plus</v-icon>Zaregistrovať sa
+        </v-btn>
       </router-link>
     </div>
   </div>
 
   <!-- content -->
   <div class="content verticalhorizontal">
-    <img src="/img/logo.png" align="middle" class="m-auto align-middle">
+    <v-row justify="center">
+      <!-- <v-col> -->
+      <div v-if="this.$vuetify.theme.dark">
+        <img src="/img/logo_welcome_theme_dark.png" lazy-src="/img/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
+      </div>
+      <div v-else>
+        <img src="/img/logo_welcome_theme_light.png" lazy-src="/img/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
+      </div>
+      <!-- <img src="/img/logo.png" lazy-src="/img/logo3.png" class="m-auto w-100" color="primary"> -->
+      <!-- </v-col> -->
+      <!-- <v-col>
+      <v-row>
+        <h1 class="secondary-text font-weight-bold text-uppercase">Chata Byšta</h1>
+      </v-row>
+      <v-row>
+        <h6 class="secondary-text">Ak pochopíš krásu prírody, nemôžeš zablúdiť</h6>
+      </v-row>
+    </v-col> -->
+    </v-row>
   </div>
 </div>
 </template>
@@ -32,6 +51,9 @@
 export default {
   name: "Welcome",
   components: {},
+  data() {
+    return {}
+  },
 };
 </script>
 
@@ -41,6 +63,7 @@ export default {
     right: 15px;
     display: flex;
     flex-wrap: wrap;
+    padding-top: 1rem;
   }
   .flex-center {
     align-items: center;
@@ -57,39 +80,12 @@ export default {
   }
   .content {
     text-align: center;
-    width: 70vw;
+    width: 85vw;
     margin: auto;
     display:flex;
     top: 30vh;
     position: relative;
-  }
-  .login-content-btn {
-    width: 300px;
-    height: 50px;
-    border: 1px solid #007bff;
-    background-color: #fff;
-    color: #007bff;
-    border-radius: 50px;
-    text-align: center;
-  }
-  .login-content-btn:hover {
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: #fff;
-  }
-  .register-content-btn {
-    width: 300px;
-    height: 50px;
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 50px;
-    text-align: center;
-  }
-  .register-content-btn:hover {
-    border: 1px solid #007bff;
-    background-color: #fff;
-    color: #007bff;
+    /* float: left; */
   }
   .login-content {
     padding: 0px 15px 0px 15px;
@@ -101,5 +97,9 @@ export default {
   .text2,
   .text3 {
     display: none;
+  }
+
+  .sign-controls button:focus {
+    outline: unset !important;
   }
 </style>

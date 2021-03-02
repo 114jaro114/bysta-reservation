@@ -5,24 +5,24 @@
       <v-card-title>
         <v-row v-if="pu == true">
           <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" color="info" disabled>
+            <v-btn class="w-100" color="primary" disabled>
               Používateľský účet
             </v-btn>
           </v-col>
           <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" outlined color="blue" @click="contact_inf()">
+            <v-btn class="w-100" outlined color="primary" @click="contact_inf()">
               Kontaktné informácie<v-icon>mdi-arrow-right-thick</v-icon>
             </v-btn>
           </v-col>
         </v-row>
         <v-row v-else>
           <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" color="info" @click="user_acc()">
+            <v-btn class="w-100" color="primary" @click="user_acc()">
               <v-icon>mdi-arrow-left-thick</v-icon>Používateľšký účet
             </v-btn>
           </v-col>
           <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" outlined color="blue" disabled>
+            <v-btn class="w-100" outlined color="primary" disabled>
               Kontaktné informácie
             </v-btn>
           </v-col>
@@ -117,13 +117,13 @@
 
       <v-card-actions class="p-0">
         <div v-if="pu == true">
-          <v-btn color="info" :loading="loading" @click.native="update">
+          <v-btn color="primary" :loading="loading" @click.native="update">
             <v-icon left dark>mdi-check</v-icon>
             Uložiť zmeny
           </v-btn>
         </div>
         <div v-else>
-          <v-btn color="info" :loading="loading" @click="updateContactInfo">
+          <v-btn color="primary" :loading="loading" @click="updateContactInfo">
             <v-icon left dark>mdi-update</v-icon>
             Uložiť zmeny
           </v-btn>

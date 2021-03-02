@@ -19,7 +19,27 @@ export default {
     isDark() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
     }
-  }
+  },
+
+  mounted() {
+    const theme = localStorage.getItem("dark_theme");
+    if (theme) {
+      if (theme === "true") {
+        this.$vuetify.theme.dark = true;
+      } else {
+        this.$vuetify.theme.dark = false;
+      }
+    } else if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      this.$vuetify.theme.dark = true;
+      localStorage.setItem(
+        "dark_theme",
+        this.$vuetify.theme.dark.toString()
+      );
+    }
+  },
 }
 </script>
 

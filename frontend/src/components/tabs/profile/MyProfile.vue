@@ -11,7 +11,7 @@
 
           </div>
           <v-row>
-            <v-btn class="ma-2" color="info">
+            <v-btn class="ma-2" color="primary">
               Outlined Button
             </v-btn>
             <v-btn class="ma-2" outlined color="blue">

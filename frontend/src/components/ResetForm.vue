@@ -8,10 +8,12 @@
 
           <v-card :loading="myloadingvariable" tile>
             <v-card-title>
-              <span class="font-weight-bold text-center">Obnova hesla</span>
-              <router-link :to="{ name: 'Welcome' }">
-                <button type="button" class="close">&times;</button>
-              </router-link>
+              <v-row justify="center" class="p-3">
+                <span class="font-weight-bold text-center primary--text">Obnova hesla</span>
+                <router-link :to="{ name: 'Login' }">
+                  <button type="button" class="primary--text close">&times;</button>
+                </router-link>
+              </v-row>
             </v-card-title>
             <hr class="mt-0 mb-0 custom-hr">
             <v-form ref="form" v-model="valid" lazy-validation>
@@ -20,19 +22,19 @@
                   <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
                 </v-alert>
 
-                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" clearable clear-icon="mdi-close-circle"></v-text-field>
+                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" clearable clear-icon="mdi-close"></v-text-field>
 
                 <div class="row">
                   <div class="col text-center">
                     <router-link :to="{ name: 'Register' }">
-                      <span class="forgot-pass">Ešte nemáš účet? <span class="primary-color">Zaregistruj sa</span></span>
+                      <span class="forgot-pass accent--text">Ešte nemáš účet? <span class="primary--text font-weight-bold">Zaregistruj sa</span></span>
                     </router-link>
                   </div>
                 </div>
               </v-card-text>
               <hr class="mt-0 mb-0 custom-hr">
               <v-card-actions>
-                <v-btn color="info" @click="sendNewPassword" block>
+                <v-btn color="primary" @click="sendNewPassword" block>
                   Resetovať heslo
                 </v-btn>
               </v-card-actions>

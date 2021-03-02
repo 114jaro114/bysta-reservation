@@ -17,7 +17,7 @@
           </template>
 
           <template v-slot:item.id="{ item }">
-            <v-btn class="mr-3" color="info" @click="sendFriendshipRequest(item)" v-if="item.id">
+            <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.id">
               <v-icon>mdi-account-plus</v-icon>
               <span class="ml-1">Pridať priateľa</span>
             </v-btn>

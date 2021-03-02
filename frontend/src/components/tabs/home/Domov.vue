@@ -1,5 +1,5 @@
 <template>
-<div class="domov w-100 h-100 text-uppercase secondary-color">
+<div class="domov w-100 h-100 text-uppercase">
   <div class="row justify-content-center mr-0 ml-0">
     <div class="col pl-0 pr-0 mt-3">
       <md-card-content>

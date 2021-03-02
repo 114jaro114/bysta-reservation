@@ -51,10 +51,10 @@
       <template v-slot:footer>
         <div class="bg-gray-100 text-center p-2 border-t rounded-b-lg">
           <v-divider></v-divider>
-          <v-btn color="info" @click="moveToToday" class="mr-3">
+          <v-btn color="primary" @click="moveToToday" class="mr-3">
             Dnes
           </v-btn>
-          <v-btn color="grey" @click="resetDate">
+          <v-btn color="primary" @click="resetDate" outlined>
             Resetovať výber
           </v-btn>
         </div>
@@ -200,25 +200,6 @@ export default {
     }).catch((error) => {
       console.log(error)
     })
-
-    // theme
-    const theme = localStorage.getItem("dark_theme");
-    if (theme) {
-      if (theme === "true") {
-        this.$vuetify.theme.dark = true;
-      } else {
-        this.$vuetify.theme.dark = false;
-      }
-    } else if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      this.$vuetify.theme.dark = true;
-      localStorage.setItem(
-        "dark_theme",
-        this.$vuetify.theme.dark.toString()
-      );
-    }
   },
 
   methods: {
@@ -351,7 +332,6 @@ export default {
 .vc-container {
   border-radius: unset;
   border: 0px;
-  border-bottom: 1px solid #cbd5e0;
 }
 
 /* todos */
@@ -403,5 +383,11 @@ export default {
 
 .delete-todo {
   margin-left: 3px;
+}
+
+/*  */
+.vc-container.vc-is-dark {
+  background-color: #1E1E1E;
+  color: #FFFFFF;
 }
 </style>

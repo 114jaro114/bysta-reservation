@@ -6,35 +6,37 @@
       <div class="col-md-6">
         <v-card :loading="myloadingvariable" tile>
           <v-card-title>
-            <span class="font-weight-bold text-center">Registrácia</span>
-            <router-link :to="{ name: 'Welcome' }">
-              <button type="button" class="close">&times;</button>
-            </router-link>
+            <v-row justify="center" class="p-3">
+              <span class="font-weight-bold text-center primary--text">Registrácia</span>
+              <router-link :to="{ name: 'Welcome' }">
+                <button type="button" class="primary--text close">&times;</button>
+              </router-link>
+            </v-row>
           </v-card-title>
           <hr class="mt-0 mb-0 custom-hr">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text class="p-3">
 
-              <v-text-field prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" clearable @click:clear="callItBackUsername()" clear-icon="mdi-close-circle" counter></v-text-field>
+              <v-text-field prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" clearable @click:clear="callItBackUsername()" clear-icon="mdi-close" counter></v-text-field>
 
-              <v-text-field ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" clearable @click:clear="callItBackEMail()" clear-icon="mdi-close-circle" counter></v-text-field>
+              <v-text-field ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" clearable @click:clear="callItBackEMail()" clear-icon="mdi-close" counter></v-text-field>
 
               <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
-                @click:append="togglePassword = !togglePassword" clearable clear-icon="mdi-close-circle"></v-text-field>
+                @click:append="togglePassword = !togglePassword" clearable clear-icon="mdi-close"></v-text-field>
               <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules" :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova"
-                hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" clearable clear-icon="mdi-close-circle"></v-text-field>
+                hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" clearable clear-icon="mdi-close"></v-text-field>
 
               <div class="row">
                 <div class="col text-center">
                   <router-link :to="{ name: 'Login' }">
-                    <span class="forgot-pass">Už máš účet? <span class="primary-color">Prihlás sa</span></span>
+                    <span class="forgot-pass accent--text">Už máš účet? <span class="primary--text font-weight-bold">Prihlás sa</span></span>
                   </router-link>
                 </div>
               </div>
             </v-card-text>
             <hr class="mt-0 mb-0 custom-hr">
             <v-card-actions>
-              <v-btn color="info" @click="register" block>
+              <v-btn color="primary" @click="register" block>
                 Zaregistrovať sa
               </v-btn>
             </v-card-actions>
@@ -81,14 +83,14 @@ export default {
       ],
       password: '',
       passwordRules: [
-        v => !!v || 'Heslo je Povinné.',
+        v => !!v || 'Heslo je povinné',
         v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
       ],
       confirmPassword: '',
       confirmPasswordRules: [
-        v => !!v || 'Potvrdenie hesla je povinné.',
+        v => !!v || 'Potvrdenie hesla je povinné',
         v => v.length >= 4 || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
-        v => v === this.password || 'Zadané hesla sa nezhodujú.',
+        v => v === this.password || 'Zadané hesla sa nezhodujú',
       ],
       remember: true,
       alertFailText: '',

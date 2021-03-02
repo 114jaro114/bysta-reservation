@@ -37,6 +37,7 @@
     "vue-cli-plugin-vuetify": "^2.1.0",
     "vue-hotel-datepicker": "^4.3.0",
     "vue-hotel-datepicker2": "^0.9.6",
+    "vue-i18n": "^8.23.0",
     "vue-material": "^1.0.0-beta-15",
     "vue-router": "^3.4.9",
     "vue-tel-input-vuetify": "^1.2.16",

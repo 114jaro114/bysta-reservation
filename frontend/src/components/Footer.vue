@@ -3,7 +3,7 @@
   <v-card flat tile width="100%" class="text-center">
     <v-divider />
     <v-card-text class="p-0">
-      <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
+      <v-btn color="primary" v-for="icon in icons" :key="icon" class="mx-4" icon>
         <v-icon size="36px">
           {{ icon }}
         </v-icon>
@@ -11,7 +11,7 @@
     </v-card-text>
     <!-- <v-divider /> -->
     <v-card-text>
-      <v-icon>mdi-copyright</v-icon> {{ new Date().getFullYear() }} — <strong>Chata Byšta. Všetky práva vyhradené.</strong>
+      <v-icon color="primary">mdi-copyright</v-icon> {{ new Date().getFullYear() }} — <strong>Chata Byšta. Všetky práva vyhradené.</strong>
     </v-card-text>
   </v-card>
 </v-footer>

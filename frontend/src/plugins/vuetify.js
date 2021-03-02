@@ -5,28 +5,28 @@ import '@mdi/font/css/materialdesignicons.css';
 
 Vue.use(Vuetify);
 // import colors from 'vuetify/lib/util/colors'
-
-// const vuetify = new Vuetify({
-//
-// })
-
+// https://lobotuerto.com/vuetify-color-theme-builder/#generated-code
 export default new Vuetify({
   theme: {
     themes: {
-      light: {
-        primary: '#007bff',
-        secondary: '#000000',
-        accent: '#fff',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        background: '#ffffff'
-      },
       dark: {
-        primary: '#007bff',
-        background: '#000000'
+        primary: '#21CFF3',
+        accent: '#E0E0E0',
+        secondary: '#EEEEEE',
+        success: '#4CAF50',
+        info: '#2196F3',
+        warning: '#FB8C00',
+        error: '#FF5252'
       },
+      light: {
+        primary: '#0D47A1',
+        accent: '#212121',
+        secondary: '#ffffff',
+        success: '#4CAF50',
+        info: '#2196F3',
+        warning: '#FB8C00',
+        error: '#FF5252'
+      }
     },
   },
 });

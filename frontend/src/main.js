@@ -38,6 +38,9 @@ Vue.use(VueGoogleMaps, {
   }
 });
 
+//translate
+// import i18n from "./i18n";
+
 // Calendar
 // import VCalendar from 'v-calendar';
 //
@@ -82,8 +85,8 @@ window.Echo = new Echo({
 })
 
 //vue materialize
-import VueMaterial from 'vue-material';
-Vue.use(VueMaterial);
+// import VueMaterial from 'vue-material';
+// Vue.use(VueMaterial);
 
 // import scss file
 require('@/assets/styles/main.scss');
@@ -94,6 +97,7 @@ new Vue({
     router,
     vuetify,
     store,
+    // i18n,
     render: h => h(App),
   })
   .$mount('#app')

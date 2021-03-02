@@ -5,8 +5,11 @@
     <v-toolbar elevation="2" class="mb-3">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="position-absolute" style="right:14px">
-        <span class="md-title font-weight-bold">
-          <img class="logo2 align-middle" src="/img/logo2.png">
+        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
+          <img class="logo2 align-middle" src="/img/logo_home_theme_dark.png">
+        </span>
+        <span class="md-title font-weight-bold" v-else>
+          <img class="logo2 align-middle" src="/img/logo_home_theme_light.png">
         </span>
       </v-toolbar-title>
       <template v-slot:extension>
