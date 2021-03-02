@@ -14,7 +14,18 @@
       </v-toolbar-title>
       <template v-slot:extension>
         <v-tabs class="tabs" grow v-model="activeTab">
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
+          <v-tab :to="tabs[0].route">
+            Všetky
+          </v-tab>
+          <v-tab :to="tabs[1].route">
+            <v-badge :content="notifications" :value="notifications" color="primary">
+              Nové
+            </v-badge>
+          </v-tab>
+          <v-tab :to="tabs[2].route">
+            Dôležité
+          </v-tab>
+          <!-- <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab> -->
         </v-tabs>
       </template>
     </v-toolbar>
@@ -64,6 +75,7 @@ export default {
         name: 'Dôležité',
         route: '/notifications/relevant'
       }],
+      notifications: 1,
     }
   },
   updated() {

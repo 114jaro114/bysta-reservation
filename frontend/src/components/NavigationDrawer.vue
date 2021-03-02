@@ -26,7 +26,9 @@
         <v-list-item-title>Home</v-list-item-title>
       </v-list-item>
       <v-list-item to="/notifications">
-        <v-icon>mdi-bell</v-icon>
+        <v-badge :content="notifications" :value="notifications" color="primary" overlap bordered>
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
         <v-list-item-title>Notifikácie</v-list-item-title>
       </v-list-item>
       <v-list-item to="/administration">
@@ -38,7 +40,9 @@
         <v-list-item-title>Rezervácie</v-list-item-title>
       </v-list-item>
       <v-list-item to="/messenger">
-        <v-icon>mdi-facebook-messenger</v-icon>
+        <v-badge :content="messages" :value="messages" color="primary" overlap bordered>
+          <v-icon>mdi-facebook-messenger</v-icon>
+        </v-badge>
         <v-list-item-title>Messenger</v-list-item-title>
       </v-list-item>
       <v-list-item to="/settings">
@@ -48,6 +52,16 @@
       <v-list-item to="/about_us">
         <v-icon>mdi-information</v-icon>
         <v-list-item-title>O nás</v-list-item-title>
+      </v-list-item>
+
+      <v-list-item>
+        <v-btn color="primary" @click="messages++">
+          Send Message
+        </v-btn>
+
+        <v-btn color="error" @click="messages = 0">
+          Clear Notifications
+        </v-btn>
       </v-list-item>
     </v-list-item-group>
   </v-list>
@@ -66,6 +80,11 @@ export default {
       username: localStorage.getItem("username"),
       drawerNew: false,
       group: null,
+
+      // badge
+      messages: 0,
+      show: false,
+      notifications: 5,
     }
   },
   computed: {
