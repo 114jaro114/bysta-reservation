@@ -29,6 +29,10 @@ export default new Vuex.Store({
       end_date: '',
       color: '',
       username: '',
+    },
+
+    speedDialState: {
+      test: false,
     }
     // userInformations: [],
   },
@@ -48,6 +52,10 @@ export default new Vuex.Store({
     successReservationData: state => {
       return state.successReservationData;
     },
+
+    speedDialState: state => {
+      return state.speedDialState
+    }
   },
   mutations: {
     showProfile: (state, payload) => {
@@ -81,6 +89,10 @@ export default new Vuex.Store({
       Vue.set(state.successReservationData, 'color', payload.color);
       Vue.set(state.successReservationData, 'username', payload.username);
     },
+
+    speedDialState2: (state, payload) => {
+      Vue.set(state.speedDialState, 'test', payload.status);
+    },
   },
   actions: {
     showProfile: (context, payload) => {
@@ -97,7 +109,11 @@ export default new Vuex.Store({
 
     reservationData: (context, payload) => {
       context.commit('reservationData', payload)
-    }
+    },
+
+    speedDialState2: (context, payload) => {
+      context.commit('speedDialState2', payload)
+    },
   }
 });
 

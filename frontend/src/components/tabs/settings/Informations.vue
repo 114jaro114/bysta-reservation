@@ -1,16 +1,26 @@
 <template>
 <div class="informations w-100 h-100 text-uppercase">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col pl-0 pr-0 mt-3">
-      <span>Krajina/region</span>
-      <span>O aktuálnej verzií</span>
-      <span>Podmienky používania</span>
-      <span>Zásady ochrany osobných údajov</span>
-      <span>Časté otázkyh</span>
-      <span>Kontakt</span>
-      <span>Poďakovanie</span>
-    </div>
-  </div>
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card color="primary pt-3 pb-3" dark>
+        <span class="secondary--color">Krajina/region</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Krajina/region</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">O aktuálnej verzií</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Podmienky používania</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Zásady ochrany osobných údajov</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Časté otázky</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Kontakt</span>
+        <v-divider class="secondary" />
+        <span class="secondary--color">Poďakovanie</span>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 

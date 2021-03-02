@@ -1,9 +1,9 @@
 <template>
-<div class="friend_list w-100 h-100 text-uppercase secondary-color mt-3">
+<div class="friend_list w-100 h-100 text-uppercase mt-1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col">
-      <v-card elevation="0">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card elevation="2">
         <v-card-title>
           <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
         </v-card-title>
@@ -17,8 +17,8 @@
           </template>
 
           <template v-slot:item.status="{ item }">
-            <v-icon style="color:red" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
-            <v-icon style="color:green" v-else>mdi-checkbox-blank-circle</v-icon>
+            <v-icon color="error" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
+            <v-icon color="success" v-else>mdi-checkbox-blank-circle</v-icon>
             <span>{{item.status}}</span>
           </template>
 
@@ -48,14 +48,14 @@
               </v-btn>
               <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
                 <v-icon>mdi-close-circle</v-icon>
-                <span class="ml-1">Zrušiť žiadosť o priateľstvo</span>
+                <span class="ml-1">Zrušiť žiadosť</span>
               </v-btn>
             </div>
           </template>
         </v-data-table>
       </v-card>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </div>
 </template>
 

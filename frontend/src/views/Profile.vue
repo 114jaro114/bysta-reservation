@@ -1,5 +1,5 @@
 <template>
-<div class="profile w-100 h-100 text-uppercase secondary-color">
+<div class="profile w-100 h-100 text-uppercase">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-card elevation="0" class="v-content">
     <v-toolbar elevation="2" class="mb-3">

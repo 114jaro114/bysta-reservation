@@ -1,6 +1,6 @@
 <template>
 <div class="vytvorit_rezervaciu w-100 h-100">
-  <div class="row justify-content-center mr-0 ml-0">
+  <v-row justify="center" class="ml-0 mr-0">
     <div class="text-center">
       <v-snackbar v-model="snackbar" :multi-line="multiLine" color="red" :left="true">
         <v-icon>mdi-alert-circle</v-icon>
@@ -13,7 +13,7 @@
         </template>
       </v-snackbar>
     </div>
-    <div class="col pl-0 pr-0 mt-3">
+    <v-col class="pl-0 pr-0">
       <!-- <v-lazy v-model="isActive" :options="{
           threshold: .8
         }" min-height="200" transition="fade-transition"> -->
@@ -339,8 +339,8 @@
         </v-stepper-items>
       </v-stepper>
       <!-- </v-lazy> -->
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </div>
 </template>
 
@@ -685,6 +685,7 @@ export default {
 }
 .v-stepper {
     box-shadow: none !important;
+    background-color: unset !important;
 }
 
 .v-stepper__wrapper {
@@ -705,7 +706,4 @@ export default {
 //         display: flex !important;
 //     }
 // }
-.v-picker--time .theme--dark.v-picker__title {
-    background-color: red !important;
-}
 </style>

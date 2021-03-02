@@ -130,6 +130,12 @@ export default {
           localStorage.setItem('authToken', resp.data.token);
           this.reset();
           this.$router.push("/home");
+          if (localStorage.getItem('speed_dial') == undefined) {
+            localStorage.setItem('speed_dial', true);
+            this.$store.dispatch('speedDialState2', {
+              status: true
+            });
+          }
         }).catch(e => {
           this.myloadingvariable = false,
             this.alert = true,

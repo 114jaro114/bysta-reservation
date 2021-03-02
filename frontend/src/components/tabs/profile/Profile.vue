@@ -1,137 +1,140 @@
 <template>
-<div class="row justify-content-center mr-0 ml-0">
-  <div class="col">
-    <v-card elevation="0">
-      <v-card-title>
-        <v-row v-if="pu == true">
-          <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" color="primary" disabled>
-              Používateľský účet
-            </v-btn>
-          </v-col>
-          <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" outlined color="primary" @click="contact_inf()">
-              Kontaktné informácie<v-icon>mdi-arrow-right-thick</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" color="primary" @click="user_acc()">
-              <v-icon>mdi-arrow-left-thick</v-icon>Používateľšký účet
-            </v-btn>
-          </v-col>
-          <v-col class="pl-0 pr-0">
-            <v-btn class="w-100" outlined color="primary" disabled>
-              Kontaktné informácie
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card-title>
+<div class="profile w-100 h-100 text-uppercase mt-1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card elevation="2">
+        <v-card-title>
+          <v-row v-if="pu == true">
+            <v-col>
+              <v-btn class="w-100" color="primary" disabled>
+                Používateľský účet
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn class="w-100" outlined color="primary" @click="contact_inf()">
+                Kontaktné informácie<v-icon>mdi-arrow-right-thick</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row v-else>
+            <v-col>
+              <v-btn class="w-100" color="primary" @click="user_acc()">
+                <v-icon>mdi-arrow-left-thick</v-icon>Používateľšký účet
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn class="w-100" outlined color="primary" disabled>
+                Kontaktné informácie
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-title>
 
-      <v-divider class="mb-0" />
+        <v-divider class="mb-0" />
 
-      <v-card-text>
-        <div class="" v-if="pu == true">
-          <v-row justify="center" class="mt-3 mb-3">
-            <!-- <v-avatar color="blue" size="48" class="mr-3" v-if="!avatarImageUrl">
+        <v-card-text>
+          <div class="" v-if="pu == true">
+            <v-row justify="center" class="mt-3 mb-3">
+              <!-- <v-avatar color="blue" size="48" class="mr-3" v-if="!avatarImageUrl">
                   <span style="color:white">{{ usernameInitial }}</span>
                 </v-avatar>
                 <v-avatar color="blue" size="48" class="mr-3" v-else>
                   <img :src="avatarImageUrl">
                 </v-avatar> -->
 
-            <!-- <div v-if="showUploadProgress">
+              <!-- <div v-if="showUploadProgress">
                   Uploading: {{ uploadPercent }} %
                 </div> -->
 
-            <div class="image-upload">
-              <v-btn @change="updateAvatar($event)" block>
-                <label class="file-input-icon-profile" for="file-input">
-                  Zmeniť profilovú fotku
-                </label>
+              <div class="image-upload">
+                <v-btn @change="updateAvatar($event)" color="primary" block>
+                  <v-icon>mdi-file-find</v-icon>
+                  <label class="file-input-icon-profile" for="file-input">
+                    Zmeniť profilovú fotku
+                  </label>
+                  <input type="file" id="file-input" name="avatar" ref="photo" accept="image/*" @change="updateAvatar($event)">
+                </v-btn>
+              </div>
 
-                <input type="file" id="file-input" name="avatar" ref="photo" accept="image/*" @change="updateAvatar($event)">
-              </v-btn>
-            </div>
+              <div class="user-from" block>
+                <v-btn disabled>
+                  <span>Člen od: <span class="font-weight-bold">{{ memberFrom }}</span></span>
+                </v-btn>
+              </div>
+            </v-row>
 
-            <div class="user-from" block>
-              <v-btn disabled>
-                <span>Člen od: <span class="font-weight-bold">{{ memberFrom }}</span></span>
-              </v-btn>
-            </div>
-          </v-row>
+            <v-row justify="center">
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
+              </v-col>
 
-          <v-row justify="center">
-            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-              <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
-            </v-col>
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-              <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
-            </v-col>
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
+                  :type="show1 ? 'text' : 'password'" clearable>
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </div>
+          <div v-else>
+            <v-row justify="center">
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" label="Meno" clearable required></v-text-field>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-              <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
-                :type="show1 ? 'text' : 'password'" clearable>
-              </v-text-field>
-            </v-col>
-          </v-row>
-        </div>
-        <div v-else>
-          <v-row justify="center">
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" label="Meno" clearable required></v-text-field>
-            </v-col>
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" label="Priezvisko" clearable required></v-text-field>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" label="Priezvisko" clearable required></v-text-field>
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-              <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
                         () => !!address && address.length <= 25 || 'Address must be less than 25 characters']" label="Adresa" counter="25" clearable required></v-text-field>
-            </v-col>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required']" label="Mesto" clearable required></v-text-field>
-            </v-col>
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required']" label="Mesto" clearable required></v-text-field>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <v-text-field ref="postcode" v-model="postcode" :rules="[() => !!postcode || 'This field is required']" label="PSČ" clearable required></v-text-field>
-            </v-col>
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <v-text-field ref="postcode" v-model="postcode" :rules="[() => !!postcode || 'This field is required']" label="PSČ" clearable required></v-text-field>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
-              </v-autocomplete>
-            </v-col>
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
+                </v-autocomplete>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-              <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
-            </v-col>
-          </v-row>
-        </div>
-      </v-card-text>
+              <v-col cols="12" sm="12" md="6" lg="6">
+                <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card-text>
 
-      <v-divider />
+        <v-divider />
 
-      <v-card-actions class="p-0">
-        <div v-if="pu == true">
-          <v-btn color="primary" :loading="loading" @click.native="update">
-            <v-icon left dark>mdi-check</v-icon>
-            Uložiť zmeny
-          </v-btn>
-        </div>
-        <div v-else>
-          <v-btn color="primary" :loading="loading" @click="updateContactInfo">
-            <v-icon left dark>mdi-update</v-icon>
-            Uložiť zmeny
-          </v-btn>
-        </div>
+        <v-card-actions class="pt-0">
+          <div v-if="pu == true">
+            <v-btn color="primary" :loading="loading" @click.native="update">
+              <v-icon left dark>mdi-check</v-icon>
+              Uložiť zmeny
+            </v-btn>
+          </div>
+          <div v-else>
+            <v-btn color="primary" :loading="loading" @click="updateContactInfo">
+              <v-icon left dark>mdi-update</v-icon>
+              Aktualizovať kontaktné údaje
+            </v-btn>
+          </div>
 
-      </v-card-actions>
-    </v-card>
-  </div>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 

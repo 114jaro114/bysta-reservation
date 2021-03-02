@@ -1,7 +1,7 @@
 <template>
 <v-footer class="p-0">
   <v-card flat tile width="100%" class="text-center">
-    <v-divider />
+    <v-divider class="primary" />
     <v-card-text class="p-0">
       <v-btn color="primary" v-for="icon in icons" :key="icon" class="mx-4" icon>
         <v-icon size="36px">
