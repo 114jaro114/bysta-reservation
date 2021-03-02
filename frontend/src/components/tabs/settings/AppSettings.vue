@@ -57,6 +57,22 @@
 
         <v-divider class="secondary" />
 
+        <span class="secondary--color">Notifikácie</span>
+
+        <v-card-text>
+          <v-row justify="center">
+            <v-col class="d-flex pb-0" cols="12" sm="6">
+              <v-btn :ripple="false" class="speed_dial_switch" block large>
+                <span class="pr-4">vypnúť</span>
+                <v-switch color="primary" v-model="switch2" inset></v-switch>
+                <span>Zapnúť</span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+
+        <v-divider class="secondary" />
+
         <span class="secondary--color">Jazyk aplikácie</span>
 
         <v-card-text>
@@ -114,6 +130,7 @@ export default {
         },
       ],
       switch1: JSON.parse(localStorage.getItem("speed_dial")),
+      switch2: true,
     }
   },
   mounted() {
