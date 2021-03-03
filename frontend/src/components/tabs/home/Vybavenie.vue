@@ -1,16 +1,18 @@
 <template>
-<div class="vybavenie w-100 h-100 text-uppercase secondary-color">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col pl-0 pr-0 mt-3">
-      <md-card-header>
-        <div class="md-title">Vybavenie</div>
-      </md-card-header>
+<div class="vybavenie w-100 h-100 text-uppercase mt-1">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card>
+        <v-card-title>
+          <span class="primary--text">Vybavenie</span>
+        </v-card-title>
 
-      <md-card-content>
-        <span>10 hostí · 5 spální · 16 lôžok · 1 kúpeľňa</span><br>
-      </md-card-content>
-    </div>
-  </div>
+        <v-card-text>
+          <span>10 hostí · 5 spální · 16 lôžok · 1 kúpeľňa</span><br>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 

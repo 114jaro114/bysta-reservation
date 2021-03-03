@@ -1,12 +1,16 @@
 <template>
-<div class="hodnotenie w-100 h-100 text-uppercase secondary-color">
-  <v-lazy v-model="isActive" :options="{
+<div class="hodnotenie w-100 h-100 text-uppercase mt-1">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <!-- <v-lazy v-model="isActive" :options="{
           threshold: .5
-        }" min-height="200" transition="fade-transition">
-    <v-card class="mx-auto">
+        }" min-height="200" transition="fade-transition"> -->
+      <!-- <v-card> -->
       <Rating />
-    </v-card>
-  </v-lazy>
+      <!-- </v-card> -->
+      <!-- </v-lazy> -->
+    </v-col>
+  </v-row>
 </div>
 </template>
 <script>

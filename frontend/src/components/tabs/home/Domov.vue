@@ -1,14 +1,19 @@
 <template>
-<div class="domov w-100 h-100 text-uppercase">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col pl-0 pr-0 mt-3">
-      <md-card-content>
-        <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
-        <h1>Gallery</h1>
-        <lightbox :cells="3" :items="images"></lightbox>
-      </md-card-content>
-    </div>
-  </div>
+<div class="domov w-100 h-100 text-uppercase mt-1">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card>
+        <v-card-text>
+          <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
+        </v-card-text>
+
+        <v-card-text>
+          <h1 class="primary--text">Gallery</h1>
+          <lightbox :cells="3" :items="images"></lightbox>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 <script>
@@ -83,9 +88,16 @@ export default {
     opacity: 0.9;
 }
 
-.lb-item {
-    border-top: 2px solid #f5f5f5;
-    border-right: 2px solid #f5f5f5;
+.v-card .theme--dark .lb-item {
+    border-top: 5px solid #1E1E1E !important;
+    border-right: 5px solid #1E1E1E !important;
+    /* border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px; */
+}
+
+.v-card .theme--light .lb-item {
+    border-top: 5px solid #ffffff !important;
+    border-right: 5px solid #ffffff !important;
     /* border-top-left-radius: 20px;
   border-bottom-left-radius: 20px; */
 }

@@ -1,7 +1,7 @@
 <template>
 <div class='calendar'>
   <!-- <div class="row bb ml-0 mr-0 pt-3"> -->
-  <v-card class="m-3" :loading="myloadingvariable" tile>
+  <v-card class="m-3" :loading="myloadingvariable">
     <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="date" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone" is-expanded>
       <!--=========DAY POPOVER HEADER SLOT=========-->
       <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>

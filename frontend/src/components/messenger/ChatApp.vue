@@ -1,7 +1,70 @@
 <template lang="html">
-  <div class="chat-app pt-3">
-    <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
-    <ContactsList :contacts="contacts" @selected="startConversationWith"/>
+  <div class="chat-app w-100 h-100 mt-1">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col>
+        <v-card elevation="2" class="mh-50">
+          <v-card-title>
+            <v-row v-if="userChoosed == true">
+              <v-col>
+                <v-btn class="w-100" color="primary" disabled>
+                  <v-icon class="mr-1">mdi-facebook-messenger</v-icon>Chat
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn class="w-100" outlined color="primary" @click="friend_list()">
+                  <v-icon class="mr-1">mdi-account-group</v-icon>
+                  Zoznam priateľov
+                  <!-- <v-icon class="ml-1">mdi-arrow-right-thick</v-icon> -->
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row v-else>
+              <v-col>
+                <v-btn class="w-100" color="primary" @click="chat()">
+                  <!-- <v-icon class="mr-1">mdi-arrow-left-thick</v-icon> -->
+                  <v-icon class="mr-1">mdi-facebook-messenger</v-icon>
+                  Chat
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn class="w-100" outlined color="primary" disabled>
+                  <v-icon class="mr-1">mdi-account-group</v-icon>Zoznam priateľov
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+
+          <v-divider class="mb-0" />
+
+          <v-card-text>
+            <div v-if="userChoosed == true">
+              <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
+            </div>
+            <div v-else>
+              <ContactsList :contacts="contacts" @selected="startConversationWith"/>
+            </div>
+          </v-card-text>
+
+          <!-- <v-divider /> -->
+
+          <!-- <v-card-actions class="pt-0">
+            <div v-if="userChoosed == true">
+              <v-btn color="primary" :loading="loading">
+                <v-icon left dark>mdi-check</v-icon>
+                Uložiť zmeny
+              </v-btn>
+            </div>
+            <div v-else>
+              <v-btn color="primary" :loading="loading">
+                <v-icon left dark>mdi-update</v-icon>
+                Aktualizovať kontaktné údaje
+              </v-btn>
+            </div>
+
+          </v-card-actions> -->
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -22,6 +85,7 @@ export default {
       messages: [],
       contacts: [],
       users: [],
+      userChoosed: true,
     }
   },
 
@@ -56,6 +120,14 @@ export default {
   },
 
   methods: {
+    friend_list() {
+      this.userChoosed = false;
+    },
+
+    chat() {
+      this.userChoosed = true;
+    },
+
     startConversationWith(contact) {
       this.updateUnreadCount(contact, true);
 

@@ -1,13 +1,13 @@
 <template>
-<div class="mapa w-100 h-100 text-uppercase secondary-color">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col pl-0 pr-0">
-      <md-card class="">
-        <md-card-header>
-          <div class="md-title">Poloha</div>
-        </md-card-header>
+<div class="mapa w-100 h-100 text-uppercase mt-1">
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card>
+        <v-card-title>
+          <span class="primary--text">Poloha</span>
+        </v-card-title>
 
-        <md-card-content>
+        <v-card-text>
           <span>Byšta, Košický kraj, Slovensko</span>
           <gmap-map :center="position" :zoom="10" style="width: 100%; height: 440px;">
             <gmap-info-window :options="infoWindowOptions" :position="position" :opened="infoWindowOpened" @closeclick="handleInfoWindowClose">
@@ -17,10 +17,10 @@
             </gmap-info-window>
             <gmap-marker :position="position" :clickable="true" :draggable="false" @click="handleMarkerClicked()"></gmap-marker>
           </gmap-map>
-        </md-card-content>
-      </md-card>
-    </div>
-  </div>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 

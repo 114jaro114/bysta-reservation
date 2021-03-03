@@ -1,38 +1,64 @@
 <template lang="html">
-  <div class="conversation col-8 pr-0 pl-1 pt-0 pb-0">
-    <v-card v-if="contact" class="h-100" :typingStatusNew="typingStatusNew">
-      <!-- v-show="showChat" -->
-      <div class="top-bar">
-        <!-- <div class="avatar"><p>CB</p></div> -->
-        <div class="row m-0">
-          <div class="name" v-if="contact.status == 'online'">
-            <i class="fas fa-user" style="color: #58b666"></i>
-            <span> {{ contact.name }}</span>
-          </div>
-          <div class="name" v-else>
-            <i class="fas fa-user" style="color: #ff725d"></i>
-            <span> {{ contact.name }}</span>
-          </div>
-          <div class="icons">
-            <i class="fas fa-phone"></i>
-            <i class="fas fa-video"></i>
-            <i class="fas fa-ellipsis-v"></i>
-            <i class="fas fa-times" style="font-size: 15px" @click="removeSelectedContact"></i>
-          </div>
-        </div>
-      </div>
+  <div class="conversation">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col>
+        <v-card elevation="0" v-if="contact" :typingStatusNew="typingStatusNew">
+          <!-- v-show="showChat" -->
+          <div class="top-bar">
+            <!-- <div class="avatar"><p>CB</p></div> -->
+            <div class="row m-0">
+              <div class="name" v-if="contact.status == 'online'">
+                <v-icon color="success mr-1">mdi-account</v-icon>
+                <span> {{ contact.name }}</span>
+              </div>
+              <div class="name" v-else>
+                <v-icon color="error mr-1">mdi-account</v-icon>
+                <span> {{ contact.name }}</span>
+              </div>
+              <div class="icons">
+                <v-btn icon>
+                  <v-icon>mdi-phone</v-icon>
+                </v-btn>
 
-      <hr class="mb-0 mt-0">
+                <v-btn icon>
+                  <v-icon>mdi-video</v-icon>
+                </v-btn>
 
-      <div class="card-body">
-        <!-- <span>{{ contact ? contact.name: 'Select a Contact' }}</span> -->
-        <MessagesFeed :typingStatus="typingStatus" :contact="contact" :messages="messages" />
-      </div>
-      <!-- <hr class="mb-0 mt-0"> -->
-      <div class="bottom-bar">
-        <MessageComposer @send="sendMessage" />
-      </div>
-    </v-card>
+                <v-btn icon>
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+
+                <v-btn icon @click="removeSelectedContact">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <!-- <i class="fas fa-phone"></i>
+                <i class="fas fa-video"></i>
+                <i class="fas fa-ellipsis-v"></i>
+                <i class="fas fa-times" style="font-size: 15px" @click="removeSelectedContact"></i> -->
+              </div>
+            </div>
+          </div>
+
+          <v-divider class="mb-0 mt-0" />
+
+
+          <div class="card-body">
+            <!-- <span>{{ contact ? contact.name: 'Select a Contact' }}</span> -->
+            <MessagesFeed :typingStatus="typingStatus" :contact="contact" :messages="messages" />
+          </div>
+          <!-- <hr class="mb-0 mt-0"> -->
+          <div class="bottom-bar">
+            <MessageComposer @send="sendMessage" />
+          </div>
+        </v-card>
+
+        <v-card elevation="0" v-else>
+          <v-card-title class="justify-center">
+            <span class="primary--text">Nie je vybratý žiadny kontakt</span>
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

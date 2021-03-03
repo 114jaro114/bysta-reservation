@@ -1,31 +1,37 @@
 <template lang="html">
-  <div class="contacts-list col-4 pr-1 pl-3 pt-0 pb-0">
-    <v-card tile class="h-100">
-      <div class="top-bar">
-        <!-- <div class="avatar"><p>CB</p></div> -->
-        <div class="name text-center"><i class="fas fa-users"></i> Zoznam priateľov</div>
-      </div>
-      <hr class="mb-0 mt-0">
-      <div class="card-body h-100">
-        <div class="row mr-0 ml-0 pl-1 w-100 position-relative" style="color: #6c757d" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }">
-          <div style="width:20px;text-align:left" v-if="contact.status == 'online'">
-            <span class="status online"></span>
-          </div>
-          <div style="width:20px;text-align:left" v-else>
-            <span class="status offline"></span>
-          </div>
-          <!-- <div class="avatar">
-            <img :src="contact.profile_image" :alt="contact.name">
-        </div> -->
-          <div class="contact">
-            <span>{{ contact.name }}</span>
-          </div>
-          <div class="unread" v-if="contact.unread">
-            <span>{{ contact.unread }}</span>
-          </div>
-        </div>
-      </div>
-    </v-card>
+  <div class="contacts-list">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col>
+        <v-card elevation="0" :loading="myloadingvariable">
+          <v-card-title class="justify-center">
+            <v-icon class="mr-1 primary--text" large>mdi-account-group</v-icon>
+            <span class="primary--text">Zoznam priateľov</span>
+          </v-card-title>
+          <v-divider class="mt-0" />
+        <v-card-text class="p-3">
+          <v-row justify="center" class="ml-0 mr-0 position-relative" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }">
+            <!-- <div class="row mr-0 ml-0 pl-1 w-100 position-relative" style="color: #6c757d" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }"> -->
+              <div style="width:20px;text-align:left" v-if="contact.status == 'online'">
+                <span class="status online"></span>
+              </div>
+              <div style="width:20px;text-align:left" v-else>
+                <span class="status offline"></span>
+              </div>
+              <!-- <div class="avatar">
+                <img :src="contact.profile_image" :alt="contact.name">
+            </div> -->
+              <div class="contact">
+                <span>{{ contact.name }}</span>
+              </div>
+              <div class="unread" v-if="contact.unread">
+                <span>{{ contact.unread }}</span>
+              </div>
+            </v-row>
+            <!-- </div> -->
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
@@ -41,7 +47,8 @@ export default {
   data() {
     return {
       // selected: 0
-      selected: this.contacts.length ? this.contacts[0] : null
+      selected: this.contacts.length ? this.contacts[0] : null,
+      myloadingvariable: true,
     }
   },
   methods: {

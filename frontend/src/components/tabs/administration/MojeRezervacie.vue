@@ -1,119 +1,121 @@
 <template>
-<div class="moje_rezervacie w-100 h-100 text-uppercase secondary-color">
+<div class="moje_rezervacie w-100 h-100 text-uppercase mt-1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <div class="row justify-content-center mr-0 ml-0">
-    <div class="col">
-      <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search" sort-by="id" v-if="user == 'admin'" item-key="title"
-        :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte">
-        <template v-slot:top>
-          <v-toolbar flat>
-            <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
-            <!-- <v-spacer></v-spacer> -->
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-            <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
-            <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Nová rezervácia </v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col class="d-flex" cols="12" sm="12">
-                        <v-select :items="items" item-text="items" label="Status" v-model="newEvent.event_name"></v-select>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12" sm="6">
-                        <v-menu v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field v-model="newEvent.start_date" label="Dátum začiatku" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
-                          </template>
-                          <v-date-picker id="start_date" name="start_date" v-model="newEvent.start_date" @input="menu1 = false"></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field v-model="newEvent.end_date" label="Dátum konca" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
-                          </template>
-                          <v-date-picker id="end_date" name="end_date" v-model="newEvent.end_date" @input="menu2 = false"></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
-              <v-card>
-                <v-card-title class="headline text-center">Naozaj chcete zmazať rezerváciu?</v-card-title>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDelete">Zatvoriť</v-btn>
-                  <v-btn color="blue darken-1" text @click="deleteItemConfirm">Áno</v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.title="{ item }">
-          <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
-            <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
-            <!-- {{ item.title }} -->
-          </v-chip>
-          <v-chip :color="getColor(item.title)" dark v-else>
-            <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
-            <!-- {{ item.title }} -->
-          </v-chip>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-        </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize"> Reset </v-btn>
-        </template>
-      </v-data-table>
-      <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEventsForOneUser" :search="search" item-key="name" :loading="myloadingvariable"
-        loading-text="Načítavanie... Prosím počkajte" v-else>
-        <template v-slot:item.id="{ item }">
-          <span>{{ currentEventsForOneUser.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
-        </template>
-        <template v-slot:item.title="{ item }">
-          <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
-            <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
-            <!-- {{ item.title }} -->
-          </v-chip>
-          <v-chip :color="getColor(item.title)" dark v-else>
-            <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
-            <!-- {{ item.title }} -->
-          </v-chip>
-        </template>
-        <template v-slot:item.start="{ item }">
-          <span>{{ formatStart_date(item.start) }}</span>
-        </template>
-        <template v-slot:item.end="{ item }">
-          <span>{{ formatEnd_date(item.end) }}</span>
-        </template>
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col>
+      <v-card color="primary">
+        <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search" sort-by="id" v-if="user == 'admin'" item-key="title"
+          :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte">
+          <template v-slot:top>
+            <v-toolbar flat>
+              <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
+              <!-- <v-spacer></v-spacer> -->
+              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
+              <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
+              <v-spacer></v-spacer>
+              <v-dialog v-model="dialog" max-width="500px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Nová rezervácia </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col class="d-flex" cols="12" sm="12">
+                          <v-select :items="items" item-text="items" label="Status" v-model="newEvent.event_name"></v-select>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <v-menu v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field v-model="newEvent.start_date" label="Dátum začiatku" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                            </template>
+                            <v-date-picker id="start_date" name="start_date" v-model="newEvent.start_date" @input="menu1 = false"></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field v-model="newEvent.end_date" label="Dátum konca" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                            </template>
+                            <v-date-picker id="end_date" name="end_date" v-model="newEvent.end_date" @input="menu2 = false"></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
+                    <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-card>
+                  <v-card-title class="headline text-center">Naozaj chcete zmazať rezerváciu?</v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDelete">Zatvoriť</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">Áno</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.title="{ item }">
+            <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
+              <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
+              <!-- {{ item.title }} -->
+            </v-chip>
+            <v-chip :color="getColor(item.title)" dark v-else>
+              <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
+              <!-- {{ item.title }} -->
+            </v-chip>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+          </template>
+          <template v-slot:no-data>
+            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+          </template>
+        </v-data-table>
+        <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEventsForOneUser" :search="search" item-key="name" :loading="myloadingvariable"
+          loading-text="Načítavanie... Prosím počkajte" v-else>
+          <template v-slot:item.id="{ item }">
+            <span>{{ currentEventsForOneUser.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
+          </template>
+          <template v-slot:item.title="{ item }">
+            <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
+              <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
+              <!-- {{ item.title }} -->
+            </v-chip>
+            <v-chip :color="getColor(item.title)" dark v-else>
+              <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
+              <!-- {{ item.title }} -->
+            </v-chip>
+          </template>
+          <template v-slot:item.start="{ item }">
+            <span>{{ formatStart_date(item.start) }}</span>
+          </template>
+          <template v-slot:item.end="{ item }">
+            <span>{{ formatEnd_date(item.end) }}</span>
+          </template>
 
-        <template v-slot:item.username="{ item }">
-          <v-icon>mdi-account</v-icon>
-          <span>{{item.username}}</span>
-        </template>
-      </v-data-table>
-    </div>
-  </div>
+          <template v-slot:item.username="{ item }">
+            <v-icon>mdi-account</v-icon>
+            <span>{{item.username}}</span>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-col>
+  </v-row>
 </div>
 </template>
 <script>
