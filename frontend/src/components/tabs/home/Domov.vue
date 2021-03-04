@@ -7,8 +7,9 @@
           <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
         </v-card-text>
 
+        <v-divider />
         <v-card-text>
-          <h1 class="primary--text">Gallery</h1>
+          <h1 class="primary--text">Galéria</h1>
           <lightbox :cells="3" :items="images"></lightbox>
         </v-card-text>
       </v-card>

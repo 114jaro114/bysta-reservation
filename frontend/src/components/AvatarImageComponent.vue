@@ -116,6 +116,10 @@ export default {
       axios.post(api, null, config).then((res) => {
         this.$emit('childToParent', 'false');
         console.log(res);
+        this.$store.dispatch('mutationLogout', {
+          username: localStorage.getItem("username"),
+          logout: true
+        });
         localStorage.removeItem("username");
         localStorage.removeItem("authToken");
         this.$router.push("/login");

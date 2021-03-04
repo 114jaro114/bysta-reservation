@@ -53,21 +53,45 @@
         <v-icon>mdi-information</v-icon>
         <v-list-item-title>O nás</v-list-item-title>
       </v-list-item>
-
-      <v-list-item>
-        <v-btn color="primary" @click="messages++">
-          Send Message
-        </v-btn>
-
-        <v-btn color="error" @click="messages = 0">
-          Clear Notifications
-        </v-btn>
-      </v-list-item>
     </v-list-item-group>
   </v-list>
+
+  <template v-slot:append>
+    <v-divider class="mb-2 mt-0"></v-divider>
+    <v-list-item>
+      <v-btn color="primary" @click="messages++" block>
+        Send Message
+      </v-btn>
+    </v-list-item>
+
+    <v-list-item>
+      <v-btn color="error" @click="messages = 0" block>
+        Clear Notifications
+      </v-btn>
+    </v-list-item>
+    <v-list-item>
+      <v-btn color="accent" @click="messages = 0; logout()" block>
+        Odhlásiť sa
+      </v-btn>
+    </v-list-item>
+  </template>
+  <!-- <template v-slot:append>
+    <v-list-item link @click="logout">
+      <v-list-item-icon>
+        <v-icon>logout</v-icon>
+      </v-list-item-icon>
+
+      <v-list-item-content>
+        <v-list-item-title>
+          logout
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+  </template> -->
 </v-navigation-drawer>
 </template>
 <script>
+import axios from 'axios'
 import AvatarImageComponent from "@/components/AvatarImageComponent.vue";
 export default {
   name: "NavigationDrawer",
@@ -93,10 +117,30 @@ export default {
     },
   },
   methods: {
-    // childToParentFunction(param) {
-    //   console.log
-    //   console.log("cau: ");
-    // },
+    logout() {
+      this.$emit('childToParent', 'true');
+      const api = 'http://127.0.0.1:8000/api/auth/logout';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.post(api, null, config).then((res) => {
+        this.$emit('childToParent', 'false');
+        console.log(res);
+        this.$store.dispatch('mutationLogout', {
+          username: localStorage.getItem("username"),
+          logout: true
+        });
+        localStorage.removeItem("username");
+        localStorage.removeItem("authToken");
+        this.$router.push("/login");
+      }).catch(e => {
+        this.$emit('childToParent', 'false'),
+          console.log(e);
+      })
+    },
   }
 }
 </script>
@@ -105,6 +149,13 @@ export default {
   position: fixed !important;
   width: 300px !important;
   box-shadow: unset !important;
+  z-index: 51 !important;
+}
+
+.v-navigation-drawer__append {
+  /* margin-bottom: 64px; */
+  margin-bottom: 6px;
+
 }
 
 .v-overlay__scrim {
@@ -121,5 +172,9 @@ export default {
 
 .v-list-item-group .v-list-item--active.theme--light {
   color: #0D47A1;
+}
+
+.v-navigation-drawer:not(.v-navigation-drawer--floating) .v-navigation-drawer__border {
+  background-color: unset !important;
 }
 </style>

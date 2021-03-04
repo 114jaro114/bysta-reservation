@@ -4,7 +4,7 @@
     <v-col>
       <v-card>
         <v-card-title>
-          <span class="primary--text">Poloha</span>
+          <!-- <span class="primary--text">Poloha</span> -->
         </v-card-title>
 
         <v-card-text>

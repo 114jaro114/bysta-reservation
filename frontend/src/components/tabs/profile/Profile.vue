@@ -3,7 +3,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <v-row justify="center" class="ml-0 mr-0">
     <v-col>
-      <v-card elevation="2">
+      <v-card elevation="2" :loading="myloadingvariable">
         <v-card-title>
           <v-row v-if="pu == true">
             <v-col>
@@ -83,33 +83,32 @@
           <div v-else>
             <v-row justify="center">
               <v-col cols="12" sm="12" md="6" lg="6">
-                <v-text-field ref="surname" v-model="surname" :rules="[() => !!surname || 'This field is required']" label="Meno" clearable required></v-text-field>
+                <v-text-field ref="surname" v-model="surname" label="Meno" counter clearable required></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" md="6" lg="6">
-                <v-text-field ref="lastname" v-model="lastname" :rules="[() => !!lastname || 'This field is required']" label="Priezvisko" clearable required></v-text-field>
+                <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" counter clearable required></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" md="12" lg="12">
-                <v-text-field ref="address" v-model="address" :rules="[() => !!address || 'This field is required',
-                        () => !!address && address.length <= 25 || 'Address must be less than 25 characters']" label="Adresa" counter="25" clearable required></v-text-field>
+                <v-text-field ref="address" v-model="address" label="Adresa" counter clearable required></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" md="6" lg="6">
-                <v-text-field ref="city" v-model="city" :rules="[() => !!city || 'This field is required']" label="Mesto" clearable required></v-text-field>
+                <v-text-field ref="city" v-model="city" label="Mesto" counter clearable required></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" md="6" lg="6">
-                <v-text-field ref="postcode" v-model="postcode" :rules="[() => !!postcode || 'This field is required']" label="PSČ" clearable required></v-text-field>
+                <v-text-field ref="postcode" v-model="postcode" label="PSČ" counter clearable required></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" md="6" lg="6">
-                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="[() => !!country || 'This field is required']" :items="countries" label="Krajina" clearable required>
+                <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :items="countries" label="Krajina" counter clearable required>
                 </v-autocomplete>
               </v-col>
 
               <v-col cols="12" sm="12" md="6" lg="6">
-                <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+                <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" counter clearable></VueTelInputVuetify>
               </v-col>
             </v-row>
           </div>
@@ -211,10 +210,12 @@ export default {
       },
       // comment: null,
       formHasErrors: false,
+      myloadingvariable: true,
     }
   },
 
   mounted() {
+    this.myloadingvariable = true;
     this.avatarImageUrl = this.avatarUrl;
     const api = 'http://127.0.0.1:8000/api/user';
 
@@ -237,6 +238,7 @@ export default {
         this.postcode = res.data[0].postcode;
         this.country = res.data[0].country;
         this.myPhone = res.data[0].phone;
+        this.myloadingvariable = false;
       });
   },
   async created() {

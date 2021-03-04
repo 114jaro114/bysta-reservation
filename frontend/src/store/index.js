@@ -33,8 +33,12 @@ export default new Vuex.Store({
 
     speedDialState: {
       test: false,
+    },
+
+    isLoggedOut: {
+      username: '',
+      logout: false
     }
-    // userInformations: [],
   },
   getters: {
     Data: state => {
@@ -55,6 +59,10 @@ export default new Vuex.Store({
 
     speedDialState: state => {
       return state.speedDialState
+    },
+
+    gettersIsLoggedOut: state => {
+      return state.isLoggedOut
     }
   },
   mutations: {
@@ -93,6 +101,16 @@ export default new Vuex.Store({
     speedDialState2: (state, payload) => {
       Vue.set(state.speedDialState, 'test', payload.status);
     },
+
+
+    mutationLogout: (state, payload) => {
+      Vue.set(state.isLoggedOut, 'username', payload.username);
+      Vue.set(state.isLoggedOut, 'logout', payload.logout);
+    },
+
+    // mutationLogout: (state, payload) => {
+    //   state.username = payload.username;
+    // }
   },
   actions: {
     showProfile: (context, payload) => {
@@ -114,6 +132,10 @@ export default new Vuex.Store({
     speedDialState2: (context, payload) => {
       context.commit('speedDialState2', payload)
     },
+
+    mutationLogout: (context, payload) => {
+      context.commit('mutationLogout', payload)
+    }
   }
 });
 

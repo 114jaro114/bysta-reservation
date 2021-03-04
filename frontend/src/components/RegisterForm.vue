@@ -177,6 +177,19 @@ export default {
       }
     },
   },
+
+  mounted() {
+    //do something after mounting vue instance
+    console.log('Component Register mounted.')
+    this.$store.dispatch('mutationLogout', {
+      username: '',
+      logout: false
+    });
+  },
+
+  created() {
+    console.log('Component Register created')
+  },
 };
 </script>
 <style lang="css" scoped>

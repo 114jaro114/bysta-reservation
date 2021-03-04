@@ -38,6 +38,10 @@ Vue.use(VueGoogleMaps, {
   }
 });
 
+// vue scrollbar
+import Vuebar from 'vuebar';
+Vue.use(Vuebar);
+
 //translate
 // import i18n from "./i18n";
 

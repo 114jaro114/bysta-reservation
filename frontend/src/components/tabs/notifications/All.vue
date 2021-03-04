@@ -1,5 +1,5 @@
 <template>
-<div class="all w-100 h-100 text-uppercase">
+<div class="all w-100 h-100 text-uppercase mt-1">
   <v-row justify="center" class="ml-0 mr-0">
     <v-col v-for="(item, i) in items" :key="i" cols="12">
       <v-card color="primary" dark>

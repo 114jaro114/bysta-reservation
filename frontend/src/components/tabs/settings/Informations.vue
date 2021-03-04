@@ -1,5 +1,5 @@
 <template>
-<div class="informations w-100 h-100 text-uppercase">
+<div class="informations w-100 h-100 text-uppercase mt-1">
   <v-row justify="center" class="ml-0 mr-0">
     <v-col>
       <v-expansion-panels accordion>
@@ -158,4 +158,8 @@ export default {
 </script>
 
 <style type="scss">
+.v-expansion-panels>*:first-child {
+  border-top-left-radius: unset !important;
+  border-top-right-radius: unset !important;
+}
 </style>

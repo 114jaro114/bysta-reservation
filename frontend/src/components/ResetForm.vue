@@ -18,7 +18,7 @@
             <hr class="mt-0 mb-0 custom-hr">
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-card-text class="p-3">
-                <v-alert v-if="alert" dismissible color="green" border="left" elevation="2" colored-border icon="mdi-check-circle">
+                <v-alert v-if="alert" dismissible color="success" border="left" elevation="2" colored-border icon="mdi-check-circle">
                   <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
                 </v-alert>
 
@@ -140,11 +140,15 @@ export default {
     },
   },
   mounted() {
-    console.log('Component login mounted.')
+    console.log('Component Reset mounted.');
+    this.$store.dispatch('mutationLogout', {
+      username: '',
+      logout: false
+    });
   },
 
   created() {
-    console.log('Component login created')
+    console.log('Component Reset created')
   }
 };
 </script>

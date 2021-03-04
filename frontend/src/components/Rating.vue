@@ -11,7 +11,7 @@
       <form @submit.prevent>
         <v-rating v-model="newEvent.rate" background-color="accent" color="primary" size="50"></v-rating>
         <div class="p-3">
-          <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" counter clearable clear-icon="mdi-close"></v-textarea>
+          <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable clear-icon="mdi-close"></v-textarea>
           <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
         </div>
       </form>
@@ -170,7 +170,7 @@ export default {
       cardHide: true,
       cardHide2: true,
       myloadingvariable: true,
-      rules: [v => v.length <= 25 || 'Maximálna dĺžka je 25 znakov'],
+      rules: [v => v.length <= 50 || 'Maximálna dĺžka je 50 znakov'],
       search: '',
       headers: [{
         text: 'ID',

@@ -1,5 +1,5 @@
 <template>
-<div class="new w-100 h-100 text-uppercase">
+<div class="new w-100 h-100 text-uppercase mt-1">
   <v-row justify="center" class="ml-0 mr-0">
     <v-col>
       <v-lazy v-model="isActive" :options="{

@@ -1,5 +1,5 @@
 <template>
-<div class="app_settings w-100 h-100 text-uppercase">
+<div class="app_settings w-100 h-100 text-uppercase mt-1">
   <v-row justify="center" class="ml-0 mr-0">
     <v-col>
       <v-card color="primary" dark>
@@ -75,7 +75,7 @@
 
         <span class="secondary--color">Jazyk aplikácie</span>
 
-        <v-card-text>
+        <v-card-text class="select_country">
           <v-row justify="center">
             <v-col class="d-flex pb-0" cols="12" sm="6">
               <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo>
@@ -161,6 +161,8 @@ export default {
         status: false
       });
     }
+
+    this.select = localStorage.getItem('language');
   },
   methods: {
     toggle_dark_mode() {
@@ -187,6 +189,7 @@ export default {
 
   updated() {
     //do something after updating vue instance
+    localStorage.setItem('language', this.select);
     console.log(this.$store.getters['speedDialState'].test);
   }
 }
@@ -199,5 +202,9 @@ export default {
 
 .speed_dial_switch .v-input--selection-controls {
   margin-top: 22px !important;
+}
+
+.menuable__content__active {
+  z-index: 51 !important;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="chat-app w-100 h-100 mt-1">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card elevation="2" class="mh-50">
+        <v-card elevation="2">
           <v-card-title>
             <v-row v-if="userChoosed == true">
               <v-col>

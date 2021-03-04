@@ -3,6 +3,17 @@
   <div class="p-3 position-ref body-height">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="row justify-content-center">
+      <div class="text-center">
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
+          <v-icon>mdi-check-circle</v-icon>
+          {{ text }}
+          <template v-slot:action="{ attrs }">
+            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </div>
       <div class="col-md-6">
         <v-card :loading="myloadingvariable" tile>
           <v-card-title>
@@ -17,11 +28,11 @@
           <hr class="mt-0 mb-0 custom-hr">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text class="p-3">
-              <v-alert v-if="alert" dismissible color="red" border="left" elevation="2" colored-border icon="mdi-alert-circle">
+              <v-alert v-if="alert" dismissible color="error" border="left" elevation="2" colored-border icon="mdi-alert-circle">
                 <span>Nesprávny email alebo heslo!</span>
               </v-alert>
 
-              <v-alert v-if="alertSuccessRegister" dismissible color="green" border="left" elevation="2" colored-border icon="mdi-check-circle">
+              <v-alert v-if="alertSuccessRegister" dismissible color="success" border="left" elevation="2" colored-border icon="mdi-check-circle">
                 <span>Používateľský účet bol úspešne vytvorený!</span>
               </v-alert>
 
@@ -39,7 +50,7 @@
                   </router-link>
                 </v-col>
               </v-row>
-              <v-divider class="mx-0 accent"></v-divider>
+              <v-divider class="mx-0"></v-divider>
               <div class="row">
                 <div class="col text-center">
                   <router-link :to="{ name: 'Register' }">
@@ -90,6 +101,10 @@ export default {
       ],
       remember: true,
       error: '',
+
+      multiLine: true,
+      snackbar: false,
+      text: '',
     }
   },
 
@@ -149,11 +164,18 @@ export default {
 
   },
   mounted() {
+    if (this.$store.getters['gettersIsLoggedOut'].logout != false) {
+      this.snackbar = true;
+    } else {
+      this.snackbar = false;
+    }
     console.log('Component login mounted.')
   },
   created() {
     //add text that user was sucessfully registered
-    this.alertSuccessRegister = this.$store.getters['successRegisterAlert'].success
+    this.alertSuccessRegister = this.$store.getters['successRegisterAlert'].success;
+    this.text = `${this.$store.getters['gettersIsLoggedOut'].username}, bol si úspešne odhlásený`;
+    console.log(this.$store.getters['gettersIsLoggedOut'].logout);
     console.log('Component login created')
   }
 };

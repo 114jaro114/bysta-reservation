@@ -2,7 +2,7 @@
 <div class="vytvorit_rezervaciu w-100 h-100">
   <v-row justify="center" class="ml-0 mr-0">
     <div class="text-center">
-      <v-snackbar v-model="snackbar" :multi-line="multiLine" color="red" :left="true">
+      <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" :left="true">
         <v-icon>mdi-alert-circle</v-icon>
         {{ text }}
 

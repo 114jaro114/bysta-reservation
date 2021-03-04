@@ -9,11 +9,11 @@
             <div class="row m-0">
               <div class="name" v-if="contact.status == 'online'">
                 <v-icon color="success mr-1">mdi-account</v-icon>
-                <span> {{ contact.name }}</span>
+                <span class="secondary--text"> {{ contact.name }}</span>
               </div>
               <div class="name" v-else>
                 <v-icon color="error mr-1">mdi-account</v-icon>
-                <span> {{ contact.name }}</span>
+                <span class="accent--text"> {{ contact.name }}</span>
               </div>
               <div class="icons">
                 <v-btn icon>
@@ -39,14 +39,15 @@
             </div>
           </div>
 
-          <v-divider class="mb-0 mt-0" />
+          <v-divider class="mt-0"/>
 
-
-          <div class="card-body">
+          <div class="card-body pt-3 pb-3 pl-0 pr-0">
             <!-- <span>{{ contact ? contact.name: 'Select a Contact' }}</span> -->
             <MessagesFeed :typingStatus="typingStatus" :contact="contact" :messages="messages" />
           </div>
-          <!-- <hr class="mb-0 mt-0"> -->
+
+          <v-divider />
+
           <div class="bottom-bar">
             <MessageComposer @send="sendMessage" />
           </div>
@@ -128,19 +129,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.status {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    // display: inline-block;
-    margin-right: 7px;
-}
-
-.online {
-    background-color: #58b666;
-}
-
-.offline {
-    background-color: #ff725d;
-}
+// .status {
+//     width: 8px;
+//     height: 8px;
+//     border-radius: 50%;
+//     // display: inline-block;
+//     margin-right: 7px;
+// }
+//
+// .online {
+//     background-color: #58b666;
+// }
+//
+// .offline {
+//     background-color: #ff725d;
+// }
 </style>
