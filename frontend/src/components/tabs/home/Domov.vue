@@ -10,7 +10,10 @@
         <v-divider />
         <v-card-text>
           <h1 class="primary--text">Galéria</h1>
+          <!-- <v-skeleton-loader v-bind="attrs" type="image image"></v-skeleton-loader> -->
+
           <lightbox :cells="3" :items="images"></lightbox>
+
         </v-card-text>
       </v-card>
     </v-col>

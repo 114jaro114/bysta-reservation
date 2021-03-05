@@ -125,4 +125,7 @@ export default {
     right: -30px;
     top: -17px;
 }
+.v-window__container {
+    padding-bottom: 480px !important;
+}
 </style>

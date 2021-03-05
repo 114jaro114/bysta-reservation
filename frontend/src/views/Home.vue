@@ -1,38 +1,39 @@
 <template>
 <div class="home w-100 h-100 text-uppercase">
-  <div class="text-center">
-    <v-overlay :value="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
-  </div>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <v-card class="v-content">
-    <v-toolbar elevation="2" class="mb-3">
-      <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="position-absolute" style="right:14px">
-        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-          <img class="logo2 align-middle" src="/img/logo_home_theme_dark.png">
-        </span>
-        <span class="md-title font-weight-bold" v-else>
-          <img class="logo2 align-middle" src="/img/logo_home_theme_light.png">
-        </span>
-      </v-toolbar-title>
-      <template v-slot:extension>
-        <v-tabs class="tabs" v-model="activeTab" grow>
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
-        </v-tabs>
-      </template>
-    </v-toolbar>
-    <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
-      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-        <router-view />
-      </v-tab-item>
-      <NavigationDrawer :drawer="drawer" />
-    </v-tabs-items>
-  </v-card>
-  <SpeedDial />
-  <BottomNavigation />
-  <Footer />
+  <v-lazy :options="{
+        threshold: .4
+      }" min-height="100vh" transition-group="fade-transition">
+    <div class="text-center">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <v-card class="v-content">
+        <v-toolbar elevation="2" class="mb-3">
+          <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-toolbar-title class="position-absolute" style="right:14px">
+            <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
+              <img class="logo2 align-middle" src="/img/logo_home_theme_dark.png">
+            </span>
+            <span class="md-title font-weight-bold" v-else>
+              <img class="logo2 align-middle" src="/img/logo_home_theme_light.png">
+            </span>
+          </v-toolbar-title>
+          <template v-slot:extension>
+            <v-tabs class="tabs" v-model="activeTab" grow>
+              <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
+            </v-tabs>
+          </template>
+        </v-toolbar>
+        <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+          <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
+            <router-view />
+          </v-tab-item>
+          <NavigationDrawer :drawer="drawer" />
+        </v-tabs-items>
+      </v-card>
+      <SpeedDial />
+      <BottomNavigation />
+      <Footer />
+    </div>
+  </v-lazy>
 </div>
 </template>
 <script>

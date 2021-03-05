@@ -1,7 +1,11 @@
 <template>
-  <div class="reset">
+<div class="reset">
+  <v-lazy :options="{
+          threshold: .4
+        }" min-height="100vh" transition-group="fade-transition">
     <ResetForm />
-  </div>
+  </v-lazy>
+</div>
 </template>
 
 <script>

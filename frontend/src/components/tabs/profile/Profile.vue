@@ -5,7 +5,7 @@
     <v-col>
       <v-card elevation="2" :loading="myloadingvariable">
         <v-card-title>
-          <v-row v-if="pu == true">
+          <v-row v-if="user_acc_info == true">
             <v-col>
               <v-btn class="w-100" color="primary" disabled>
                 Používateľský účet
@@ -18,6 +18,7 @@
             </v-col>
           </v-row>
           <v-row v-else>
+            <!-- {{user_acc_info}} -->
             <v-col>
               <v-btn class="w-100" color="primary" @click="user_acc()">
                 <v-icon>mdi-arrow-left-thick</v-icon>Používateľšký účet
@@ -25,17 +26,17 @@
             </v-col>
             <v-col>
               <v-btn class="w-100" outlined color="primary" disabled>
-                Kontaktné informácie
+                Kontaktné informácie {{show1}}
               </v-btn>
             </v-col>
           </v-row>
         </v-card-title>
 
-        <v-divider class="mb-0" />
+        <v-divider />
 
         <v-card-text>
-          <div class="" v-if="pu == true">
-            <v-row justify="center" class="mt-3 mb-3">
+          <div v-if="user_acc_info == true">
+            <v-row justify="center" class="mb-3">
               <!-- <v-avatar color="blue" size="48" class="mr-3" v-if="!avatarImageUrl">
                   <span style="color:white">{{ usernameInitial }}</span>
                 </v-avatar>
@@ -65,15 +66,15 @@
             </v-row>
 
             <v-row justify="center">
-              <v-col cols="12" sm="12" md="12" lg="12">
+              <v-col cols="12" sm="12" md="12" lg="12" class="pb-0">
                 <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="12">
+              <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
                 <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="12">
+              <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
                 <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
                   :type="show1 ? 'text' : 'password'" clearable>
                 </v-text-field>
@@ -82,32 +83,32 @@
           </div>
           <div v-else>
             <v-row justify="center">
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <v-text-field ref="surname" v-model="surname" label="Meno" counter clearable required></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" counter clearable required></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="12">
+              <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
                 <v-text-field ref="address" v-model="address" label="Adresa" counter clearable required></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <v-text-field ref="city" v-model="city" label="Mesto" counter clearable required></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <v-text-field ref="postcode" v-model="postcode" label="PSČ" counter clearable required></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :items="countries" label="Krajina" counter clearable required>
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6" lg="6">
+              <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                 <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" counter clearable></VueTelInputVuetify>
               </v-col>
             </v-row>
@@ -117,7 +118,7 @@
         <v-divider />
 
         <v-card-actions class="pt-0">
-          <div v-if="pu == true">
+          <div v-if="user_acc_info == true">
             <v-btn color="primary" :loading="loading" @click.native="update">
               <v-icon left dark>mdi-check</v-icon>
               Uložiť zmeny
@@ -129,7 +130,6 @@
               Aktualizovať kontaktné údaje
             </v-btn>
           </div>
-
         </v-card-actions>
       </v-card>
     </v-col>
@@ -158,19 +158,13 @@ export default {
   data() {
     return {
       loading: false,
-      form: {
-        firstName: 'John',
-        lastName: 'Doe',
-        contactEmail: 'john@doe.com',
-        avatar: 'MALE_CAUCASIAN_BLOND_BEARD'
-      },
       showAvatarPicker: false,
-
       uploadPercent: 0,
       avatarImageUrl: "",
       showUploadProgress: false,
       processingUpload: false,
-      usernameInitial: localStorage.getItem('username').charAt(0),
+      usernameInitial: localStorage.getItem('username')
+        .charAt(0),
       name: localStorage.getItem("username"),
       email: '',
       password: '',
@@ -178,7 +172,6 @@ export default {
       rules: [v => v.length <= 25 || 'Max 25 characters'],
       //Password
       show1: false,
-      pu: true,
 
       // contact formular
       // contact form
@@ -211,6 +204,7 @@ export default {
       // comment: null,
       formHasErrors: false,
       myloadingvariable: true,
+      user_acc_info: true,
     }
   },
 
@@ -219,34 +213,41 @@ export default {
     this.avatarImageUrl = this.avatarUrl;
     const api = 'http://127.0.0.1:8000/api/user';
 
-    axios.get(api, config).then((response) => {
-      if (response.data.avatar) {
-        this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+    axios.get(api, config)
+      .then((response) => {
+        if (response.data.avatar) {
+          this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
+          this.myloadingvariable = false;
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
 
     const api2 = 'http://127.0.0.1:8000/api/getContactForm';
 
     axios.get(api2, config)
       .then(res => {
-        this.surname = res.data[0].surname;
-        this.lastname = res.data[0].lastname;
-        this.address = res.data[0].address;
-        this.city = res.data[0].city;
-        this.postcode = res.data[0].postcode;
-        this.country = res.data[0].country;
-        this.myPhone = res.data[0].phone;
-        this.myloadingvariable = false;
+        if (res.data.length != 0) {
+          this.surname = res.data[0].surname;
+          this.lastname = res.data[0].lastname;
+          this.address = res.data[0].address;
+          this.city = res.data[0].city;
+          this.postcode = res.data[0].postcode;
+          this.country = res.data[0].country;
+          this.myPhone = res.data[0].phone;
+        }
       });
   },
   async created() {
+    this.myloadingvariable = true;
     const api = 'http://127.0.0.1:8000/api/auth/user';
     try {
       let res = await axios.get(api, config)
       this.email = res.data.email;
-      this.memberFrom = moment(res.data.created_at).format('YYYY-MM-DD');
+      this.memberFrom = moment(res.data.created_at)
+        .format('YYYY-MM-DD');
+      this.myloadingvariable = false;
     } catch (err) {
       console.log(err)
     }
@@ -272,6 +273,13 @@ export default {
   },
 
   methods: {
+    contact_inf() {
+      this.user_acc_info = false;
+    },
+
+    user_acc() {
+      this.user_acc_info = true;
+    },
     onInput(formattedNumber, {
       number,
       valid,
@@ -289,7 +297,7 @@ export default {
         closeOnContentClick: false,
         disableKeys: true,
         openOnClick: false,
-        maxHeight: 304
+        maxHeight: 304,
       };
 
       if (this.$vuetify.breakpoint.smAndDown) {
@@ -306,14 +314,6 @@ export default {
       //
       return false
     },
-    //
-    contact_inf() {
-      this.pu = false;
-    },
-
-    user_acc() {
-      this.pu = true;
-    },
 
     openAvatarPicker() {
       this.showAvatarPicker = true
@@ -324,6 +324,7 @@ export default {
 
     updateAvatar(event) {
       if (this.$refs.photo) {
+        this.myloadingvariable = true;
         this.showUploadProgress = true
         this.processingUpload = true
         this.uploadPercent = 0
@@ -342,11 +343,13 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            this.avatarImageUrl = response.data.avatar_url
-            this.showUploadProgress = false
-            this.processingUpload = false
-            this.$emit('imageUrl', response.data.secure_url)
-          }).catch((error) => {
+            this.avatarImageUrl = response.data.avatar_url;
+            this.showUploadProgress = false;
+            this.processingUpload = false;
+            this.myloadingvariable = false;
+            this.$emit('imageUrl', response.data.secure_url);
+          })
+          .catch((error) => {
             if (error.response) {
               console.log(error.message)
             } else {
@@ -360,7 +363,7 @@ export default {
 
     updateContactInfo() {
       const api = 'http://127.0.0.1:8000/api/contactForm';
-
+      this.myloadingvariable = true;
       axios.post(api, {
             surname: this.surname,
             lastname: this.lastname,
@@ -378,6 +381,7 @@ export default {
           const api = 'http://127.0.0.1:8000/api/getContactForm';
           axios.get(api, config)
             .then(res => {
+              this.myloadingvariable = false;
               this.surname = res.data[0].surname;
               this.lastname = res.data[0].lastname;
               this.address = res.data[0].address;
@@ -386,7 +390,8 @@ export default {
               this.country = res.data[0].country;
               this.myPhone = res.data[0].phone;
             });
-        }).catch(e => {
+        })
+        .catch(e => {
           console.log(e)
         })
     }
@@ -420,6 +425,10 @@ input[type="file"] {
 .user-from {
   margin-left: 1rem;
 }
+
+/* .menuable__content__active {
+  top: 305px !important;
+} */
 
 /* @media screen and (max-width:767px) {
   .image-upload {

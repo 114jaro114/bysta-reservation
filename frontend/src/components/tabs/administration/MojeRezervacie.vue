@@ -82,9 +82,9 @@
             <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
           </template>
-          <template v-slot:no-data>
+          <!-- <template v-slot:no-data>
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
-          </template>
+          </template> -->
         </v-data-table>
         <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEventsForOneUser" :search="search" item-key="name" :loading="myloadingvariable"
           loading-text="Načítavanie... Prosím počkajte" v-else>
@@ -257,33 +257,38 @@ export default {
   },
   methods: {
     formatStart_date(value) {
-      return moment(value).format("YYYY-MM-DD")
+      return moment(value)
+        .format("YYYY-MM-DD")
     },
     formatEnd_date(value) {
-      return moment(value).format("YYYY-MM-DD")
+      return moment(value)
+        .format("YYYY-MM-DD")
     },
     addReservation() {
       this.$router.push("/administration/create_reservation");
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/calendar').then(resp => {
-        console.log(resp);
-        this.currentEvents = resp.data.data
-        this.searched = this.currentEvents
-        for (var i = 0; i < resp.data.data.length; i++) {
-          console.log(resp.data.data);
-          if (resp.data.data[i].username == this.user) {
-            this.currentEventsForOneUser.push(resp.data.data[i]);
+      axios.get('http://127.0.0.1:8000/api/calendar')
+        .then(resp => {
+          console.log(resp);
+          this.currentEvents = resp.data.data
+          this.searched = this.currentEvents
+          for (var i = 0; i < resp.data.data.length; i++) {
+            console.log(resp.data.data);
+            if (resp.data.data[i].username == this.user) {
+              this.currentEventsForOneUser.push(resp.data.data[i]);
+            }
           }
-        }
-        console.log(this.currentEventsForOneUser);
-        this.myloadingvariable = false;
-      }).catch(err => console.log(err.resp.data));
+          console.log(this.currentEventsForOneUser);
+          this.myloadingvariable = false;
+        })
+        .catch(err => console.log(err.resp.data));
     },
     resetForm() {
-      Object.keys(this.newEvent).forEach(key => {
-        return (this.newEvent[key] = "");
-      });
+      Object.keys(this.newEvent)
+        .forEach(key => {
+          return (this.newEvent[key] = "");
+        });
     },
     //vueify table
     getColor(title) {
@@ -313,11 +318,13 @@ export default {
     deleteItemConfirm() {
       this.currentEvents.splice(this.editedIndex, 1)
       axios.post('http://127.0.0.1:8000/api/calendar/delete', {
-        id: this.editedIndex
-      }).then(resp => {
-        console.log(resp);
-        this.getEvents();
-      }).catch(err => console.log("Unable to delete event!", err.response.data));
+          id: this.editedIndex
+        })
+        .then(resp => {
+          console.log(resp);
+          this.getEvents();
+        })
+        .catch(err => console.log("Unable to delete event!", err.response.data));
       this.closeDelete()
     },
     close() {
@@ -343,16 +350,18 @@ export default {
           this.newEvent.color = 'orange';
         }
         axios.post('http://127.0.0.1:8000/api/calendar/update', {
-          id: this.newEvent.id,
-          event_name: this.newEvent.event_name,
-          start_date: this.newEvent.start_date,
-          end_date: this.newEvent.end_date,
-          color: this.newEvent.color
-        }).then(resp => {
-          console.log(resp);
-          this.getEvents();
-          console.log("jupi")
-        }).catch(err => console.log("Unable to update event!", err.response.data));
+            id: this.newEvent.id,
+            event_name: this.newEvent.event_name,
+            start_date: this.newEvent.start_date,
+            end_date: this.newEvent.end_date,
+            color: this.newEvent.color
+          })
+          .then(resp => {
+            console.log(resp);
+            this.getEvents();
+            console.log("jupi")
+          })
+          .catch(err => console.log("Unable to update event!", err.response.data));
         Object.assign(this.currentEvents[this.editedIndex], this.editedItem)
       } else {
         //add
@@ -360,12 +369,14 @@ export default {
         this.newEvent.username = this.user;
         this.newEvent.color = "orange";
         axios.post('http://127.0.0.1:8000/api/calendar/store', {
-          ...this.newEvent
-        }).then(resp => {
-          console.log(resp);
-          this.getEvents();
-          this.resetForm();
-        }).catch(err => console.log("nepodarilo sa pridat event", err.response.data));
+            ...this.newEvent
+          })
+          .then(resp => {
+            console.log(resp);
+            this.getEvents();
+            this.resetForm();
+          })
+          .catch(err => console.log("nepodarilo sa pridat event", err.response.data));
         this.resetForm();
         // this.currentEvents.push(this.editedItem)
       }

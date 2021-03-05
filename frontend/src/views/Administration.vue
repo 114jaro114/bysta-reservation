@@ -1,8 +1,8 @@
 <template>
 <div class="administration w-100 h-100 text-uppercase">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <v-lazy v-model="isActive" :options="{
-        threshold: .8
+  <v-lazy :options="{
+        threshold: .4
       }" min-height="100vh" transition-group="fade-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">
@@ -57,7 +57,6 @@ export default {
       drawer: false,
       tab: null,
       items: ['Administrácia', ],
-      isActive: false,
     }
   },
   updated() {
@@ -77,14 +76,16 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("authToken"),
         },
       };
-      axios.post(api, null, config).then((res) => {
-        console.log(res);
-        localStorage.removeItem("username");
-        localStorage.removeItem("authToken");
-        this.$router.push("/");
-      }).catch(e => {
-        console.log(e);
-      })
+      axios.post(api, null, config)
+        .then((res) => {
+          console.log(res);
+          localStorage.removeItem("username");
+          localStorage.removeItem("authToken");
+          this.$router.push("/");
+        })
+        .catch(e => {
+          console.log(e);
+        })
     },
   }
 }

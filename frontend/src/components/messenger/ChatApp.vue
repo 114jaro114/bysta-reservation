@@ -208,4 +208,7 @@ export default {
     display: flex;
     width: 100%;
 }
+.v-window__container {
+    padding-bottom: 480px !important;
+}
 </style>

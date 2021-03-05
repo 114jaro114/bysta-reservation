@@ -1,5 +1,8 @@
 <template>
 <div class="welcome vh-100 p-3">
+  <!-- <v-lazy v-model="isActive" :options="{
+        threshold: .4
+      }" min-height="100vh" transition-group="fade-transition"> -->
   <!-- SIGN CONTROLS -->
   <div class="sign-controls">
     <!-- SIGN IN -->
@@ -32,18 +35,9 @@
       <div v-else>
         <img src="/img/logo_welcome_theme_light.png" lazy-src="/img/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
       </div>
-      <!-- <img src="/img/logo.png" lazy-src="/img/logo3.png" class="m-auto w-100" color="primary"> -->
-      <!-- </v-col> -->
-      <!-- <v-col>
-      <v-row>
-        <h1 class="secondary-text font-weight-bold text-uppercase">Chata Byšta</h1>
-      </v-row>
-      <v-row>
-        <h6 class="secondary-text">Ak pochopíš krásu prírody, nemôžeš zablúdiť</h6>
-      </v-row>
-    </v-col> -->
     </v-row>
   </div>
+  <!-- </v-lazy> -->
 </div>
 </template>
 
@@ -52,7 +46,9 @@ export default {
   name: "Welcome",
   components: {},
   data() {
-    return {}
+    return {
+      isActive: false,
+    }
   },
 
   mounted() {

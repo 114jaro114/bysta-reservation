@@ -2,14 +2,14 @@
   <div class="conversation">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card elevation="0" v-if="contact" :typingStatusNew="typingStatusNew">
+        <v-card elevation="0" v-if="contact" :typingStatusNew="typingStatusNew" class="pb-5">
           <!-- v-show="showChat" -->
           <div class="top-bar">
             <!-- <div class="avatar"><p>CB</p></div> -->
             <div class="row m-0">
               <div class="name" v-if="contact.status == 'online'">
                 <v-icon color="success mr-1">mdi-account</v-icon>
-                <span class="secondary--text"> {{ contact.name }}</span>
+                <span class="accent--text"> {{ contact.name }}</span>
               </div>
               <div class="name" v-else>
                 <v-icon color="error mr-1">mdi-account</v-icon>
@@ -55,7 +55,10 @@
 
         <v-card elevation="0" v-else>
           <v-card-title class="justify-center">
-            <span class="primary--text">Nie je vybratý žiadny kontakt</span>
+            <span class="primary--text">
+              <v-icon style="font-size: 100px" class="mr-1" color="primary">mdi-account-cancel</v-icon>
+              Nie je vybratý priateľ na chat
+            </span>
           </v-card-title>
         </v-card>
       </v-col>
@@ -144,4 +147,7 @@ export default {
 // .offline {
 //     background-color: #ff725d;
 // }
+.v-window__container {
+    padding-bottom: 480px !important;
+}
 </style>

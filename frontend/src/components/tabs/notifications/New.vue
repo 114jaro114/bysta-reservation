@@ -6,7 +6,7 @@
           threshold: .5
         }" min-height="200" transition="fade-transition">
         <v-btn color="primary" icon width="170px" height="170px">
-          <v-icon loading style="font-size: 150px">mdi-bell-cancel</v-icon>
+          <v-icon style="font-size: 150px">mdi-bell-cancel</v-icon>
         </v-btn>
       </v-lazy>
     </v-col>

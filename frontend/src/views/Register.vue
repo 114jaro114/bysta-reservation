@@ -1,7 +1,11 @@
 <template>
-  <div class="register">
+<div class="register">
+  <v-lazy :options="{
+          threshold: .4
+        }" min-height="100vh" transition-group="fade-transition">
     <RegisterForm />
-  </div>
+  </v-lazy>
+</div>
 </template>
 
 <script>

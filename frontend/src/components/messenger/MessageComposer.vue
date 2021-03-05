@@ -15,31 +15,24 @@
             append-icon="mdi-send"
           ></v-text-field> -->
           <v-text-field
-            v-model="message"
-            :append-icon="marker ? 'mdi-eye' : 'mdi-eye-off'"
-            :append-outer-icon="message ? 'mdi-send' : 'mdi-microphone'"
+            :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-outer-icon="message ? 'mdi-send' : 'mdi-thumb-up'"
             :prepend-icon="icon"
+            :type="show2 ? 'text' : 'password'"
             filled
-            clear-icon="mdi-close"
             clearable
+            counter
+            clear-icon="mdi-close"
             label="Správa"
-            type="text"
-            @click:append="toggleMarker"
-            @click:append-outer="sendMessage"
+            v-model="message"
+            @click:append="show2 = !show2"
             @click:prepend="changeIcon"
             @click:clear="clearMessage"
-            @keydown.enter="sendMessage" 
+            @keydown.enter="send"
             @keydown="sendTypingEvent()"
           ></v-text-field>
-          <v-menu offset-y>
-            <template id="">
-              <span>dement</span>
-            </template>
-
-    </v-menu>
-
           <div v-if="autoselectMenu">
-            <VEmojiPicker @click="selectEmoji" />
+            <picker :color="`${$vuetify.theme.themes[isDark].primary}`" :showSearch="false" :showPreview="false" :set="'messenger'" :showSkinTones="true" :emojiTooltip="true" :infiniteScroll="false" @select="selectEmoji" :i18n="i18n" />
           </div>
           <!-- <input class="chatInput" type="text" placeholder="Napiš správu..." v-model="message" @keydown.enter="send" @keydown="sendTypingEvent()" name="message" /> -->
         </v-col>
@@ -54,19 +47,23 @@
 </template>
 
 <script>
+// import {
+//   VEmojiPicker
+// } from 'v-emoji-picker';
 import {
-  VEmojiPicker
-} from 'v-emoji-picker';
+  Picker
+} from 'emoji-mart-vue'
 export default {
   components: {
-    VEmojiPicker,
+    // VEmojiPicker,
+    Picker,
   },
   data() {
     return {
       message: '',
       // chatInput
       show: false,
-      marker: true,
+      show2: false,
       iconIndex: 0,
       icons: [
         'mdi-emoticon',
@@ -92,6 +89,23 @@ export default {
         },
       ],
       autoselectMenu: false,
+      i18n: {
+        search: 'Vyhľadať',
+        notfound: 'Neboli nájdené žiadne emoji',
+        categories: {
+          search: 'Výsledok vyhľadávania',
+          recent: '',
+          people: '',
+          nature: '',
+          foods: '',
+          activity: '',
+          places: '',
+          objects: '',
+          symbols: '',
+          flags: '',
+          custom: '',
+        }
+      }
     }
   },
 
@@ -104,7 +118,12 @@ export default {
   methods: {
     // emoji input char
     selectEmoji(emoji) {
-      console.log(emoji)
+      if (this.message != null) {
+        this.message += emoji.native;
+      } else {
+        this.message = emoji.native;
+        console.log(emoji.native);
+      }
     },
 
     send(e) {
@@ -152,5 +171,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.v-window__container {
+    padding-bottom: 480px !important;
+}
 </style>
