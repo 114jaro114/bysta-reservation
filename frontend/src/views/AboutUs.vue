@@ -3,7 +3,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
         threshold: .4
-      }" min-height="100vh" transition-group="fade-transition">
+      }" min-height="100vh" transition-group="scale-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">
         <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -16,23 +16,23 @@
           </span>
         </v-toolbar-title>
         <template v-slot:extension>
-          <v-tabs v-model="tab" grow>
+          <v-tabs grow>
             <v-tab v-for="item in items" :key="item">
               {{ item }}
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-tabs-items v-model="tab" class="p-2">
+      <v-tabs-items v-model="tab" class="p-3 pt-1">
         <v-tab-item v-for="item in items" :key="item">
         </v-tab-item>
         <NavigationDrawer :drawer="drawer" />
-        <v-card class="mx-auto">
+        <v-card>
           <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
-          <v-card-title> Top western road trips </v-card-title>
+          <v-card-title> Chata byšta </v-card-title>
           <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
           <v-card-actions>
-            <v-btn color="orange lighten-2" text> Explore </v-btn>
+            <!-- <v-btn color="orange lighten-2" text> Explore </v-btn> -->
             <v-spacer></v-spacer>
             <v-btn icon @click="show = !show">
               <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
@@ -41,17 +41,18 @@
           <v-expand-transition>
             <div v-show="show">
               <v-divider></v-divider>
-              <v-card-text> I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one
+              <v-card-text> I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a
+                one
                 and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape. </v-card-text>
             </div>
           </v-expand-transition>
         </v-card>
       </v-tabs-items>
     </v-card>
-    <SpeedDial />
-    <BottomNavigation />
-    <Footer />
   </v-lazy>
+  <SpeedDial />
+  <BottomNavigation />
+  <Footer />
 </div>
 </template>
 <script>

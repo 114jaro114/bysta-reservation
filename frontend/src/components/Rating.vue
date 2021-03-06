@@ -1,22 +1,18 @@
 <template>
 <div v-if="seen">
-  <v-lazy :options="{
-            threshold: .5
-          }" min-height="200" transition="scale-transition">
-    <v-card elevation="2">
-      <v-card-title class="justify-center">
-        <span class="primary--text">Pridať hodnotenie</span>
-      </v-card-title>
-      <v-divider class="mt-0 mb-0" horizontal></v-divider>
-      <form @submit.prevent>
-        <v-rating v-model="newEvent.rate" background-color="accent" color="primary" size="50"></v-rating>
-        <div class="p-3">
-          <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable clear-icon="mdi-close"></v-textarea>
-          <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
-        </div>
-      </form>
-    </v-card>
-  </v-lazy>
+  <!-- <v-card elevation="2"> -->
+  <v-card-title class="justify-center">
+    <span class="primary--text">Pridať hodnotenie</span>
+  </v-card-title>
+  <v-divider class="mt-0 mb-0" horizontal></v-divider>
+  <form @submit.prevent>
+    <v-rating v-model="newEvent.rate" background-color="accent" color="primary" size="50"></v-rating>
+    <div class="p-3">
+      <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable clear-icon="mdi-close"></v-textarea>
+      <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
+    </div>
+  </form>
+  <!-- </v-card> -->
 </div>
 <div class="rates" v-else>
   <v-row no-gutters>
@@ -237,12 +233,14 @@ export default {
     addNewEvent() {
       this.newEvent.name = this.user;
       axios.post('http://127.0.0.1:8000/api/rating/store', {
-        ...this.newEvent
-      }).then(res => {
-        console.log(res);
-        this.resetEvents();
-        this.getEvents();
-      }).catch(err => console.log("nepodarilo sa pridat event", err));
+          ...this.newEvent
+        })
+        .then(res => {
+          console.log(res);
+          this.resetEvents();
+          this.getEvents();
+        })
+        .catch(err => console.log("nepodarilo sa pridat event", err));
     },
     updateEvent() {
       for (var i = 0; i < this.items.length; i++) {
@@ -261,11 +259,13 @@ export default {
         this.newEvent2.Koment = this.commentForUpdate;
       }
       axios.post(`http://127.0.0.1:8000/api/rating/update`, {
-        ...this.newEvent2
-      }).then(res => {
-        console.log(res.data.data);
-        this.getEvents();
-      }).catch(err => console.log("Unable to update event!", err));
+          ...this.newEvent2
+        })
+        .then(res => {
+          console.log(res.data.data);
+          this.getEvents();
+        })
+        .catch(err => console.log("Unable to update event!", err));
     },
     resetEvents() {
       this.totalValue = 0;
@@ -286,44 +286,52 @@ export default {
       this.Five2 = 0;
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/rating').then(resp => {
-        this.resetEvents();
-        this.items = resp.data.data;
-        this.totalRates = resp.data.data.length;
-        for (var i = 0; i < this.totalRates; i++) {
-          if (this.user == resp.data.data[i].Meno) {
-            this.seen = false;
-            //vyplnenie poli rate a comment na zaklade udajov z db
-            this.newEvent2 = {
-              name: resp.data.data[i].Meno,
-              rate: parseInt(resp.data.data[i].Hodnotenie),
-              comment: resp.data.data[i].Koment
+      axios.get('http://127.0.0.1:8000/api/rating')
+        .then(resp => {
+          this.resetEvents();
+          this.items = resp.data.data;
+          this.totalRates = resp.data.data.length;
+          for (var i = 0; i < this.totalRates; i++) {
+            if (this.user == resp.data.data[i].Meno) {
+              this.seen = false;
+              //vyplnenie poli rate a comment na zaklade udajov z db
+              this.newEvent2 = {
+                name: resp.data.data[i].Meno,
+                rate: parseInt(resp.data.data[i].Hodnotenie),
+                comment: resp.data.data[i].Koment
+              }
+            }
+            this.totalValue += resp.data.data[i].Hodnotenie / this.totalRates;
+            if (resp.data.data[i].Hodnotenie == "5") {
+              this.countFiveStar++;
+            } else if (resp.data.data[i].Hodnotenie == "4") {
+              this.countFourStar++;
+            } else if (resp.data.data[i].Hodnotenie == "3") {
+              this.countThreeStar++;
+            } else if (resp.data.data[i].Hodnotenie == "2") {
+              this.countTwoStar++;
+            } else if (resp.data.data[i].Hodnotenie == "1") {
+              this.countOneStar++;
             }
           }
-          this.totalValue += resp.data.data[i].Hodnotenie / this.totalRates;
-          if (resp.data.data[i].Hodnotenie == "5") {
-            this.countFiveStar++;
-          } else if (resp.data.data[i].Hodnotenie == "4") {
-            this.countFourStar++;
-          } else if (resp.data.data[i].Hodnotenie == "3") {
-            this.countThreeStar++;
-          } else if (resp.data.data[i].Hodnotenie == "2") {
-            this.countTwoStar++;
-          } else if (resp.data.data[i].Hodnotenie == "1") {
-            this.countOneStar++;
-          }
-        }
-        this.totalValueOfRate = Number((this.totalValue).toFixed(2));
-        this.percentage = 100 / this.totalRates;
-        this.widthFiveStar = Number((this.percentage * this.countFiveStar).toFixed(1));
-        this.widthFourStar = Number((this.percentage * this.countFourStar).toFixed(1));
-        this.widthThreeStar = Number((this.percentage * this.countThreeStar).toFixed(1));
-        this.widthTwoStar = Number((this.percentage * this.countTwoStar).toFixed(1));
-        this.widthOneStar = Number((this.percentage * this.countOneStar).toFixed(1));
-        // this.decimal = (this.totalValueOfRate % 1) * 100; //this is .number
-        // this.integer = Math.floor(this.totalValueOfRate);
-        this.myloadingvariable = false;
-      }).catch(err => console.log(err));
+          this.totalValueOfRate = Number((this.totalValue)
+            .toFixed(2));
+          this.percentage = 100 / this.totalRates;
+          this.widthFiveStar = Number((this.percentage * this.countFiveStar)
+            .toFixed(1));
+          this.widthFourStar = Number((this.percentage * this.countFourStar)
+            .toFixed(1));
+          this.widthThreeStar = Number((this.percentage * this.countThreeStar)
+            .toFixed(1));
+          this.widthTwoStar = Number((this.percentage * this.countTwoStar)
+            .toFixed(1));
+          this.widthOneStar = Number((this.percentage * this.countOneStar)
+            .toFixed(1));
+          // this.decimal = (this.totalValueOfRate % 1) * 100; //this is .number
+          // this.integer = Math.floor(this.totalValueOfRate);
+          this.myloadingvariable = false;
+        })
+        .catch(err => console.log(err));
     },
   }
 }

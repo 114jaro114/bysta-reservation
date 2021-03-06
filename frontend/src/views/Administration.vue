@@ -3,7 +3,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
         threshold: .4
-      }" min-height="100vh" transition-group="fade-transition">
+      }" min-height="100vh" transition-group="scale-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">
         <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -23,7 +23,7 @@
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-tabs-items grow v-model="tab">
+      <v-tabs-items v-model="tab" grow>
         <v-tab-item v-for="item in items" :key="item">
           <router-view></router-view>
         </v-tab-item>

@@ -3,7 +3,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
         threshold: .4
-      }" min-height="100vh" transition-group="fade-transition">
+      }" min-height="100vh" transition-group="scale-transition">
     <v-card elevation="0" class="v-content">
       <v-toolbar elevation="2" class="mb-3">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -16,7 +16,7 @@
           </span>
         </v-toolbar-title>
         <template v-slot:extension>
-          <v-tabs class="tabs" grow v-model="activeTab">
+          <v-tabs grow>
             <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
           </v-tabs>
         </template>
@@ -28,11 +28,10 @@
         <NavigationDrawer :drawer="drawer" />
       </v-tabs-items>
     </v-card>
-
-    <SpeedDial />
-    <BottomNavigation />
-    <Footer />
   </v-lazy>
+  <SpeedDial />
+  <BottomNavigation />
+  <Footer />
 </div>
 </template>
 

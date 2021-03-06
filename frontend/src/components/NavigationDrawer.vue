@@ -37,7 +37,7 @@
       </v-list-item>
       <v-list-item to="/reservation">
         <v-icon>mdi-calendar-month</v-icon>
-        <v-list-item-title>Rezervácie</v-list-item-title>
+        <v-list-item-title>Rezervácia</v-list-item-title>
       </v-list-item>
       <v-list-item to="/messenger">
         <v-badge :content="messages" :value="messages" color="primary" overlap bordered>
@@ -126,20 +126,22 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("authToken"),
         },
       };
-      axios.post(api, null, config).then((res) => {
-        this.$emit('childToParent', 'false');
-        console.log(res);
-        this.$store.dispatch('mutationLogout', {
-          username: localStorage.getItem("username"),
-          logout: true
-        });
-        localStorage.removeItem("username");
-        localStorage.removeItem("authToken");
-        this.$router.push("/login");
-      }).catch(e => {
-        this.$emit('childToParent', 'false'),
-          console.log(e);
-      })
+      axios.post(api, null, config)
+        .then((res) => {
+          this.$emit('childToParent', 'false');
+          console.log(res);
+          this.$store.dispatch('mutationLogout', {
+            username: localStorage.getItem("username"),
+            logout: true
+          });
+          localStorage.removeItem("username");
+          localStorage.removeItem("authToken");
+          this.$router.push("/login");
+        })
+        .catch(e => {
+          this.$emit('childToParent', 'false'),
+            console.log(e);
+        })
     },
   }
 }

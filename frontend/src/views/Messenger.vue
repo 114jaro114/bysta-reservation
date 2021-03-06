@@ -1,9 +1,9 @@
 <template>
-<div class="messenger w-100 h-100 text-uppercase secondary-color">
+<div class="messenger w-100 h-100">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
         threshold: .4
-      }" min-height="100vh" transition-group="fade-transition">
+      }" min-height="100vh" transition-group="scale-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">
         <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -18,28 +18,24 @@
         </v-toolbar-title>
 
         <template v-slot:extension>
-          <v-tabs v-model="tab" grow>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-            </v-tab>
+          <v-tabs grow>
+            <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
 
-      <v-tabs-items grow v-model="tab">
-        <v-tab-item v-for="item in items" :key="item">
+      <v-tabs-items v-model="activeTab" grow>
+        <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
           <!-- messenger -->
           <chat-app></chat-app>
         </v-tab-item>
         <NavigationDrawer :drawer="drawer" />
       </v-tabs-items>
     </v-card>
-
-    <SpeedDial />
-
-    <BottomNavigation />
-    <Footer />
   </v-lazy>
+  <SpeedDial />
+  <BottomNavigation />
+  <Footer />
 </div>
 </template>
 
@@ -65,9 +61,12 @@ export default {
       username: localStorage.getItem("username"),
       drawer: false,
       tab: null,
-      items: [
-        'Messenger',
-      ],
+      activeTab: '/messenger',
+      tabs: [{
+        id: 1,
+        name: 'Messenger',
+        route: '/messenger'
+      }],
     }
   },
   updated() {

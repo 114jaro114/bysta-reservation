@@ -2,67 +2,74 @@
   <div class="chat-app w-100 h-100 mt-1">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card elevation="2">
-          <v-card-title>
-            <v-row v-if="userChoosed == true">
-              <v-col>
-                <v-btn class="w-100" color="primary" disabled>
-                  <v-icon class="mr-1">mdi-facebook-messenger</v-icon>Chat
+        <v-lazy :options="{
+                  threshold: .4
+                }" transition="scale-transition">
+          <v-card elevation="2">
+            <v-card-title>
+              <v-row v-if="userChoosed == true">
+                <v-col>
+                  <v-btn class="w-100" color="primary" disabled>
+                    <v-icon class="mr-1">mdi-facebook-messenger</v-icon>Chat
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn class="w-100" outlined color="primary" @click="friend_list()">
+                    <v-icon class="mr-1">mdi-account-group</v-icon>
+                    Zoznam priateľov
+                    <!-- <v-icon class="ml-1">mdi-arrow-right-thick</v-icon> -->
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row v-else>
+                <v-col>
+                  <v-btn class="w-100" color="primary" @click="chat()">
+                    <!-- <v-icon class="mr-1">mdi-arrow-left-thick</v-icon> -->
+                    <v-icon class="mr-1">mdi-facebook-messenger</v-icon>
+                    Chat
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn class="w-100" outlined color="primary" disabled>
+                    <v-icon class="mr-1">mdi-account-group</v-icon>Zoznam priateľov
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-title>
+
+            <v-divider class="mb-0" />
+
+            <v-card-text>
+              <div v-if="userChoosed == true">
+                <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
+              </div>
+              <div v-else>
+                <ContactsList :contacts="contacts" @selected="startConversationWith"/>
+              </div>
+              <div v-if="autoselectMenu">
+                <picker :showSearch="false" :showPreview="false" :set="'messenger'" :showSkinTones="true" :emojiTooltip="true" :infiniteScroll="false" @select="selectEmoji" :i18n="i18n" />
+              </div>
+            </v-card-text>
+
+            <!-- <v-divider /> -->
+
+            <!-- <v-card-actions class="pt-0">
+              <div v-if="userChoosed == true">
+                <v-btn color="primary" :loading="loading">
+                  <v-icon left dark>mdi-check</v-icon>
+                  Uložiť zmeny
                 </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn class="w-100" outlined color="primary" @click="friend_list()">
-                  <v-icon class="mr-1">mdi-account-group</v-icon>
-                  Zoznam priateľov
-                  <!-- <v-icon class="ml-1">mdi-arrow-right-thick</v-icon> -->
+              </div>
+              <div v-else>
+                <v-btn color="primary" :loading="loading">
+                  <v-icon left dark>mdi-update</v-icon>
+                  Aktualizovať kontaktné údaje
                 </v-btn>
-              </v-col>
-            </v-row>
-            <v-row v-else>
-              <v-col>
-                <v-btn class="w-100" color="primary" @click="chat()">
-                  <!-- <v-icon class="mr-1">mdi-arrow-left-thick</v-icon> -->
-                  <v-icon class="mr-1">mdi-facebook-messenger</v-icon>
-                  Chat
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn class="w-100" outlined color="primary" disabled>
-                  <v-icon class="mr-1">mdi-account-group</v-icon>Zoznam priateľov
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-title>
+              </div>
 
-          <v-divider class="mb-0" />
-
-          <v-card-text>
-            <div v-if="userChoosed == true">
-              <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
-            </div>
-            <div v-else>
-              <ContactsList :contacts="contacts" @selected="startConversationWith"/>
-            </div>
-          </v-card-text>
-
-          <!-- <v-divider /> -->
-
-          <!-- <v-card-actions class="pt-0">
-            <div v-if="userChoosed == true">
-              <v-btn color="primary" :loading="loading">
-                <v-icon left dark>mdi-check</v-icon>
-                Uložiť zmeny
-              </v-btn>
-            </div>
-            <div v-else>
-              <v-btn color="primary" :loading="loading">
-                <v-icon left dark>mdi-update</v-icon>
-                Aktualizovať kontaktné údaje
-              </v-btn>
-            </div>
-
-          </v-card-actions> -->
-        </v-card>
+            </v-card-actions> -->
+          </v-card>
+        </v-lazy>
       </v-col>
     </v-row>
   </div>
@@ -72,11 +79,15 @@
 import Conversation from './Conversation.vue';
 import ContactsList from './ContactsList.vue';
 import axios from 'axios';
+import {
+  Picker
+} from 'emoji-mart-vue'
 
 export default {
   components: {
     Conversation,
-    ContactsList
+    ContactsList,
+    Picker
   },
 
   data() {
@@ -86,6 +97,7 @@ export default {
       contacts: [],
       users: [],
       userChoosed: true,
+      autoselectMenu: false,
     }
   },
 
@@ -101,6 +113,9 @@ export default {
       .then(res => {
         this.contacts = res.data;
         this.users = res.data
+        this.$store.dispatch('mutationContactListLoader', {
+          cancelLoader: false
+        });
       });
   },
 
@@ -198,8 +213,9 @@ export default {
   },
 
   updated() {
+    //do something after updating vue instance
 
-  },
+  }
 }
 </script>
 
@@ -207,8 +223,9 @@ export default {
 .chat-app {
     display: flex;
     width: 100%;
+    height: 100%;
 }
-.v-window__container {
-    padding-bottom: 480px !important;
+.v-window .v-item-group .v-window__container {
+    padding-bottom: 380px !important;
 }
 </style>

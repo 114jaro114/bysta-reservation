@@ -2,7 +2,7 @@
 <div class="login">
   <v-lazy :options="{
           threshold: .4
-        }" min-height="100vh" transition-group="fade-transition">
+        }" min-height="100vh" transition-group="scale-transition">
     <LoginForm />
   </v-lazy>
 </div>

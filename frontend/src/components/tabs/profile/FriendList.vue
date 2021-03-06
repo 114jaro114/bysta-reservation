@@ -1,61 +1,65 @@
 <template>
 <div class="friend_list w-100 h-100 text-uppercase mt-1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col>
-      <v-card elevation="2">
-        <v-card-title>
-          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-        </v-card-title>
-        <v-data-table no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
-          loading-text="Načítavanie... Prosím počkajte">
-          <template v-slot:item.name="{ item }">
-            <v-btn class="mr-3" @click="showProfile(item)">
-              <v-icon>mdi-account</v-icon>
-              <span>{{item.name}}</span>
-            </v-btn>
-          </template>
+  <v-lazy :options="{
+            threshold: .4
+          }" transition="scale-transition">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col>
+        <v-card elevation="2">
+          <v-card-title>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
+          </v-card-title>
+          <v-data-table no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
+            loading-text="Načítavanie... Prosím počkajte">
+            <template v-slot:item.name="{ item }">
+              <v-btn class="mr-3" @click="showProfile(item)">
+                <v-icon>mdi-account</v-icon>
+                <span>{{item.name}}</span>
+              </v-btn>
+            </template>
 
-          <template v-slot:item.status="{ item }">
-            <v-icon color="error" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
-            <v-icon color="success" v-else>mdi-checkbox-blank-circle</v-icon>
-            <span>{{item.status}}</span>
-          </template>
+            <template v-slot:item.status="{ item }">
+              <v-icon color="error" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
+              <v-icon color="success" v-else>mdi-checkbox-blank-circle</v-icon>
+              <span>{{item.status}}</span>
+            </template>
 
-          <template v-slot:item.friendship_status="{ item }">
-            <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.friendship_status == '0'">
-              <v-icon>mdi-account-plus</v-icon>
-              <span class="ml-1">Pridať priateľa</span>
-            </v-btn>
-            <div v-else-if="item.friendship_status == '1'">
-              <v-btn class="mr-3" color="success">
-                <v-icon>mdi-account-check</v-icon>
-                <span class="ml-1">Priatelia</span>
+            <template v-slot:item.friendship_status="{ item }">
+              <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.friendship_status == '0'">
+                <v-icon>mdi-account-plus</v-icon>
+                <span class="ml-1">Pridať priateľa</span>
               </v-btn>
-              <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                <v-icon>mdi-close-circle</v-icon>
-                <span class="ml-1">Zrušiť priateľstvo</span>
+              <div v-else-if="item.friendship_status == '1'">
+                <v-btn class="mr-3" color="success">
+                  <v-icon>mdi-account-check</v-icon>
+                  <span class="ml-1">Priatelia</span>
+                </v-btn>
+                <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                  <v-icon>mdi-close-circle</v-icon>
+                  <span class="ml-1">Zrušiť priateľstvo</span>
+                </v-btn>
+              </div>
+              <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="item.friendship_status == '2' && item.user_requested == actualUser">
+                <v-icon>mdi-arrow-right-bold</v-icon>
+                <span class="ml-1">Prijať žiadosť</span>
               </v-btn>
-            </div>
-            <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="item.friendship_status == '2' && item.user_requested == actualUser">
-              <v-icon>mdi-arrow-right-bold</v-icon>
-              <span class="ml-1">Prijať žiadosť</span>
-            </v-btn>
-            <div v-else>
-              <v-btn class="mr-3" color="warning">
-                <v-icon>mdi-account-clock</v-icon>
-                <span class="ml-1">Žiadosť odoslaná</span>
-              </v-btn>
-              <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                <v-icon>mdi-close-circle</v-icon>
-                <span class="ml-1">Zrušiť žiadosť</span>
-              </v-btn>
-            </div>
-          </template>
-        </v-data-table>
-      </v-card>
-    </v-col>
-  </v-row>
+              <div v-else>
+                <v-btn class="mr-3" color="warning">
+                  <v-icon>mdi-account-clock</v-icon>
+                  <span class="ml-1">Žiadosť odoslaná</span>
+                </v-btn>
+                <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                  <v-icon>mdi-close-circle</v-icon>
+                  <span class="ml-1">Zrušiť žiadosť</span>
+                </v-btn>
+              </div>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-lazy>
 </div>
 </template>
 

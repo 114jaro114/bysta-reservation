@@ -38,7 +38,9 @@ export default new Vuex.Store({
     isLoggedOut: {
       username: '',
       logout: false
-    }
+    },
+
+    contactListLoader: true,
   },
   getters: {
     Data: state => {
@@ -63,7 +65,11 @@ export default new Vuex.Store({
 
     gettersIsLoggedOut: state => {
       return state.isLoggedOut
-    }
+    },
+
+    gettersContactListLoader: state => {
+      return state.contactListLoader
+    },
   },
   mutations: {
     showProfile: (state, payload) => {
@@ -108,9 +114,9 @@ export default new Vuex.Store({
       Vue.set(state.isLoggedOut, 'logout', payload.logout);
     },
 
-    // mutationLogout: (state, payload) => {
-    //   state.username = payload.username;
-    // }
+    mutationContactListLoader: (state, payload) => {
+      state.contactListLoader = payload.cancelLoader;
+    }
   },
   actions: {
     showProfile: (context, payload) => {
@@ -135,7 +141,10 @@ export default new Vuex.Store({
 
     mutationLogout: (context, payload) => {
       context.commit('mutationLogout', payload)
-    }
+    },
+    mutationContactListLoader: (context, payload) => {
+      context.commit('mutationContactListLoader', payload)
+    },
   }
 });
 

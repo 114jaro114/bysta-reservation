@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="conversation">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-0 pr-0">
         <v-card elevation="0" v-if="contact" :typingStatusNew="typingStatusNew" class="pb-5">
           <!-- v-show="showChat" -->
           <div class="top-bar">
@@ -56,8 +56,8 @@
         <v-card elevation="0" v-else>
           <v-card-title class="justify-center">
             <span class="primary--text">
-              <v-icon style="font-size: 100px" class="mr-1" color="primary">mdi-account-cancel</v-icon>
-              Nie je vybratý priateľ na chat
+              <v-icon style="font-size: 50px" class="mr-1" color="primary">mdi-account-cancel</v-icon>
+              <span>Nie je vybratý priateľ</span>
             </span>
           </v-card-title>
         </v-card>
@@ -119,6 +119,7 @@ export default {
           config
         )
         .then((res) => {
+          console.log("res")
           this.$emit('new', res.data);
         })
       console.log(text);

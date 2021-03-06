@@ -1,31 +1,35 @@
 <template>
 <div class="add_friends w-100 h-100 text-uppercase mt-1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col>
-      <v-card elevation="2">
-        <v-card-title>
-          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-        </v-card-title>
-        <v-data-table no-data-text="Nenašli sa žiadny používateľia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
-          loading-text="Načítavanie... Prosím počkajte">
-          <template v-slot:item.name="{ item }">
-            <v-btn class="mr-3" @click="showProfile(item)">
-              <v-icon>mdi-account</v-icon>
-              <span>{{item.name}}</span>
-            </v-btn>
-          </template>
+  <v-lazy :options="{
+            threshold: .4
+          }" transition="scale-transition">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col>
+        <v-card elevation="2">
+          <v-card-title>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
+          </v-card-title>
+          <v-data-table no-data-text="Nenašli sa žiadny používatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
+            loading-text="Načítavanie... Prosím počkajte">
+            <template v-slot:item.name="{ item }">
+              <v-btn class="mr-3" @click="showProfile(item)">
+                <v-icon>mdi-account</v-icon>
+                <span>{{item.name}}</span>
+              </v-btn>
+            </template>
 
-          <template v-slot:item.id="{ item }">
-            <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.id">
-              <v-icon>mdi-account-plus</v-icon>
-              <span class="ml-1">Pridať priateľa</span>
-            </v-btn>
-          </template>
-        </v-data-table>
-      </v-card>
-    </v-col>
-  </v-row>
+            <template v-slot:item.id="{ item }">
+              <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.id">
+                <v-icon>mdi-account-plus</v-icon>
+                <span class="ml-1">Pridať priateľa</span>
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-lazy>
 </div>
 </template>
 
@@ -152,4 +156,5 @@ export default {
 </script>
 
 <style type="scss">
+
 </style>

@@ -1,44 +1,45 @@
 <template>
-<div class="welcome vh-100 p-3">
-  <!-- <v-lazy v-model="isActive" :options="{
-        threshold: .4
-      }" min-height="100vh" transition-group="fade-transition"> -->
-  <!-- SIGN CONTROLS -->
-  <div class="sign-controls">
-    <!-- SIGN IN -->
-    <div class="login-content">
-      <router-link :to="{ name: 'Login' }">
-        <v-btn color="primary" class="text-uppercase font-weight-bold cursor-pointer text-decoration-none" elevation="2" x-large outlined rounded block>
-          <v-icon class="pr-1">mdi-login</v-icon>Prihlásiť sa
-        </v-btn>
-      </router-link>
-    </div>
-    <div class="text pb-5">
-    </div>
-    <!-- GET STARTED -->
-    <div class="register-content">
-      <router-link :to="{ name: 'Register' }">
-        <v-btn color="primary" class="text-uppercase font-weight-bold text-decoration-none" elevation="2" x-large rounded block>
-          <v-icon class="pr-1">mdi-account-plus</v-icon>Zaregistrovať sa
-        </v-btn>
-      </router-link>
-    </div>
-  </div>
+<v-lazy :options="{
+        threshold: 1
+      }" min-height="100vh" transition-group="scale-transition">
+  <div class="welcome vh-100 p-3">
 
-  <!-- content -->
-  <div class="content verticalhorizontal">
-    <v-row justify="center">
-      <!-- <v-col> -->
-      <div v-if="this.$vuetify.theme.dark">
-        <img src="/img/logo_welcome_theme_dark.png" lazy-src="/img/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
+    <!-- SIGN CONTROLS -->
+    <div class="sign-controls">
+      <!-- SIGN IN -->
+      <div class="login-content">
+        <router-link :to="{ name: 'Login' }">
+          <v-btn color="primary" class="text-uppercase font-weight-bold cursor-pointer text-decoration-none" elevation="2" x-large outlined rounded block>
+            <v-icon class="pr-1">mdi-login</v-icon>Prihlásiť sa
+          </v-btn>
+        </router-link>
       </div>
-      <div v-else>
-        <img src="/img/logo_welcome_theme_light.png" lazy-src="/img/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
+      <div class="text pb-5">
       </div>
-    </v-row>
+      <!-- GET STARTED -->
+      <div class="register-content">
+        <router-link :to="{ name: 'Register' }">
+          <v-btn color="primary" class="text-uppercase font-weight-bold text-decoration-none" elevation="2" x-large rounded block>
+            <v-icon class="pr-1">mdi-account-plus</v-icon>Zaregistrovať sa
+          </v-btn>
+        </router-link>
+      </div>
+    </div>
+
+    <!-- content -->
+    <div class="content verticalhorizontal">
+      <v-row justify="center">
+        <!-- <v-col> -->
+        <div v-if="this.$vuetify.theme.dark">
+          <img src="/img/logo_welcome_theme_dark.png" lazy-src="/img/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
+        </div>
+        <div v-else>
+          <img src="/img/logo_welcome_theme_light.png" lazy-src="/img/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
+        </div>
+      </v-row>
+    </div>
   </div>
-  <!-- </v-lazy> -->
-</div>
+</v-lazy>
 </template>
 
 <script>
@@ -46,14 +47,12 @@ export default {
   name: "Welcome",
   components: {},
   data() {
-    return {
-      isActive: false,
-    }
+    return {}
   },
 
   mounted() {
     //do something after mounting vue instance
-    console.log('Component Register mounted.')
+    console.log('Component Welcome mounted.')
     this.$store.dispatch('mutationLogout', {
       username: '',
       logout: false
@@ -61,7 +60,7 @@ export default {
   },
 
   created() {
-    console.log('Component Register created')
+    console.log('Component Welcome created')
   },
 };
 </script>

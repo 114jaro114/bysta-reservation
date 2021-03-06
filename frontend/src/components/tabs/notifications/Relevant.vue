@@ -1,42 +1,46 @@
 <template>
 <div class="relevant w-100 h-100 text-uppercase mt-1">
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col v-for="(item, i) in items" :key="i" cols="12">
-      <v-card color="primary" dark>
-        <div class=" d-flex flex-no-wrap justify-space-between">
-          <div>
-            <v-card-title class="headline" v-text="item.title"></v-card-title>
+  <v-lazy :options="{
+            threshold: .8
+          }" transition="fade-transition">
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col v-for="(item, i) in items" :key="i" cols="12">
+        <v-card color="primary" dark>
+          <div class=" d-flex flex-no-wrap justify-space-between">
+            <div>
+              <v-card-title class="headline" v-text="item.title"></v-card-title>
 
-            <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+              <v-card-subtitle v-text="item.artist"></v-card-subtitle>
 
-            <v-card-actions v-if="item.artist === 'Ellie Goulding'">
-              <v-btn class="ml-2 mt-3" fab icon small>
-                <v-icon>mdi-star-box-multiple</v-icon>
-              </v-btn>
+              <v-card-actions v-if="item.artist === 'Ellie Goulding'">
+                <v-btn class="ml-2 mt-3" fab icon small>
+                  <v-icon>mdi-star-box-multiple</v-icon>
+                </v-btn>
 
-              <v-btn class="ml-2 mt-3" outlined rounded medium>
-                START RADIO
-              </v-btn>
-            </v-card-actions>
+                <v-btn class="ml-2 mt-3" outlined rounded medium>
+                  START RADIO
+                </v-btn>
+              </v-card-actions>
 
-            <v-card-actions v-else>
-              <v-btn class="ml-2 mt-3" fab icon small>
-                <v-icon>mdi-star-box-multiple</v-icon>
-              </v-btn>
+              <v-card-actions v-else>
+                <v-btn class="ml-2 mt-3" fab icon small>
+                  <v-icon>mdi-star-box-multiple</v-icon>
+                </v-btn>
 
-              <v-btn class="ml-2 mt-3" outlined rounded medium>
-                START RADIO
-              </v-btn>
-            </v-card-actions>
+                <v-btn class="ml-2 mt-3" outlined rounded medium>
+                  START RADIO
+                </v-btn>
+              </v-card-actions>
+            </div>
+
+            <v-avatar class="ma-3" size="125" tile>
+              <v-img :src="item.src"></v-img>
+            </v-avatar>
           </div>
-
-          <v-avatar class="ma-3" size="125" tile>
-            <v-img :src="item.src"></v-img>
-          </v-avatar>
-        </div>
-      </v-card>
-    </v-col>
-  </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-lazy>
 </div>
 </template>
 

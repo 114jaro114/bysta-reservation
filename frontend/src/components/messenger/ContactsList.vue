@@ -20,7 +20,7 @@
               <!-- <div class="avatar">
                 <img :src="contact.profile_image" :alt="contact.name">
             </div> -->
-            <v-data-table :search="search" no-data-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="contacts" :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" elevation="0">
+            <v-data-table no-data-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="contacts" :search="search"  :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" elevation="0">
               <template v-slot:top>
                 <v-toolbar flat>
                   <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
@@ -34,16 +34,12 @@
               <template v-slot:item="{ item }" >
                 <div class="p-3" :key="item.id" @click="selectContact(item)" :class="{ 'selected': item == selected }">
                   <v-badge bottom dot bordered :color="getColor(item.status)" offset-x="10" offset-y="10" class="mr-2">
-                    <div v-if="!avatarImageUrl">
-                      <v-avatar color="primary">
-                        <v-avatar color="primary" size="48" v-if="item.avatar == null">
-                          <span class="text-uppercase secondary--text">{{ item.name.charAt(0) }}</span>
-                        </v-avatar>
-                        <v-avatar color="primary" size="48" v-else>
-                          <img :src="`http://127.0.0.1:8000/storage/user-avatar/${item.avatar}`">
-                        </v-avatar>
-                      </v-avatar>
-                    </div>
+                    <v-avatar color="primary" size="48" v-if="item.avatar == null">
+                      <span class="text-uppercase secondary--text">{{ item.name.charAt(0) }}</span>
+                    </v-avatar>
+                    <v-avatar color="primary" size="48" v-else>
+                      <img :src="`http://127.0.0.1:8000/storage/user-avatar/${item.avatar}`">
+                    </v-avatar>
                   </v-badge>
 
                   <v-badge :content="item.unread" :value="item.unread" color="primary">
@@ -107,7 +103,6 @@
   </div>
 </template>
 <script>
-// import axios from 'axios';
 // import {
 //   Picker
 // } from 'emoji-mart-vue'
@@ -118,10 +113,6 @@ export default {
       type: Array,
       default: () => []
     }
-  },
-
-  components: {
-    // Picker
   },
 
   data() {
@@ -170,8 +161,8 @@ export default {
       headers: [{
           // text: 'Priateľ',
           align: 'center',
-          value: 'status',
-          sortable: true,
+          value: 'name',
+          sortable: false,
         },
         // {
         //   text: 'Email',
@@ -231,7 +222,13 @@ export default {
         this.iconIndex++
     },
   },
+  updated() {
+    //do something after updating vue instance
+    this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
+  },
+
   created() {
+    this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
     // window.Echo.private('statusUpdate')
     //   .listen('statusUpdate', (e) => {
     //     console.log("test " + e.message);

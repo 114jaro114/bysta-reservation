@@ -1,22 +1,27 @@
 <template lang="html">
   <div class="feed">
-    <div v-bar class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll="{smooth: true, notSmoothOnInit: true}" ref="card_body" v-if="contact">
+    <div class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll="{smooth: true, notSmoothOnInit: true}" ref="card_body" v-if="contact">
+      <!-- v-bar -->
       <div class="row m-0 pt-4 pl-2 pr-2 w-100" v-for="message in messages" :class="`message${message.to = contact.id ? ' sent' : ' received'}`" :key="message.id">
         <div v-if="message.from != user_id" class="float-left" style="border-radius: 5px;">
-          <div class="float-left p-2 pr-3 pl-3 mr-1 bubble_friend" :style="{background: $vuetify.theme.themes[isDark].accent}">
-            <span class="background--text">{{ message.text }}</span><br>
-          </div>
-          <div class="float-left pr-3 bubble_friend2 accent--text">
-            <span>{{ message.created_at.substr(11, 5) }}</span>
-          </div>
+          <v-badge color="accent" content="6" bordered overlap bottom left>
+            <div class="float-left p-2 pr-3 pl-3 mr-1 bubble_friend" :style="{background: $vuetify.theme.themes[isDark].accent}">
+              <span class="background--text">{{ message.text }}</span><br>
+            </div>
+            <div class="float-left pr-3 bubble_friend2 accent--text">
+              <span>{{ message.created_at.substr(11, 5) }}</span>
+            </div>
+          </v-badge>
         </div>
-        <div v-else class="col p-0">
-          <div class="float-right p-2 pr-3 pl-3 ml-1 bubble_me" :style="{background: $vuetify.theme.themes[isDark].primary}">
-            <span class="secondary--text">{{ message.text }}</span><br>
-          </div>
-          <div class="float-right bubble_me2 primary--text">
-            <span>{{ message.created_at.substr(11, 5) }}</span>
-          </div>
+        <div v-else class="col p-0 pr-1" style="text-align: right">
+          <v-badge color="primary" content="6" bordered overlap bottom >
+            <div class="float-right p-2 pr-3 pl-3 ml-1 bubble_me" :style="{background: $vuetify.theme.themes[isDark].primary}" @click="skuska(message)">
+              <span class="secondary--text">{{ message.text }}</span><br>
+            </div>
+            <div class="float-right bubble_me2 primary--text">
+              <span>{{ message.created_at.substr(11, 5) }}</span>
+            </div>
+          </v-badge>
         </div>
       </div>
       <span class="accent--text text-muted p-2 float-left" v-if="typingStatusFunction">
@@ -91,6 +96,10 @@ export default {
       setTimeout(() => {
         this.$refs.card_body.scrollTop = this.$refs.card_body.scrollHeight;
       }, 50);
+    },
+
+    skuska(message) {
+      console.log(message);
     }
   },
   updated() {
