@@ -1,6 +1,6 @@
 <template>
 <v-lazy :options="{
-        threshold: 1
+        threshold: 0.9
       }" min-height="100vh" transition-group="scale-transition">
   <div class="welcome vh-100 p-3">
 

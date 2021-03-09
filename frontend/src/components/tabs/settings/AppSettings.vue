@@ -76,6 +76,22 @@
 
           <v-divider class="secondary" />
 
+          <span class="secondary--color">spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</span>
+
+          <v-card-text>
+            <v-row justify="center">
+              <v-col class="d-flex pb-0" cols="12" sm="6">
+                <v-btn :ripple="false" class="speed_dial_switch" block large>
+                  <span class="pr-4">skryt</span>
+                  <v-switch color="primary" v-model="switch3" inset></v-switch>
+                  <span>Zobraziť</span>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-divider class="secondary" />
+
           <span class="secondary--color">Jazyk aplikácie</span>
 
           <v-card-text class="select_country">
@@ -135,6 +151,7 @@ export default {
       ],
       switch1: JSON.parse(localStorage.getItem("speed_dial")),
       switch2: true,
+      switch3: true,
     }
   },
   mounted() {

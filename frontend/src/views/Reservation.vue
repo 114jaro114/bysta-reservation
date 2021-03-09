@@ -2,7 +2,7 @@
 <div class="reservation w-100 h-100 text-uppercase secondary-color">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
-        threshold: .4
+        threshold: .1
       }" min-height="100vh" transition-group="scale-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">

@@ -59,13 +59,31 @@
                 </div>
               </div>
             </v-card-text>
-            <hr class="mt-0 mb-0 custom-hr">
+            <v-divider class="mt-0" />
+            <!-- <hr class="mt-0 mb-0 custom-hr"> -->
             <v-card-actions>
               <v-btn color="primary" @click="login" block>
                 Prihlásiť sa
               </v-btn>
             </v-card-actions>
           </v-form>
+          <v-container class="p-4 pt-3">
+            <v-row align="center">
+              <v-divider />
+              Alebo
+              <v-divider />
+            </v-row>
+            <v-row align="center">
+              <v-btn color="primary" outlined block>
+                Prihlásiť pomocou <v-icon class="mr-1">mdi-facebook</v-icon>
+              </v-btn>
+            </v-row>
+            <v-row class="pt-3" align="center">
+              <v-btn color="error" outlined block>
+                Prihlásiť pomocou <v-icon class="mr-1">mdi-google</v-icon>
+              </v-btn>
+            </v-row>
+          </v-container>
         </v-card>
       </div>
     </div>
@@ -134,29 +152,31 @@ export default {
         this.alert = false;
         // call API
         axios.post('http://127.0.0.1:8000/api/auth/login', {
-          email: this.email,
-          password: this.password,
-          remember: this.remember,
-          status: "online"
-        }).then(resp => {
-          this.myloadingvariable = false;
-          localStorage.setItem('username', resp.data.user.name);
-          localStorage.setItem('user_id', resp.data.user.id);
-          localStorage.setItem('authToken', resp.data.token);
-          this.reset();
-          this.$router.push("/home");
-          if (localStorage.getItem('speed_dial') == undefined) {
-            localStorage.setItem('speed_dial', true);
-            this.$store.dispatch('speedDialState2', {
-              status: true
-            });
-          }
-        }).catch(e => {
-          this.myloadingvariable = false,
-            this.alert = true,
-            this.error = ' ',
-            this.errors.push(e)
-        })
+            email: this.email,
+            password: this.password,
+            remember: this.remember,
+            status: "online"
+          })
+          .then(resp => {
+            this.myloadingvariable = false;
+            localStorage.setItem('username', resp.data.user.name);
+            localStorage.setItem('user_id', resp.data.user.id);
+            localStorage.setItem('authToken', resp.data.token);
+            this.reset();
+            this.$router.push("/home");
+            if (localStorage.getItem('speed_dial') == undefined) {
+              localStorage.setItem('speed_dial', true);
+              this.$store.dispatch('speedDialState2', {
+                status: true
+              });
+            }
+          })
+          .catch(e => {
+            this.myloadingvariable = false,
+              this.alert = true,
+              this.error = ' ',
+              this.errors.push(e)
+          })
       }
     },
   },

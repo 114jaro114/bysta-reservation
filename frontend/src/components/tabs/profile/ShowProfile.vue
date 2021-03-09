@@ -11,10 +11,10 @@
             <v-flex class="mb-4">
               <v-container fluid>
                 <v-row justify="center">
-                  <v-avatar color="blue" size="48" class="mr-3" v-if="!avatarImageUrl">
+                  <v-avatar color="primary" size="48" class="mr-3" v-if="!avatarImageUrl">
                     <span style="color:white" class="text-uppercase font-weight-bold">{{ usernameInitial }}</span>
                   </v-avatar>
-                  <v-avatar color="blue" size="48" class="mr-3" v-else>
+                  <v-avatar color="primary" size="48" class="mr-3" v-else>
                     <img :src="avatarImageUrl">
                   </v-avatar>
                   <div class="ml-3">

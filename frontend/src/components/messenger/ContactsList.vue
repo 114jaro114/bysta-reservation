@@ -3,11 +3,11 @@
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
         <v-card elevation="0">
-          <v-card-title class="justify-center">
+          <!-- <v-card-title class="justify-center">
             <v-icon class="mr-1 primary--text" large>mdi-account-group</v-icon>
             <span class="primary--text">Zoznam priateľov</span>
           </v-card-title>
-          <v-divider class="mt-0" />
+          <v-divider class="mt-0" /> -->
         <v-card-text class="p-0">
           <!-- <v-row justify="center" class="ml-0 mr-0 position-relative" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }"> -->
             <!-- <div class="row mr-0 ml-0 pl-1 w-100 position-relative" style="color: #6c757d" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }"> -->
@@ -27,8 +27,8 @@
                   <!-- <v-spacer></v-spacer> -->
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
                   <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" class="mb-2" to="/profile/add_friends"> Pridať nového priateľa </v-btn>
+                  <v-spacer class="mr-1 ml-1"></v-spacer>
+                  <v-btn color="primary" class="mb-2" to="/profile/add_friends" fab small ><v-icon>mdi-account-plus</v-icon></v-btn>
                 </v-toolbar>
               </template>
               <template v-slot:item="{ item }" >

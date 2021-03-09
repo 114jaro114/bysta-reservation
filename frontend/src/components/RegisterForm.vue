@@ -34,13 +34,31 @@
                 </div>
               </div>
             </v-card-text>
-            <hr class="mt-0 mb-0 custom-hr">
+            <v-divider class="mt-0" />
+            <!-- <hr class="mt-0 mb-0 custom-hr"> -->
             <v-card-actions>
               <v-btn color="primary" @click="register" block>
                 Zaregistrovať sa
               </v-btn>
             </v-card-actions>
           </v-form>
+          <v-container class="p-4 pt-3">
+            <v-row align="center">
+              <v-divider />
+              Alebo
+              <v-divider />
+            </v-row>
+            <v-row align="center">
+              <v-btn color="primary" outlined block>
+                Zaregistrovať pomocou <v-icon class="mr-1">mdi-facebook</v-icon>
+              </v-btn>
+            </v-row>
+            <v-row class="pt-3" align="center">
+              <v-btn color="error" outlined block>
+                Zaregistrovať pomocou <v-icon class="mr-1">mdi-google</v-icon>
+              </v-btn>
+            </v-row>
+          </v-container>
         </v-card>
       </div>
     </div>
@@ -116,11 +134,12 @@ export default {
     email() {
       if (/.+@.+\..+/.test(this.email)) {
         axios.post('http://127.0.0.1:8000/api/checkIfEMailExist', {
-          email: this.email
-        }).then(valid => {
-          this.errorEmail = valid.data;
-          // this.errorEmail = valid ? [] : ['async error']
-        });
+            email: this.email
+          })
+          .then(valid => {
+            this.errorEmail = valid.data;
+            // this.errorEmail = valid ? [] : ['async error']
+          });
       } else {
         this.errorEmail = '';
       }
@@ -148,32 +167,34 @@ export default {
       if (this.validate()) {
         this.myloadingvariable = true;
         axios.post('http://127.0.0.1:8000/api/auth/register', {
-          email: this.email,
-          name: this.name,
-          password: this.password
-        }).then(resp => {
-          this.myloadingvariable = false;
-          this.alertSuccess = true;
-          this.$store.dispatch('successRegister', {
-            success: true
-          });
-          // setTimeout(function() {
-          this.$router.push("/Login");
-          // }, 3000);
-          console.log(resp);
-        }).catch(e => {
-          this.alertFail = true;
-          this.myloadingvariable = false;
-          console.log(e);
-          if (e.response.data.errors.name != null && e.response.data.errors.email != null) {
-            this.alertFailText = 'Zadaný email a meno sú už použíté!';
-          } else if (e.response.data.errors.email != null) {
-            this.alertFailText = 'Zadaný email je už použítý!';
-          } else if (e.response.data.errors.name != null) {
-            this.alertFailText = 'Zadané meno je už použíté!';
-          }
-          console.log(e);
-        })
+            email: this.email,
+            name: this.name,
+            password: this.password
+          })
+          .then(resp => {
+            this.myloadingvariable = false;
+            this.alertSuccess = true;
+            this.$store.dispatch('successRegister', {
+              success: true
+            });
+            // setTimeout(function() {
+            this.$router.push("/Login");
+            // }, 3000);
+            console.log(resp);
+          })
+          .catch(e => {
+            this.alertFail = true;
+            this.myloadingvariable = false;
+            console.log(e);
+            if (e.response.data.errors.name != null && e.response.data.errors.email != null) {
+              this.alertFailText = 'Zadaný email a meno sú už použíté!';
+            } else if (e.response.data.errors.email != null) {
+              this.alertFailText = 'Zadaný email je už použítý!';
+            } else if (e.response.data.errors.name != null) {
+              this.alertFailText = 'Zadané meno je už použíté!';
+            }
+            console.log(e);
+          })
       }
     },
   },

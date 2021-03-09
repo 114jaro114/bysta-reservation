@@ -439,3 +439,28 @@ a:hover {
 .offset-2 {
   margin: 0 !important;
 }
+
+// pagination
+.v-application--is-ltr .v-data-footer__select {
+  margin-right: 0px;
+}
+
+.v-application--is-ltr .v-data-footer__select .v-select {
+    margin: 13px 0 13px 15px;
+}
+.v-application--is-ltr .v-data-footer__pagination {
+    margin: 0 5px 0 15px;
+}
+
+.v-application--is-ltr .v-data-footer__icons-before .v-btn:last-child {
+    margin-right: 0px;
+}
+
+.v-application--is-ltr .v-data-footer__icons-after .v-btn:first-child {
+    margin-left: 0px;
+}
+
+.v-data-footer {
+  justify-content: center !important;
+  padding: 0px;
+}
