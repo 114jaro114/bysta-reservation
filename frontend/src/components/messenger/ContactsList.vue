@@ -181,9 +181,18 @@ export default {
       else return 'green'
     },
     selectContact(item) {
+      console.log(item)
       this.selected = item;
-      console.log(item);
       this.$emit('selected', item);
+      this.$store.dispatch('mutationSelectedUser', {
+        id: item.id,
+        name: item.name,
+        email: item.email,
+        status: item.status,
+        avatar: item.avatar,
+        created_at: item.created_at,
+        unread: item.unread,
+      });
     },
 
     // newEvent
@@ -225,10 +234,16 @@ export default {
   updated() {
     //do something after updating vue instance
     this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
+    this.selected = this.$store.getters['gettersSelectedUser'];
+  },
+
+  mounted() {
+    //do something after mounting vue instance
   },
 
   created() {
     this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
+    this.selected = this.$store.getters['gettersSelectedUser'];
     // window.Echo.private('statusUpdate')
     //   .listen('statusUpdate', (e) => {
     //     console.log("test " + e.message);
@@ -251,7 +266,7 @@ export default {
     },
     isDark() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
-    }
+    },
   }
 }
 </script>

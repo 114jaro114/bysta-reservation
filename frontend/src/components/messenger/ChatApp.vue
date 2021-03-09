@@ -42,6 +42,7 @@
             <v-card-text>
               <div v-if="userChoosed == true">
                 <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
+                <!--  -->
               </div>
               <div v-else>
                 <ContactsList :contacts="contacts" @selected="startConversationWith"/>
@@ -127,6 +128,8 @@ export default {
         this.handleIncoming(e.message);
       })
 
+    this.selectedContact = this.$store.getters['gettersSelectedUser'];
+
     //private channel
     // window.Echo.private(`messages.${localStorage.getItem("user_id")}`)
     //   .listen('NewMessage', (e) => {
@@ -144,6 +147,7 @@ export default {
     },
 
     startConversationWith(contact) {
+      console.log(contact);
       this.updateUnreadCount(contact, true);
 
       const api = `http://127.0.0.1:8000/api/conversation/${contact.id}`;
@@ -214,7 +218,8 @@ export default {
 
   updated() {
     //do something after updating vue instance
-
+    console.log(this.$store.getters['gettersSelectedUser']);
+    this.selectedContact = this.$store.getters['gettersSelectedUser'];
   }
 }
 </script>

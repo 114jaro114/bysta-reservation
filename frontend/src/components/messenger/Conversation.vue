@@ -2,7 +2,7 @@
   <div class="conversation">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col class="pl-0 pr-0">
-        <v-card elevation="0" v-if="contact" :typingStatusNew="typingStatusNew" class="pb-5">
+        <v-card elevation="0" v-if="contact.id != null" :typingStatusNew="typingStatusNew" class="pb-5">
           <!-- v-show="showChat" -->
           <div class="top-bar">
             <!-- <div class="avatar"><p>CB</p></div> -->
@@ -91,11 +91,16 @@ export default {
   data() {
     return {
       typingStatus: false,
+      contactIdExist: null,
     }
   },
 
   updated() {
     this.typingStatus = this.typingStatusNew;
+  },
+
+  created() {
+    //do something after creating vue instance
   },
 
   methods: {
@@ -126,7 +131,17 @@ export default {
     },
 
     removeSelectedContact() {
-      this.contact = null;
+      // console.log("hmm");
+      // this.$emit('selected', this.contact);
+      this.$store.dispatch('mutationSelectedUser', {
+        id: null,
+        name: null,
+        email: null,
+        status: null,
+        avatar: null,
+        created_at: null,
+        unread: null,
+      });
     }
   }
 }

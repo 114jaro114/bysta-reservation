@@ -41,6 +41,15 @@ export default new Vuex.Store({
     },
 
     contactListLoader: true,
+    selectedUser: {
+      id: null,
+      name: null,
+      email: null,
+      status: null,
+      avatar: null,
+      created_at: null,
+      unread: null,
+    },
   },
   getters: {
     Data: state => {
@@ -70,6 +79,10 @@ export default new Vuex.Store({
     gettersContactListLoader: state => {
       return state.contactListLoader
     },
+
+    gettersSelectedUser: state => {
+      return state.selectedUser
+    }
   },
   mutations: {
     showProfile: (state, payload) => {
@@ -116,6 +129,16 @@ export default new Vuex.Store({
 
     mutationContactListLoader: (state, payload) => {
       state.contactListLoader = payload.cancelLoader;
+    },
+
+    mutationSelectedUser: (state, payload) => {
+      Vue.set(state.selectedUser, 'id', payload.id);
+      Vue.set(state.selectedUser, 'name', payload.name);
+      Vue.set(state.selectedUser, 'email', payload.email);
+      Vue.set(state.selectedUser, 'status', payload.status);
+      Vue.set(state.selectedUser, 'avatar', payload.avatar);
+      Vue.set(state.selectedUser, 'created_at', payload.created_at);
+      Vue.set(state.selectedUser, 'unread', payload.unread);
     }
   },
   actions: {
@@ -145,6 +168,10 @@ export default new Vuex.Store({
     mutationContactListLoader: (context, payload) => {
       context.commit('mutationContactListLoader', payload)
     },
+
+    mutationSelectedUser: (context, payload) => {
+      context.commit('mutationSelectedUser', payload)
+    }
   }
 });
 
