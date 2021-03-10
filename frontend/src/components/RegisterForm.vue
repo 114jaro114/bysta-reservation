@@ -42,20 +42,35 @@
               </v-btn>
             </v-card-actions>
           </v-form>
-          <v-container class="p-4 pt-3">
+          <v-container align="center" class="p-4 pt-3">
             <v-row align="center">
               <v-divider />
               Alebo
               <v-divider />
             </v-row>
-            <v-row align="center">
-              <v-btn color="primary" outlined block>
-                Zaregistrovať pomocou <v-icon class="mr-1">mdi-facebook</v-icon>
+            <v-row class="pt-1" style="justify-content: center">
+              <v-btn fab medium color="blue">
+                <v-icon>
+                  mdi-facebook
+                </v-icon>
               </v-btn>
-            </v-row>
-            <v-row class="pt-3" align="center">
-              <v-btn color="error" outlined block>
-                Zaregistrovať pomocou <v-icon class="mr-1">mdi-google</v-icon>
+
+              <v-btn class="ml-5" fab medium color="red">
+                <v-icon>
+                  mdi-google
+                </v-icon>
+              </v-btn>
+
+              <v-btn class="ml-5" fab medium color="light-blue">
+                <v-icon>
+                  mdi-twitter
+                </v-icon>
+              </v-btn>
+
+              <v-btn class="ml-5" fab medium color="brown">
+                <v-icon>
+                  mdi-github
+                </v-icon>
               </v-btn>
             </v-row>
           </v-container>
@@ -174,7 +189,7 @@ export default {
           .then(resp => {
             this.myloadingvariable = false;
             this.alertSuccess = true;
-            this.$store.dispatch('successRegister', {
+            this.$store.dispatch('actionSuccessRegister', {
               success: true
             });
             // setTimeout(function() {
@@ -202,7 +217,7 @@ export default {
   mounted() {
     //do something after mounting vue instance
     console.log('Component Register mounted.')
-    this.$store.dispatch('mutationLogout', {
+    this.$store.dispatch('actionIsLoggedOut', {
       username: '',
       logout: false
     });

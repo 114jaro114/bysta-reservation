@@ -1,7 +1,7 @@
 <template>
 <div class="phone-viewport w-100 m-auto">
   <!-- v-model="value" -->
-  <v-bottom-navigation color="secondary" :input-value="activeBottomNavigation" background-color="primary" shift grow>
+  <v-bottom-navigation color="secondary" :input-value="this.$store.getters['bottomNavigationState'].state" background-color="primary" shift grow>
     <v-btn to="/home" value="home">
       <span>Domov</span>
       <v-icon color="secondary">mdi-home</v-icon>
@@ -57,7 +57,7 @@ export default {
     return {
       value: '',
       num: 5,
-      activeBottomNavigation: true
+      // activeBottomNavigation: true
     }
   },
   methods: {

@@ -182,7 +182,7 @@ export default {
     //   }),
     showProfile(item) {
       console.log(item);
-      this.$store.dispatch('showProfile', {
+      this.$store.dispatch('actionShowProfile', {
         avatar: item.avatar,
         created_at: item.created_at,
         email: item.email,

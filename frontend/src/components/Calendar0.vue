@@ -146,7 +146,8 @@ export default {
         eventClick: this.showEvent,
         eventsSet: this.handleEvents,
         validRange: {
-          start: moment(new Date()).format('YYYY-MM-DDTHH:mm:SS')
+          start: moment(new Date())
+            .format('YYYY-MM-DDTHH:mm:SS')
         }
       },
       // selectedDatesArray: [],
@@ -238,13 +239,15 @@ export default {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
       },
     };
-    axios.get(api, config).then((response) => {
-      if (response.data.avatar) {
-        this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+    axios.get(api, config)
+      .then((response) => {
+        if (response.data.avatar) {
+          this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   created() {
     this.getEvents();
@@ -258,8 +261,12 @@ export default {
       this.range.end = null;
     },
     periodSelected(event, checkIn, checkOut) {
-      this.newEvent.start_date = moment(checkIn).format('YYYY-MM-DDTHH:mm:SS');
-      this.newEvent.end_date = moment(checkOut).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS');
+      this.newEvent.start_date = moment(checkIn)
+        .format('YYYY-MM-DDTHH:mm:SS');
+      this.newEvent.end_date = moment(checkOut)
+        .add(23, 'hours')
+        .add(59, 'minutes')
+        .format('YYYY-MM-DDTHH:mm:SS');
     },
     clearDates() {
       this.$refs.DatePicker.clearSelection();
@@ -279,11 +286,18 @@ export default {
         let title = "rezervácia";
         let calendarApi = selectInfo.view.calendar
         calendarApi.unselect() // clear date selection
-        console.log(new Date().toISOString().slice(0, 10));
+        console.log(new Date()
+          .toISOString()
+          .slice(0, 10));
         this.newEvent = {
           event_name: title,
-          start_date: moment(selectInfo.start).format('YYYY-MM-DDTHH:mm:SS'),
-          end_date: moment(selectInfo.end).subtract(1, 'days').add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS'),
+          start_date: moment(selectInfo.start)
+            .format('YYYY-MM-DDTHH:mm:SS'),
+          end_date: moment(selectInfo.end)
+            .subtract(1, 'days')
+            .add(23, 'hours')
+            .add(59, 'minutes')
+            .format('YYYY-MM-DDTHH:mm:SS'),
           // start_date: selectInfo.startStr,
           // end_date: selectInfo.endStr,
           color: 'orange',
@@ -292,16 +306,18 @@ export default {
 
         console.log(this.newEvent);
         axios.post('http://127.0.0.1:8000/api/calendar/store', {
-          ...this.newEvent
-        }).then(res => {
-          console.log(res);
-          this.alert3 = true;
-          this.$store.dispatch('successReservation', {
-            success: true
-          });
-          this.getEvents();
-          this.resetForm();
-        }).catch(err => console.log("nepodarilo sa pridat event", err));
+            ...this.newEvent
+          })
+          .then(res => {
+            console.log(res);
+            this.alert3 = true;
+            this.$store.dispatch('actionSuccessReservation', {
+              success: true
+            });
+            this.getEvents();
+            this.resetForm();
+          })
+          .catch(err => console.log("nepodarilo sa pridat event", err));
       } else {
         this.alert2 = true;
       }
@@ -319,13 +335,14 @@ export default {
 
           if (this.currentEvents[i].borderColor == 'orange') {
             axios.post('http://127.0.0.1:8000/api/calendar/update', {
-              ...this.newEvent,
-              id: this.currentEvents[i].id
-            }).then(res => {
-              console.log(res);
-              console.log("cau");
-              this.updateDatePicker();
-            })
+                ...this.newEvent,
+                id: this.currentEvents[i].id
+              })
+              .then(res => {
+                console.log(res);
+                console.log("cau");
+                this.updateDatePicker();
+              })
           }
         } else {
           if (this.calendarOptions.events[i].username == this.user) {
@@ -337,13 +354,14 @@ export default {
             }
             if (this.currentEvents[i].borderColor == 'orange') {
               axios.post('http://127.0.0.1:8000/api/calendar/update', {
-                ...this.newEvent,
-                id: this.currentEvents[i].id
-              }).then(res => {
-                console.log(res);
-                console.log("cau");
-                this.updateDatePicker();
-              })
+                  ...this.newEvent,
+                  id: this.currentEvents[i].id
+                })
+                .then(res => {
+                  console.log(res);
+                  console.log("cau");
+                  this.updateDatePicker();
+                })
               this.resetForm();
             }
           }
@@ -372,16 +390,18 @@ export default {
           this.alert1 = true;
         } else {
           axios.post('http://127.0.0.1:8000/api/calendar/store', {
-            ...this.newEvent
-          }).then(res => {
-            console.log(res);
-            this.$store.dispatch('successReservation', {
-              success: true
-            });
-            this.getEvents();
-            this.resetForm();
-            this.alert3 = true;
-          }).catch(err => console.log("nepodarilo sa pridat event", err));
+              ...this.newEvent
+            })
+            .then(res => {
+              console.log(res);
+              this.$store.dispatch('actionSuccessReservation', {
+                success: true
+              });
+              this.getEvents();
+              this.resetForm();
+              this.alert3 = true;
+            })
+            .catch(err => console.log("nepodarilo sa pridat event", err));
         }
       } else {
         this.alert2 = true;
@@ -417,34 +437,38 @@ export default {
     updateEvent() {
       this.newEvent.username = this.user;
       axios.post('http://127.0.0.1:8000/api/calendar/update', {
-        ...this.newEvent
-      }).then(res => {
-        console.log("cau");
-        console.log(res);
-        this.getEvents();
-        this.showInputs = false;
-        this.addingMode = !this.addingMode;
-        this.resetForm();
-        this.alert4 = true;
-      }).catch(err => console.log("Unable to update event!", err));
+          ...this.newEvent
+        })
+        .then(res => {
+          console.log("cau");
+          console.log(res);
+          this.getEvents();
+          this.showInputs = false;
+          this.addingMode = !this.addingMode;
+          this.resetForm();
+          this.alert4 = true;
+        })
+        .catch(err => console.log("Unable to update event!", err));
     },
     deleteEvent() {
       if (confirm("Naozaj chceš vymazať rezerváciu?")) {
         this.isPossibleAddEvent = 0;
         axios.post('http://127.0.0.1:8000/api/calendar/delete', {
-          id: this.indexToUpdate
-        }).then(res => {
-          console.log(res);
-          // this.disabledDates = null;
-          this.$store.dispatch('successReservation', {
-            success: false
-          });
-          this.getEvents();
-          this.resetForm();
-          this.addingMode = !this.addingMode;
-          this.showInputs = false;
-          this.alert5 = true;
-        }).catch(err => console.log("Unable to delete event!", err));
+            id: this.indexToUpdate
+          })
+          .then(res => {
+            console.log(res);
+            // this.disabledDates = null;
+            this.$store.dispatch('actionSuccessReservation', {
+              success: false
+            });
+            this.getEvents();
+            this.resetForm();
+            this.addingMode = !this.addingMode;
+            this.showInputs = false;
+            this.alert5 = true;
+          })
+          .catch(err => console.log("Unable to delete event!", err));
       }
     },
     cancelEvent() {
@@ -453,67 +477,71 @@ export default {
       this.resetForm();
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/calendar').then(resp => {
-        this.calendarOptions.events = resp.data.data;
-        //this code contains disabled dates in datepicker
-        this.disabledDates = [];
-        for (var i = 0; i < resp.data.data.length; i++) {
-          var day1 = moment(resp.data.data[i].end);
-          var day2 = moment(resp.data.data[i].start);
-          var result = [moment({
-            ...day2
-          })];
-          while (day1.date() != day2.date()) {
-            day2.add(1, 'day');
-            result.push(moment({
+      axios.get('http://127.0.0.1:8000/api/calendar')
+        .then(resp => {
+          this.calendarOptions.events = resp.data.data;
+          //this code contains disabled dates in datepicker
+          this.disabledDates = [];
+          for (var i = 0; i < resp.data.data.length; i++) {
+            var day1 = moment(resp.data.data[i].end);
+            var day2 = moment(resp.data.data[i].start);
+            var result = [moment({
               ...day2
-            }));
+            })];
+            while (day1.date() != day2.date()) {
+              day2.add(1, 'day');
+              result.push(moment({
+                ...day2
+              }));
+            }
+            var allDates = result.map(x => x.format("YYYY-MM-DD"));
+            for (var a = 0; a < allDates.length; a++) {
+              this.disabledDates.push(allDates[a])
+            }
           }
-          var allDates = result.map(x => x.format("YYYY-MM-DD"));
-          for (var a = 0; a < allDates.length; a++) {
-            this.disabledDates.push(allDates[a])
+          // get data
+          this.test = resp.data.data;
+          if (resp.data.data != undefined) {
+            this.last_index = resp.data.data[resp.data.data.length - 1].id;
           }
-        }
-        // get data
-        this.test = resp.data.data;
-        if (resp.data.data != undefined) {
-          this.last_index = resp.data.data[resp.data.data.length - 1].id;
-        }
-      }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     },
 
     resetForm() {
-      Object.keys(this.newEvent).forEach(key => {
-        return (this.newEvent[key] = "");
-      });
+      Object.keys(this.newEvent)
+        .forEach(key => {
+          return (this.newEvent[key] = "");
+        });
     },
 
     updateDatePicker() {
-      axios.get('http://127.0.0.1:8000/api/calendar').then(resp => {
-        // this.calendarOptions.events = resp.data.data;
-        //this code contains disabled dates in datepicker
-        console.log(resp.data.data);
-        this.disabledDates = [];
-        for (var i = 0; i < resp.data.data.length; i++) {
-          var day1 = moment(resp.data.data[i].end);
-          var day2 = moment(resp.data.data[i].start);
-          var result = [moment({
-            ...day2
-          })];
-          while (day1.date() != day2.date()) {
-            day2.add(1, 'day');
-            result.push(moment({
+      axios.get('http://127.0.0.1:8000/api/calendar')
+        .then(resp => {
+          // this.calendarOptions.events = resp.data.data;
+          //this code contains disabled dates in datepicker
+          console.log(resp.data.data);
+          this.disabledDates = [];
+          for (var i = 0; i < resp.data.data.length; i++) {
+            var day1 = moment(resp.data.data[i].end);
+            var day2 = moment(resp.data.data[i].start);
+            var result = [moment({
               ...day2
-            }));
+            })];
+            while (day1.date() != day2.date()) {
+              day2.add(1, 'day');
+              result.push(moment({
+                ...day2
+              }));
+            }
+            var allDates = result.map(x => x.format("YYYY-MM-DD"));
+            for (var a = 0; a < allDates.length; a++) {
+              this.disabledDates.push(allDates[a])
+            }
           }
-          var allDates = result.map(x => x.format("YYYY-MM-DD"));
-          for (var a = 0; a < allDates.length; a++) {
-            this.disabledDates.push(allDates[a])
-          }
-        }
 
-        console.log(this.disabledDates);
-      })
+          console.log(this.disabledDates);
+        })
     },
   },
   watch: {
@@ -524,8 +552,12 @@ export default {
 
   updated() {
     console.log("this is updated");
-    this.newEvent.start_date = moment(this.range.start).format('YYYY-MM-DDTHH:mm:SS');
-    this.newEvent.end_date = moment(this.range.end).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS');
+    this.newEvent.start_date = moment(this.range.start)
+      .format('YYYY-MM-DDTHH:mm:SS');
+    this.newEvent.end_date = moment(this.range.end)
+      .add(23, 'hours')
+      .add(59, 'minutes')
+      .format('YYYY-MM-DDTHH:mm:SS');
     console.log(this.newEvent.start_date);
     console.log(this.newEvent.end_date);
     // this.updateDatePicker();

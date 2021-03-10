@@ -130,7 +130,7 @@ export default {
         .then((res) => {
           this.$emit('childToParent', 'false');
           console.log(res);
-          this.$store.dispatch('mutationLogout', {
+          this.$store.dispatch('actionIsLoggedOut', {
             username: localStorage.getItem("username"),
             logout: true
           });

@@ -83,7 +83,8 @@ export default {
       avatarImageUrl: "",
       showUploadProgress: false,
       processingUpload: false,
-      usernameInitial: localStorage.getItem('username').charAt(0),
+      usernameInitial: localStorage.getItem('username')
+        .charAt(0),
     }
   },
   mounted() {
@@ -95,13 +96,15 @@ export default {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
       },
     };
-    axios.get(api, config).then((response) => {
-      if (response.data.avatar) {
-        this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+    axios.get(api, config)
+      .then((response) => {
+        if (response.data.avatar) {
+          this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   methods: {
     logout() {
@@ -113,20 +116,22 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("authToken"),
         },
       };
-      axios.post(api, null, config).then((res) => {
-        this.$emit('childToParent', 'false');
-        console.log(res);
-        this.$store.dispatch('mutationLogout', {
-          username: localStorage.getItem("username"),
-          logout: true
-        });
-        localStorage.removeItem("username");
-        localStorage.removeItem("authToken");
-        this.$router.push("/login");
-      }).catch(e => {
-        this.$emit('childToParent', 'false'),
-          console.log(e);
-      })
+      axios.post(api, null, config)
+        .then((res) => {
+          this.$emit('childToParent', 'false');
+          console.log(res);
+          this.$store.dispatch('actionIsLoggedOut', {
+            username: localStorage.getItem("username"),
+            logout: true
+          });
+          localStorage.removeItem("username");
+          localStorage.removeItem("authToken");
+          this.$router.push("/login");
+        })
+        .catch(e => {
+          this.$emit('childToParent', 'false'),
+            console.log(e);
+        })
     },
     updateAvatar(event) {
       if (this.$refs.photo) {
@@ -151,24 +156,26 @@ export default {
         //
         // }, config).then((response) => {
         axios.post(api, formData, config, {
-          onUploadProgress: (progressEvent) => {
-            this.uploadPercent = progressEvent.lengthComputable ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
-          }
-        }).then((response) => {
-          console.log(response);
-          this.avatarImageUrl = response.data.avatar_url
-          this.showUploadProgress = false
-          this.processingUpload = false
-          this.$emit('imageUrl', response.data.secure_url)
-        }).catch((error) => {
-          if (error.response) {
-            console.log(error.message)
-          } else {
-            console.log(error)
-          }
-          this.showUploadProgress = false
-          this.processingUpload = false
-        })
+            onUploadProgress: (progressEvent) => {
+              this.uploadPercent = progressEvent.lengthComputable ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
+            }
+          })
+          .then((response) => {
+            console.log(response);
+            this.avatarImageUrl = response.data.avatar_url
+            this.showUploadProgress = false
+            this.processingUpload = false
+            this.$emit('imageUrl', response.data.secure_url)
+          })
+          .catch((error) => {
+            if (error.response) {
+              console.log(error.message)
+            } else {
+              console.log(error)
+            }
+            this.showUploadProgress = false
+            this.processingUpload = false
+          })
       }
     }
   }

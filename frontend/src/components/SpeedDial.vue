@@ -1,6 +1,6 @@
 <template>
 <v-card id="create">
-  <v-speed-dial v-if="this.$store.getters['speedDialState'].test == true" v-model="fab" :bottom="bottom" :right="right" :direction="direction" :open-on-hover="hover" :transition="transition">
+  <v-speed-dial v-if="this.$store.getters['speedDialState'].state == true" v-model="fab" :bottom="bottom" :right="right" :direction="direction" :open-on-hover="hover" :transition="transition">
     <template v-slot:activator>
       <v-btn color="primary" v-model="fab" fab>
         <v-icon v-if="fab"> mdi-close </v-icon>

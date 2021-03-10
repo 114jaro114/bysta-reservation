@@ -16,9 +16,11 @@ export default new Vuex.Store({
       user_requested: '',
       requester: '',
     },
+
     successRegisterAlert: {
       success: false
     },
+
     successMakeReservation: {
       success: false
     },
@@ -32,7 +34,11 @@ export default new Vuex.Store({
     },
 
     speedDialState: {
-      test: false,
+      state: false,
+    },
+
+    bottomNavigationState: {
+      state: false,
     },
 
     isLoggedOut: {
@@ -41,6 +47,7 @@ export default new Vuex.Store({
     },
 
     contactListLoader: true,
+
     selectedUser: {
       id: null,
       name: null,
@@ -72,20 +79,24 @@ export default new Vuex.Store({
       return state.speedDialState
     },
 
-    gettersIsLoggedOut: state => {
+    bottomNavigationState: state => {
+      return state.bottomNavigationState
+    },
+
+    isLoggedOut: state => {
       return state.isLoggedOut
     },
 
-    gettersContactListLoader: state => {
+    contactListLoader: state => {
       return state.contactListLoader
     },
 
-    gettersSelectedUser: state => {
+    selectedUser: state => {
       return state.selectedUser
     }
   },
   mutations: {
-    showProfile: (state, payload) => {
+    mutationShowProfile: (state, payload) => {
       if (payload.id) {
         Vue.set(state.userInfo, 'avatar', payload.avatar);
         Vue.set(state.userInfo, 'created_at', payload.created_at);
@@ -101,15 +112,15 @@ export default new Vuex.Store({
       }
     },
 
-    successRegister: (state, payload) => {
+    mutationSuccessRegister: (state, payload) => {
       Vue.set(state.successRegisterAlert, 'success', payload.success);
     },
 
-    successReservation: (state, payload) => {
+    mutationSuccessReservation: (state, payload) => {
       Vue.set(state.successMakeReservation, 'success', payload.success);
     },
 
-    reservationData: (state, payload) => {
+    mutationReservationData: (state, payload) => {
       Vue.set(state.successReservationData, 'event_name', payload.event_name);
       Vue.set(state.successReservationData, 'start_date', payload.start_date);
       Vue.set(state.successReservationData, 'end_date', payload.end_date);
@@ -117,10 +128,13 @@ export default new Vuex.Store({
       Vue.set(state.successReservationData, 'username', payload.username);
     },
 
-    speedDialState2: (state, payload) => {
-      Vue.set(state.speedDialState, 'test', payload.status);
+    mutationSpeedDialState: (state, payload) => {
+      Vue.set(state.speedDialState, 'state', payload.status);
     },
 
+    mutationBottomNavigationState: (state, payload) => {
+      Vue.set(state.bottomNavigationState, 'state', payload.status);
+    },
 
     mutationLogout: (state, payload) => {
       Vue.set(state.isLoggedOut, 'username', payload.username);
@@ -143,33 +157,37 @@ export default new Vuex.Store({
   },
   actions: {
     showProfile: (context, payload) => {
-      context.commit('showProfile', payload)
+      context.commit('mutationShowProfile', payload)
     },
 
-    successRegister: (context, payload) => {
-      context.commit('successRegister', payload)
+    actionSuccessRegister: (context, payload) => {
+      context.commit('mutationSuccessRegister', payload)
     },
 
-    successReservation: (context, payload) => {
-      context.commit('successReservation', payload)
+    actionSuccessReservation: (context, payload) => {
+      context.commit('mutationSuccessReservation', payload)
     },
 
     reservationData: (context, payload) => {
-      context.commit('reservationData', payload)
+      context.commit('mutationReservationData', payload)
     },
 
-    speedDialState2: (context, payload) => {
-      context.commit('speedDialState2', payload)
+    actionSpeedDialState: (context, payload) => {
+      context.commit('mutationSpeedDialState', payload)
     },
 
-    mutationLogout: (context, payload) => {
+    actionBottomNavigationState: (context, payload) => {
+      context.commit('mutationBottomNavigationState', payload)
+    },
+
+    actionIsLoggedOut: (context, payload) => {
       context.commit('mutationLogout', payload)
     },
-    mutationContactListLoader: (context, payload) => {
+    actionContactListLoader: (context, payload) => {
       context.commit('mutationContactListLoader', payload)
     },
 
-    mutationSelectedUser: (context, payload) => {
+    actionSelectedUser: (context, payload) => {
       context.commit('mutationSelectedUser', payload)
     }
   }

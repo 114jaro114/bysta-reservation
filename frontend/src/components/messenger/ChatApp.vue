@@ -114,7 +114,7 @@ export default {
       .then(res => {
         this.contacts = res.data;
         this.users = res.data
-        this.$store.dispatch('mutationContactListLoader', {
+        this.$store.dispatch('actionContactListLoader', {
           cancelLoader: false
         });
       });
@@ -128,7 +128,7 @@ export default {
         this.handleIncoming(e.message);
       })
 
-    this.selectedContact = this.$store.getters['gettersSelectedUser'];
+    this.selectedContact = this.$store.getters['selectedUser'];
 
     //private channel
     // window.Echo.private(`messages.${localStorage.getItem("user_id")}`)
@@ -218,8 +218,8 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log(this.$store.getters['gettersSelectedUser']);
-    this.selectedContact = this.$store.getters['gettersSelectedUser'];
+    console.log(this.$store.getters['selectedUser']);
+    this.selectedContact = this.$store.getters['selectedUser'];
   }
 }
 </script>

@@ -67,20 +67,35 @@
               </v-btn>
             </v-card-actions>
           </v-form>
-          <v-container class="p-4 pt-3">
+          <v-container align="center" class="p-4 pt-3">
             <v-row align="center">
               <v-divider />
               Alebo
               <v-divider />
             </v-row>
-            <v-row align="center">
-              <v-btn color="primary" outlined block>
-                Prihlásiť pomocou <v-icon class="mr-1">mdi-facebook</v-icon>
+            <v-row class="pt-1" style="justify-content: center">
+              <v-btn fab medium color="blue">
+                <v-icon>
+                  mdi-facebook
+                </v-icon>
               </v-btn>
-            </v-row>
-            <v-row class="pt-3" align="center">
-              <v-btn color="error" outlined block>
-                Prihlásiť pomocou <v-icon class="mr-1">mdi-google</v-icon>
+
+              <v-btn class="ml-5" fab medium color="red">
+                <v-icon>
+                  mdi-google
+                </v-icon>
+              </v-btn>
+
+              <v-btn class="ml-5" fab medium color="light-blue">
+                <v-icon>
+                  mdi-twitter
+                </v-icon>
+              </v-btn>
+
+              <v-btn class="ml-5" fab medium color="brown">
+                <v-icon>
+                  mdi-github
+                </v-icon>
               </v-btn>
             </v-row>
           </v-container>
@@ -166,7 +181,13 @@ export default {
             this.$router.push("/home");
             if (localStorage.getItem('speed_dial') == undefined) {
               localStorage.setItem('speed_dial', true);
-              this.$store.dispatch('speedDialState2', {
+              this.$store.dispatch('actionSpeedDialState', {
+                status: true
+              });
+            }
+            if (localStorage.getItem('bottom_navigation') == undefined) {
+              localStorage.setItem('bottom_navigation', true);
+              this.$store.dispatch('actionBottomNavigationState', {
                 status: true
               });
             }
@@ -184,7 +205,7 @@ export default {
 
   },
   mounted() {
-    if (this.$store.getters['gettersIsLoggedOut'].logout != false) {
+    if (this.$store.getters['isLoggedOut'].logout != false) {
       this.snackbar = true;
     } else {
       this.snackbar = false;
@@ -194,8 +215,8 @@ export default {
   created() {
     //add text that user was sucessfully registered
     this.alertSuccessRegister = this.$store.getters['successRegisterAlert'].success;
-    this.text = `${this.$store.getters['gettersIsLoggedOut'].username}, bol si úspešne odhlásený`;
-    console.log(this.$store.getters['gettersIsLoggedOut'].logout);
+    this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
+    console.log(this.$store.getters['isLoggedOut'].logout);
     console.log('Component login created')
   }
 };

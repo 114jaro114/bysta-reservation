@@ -23,7 +23,7 @@
                       <v-icon>mdi-theme-light-dark</v-icon>
                     </v-btn>
                   </template>
-                  <span>Dark Mode On</span>
+                  <span>Zapnúť dark mód</span>
                 </v-tooltip>
 
                 <v-tooltip v-else bottom>
@@ -35,7 +35,7 @@
                       <v-icon>mdi-theme-light-dark</v-icon>
                     </v-btn>
                   </template>
-                  <span>Dark Mode Off</span>
+                  <span>Vypnúť dark mód</span>
                 </v-tooltip>
               </v-col>
             </v-row>
@@ -44,11 +44,37 @@
 
           <v-divider class="secondary" />
 
-          <span class="secondary--color">Speed dial</span>
+          <span class="secondary--color">Speed dial (<v-icon medium>mdi-web</v-icon>)</span>
 
           <v-card-text>
             <v-row justify="center">
               <v-col class="d-flex" cols="12" sm="6">
+                <!-- <v-tooltip v-if="switch1" bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" :ripple="false" class="speed_dial_switch" block large depressed>
+                      <span class="pr-4">skryť</span>
+                      <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
+                      <span>Zobraziť</span>
+                      <v-icon style="right:0px" small>mdi-information</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Skryť speed dial</span>
+                  <span>
+                    <v-btn color="primary" fab dark x-small absolute bottom left>
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </span>
+                </v-tooltip>
+                <v-tooltip v-else bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" :ripple="false" class="speed_dial_switch" block large>
+                      <span class="pr-4">skryť</span>
+                      <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
+                      <span>Zobraziť</span>
+                    </v-btn>
+                  </template>
+                  <span>Zobraziť speed dial</span>
+                </v-tooltip> -->
                 <v-btn :ripple="false" class="speed_dial_switch" block large>
                   <span class="pr-4">skryť</span>
                   <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
@@ -83,7 +109,7 @@
               <v-col class="d-flex pb-0" cols="12" sm="6">
                 <v-btn :ripple="false" class="speed_dial_switch" block large>
                   <span class="pr-4">skryt</span>
-                  <v-switch color="primary" v-model="switch3" inset></v-switch>
+                  <v-switch color="primary" v-model="switch3" @click="bottomNavigation()" inset></v-switch>
                   <span>Zobraziť</span>
                 </v-btn>
               </v-col>
@@ -151,7 +177,7 @@ export default {
       ],
       switch1: JSON.parse(localStorage.getItem("speed_dial")),
       switch2: true,
-      switch3: true,
+      switch3: JSON.parse(localStorage.getItem("bottom_navigation")),
     }
   },
   mounted() {
@@ -175,11 +201,21 @@ export default {
     }
 
     if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
-      this.$store.dispatch('speedDialState2', {
+      this.$store.dispatch('actionSpeedDialState', {
         status: true
       });
     } else {
-      this.$store.dispatch('speedDialState2', {
+      this.$store.dispatch('actionSpeedDialState', {
+        status: false
+      });
+    }
+
+    if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
+      this.$store.dispatch('actionBottomNavigationState', {
+        status: true
+      });
+    } else {
+      this.$store.dispatch('actionBottomNavigationState', {
         status: false
       });
     }
@@ -196,13 +232,29 @@ export default {
       if (JSON.parse(localStorage.getItem('speed_dial')) == true) {
         localStorage.setItem('speed_dial', false);
         this.switch1 = false;
-        this.$store.dispatch('speedDialState2', {
+        this.$store.dispatch('actionSpeedDialState', {
           status: false
         });
       } else {
         localStorage.setItem('speed_dial', true);
         this.switch1 = true;
-        this.$store.dispatch('speedDialState2', {
+        this.$store.dispatch('actionSpeedDialState', {
+          status: true
+        });
+      }
+    },
+
+    bottomNavigation() {
+      if (JSON.parse(localStorage.getItem('bottom_navigation')) == true) {
+        localStorage.setItem('bottom_navigation', false);
+        this.switch3 = false;
+        this.$store.dispatch('actionBottomNavigationState', {
+          status: false
+        });
+      } else {
+        localStorage.setItem('bottom_navigation', true);
+        this.switch3 = true;
+        this.$store.dispatch('actionBottomNavigationState', {
           status: true
         });
       }
@@ -212,7 +264,8 @@ export default {
   updated() {
     //do something after updating vue instance
     localStorage.setItem('language', this.select);
-    console.log(this.$store.getters['speedDialState'].test);
+    // console.log(this.$store.getters['gettersSpeedDialState']);
+    // console.log(this.$store.getters['gettersBottomNavigationState']);
   }
 }
 </script>

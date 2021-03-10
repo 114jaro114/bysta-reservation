@@ -17,7 +17,11 @@ export default new Vuetify({
         info: '#2196F3',
         warning: '#FB8C00',
         error: '#EA1616',
-        background: '#1E1E1E'
+        background: '#1E1E1E',
+        // facebook: '#4CAF50',
+        // google: '#4CAF50',
+        // twitter: '#4CAF50',
+        // github: '#4CAF50'
       },
       light: {
         primary: '#0D47A1',

@@ -120,28 +120,30 @@ export default {
         this.myloadingvariable = true;
         // call API
         axios.post('http://127.0.0.1:8000/api/auth/login', {
-          email: this.email,
-          password: this.password,
-          remember: this.remember,
-          status: "online"
-        }).then(resp => {
-          this.myloadingvariable = false;
-          this.alert = true;
-          localStorage.setItem('username', resp.data.user.name);
-          localStorage.setItem('user_id', resp.data.user.id);
-          localStorage.setItem('authToken', resp.data.token);
-          this.reset();
-          this.$router.push("/home");
-        }).catch(e => {
-          this.myloadingvariable = false;
-          this.errors.push(e)
-        })
+            email: this.email,
+            password: this.password,
+            remember: this.remember,
+            status: "online"
+          })
+          .then(resp => {
+            this.myloadingvariable = false;
+            this.alert = true;
+            localStorage.setItem('username', resp.data.user.name);
+            localStorage.setItem('user_id', resp.data.user.id);
+            localStorage.setItem('authToken', resp.data.token);
+            this.reset();
+            this.$router.push("/home");
+          })
+          .catch(e => {
+            this.myloadingvariable = false;
+            this.errors.push(e)
+          })
       }
     },
   },
   mounted() {
     console.log('Component Reset mounted.');
-    this.$store.dispatch('mutationLogout', {
+    this.$store.dispatch('actionIsLoggedOut', {
       username: '',
       logout: false
     });

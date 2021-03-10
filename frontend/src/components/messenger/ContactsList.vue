@@ -184,7 +184,7 @@ export default {
       console.log(item)
       this.selected = item;
       this.$emit('selected', item);
-      this.$store.dispatch('mutationSelectedUser', {
+      this.$store.dispatch('actionSelectedUser', {
         id: item.id,
         name: item.name,
         email: item.email,
@@ -233,8 +233,8 @@ export default {
   },
   updated() {
     //do something after updating vue instance
-    this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
-    this.selected = this.$store.getters['gettersSelectedUser'];
+    this.myloadingvariable = this.$store.getters['contactListLoader'];
+    this.selected = this.$store.getters['selectedUser'];
   },
 
   mounted() {
@@ -242,8 +242,8 @@ export default {
   },
 
   created() {
-    this.myloadingvariable = this.$store.getters['gettersContactListLoader'];
-    this.selected = this.$store.getters['gettersSelectedUser'];
+    this.myloadingvariable = this.$store.getters['contactListLoader'];
+    this.selected = this.$store.getters['selectedUser'];
     // window.Echo.private('statusUpdate')
     //   .listen('statusUpdate', (e) => {
     //     console.log("test " + e.message);
