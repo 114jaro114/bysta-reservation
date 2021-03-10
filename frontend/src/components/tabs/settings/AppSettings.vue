@@ -264,8 +264,8 @@ export default {
   updated() {
     //do something after updating vue instance
     localStorage.setItem('language', this.select);
-    // console.log(this.$store.getters['gettersSpeedDialState']);
-    // console.log(this.$store.getters['gettersBottomNavigationState']);
+    console.log(this.$store.getters['speedDialState'].state);
+    console.log(this.$store.getters['bottomNavigationState'].state);
   }
 }
 </script>

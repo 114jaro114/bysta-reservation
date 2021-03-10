@@ -57,9 +57,28 @@ export default {
     return {
       value: '',
       num: 5,
-      // activeBottomNavigation: true
     }
   },
+
+  mounted() {
+    //do something after mounting vue instance
+    console.log("BottomNavigation mounted");
+    if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
+      this.$store.dispatch('actionBottomNavigationState', {
+        status: true
+      });
+    } else {
+      this.$store.dispatch('actionBottomNavigationState', {
+        status: false
+      });
+    }
+  },
+
+  updated() {
+    //do something after updating vue instance
+    console.log("BottomNavigation updated");
+  },
+
   methods: {
     // home() {
     //   this.$router.push('/home');

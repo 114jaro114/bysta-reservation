@@ -1,6 +1,6 @@
 <template>
 <v-card id="create">
-  <v-speed-dial v-if="this.$store.getters['speedDialState'].state == true" v-model="fab" :bottom="bottom" :right="right" :direction="direction" :open-on-hover="hover" :transition="transition">
+  <v-speed-dial v-if="this.$store.getters['speedDialState'].state" v-model="fab" :bottom="bottom" :right="right" :direction="direction" :open-on-hover="hover" :transition="transition">
     <template v-slot:activator>
       <v-btn color="primary" v-model="fab" fab>
         <v-icon v-if="fab"> mdi-close </v-icon>
@@ -30,9 +30,24 @@ export default {
     transition: 'scale-transition',
   }),
 
+  mounted() {
+    //do something after mounting vue instance
+    console.log("SpeedDial mounted");
+
+    if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
+      this.$store.dispatch('actionSpeedDialState', {
+        status: true
+      });
+    } else {
+      this.$store.dispatch('actionSpeedDialState', {
+        status: false
+      });
+    }
+  },
+
   updated() {
     //do something after updating vue instance
-    console.log("speeddial updated");
+    console.log("SpeedDial updated");
   }
 }
 </script>

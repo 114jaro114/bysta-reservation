@@ -75,25 +75,25 @@
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
               <v-btn fab medium color="blue">
-                <v-icon>
+                <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="red">
-                <v-icon>
+                <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="light-blue">
-                <v-icon>
+                <v-icon color="white">
                   mdi-twitter
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="brown">
-                <v-icon>
+                <v-icon color="white">
                   mdi-github
                 </v-icon>
               </v-btn>
