@@ -50,25 +50,25 @@
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
               <v-btn fab medium color="blue">
-                <v-icon>
+                <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="red">
-                <v-icon>
+                <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="light-blue">
-                <v-icon>
+                <v-icon color="white">
                   mdi-twitter
                 </v-icon>
               </v-btn>
 
               <v-btn class="ml-5" fab medium color="brown">
-                <v-icon>
+                <v-icon color="white">
                   mdi-github
                 </v-icon>
               </v-btn>
@@ -189,7 +189,7 @@ export default {
           .then(resp => {
             this.myloadingvariable = false;
             this.alertSuccess = true;
-            this.$store.dispatch('actionSuccessRegister', {
+            this.$store.dispatch('successRegister', {
               success: true
             });
             // setTimeout(function() {
@@ -217,7 +217,7 @@ export default {
   mounted() {
     //do something after mounting vue instance
     console.log('Component Register mounted.')
-    this.$store.dispatch('actionIsLoggedOut', {
+    this.$store.dispatch('isLoggedOut', {
       username: '',
       logout: false
     });

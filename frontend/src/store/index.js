@@ -57,6 +57,8 @@ export default new Vuex.Store({
       created_at: null,
       unread: null,
     },
+
+    notificationCounter: null,
   },
   getters: {
     Data: state => {
@@ -93,6 +95,10 @@ export default new Vuex.Store({
 
     selectedUser: state => {
       return state.selectedUser
+    },
+
+    notificationCounter: state => {
+      return state.notificationCounter
     }
   },
   mutations: {
@@ -153,6 +159,10 @@ export default new Vuex.Store({
       Vue.set(state.selectedUser, 'avatar', payload.avatar);
       Vue.set(state.selectedUser, 'created_at', payload.created_at);
       Vue.set(state.selectedUser, 'unread', payload.unread);
+    },
+
+    mutationNotificationCounter: (state, payload) => {
+      state.notificationCounter = payload.notifCounter
     }
   },
   actions: {
@@ -160,11 +170,11 @@ export default new Vuex.Store({
       context.commit('mutationShowProfile', payload)
     },
 
-    actionSuccessRegister: (context, payload) => {
+    successRegister: (context, payload) => {
       context.commit('mutationSuccessRegister', payload)
     },
 
-    actionSuccessReservation: (context, payload) => {
+    successReservation: (context, payload) => {
       context.commit('mutationSuccessReservation', payload)
     },
 
@@ -172,23 +182,27 @@ export default new Vuex.Store({
       context.commit('mutationReservationData', payload)
     },
 
-    actionSpeedDialState: (context, payload) => {
+    speedDialState: (context, payload) => {
       context.commit('mutationSpeedDialState', payload)
     },
 
-    actionBottomNavigationState: (context, payload) => {
+    bottomNavigationState: (context, payload) => {
       context.commit('mutationBottomNavigationState', payload)
     },
 
-    actionIsLoggedOut: (context, payload) => {
+    isLoggedOut: (context, payload) => {
       context.commit('mutationLogout', payload)
     },
-    actionContactListLoader: (context, payload) => {
+    contactListLoader: (context, payload) => {
       context.commit('mutationContactListLoader', payload)
     },
 
-    actionSelectedUser: (context, payload) => {
+    selectedUser: (context, payload) => {
       context.commit('mutationSelectedUser', payload)
+    },
+
+    notificationCounter: (context, payload) => {
+      context.commit('mutationNotificationCounter', payload)
     }
   }
 });

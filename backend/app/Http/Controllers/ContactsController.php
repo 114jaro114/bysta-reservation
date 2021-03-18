@@ -19,6 +19,7 @@ class ContactsController extends Controller
 
     public function index()
     {
+
         // $contacts = User::where('id', '!=', auth()->user()->id)->get();
         $array1 = array();
         $alreadyFriends1 = DB::table('friendships')
@@ -68,9 +69,17 @@ class ContactsController extends Controller
           ->groupBy('from')
           ->get();
 
+        $array3 = array();
+        foreach ($unreadIds as $unread_messages):
+          $array3[] = array(
+          'count' => $unread_messages->messages_count,
+          );
+        endforeach;
+
         $contacts = $contacts->map(function ($contact) use ($unreadIds) {
             $contactUnread = $unreadIds->where('sender_id', $contact->id)->first();
             $contact->unread = $contactUnread ? $contactUnread->messages_count : 0;
+            $contact->unreadAll = $array3;
             return $contact;
         });
         return response()->json($contacts);

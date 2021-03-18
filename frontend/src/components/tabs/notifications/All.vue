@@ -18,7 +18,7 @@
                 </v-btn>
 
                 <v-btn class="ml-2 mt-3" outlined rounded medium>
-                  START RADIO
+                  Označiť ako videné <v-icon>mdi-eye-check-outline</v-icon>
                 </v-btn>
               </v-card-actions>
 
@@ -28,7 +28,7 @@
                 </v-btn>
 
                 <v-btn class="ml-2 mt-3" outlined rounded medium>
-                  START RADIO
+                  <v-icon>mdi-eye-check</v-icon>
                 </v-btn>
               </v-card-actions>
             </div>

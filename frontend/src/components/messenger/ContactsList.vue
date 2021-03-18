@@ -42,7 +42,7 @@
                     </v-avatar>
                   </v-badge>
 
-                  <v-badge :content="item.unread" :value="item.unread" color="primary">
+                  <v-badge :content="item.unread" :value="item.unread" color="orange">
                     {{ item.name }}
                   </v-badge>
                 </div>
@@ -184,7 +184,7 @@ export default {
       console.log(item)
       this.selected = item;
       this.$emit('selected', item);
-      this.$store.dispatch('actionSelectedUser', {
+      this.$store.dispatch('selectedUser', {
         id: item.id,
         name: item.name,
         email: item.email,

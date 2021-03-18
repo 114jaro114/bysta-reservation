@@ -35,11 +35,11 @@ export default {
     console.log("SpeedDial mounted");
 
     if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
-      this.$store.dispatch('actionSpeedDialState', {
+      this.$store.dispatch('speedDialState', {
         status: true
       });
     } else {
-      this.$store.dispatch('actionSpeedDialState', {
+      this.$store.dispatch('speedDialState', {
         status: false
       });
     }

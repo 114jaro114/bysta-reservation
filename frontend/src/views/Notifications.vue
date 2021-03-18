@@ -21,7 +21,7 @@
               Všetky
             </v-tab>
             <v-tab :to="tabs[1].route">
-              <v-badge :content="notifications" :value="notifications" color="primary">
+              <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="primary">
                 Nové
               </v-badge>
             </v-tab>
@@ -79,12 +79,14 @@ export default {
         name: 'Dôležité',
         route: '/notifications/relevant'
       }],
-      notifications: 1,
+      notifications: null,
     }
   },
   updated() {
     this.drawer = this.drawerNew;
+    this.notifications = this.$store.getters['notificationCounter'];
   },
+
   methods: {
     updateRouter(tab) {
       this.$router.push(tab)

@@ -181,13 +181,13 @@ export default {
             this.$router.push("/home");
             if (localStorage.getItem('speed_dial') == undefined) {
               localStorage.setItem('speed_dial', true);
-              this.$store.dispatch('actionSpeedDialState', {
+              this.$store.dispatch('speedDialState', {
                 status: true
               });
             }
             if (localStorage.getItem('bottom_navigation') == undefined) {
               localStorage.setItem('bottom_navigation', true);
-              this.$store.dispatch('actionBottomNavigationState', {
+              this.$store.dispatch('bottomNavigationState', {
                 status: true
               });
             }

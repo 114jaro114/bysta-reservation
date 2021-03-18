@@ -24,7 +24,10 @@ Broadcast::channel('messages.{id}', function ($user, $id) {
 // Broadcast::channel('statusUpdate', function ($user) {
 //     return $user;
 // });
-
+//channel for Notifications
+Broadcast::channel('notif-channel', function ($user) {
+    return $user;
+});
 // This is only for testing purposes
 Broadcast::channel('pchat', function ($user) {
     return $user;

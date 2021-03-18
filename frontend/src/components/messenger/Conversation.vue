@@ -133,7 +133,7 @@ export default {
     removeSelectedContact() {
       // console.log("hmm");
       // this.$emit('selected', this.contact);
-      this.$store.dispatch('actionSelectedUser', {
+      this.$store.dispatch('selectedUser', {
         id: null,
         name: null,
         email: null,

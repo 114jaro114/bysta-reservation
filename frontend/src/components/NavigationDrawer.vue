@@ -26,7 +26,7 @@
         <v-list-item-title>Home</v-list-item-title>
       </v-list-item>
       <v-list-item to="/notifications">
-        <v-badge :content="notifications" :value="notifications" color="primary" overlap bordered>
+        <v-badge :content="this.$store.getters['notificationCounter']" :value="this.$store.getters['notificationCounter']" color="orange" overlap bordered>
           <v-icon>mdi-bell</v-icon>
         </v-badge>
         <v-list-item-title>Notifikácie</v-list-item-title>
@@ -44,6 +44,10 @@
           <v-icon>mdi-facebook-messenger</v-icon>
         </v-badge>
         <v-list-item-title>Messenger</v-list-item-title>
+      </v-list-item>
+      <v-list-item to="/price_list">
+        <v-icon>mdi-credit-card</v-icon>
+        <v-list-item-title>Cenník</v-list-item-title>
       </v-list-item>
       <v-list-item to="/settings">
         <v-icon>mdi-cog</v-icon>
@@ -130,7 +134,7 @@ export default {
         .then((res) => {
           this.$emit('childToParent', 'false');
           console.log(res);
-          this.$store.dispatch('actionIsLoggedOut', {
+          this.$store.dispatch('isLoggedOut', {
             username: localStorage.getItem("username"),
             logout: true
           });

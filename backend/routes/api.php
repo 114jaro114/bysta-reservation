@@ -10,6 +10,7 @@ use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendshipsController;
 use App\Http\Controllers\ValidateRegisterLogin;
+use App\Http\Controllers\NotificationsController;
 use App\Traits\Friendable;
 use App\Models\User;
 
@@ -106,6 +107,9 @@ Route::post('/friendships/removeFromFriendshipList', [FriendshipsController::cla
 // contact form
 Route::post('/contactForm', [FriendshipsController::class, 'contactForm']);
 Route::get('/getContactForm', [FriendshipsController::class, 'getContactForm']);
+//notifications
+Route::post('/sendNotification', [NotificationsController::class, 'sendNotification']);
+Route::get('/getNotification/{id}', [NotificationsController::class, 'getNotification']);
 
 //
 // Route::get('test', function () {

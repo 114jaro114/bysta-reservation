@@ -112,9 +112,10 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
+        console.log(res);
         this.contacts = res.data;
         this.users = res.data
-        this.$store.dispatch('actionContactListLoader', {
+        this.$store.dispatch('contactListLoader', {
           cancelLoader: false
         });
       });
@@ -205,7 +206,6 @@ export default {
           single.unread = 0;
         else
           single.unread += 1;
-
         return single;
       })
     },

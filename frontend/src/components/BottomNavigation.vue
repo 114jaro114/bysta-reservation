@@ -64,11 +64,11 @@ export default {
     //do something after mounting vue instance
     console.log("BottomNavigation mounted");
     if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
-      this.$store.dispatch('actionBottomNavigationState', {
+      this.$store.dispatch('bottomNavigationState', {
         status: true
       });
     } else {
-      this.$store.dispatch('actionBottomNavigationState', {
+      this.$store.dispatch('bottomNavigationState', {
         status: false
       });
     }
