@@ -193,13 +193,15 @@ export default {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
       },
     };
-    axios.get(api, config).then((response) => {
-      if (response.data.avatar) {
-        this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+    axios.get(api, config)
+      .then((response) => {
+        if (response.data.avatar) {
+          this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
 
   methods: {
@@ -225,35 +227,36 @@ export default {
     },
 
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/calendar').then(resp => {
-        //this code contains disabled dates in datepicker
-        this.myloadingvariable = false;
-        console.log(resp.data.data);
-        this.disabledDates = [];
-        for (var i = 0; i < resp.data.data.length; i++) {
-          var day1 = moment(resp.data.data[i].end);
-          var day2 = moment(resp.data.data[i].start);
-          var result = [moment({
-            ...day2
-          })];
-          while (day1.date() != day2.date()) {
-            day2.add(1, 'day');
-            result.push(moment({
+      axios.get('http://127.0.0.1:8000/api/calendar')
+        .then(resp => {
+          //this code contains disabled dates in datepicker
+          this.myloadingvariable = false;
+          this.disabledDates = [];
+          for (var i = 0; i < resp.data.data.length; i++) {
+            var day1 = moment(resp.data.data[i].end);
+            var day2 = moment(resp.data.data[i].start);
+            var result = [moment({
               ...day2
-            }));
+            })];
+            while (day1.date() != day2.date()) {
+              day2.add(1, 'day');
+              result.push(moment({
+                ...day2
+              }));
+            }
+            var allDates = result.map(x => x.format("YYYY-MM-DD"));
+            for (var a = 0; a < allDates.length; a++) {
+              this.disabledDates.push(allDates[a])
+            }
           }
-          var allDates = result.map(x => x.format("YYYY-MM-DD"));
-          for (var a = 0; a < allDates.length; a++) {
-            this.disabledDates.push(allDates[a])
+          // get data
+          this.test = resp.data.data;
+          // this.incId = this.test.length;
+          if (resp.data.data != undefined) {
+            this.incId = resp.data.data[resp.data.data.length - 1].id;
           }
-        }
-        // get data
-        this.test = resp.data.data;
-        // this.incId = this.test.length;
-        if (resp.data.data != undefined) {
-          this.incId = resp.data.data[resp.data.data.length - 1].id;
-        }
-      }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     },
   },
 
@@ -263,15 +266,23 @@ export default {
       this.newEvent = {
         // event_id: "",
         event_name: "rezervácia",
-        start_date: moment(this.range.start).format('YYYY-MM-DDTHH:mm:SS'),
-        end_date: moment(this.range.end).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS'),
+        start_date: moment(this.range.start)
+          .format('YYYY-MM-DDTHH:mm:SS'),
+        end_date: moment(this.range.end)
+          .add(23, 'hours')
+          .add(59, 'minutes')
+          .format('YYYY-MM-DDTHH:mm:SS'),
         color: "orange",
         username: this.user,
       };
       this.$store.dispatch('reservationData', {
         event_name: "rezervácia",
-        start_date: moment(this.range.start).format('YYYY-MM-DDTHH:mm:SS'),
-        end_date: moment(this.range.end).add(23, 'hours').add(59, 'minutes').format('YYYY-MM-DDTHH:mm:SS'),
+        start_date: moment(this.range.start)
+          .format('YYYY-MM-DDTHH:mm:SS'),
+        end_date: moment(this.range.end)
+          .add(23, 'hours')
+          .add(59, 'minutes')
+          .format('YYYY-MM-DDTHH:mm:SS'),
         color: "orange",
         username: this.user,
       });

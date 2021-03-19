@@ -201,21 +201,21 @@ export default {
     }
 
     if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
-      this.$store.dispatch('actionSpeedDialState', {
+      this.$store.dispatch('speedDialState', {
         status: true
       });
     } else {
-      this.$store.dispatch('actionSpeedDialState', {
+      this.$store.dispatch('speedDialState', {
         status: false
       });
     }
 
     if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
-      this.$store.dispatch('actionBottomNavigationState', {
+      this.$store.dispatch('bottomNavigationState', {
         status: true
       });
     } else {
-      this.$store.dispatch('actionBottomNavigationState', {
+      this.$store.dispatch('bottomNavigationState', {
         status: false
       });
     }
@@ -232,13 +232,13 @@ export default {
       if (JSON.parse(localStorage.getItem('speed_dial')) == true) {
         localStorage.setItem('speed_dial', false);
         this.switch1 = false;
-        this.$store.dispatch('actionSpeedDialState', {
+        this.$store.dispatch('speedDialState', {
           status: false
         });
       } else {
         localStorage.setItem('speed_dial', true);
         this.switch1 = true;
-        this.$store.dispatch('actionSpeedDialState', {
+        this.$store.dispatch('speedDialState', {
           status: true
         });
       }
@@ -248,13 +248,13 @@ export default {
       if (JSON.parse(localStorage.getItem('bottom_navigation')) == true) {
         localStorage.setItem('bottom_navigation', false);
         this.switch3 = false;
-        this.$store.dispatch('actionBottomNavigationState', {
+        this.$store.dispatch('bottomNavigationState', {
           status: false
         });
       } else {
         localStorage.setItem('bottom_navigation', true);
         this.switch3 = true;
-        this.$store.dispatch('actionBottomNavigationState', {
+        this.$store.dispatch('bottomNavigationState', {
           status: true
         });
       }

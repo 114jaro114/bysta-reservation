@@ -49,25 +49,25 @@
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
-              <v-btn fab medium color="blue">
+              <v-btn fab small color="blue">
                 <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="red">
+              <v-btn class="ml-5" fab small color="red">
                 <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="light-blue">
+              <v-btn class="ml-5" fab small color="light-blue">
                 <v-icon color="white">
                   mdi-twitter
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="brown">
+              <v-btn class="ml-5" fab small color="brown">
                 <v-icon color="white">
                   mdi-github
                 </v-icon>
@@ -186,7 +186,25 @@ export default {
             name: this.name,
             password: this.password
           })
-          .then(resp => {
+          .then((res) => {
+            console.log(res.data.user.id);
+            const api = 'http://127.0.0.1:8000/api/sendNotification';
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
+            axios.post(api, {
+                recipient: res.data.user.id,
+                text: "Vítame Vás na stránke chaty Byšta. Pre akékoľvek informácie nás neváhajte kontaktovať cez messenger alebo email.",
+                status: "WelcomeNotif"
+              }, config)
+              .then(res => {
+                console.log("res");
+                console.log(res);
+              })
+
             this.myloadingvariable = false;
             this.alertSuccess = true;
             this.$store.dispatch('successRegister', {
@@ -195,7 +213,6 @@ export default {
             // setTimeout(function() {
             this.$router.push("/Login");
             // }, 3000);
-            console.log(resp);
           })
           .catch(e => {
             this.alertFail = true;

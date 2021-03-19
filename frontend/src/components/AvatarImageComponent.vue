@@ -30,11 +30,11 @@
               </p>
               <v-divider class="my-3"></v-divider>
               <v-btn depressed rounded text to="/profile">
-                <v-icon>mdi-clipboard-edit</v-icon> Môj profil
+                <v-icon class="mr-1">mdi-clipboard-edit</v-icon> Môj profil
               </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn depressed rounded text @click="logout">
-                <v-icon>mdi-logout-variant</v-icon><span> Odhlásiť sa</span>
+                <v-icon class="mr-1">mdi-logout</v-icon>Odhlásiť sa
               </v-btn>
               <!-- <div class="image-upload">
                   <v-btn depressed rounded text for="file-input">
@@ -117,13 +117,13 @@ export default {
         },
       };
       axios.post(api, null, config)
-        .then((res) => {
+        .then(() => {
           this.$emit('childToParent', 'false');
-          console.log(res);
           this.$store.dispatch('isLoggedOut', {
             username: localStorage.getItem("username"),
             logout: true
           });
+          localStorage.removeItem("user_id");
           localStorage.removeItem("username");
           localStorage.removeItem("authToken");
           this.$router.push("/login");

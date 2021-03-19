@@ -9,7 +9,7 @@
           {{ text }}
           <template v-slot:action="{ attrs }">
             <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-              Close
+              Zrušiť
             </v-btn>
           </template>
         </v-snackbar>
@@ -74,25 +74,25 @@
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
-              <v-btn fab medium color="blue">
+              <v-btn fab small color="blue">
                 <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="red">
+              <v-btn class="ml-5" fab small color="red">
                 <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="light-blue">
+              <v-btn class="ml-5" fab small color="light-blue">
                 <v-icon color="white">
                   mdi-twitter
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab medium color="brown">
+              <v-btn class="ml-5" fab small color="brown">
                 <v-icon color="white">
                   mdi-github
                 </v-icon>

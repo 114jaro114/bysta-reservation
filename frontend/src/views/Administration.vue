@@ -37,7 +37,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios';
 import Footer from "../components/Footer.vue";
 import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
@@ -67,27 +66,7 @@ export default {
       this.drawer = false
     },
   },
-  methods: {
-    logout() {
-      const api = 'http://127.0.0.1:8000/api/auth/logout';
-      const config = {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authToken"),
-        },
-      };
-      axios.post(api, null, config)
-        .then((res) => {
-          console.log(res);
-          localStorage.removeItem("username");
-          localStorage.removeItem("authToken");
-          this.$router.push("/");
-        })
-        .catch(e => {
-          console.log(e);
-        })
-    },
-  }
+  methods: {}
 }
 </script>
 <style type="scss">

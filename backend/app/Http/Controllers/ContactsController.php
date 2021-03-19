@@ -69,20 +69,19 @@ class ContactsController extends Controller
           ->groupBy('from')
           ->get();
 
-        $array3 = array();
-        foreach ($unreadIds as $unread_messages):
-          $array3[] = array(
-          'count' => $unread_messages->messages_count,
-          );
-        endforeach;
-
         $contacts = $contacts->map(function ($contact) use ($unreadIds) {
             $contactUnread = $unreadIds->where('sender_id', $contact->id)->first();
             $contact->unread = $contactUnread ? $contactUnread->messages_count : 0;
-            $contact->unreadAll = $array3;
             return $contact;
         });
         return response()->json($contacts);
+    }
+
+    public function getAllUnreadMessages()
+    {
+        $allUnreadMessages = DB::table('messages')->where([['to', '=', auth()->user()->id],['read', '=', false]])->count();
+        // broadcast(new UnreadMessages($allUnreadMessages))->toOthers();
+        return response()->json($allUnreadMessages);
     }
 
     public function getMessagesFor($id)
@@ -110,6 +109,9 @@ class ContactsController extends Controller
             'to' => $request->contact_id,
             'text' => $request->text
         ]);
+
+        $allUnreadMessages = DB::table('messages')->where([['to', '=', $request->contact_id],['read', '=', false]])->count();
+        Message::orderBy('id', 'desc')->first()->update(['totalUnreadMsgTo' => $allUnreadMessages]);
 
         broadcast(new NewMessage($message->load('fromContact')))->toOthers();
 

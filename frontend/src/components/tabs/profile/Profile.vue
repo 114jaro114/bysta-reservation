@@ -146,14 +146,6 @@ import axios from 'axios'
 import moment from 'moment';
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
 
-const config = {
-  headers: {
-    Accept: "application/json",
-    // 'Content-Type': 'multipart/form-data',
-    Authorization: "Bearer " + localStorage.getItem("authToken"),
-  },
-};
-
 export default {
   pageTitle: 'Profile',
   components: {
@@ -215,7 +207,16 @@ export default {
   mounted() {
     this.myloadingvariable = true;
     this.avatarImageUrl = this.avatarUrl;
+
     const api = 'http://127.0.0.1:8000/api/user';
+    const api2 = 'http://127.0.0.1:8000/api/getContactForm';
+    const config = {
+      headers: {
+        Accept: "application/json",
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: "Bearer " + localStorage.getItem("authToken"),
+      },
+    };
 
     axios.get(api, config)
       .then((response) => {
@@ -228,7 +229,6 @@ export default {
         console.log(error)
       })
 
-    const api2 = 'http://127.0.0.1:8000/api/getContactForm';
 
     axios.get(api2, config)
       .then(res => {
@@ -246,6 +246,13 @@ export default {
   async created() {
     this.myloadingvariable = true;
     const api = 'http://127.0.0.1:8000/api/auth/user';
+    const config = {
+      headers: {
+        Accept: "application/json",
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: "Bearer " + localStorage.getItem("authToken"),
+      },
+    };
     try {
       let res = await axios.get(api, config)
       this.email = res.data.email;
@@ -267,13 +274,13 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log(this.surname);
-    console.log(this.lastname);
-    console.log(this.address);
-    console.log(this.city);
-    console.log(this.postcode);
-    console.log(this.country);
-    console.log(this.phone);
+    // console.log(this.surname);
+    // console.log(this.lastname);
+    // console.log(this.address);
+    // console.log(this.city);
+    // console.log(this.postcode);
+    // console.log(this.country);
+    // console.log(this.phone);
   },
 
   methods: {
@@ -335,6 +342,13 @@ export default {
         let formData = new FormData();
         formData.append('avatar', event.target.files[0]);
         const api = 'http://127.0.0.1:8000/api/upload_avatar';
+        const config = {
+          headers: {
+            Accept: "application/json",
+            // 'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
         // axios.post(api, formData, {
         //     onUploadProgress: (progressEvent) => {
         //       this.uploadPercent = progressEvent.lengthComputable ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
@@ -346,7 +360,6 @@ export default {
             }
           })
           .then((response) => {
-            console.log(response);
             this.avatarImageUrl = response.data.avatar_url;
             this.showUploadProgress = false;
             this.processingUpload = false;
@@ -367,6 +380,13 @@ export default {
 
     updateContactInfo() {
       const api = 'http://127.0.0.1:8000/api/contactForm';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          // 'Content-Type': 'multipart/form-data',
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
       this.myloadingvariable = true;
       axios.post(api, {
             surname: this.surname,
@@ -380,9 +400,15 @@ export default {
           },
           config
         )
-        .then(resp => {
-          console.log(resp);
+        .then(() => {
           const api = 'http://127.0.0.1:8000/api/getContactForm';
+          const config = {
+            headers: {
+              Accept: "application/json",
+              // 'Content-Type': 'multipart/form-data',
+              Authorization: "Bearer " + localStorage.getItem("authToken"),
+            },
+          };
           axios.get(api, config)
             .then(res => {
               this.myloadingvariable = false;

@@ -1,12 +1,12 @@
 <template>
-<div v-if="seen">
+<div v-if="this.$store.getters['ratingState']">
   <!-- <v-card elevation="2"> -->
   <v-card-title class="justify-center">
     <span class="primary--text">Pridať hodnotenie</span>
   </v-card-title>
   <v-divider class="mt-0 mb-0" horizontal></v-divider>
   <form @submit.prevent>
-    <v-rating v-model="newEvent.rate" background-color="accent" color="primary" size="50"></v-rating>
+    <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
     <div class="p-3">
       <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable clear-icon="mdi-close"></v-textarea>
       <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
@@ -198,7 +198,7 @@ export default {
         rate: null,
         comment: null
       },
-      seen: true,
+      // seen: true,
       totalValueOfRate: null,
       totalRates: null,
       totalValue: null,
@@ -235,8 +235,7 @@ export default {
       axios.post('http://127.0.0.1:8000/api/rating/store', {
           ...this.newEvent
         })
-        .then(res => {
-          console.log(res);
+        .then(() => {
           this.resetEvents();
           this.getEvents();
         })
@@ -261,8 +260,7 @@ export default {
       axios.post(`http://127.0.0.1:8000/api/rating/update`, {
           ...this.newEvent2
         })
-        .then(res => {
-          console.log(res.data.data);
+        .then(() => {
           this.getEvents();
         })
         .catch(err => console.log("Unable to update event!", err));
@@ -293,7 +291,10 @@ export default {
           this.totalRates = resp.data.data.length;
           for (var i = 0; i < this.totalRates; i++) {
             if (this.user == resp.data.data[i].Meno) {
-              this.seen = false;
+              // this.seen = false;
+              this.$store.dispatch('ratingState', {
+                state: false
+              });
               //vyplnenie poli rate a comment na zaklade udajov z db
               this.newEvent2 = {
                 name: resp.data.data[i].Meno,
@@ -333,6 +334,10 @@ export default {
         })
         .catch(err => console.log(err));
     },
+  },
+  updated() {
+    //do something after updating vue instance
+    console.log(this.$store.getters['ratingState']);
   }
 }
 </script>

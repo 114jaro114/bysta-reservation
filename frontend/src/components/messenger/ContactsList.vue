@@ -106,6 +106,7 @@
 // import {
 //   Picker
 // } from 'emoji-mart-vue'
+// import axios from 'axios';
 import _ from 'lodash';
 export default {
   props: {
@@ -248,7 +249,12 @@ export default {
     //   .listen('statusUpdate', (e) => {
     //     console.log("test " + e.message);
     //   })
+    window.Echo.join('allUnreadMessages.' + localStorage.getItem("user_id"))
+      .listen('UnreadMessages', (e) => {
+        console.log(e);
+      })
   },
+
   computed: {
     sortedContacts() {
       return _.sortBy(this.contacts, [(contact) => {

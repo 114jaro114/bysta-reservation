@@ -461,13 +461,15 @@ export default {
 
     axios.get(api, config)
       .then(res => {
-        this.surname = res.data[0].surname;
-        this.lastname = res.data[0].lastname;
-        this.address = res.data[0].address;
-        this.city = res.data[0].city;
-        this.postcode = res.data[0].postcode;
-        this.country = res.data[0].country;
-        this.myPhone = res.data[0].phone;
+        if (res.data.length != 0) {
+          this.surname = res.data[0].surname;
+          this.lastname = res.data[0].lastname;
+          this.address = res.data[0].address;
+          this.city = res.data[0].city;
+          this.postcode = res.data[0].postcode;
+          this.country = res.data[0].country;
+          this.myPhone = res.data[0].phone;
+        }
       });
   },
 

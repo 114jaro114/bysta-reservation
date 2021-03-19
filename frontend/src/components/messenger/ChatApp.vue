@@ -127,6 +127,9 @@ export default {
       .listen('NewMessage', (e) => {
         console.log(e);
         this.handleIncoming(e.message);
+        this.$store.dispatch('msgUnreadCounter', {
+          unreadCounter: e.message.totalUnreadMsgTo
+        });
       })
 
     this.selectedContact = this.$store.getters['selectedUser'];

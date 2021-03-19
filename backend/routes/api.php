@@ -81,10 +81,11 @@ Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
 Route::get('/rating', [RatingController::class, 'index']);
 Route::post('/rating/store', [RatingController::class, 'store']);
 Route::post('/rating/update', [RatingController::class, 'update']);
-
+//messenger
 Route::get('/contacts', [ContactsController::class, 'index']);
 Route::get('/conversation/{id}', [ContactsController::class, 'getMessagesFor']);
 Route::post('/conversation/send', [ContactsController::class, 'send']);
+Route::get('/getAllUnreadMessages', [ContactsController::class, 'getAllUnreadMessages']);
 //show Profile
 Route::get('/profile/{user_id}', [ContactsController::class, 'getUserProfile']);
 //get all own friends
@@ -109,6 +110,7 @@ Route::post('/contactForm', [FriendshipsController::class, 'contactForm']);
 Route::get('/getContactForm', [FriendshipsController::class, 'getContactForm']);
 //notifications
 Route::post('/sendNotification', [NotificationsController::class, 'sendNotification']);
+Route::post('/deleteNotification', [NotificationsController::class, 'deleteNotification']);
 Route::get('/getNotification/{id}', [NotificationsController::class, 'getNotification']);
 
 //

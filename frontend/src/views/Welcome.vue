@@ -53,7 +53,7 @@ export default {
   mounted() {
     //do something after mounting vue instance
     console.log('Component Welcome mounted.')
-    this.$store.dispatch('actionIsLoggedOut', {
+    this.$store.dispatch('isLoggedOut', {
       username: '',
       logout: false
     });

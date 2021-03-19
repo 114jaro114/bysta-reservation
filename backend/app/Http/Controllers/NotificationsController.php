@@ -29,4 +29,11 @@ class NotificationsController extends Controller
 
         return response()->json($notification);
     }
+
+    public function deleteNotification(Request $request)
+    {
+        Notification::where('id', $request->id)->delete();
+
+        return response()->json("successfully deleted notification");
+    }
 }

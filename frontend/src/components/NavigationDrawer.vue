@@ -40,7 +40,7 @@
         <v-list-item-title>Rezervácia</v-list-item-title>
       </v-list-item>
       <v-list-item to="/messenger">
-        <v-badge :content="messages" :value="messages" color="primary" overlap bordered>
+        <v-badge :content="this.$store.getters['msgUnreadCounter']" :value="this.$store.getters['msgUnreadCounter']" color="orange" overlap bordered>
           <v-icon>mdi-facebook-messenger</v-icon>
         </v-badge>
         <v-list-item-title>Messenger</v-list-item-title>
@@ -62,7 +62,7 @@
 
   <template v-slot:append>
     <v-divider class="mb-2 mt-0"></v-divider>
-    <v-list-item>
+    <!-- <v-list-item>
       <v-btn color="primary" @click="messages++" block>
         Send Message
       </v-btn>
@@ -72,10 +72,10 @@
       <v-btn color="error" @click="messages = 0" block>
         Clear Notifications
       </v-btn>
-    </v-list-item>
+    </v-list-item> -->
     <v-list-item>
-      <v-btn color="accent" @click="messages = 0; logout()" block>
-        Odhlásiť sa
+      <v-btn color="accent" @click="logout()" block>
+        <v-icon class="mr-1">mdi-logout</v-icon>Odhlásiť sa
       </v-btn>
     </v-list-item>
   </template>
@@ -108,11 +108,8 @@ export default {
       username: localStorage.getItem("username"),
       drawerNew: false,
       group: null,
-
       // badge
-      messages: 0,
       show: false,
-      notifications: 5,
     }
   },
   computed: {
@@ -131,13 +128,13 @@ export default {
         },
       };
       axios.post(api, null, config)
-        .then((res) => {
+        .then(() => {
           this.$emit('childToParent', 'false');
-          console.log(res);
           this.$store.dispatch('isLoggedOut', {
             username: localStorage.getItem("username"),
             logout: true
           });
+          localStorage.removeItem("user_id");
           localStorage.removeItem("username");
           localStorage.removeItem("authToken");
           this.$router.push("/login");

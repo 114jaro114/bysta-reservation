@@ -59,6 +59,8 @@ export default new Vuex.Store({
     },
 
     notificationCounter: null,
+    msgUnreadCounter: 0,
+    ratingState: true,
   },
   getters: {
     Data: state => {
@@ -99,7 +101,15 @@ export default new Vuex.Store({
 
     notificationCounter: state => {
       return state.notificationCounter
-    }
+    },
+
+    msgUnreadCounter: state => {
+      return state.msgUnreadCounter
+    },
+
+    ratingState: state => {
+      return state.ratingState
+    },
   },
   mutations: {
     mutationShowProfile: (state, payload) => {
@@ -163,7 +173,15 @@ export default new Vuex.Store({
 
     mutationNotificationCounter: (state, payload) => {
       state.notificationCounter = payload.notifCounter
-    }
+    },
+
+    mutationMsgUnreadCounter: (state, payload) => {
+      state.msgUnreadCounter = payload.unreadCounter
+    },
+
+    mutationRatingState: (state, payload) => {
+      state.ratingState = payload.state
+    },
   },
   actions: {
     showProfile: (context, payload) => {
@@ -203,7 +221,15 @@ export default new Vuex.Store({
 
     notificationCounter: (context, payload) => {
       context.commit('mutationNotificationCounter', payload)
-    }
+    },
+
+    msgUnreadCounter: (context, payload) => {
+      context.commit('mutationMsgUnreadCounter', payload)
+    },
+
+    ratingState: (context, payload) => {
+      context.commit('mutationRatingState', payload)
+    },
   }
 });
 
