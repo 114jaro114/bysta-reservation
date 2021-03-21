@@ -73,6 +73,15 @@
         </v-lazy>
       </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar" color="error" :left="true">
+      <v-icon>mdi-alert-circle</v-icon>
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+          Zrušiť
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -99,6 +108,8 @@ export default {
       users: [],
       // userChoosed: false,
       autoselectMenu: false,
+      text: '',
+      snackbar: false,
     }
   },
 
@@ -148,7 +159,7 @@ export default {
       })
 
     this.selectedContact = this.$store.getters['selectedUser'];
-    console.log(this.$store.getters['selectedUser']);
+    // console.log(this.$store.getters['selectedUser']);
     //private channel
     // window.Echo.private(`messages.${localStorage.getItem("user_id")}`)
     //   .listen('NewMessage', (e) => {
@@ -157,13 +168,23 @@ export default {
   },
 
   methods: {
-    // friend_list() {
-    //   this.userChoosed = false;
-    // },
-    //
-    // chat() {
-    //   this.userChoosed = true;
-    // },
+    friend_list() {
+      // this.userChoosed = false;
+      this.$store.dispatch('selectedUser', {
+        id: null,
+        name: null,
+        email: null,
+        status: null,
+        avatar: null,
+        created_at: null,
+        unread: null,
+      });
+    },
+
+    chat() {
+      this.text = "Prosím, vyberte priateľa na chatovanie."
+      this.snackbar = true;
+    },
 
     startConversationWith(contact) {
       this.updateUnreadCount(contact, true);
