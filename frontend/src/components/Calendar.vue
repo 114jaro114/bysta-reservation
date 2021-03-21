@@ -289,9 +289,8 @@ export default {
       this.$store.dispatch('successReservation', {
         success: true
       });
-      console.log(this.newEvent);
+      // console.log(this.newEvent);
     } else {
-      console.log("chyba");
       this.$store.dispatch('successReservation', {
         success: false
       });

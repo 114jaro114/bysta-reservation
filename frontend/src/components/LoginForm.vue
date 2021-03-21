@@ -210,14 +210,14 @@ export default {
     } else {
       this.snackbar = false;
     }
-    console.log('Component login mounted.')
+    // console.log('Component login mounted.')
   },
   created() {
     //add text that user was sucessfully registered
     this.alertSuccessRegister = this.$store.getters['successRegisterAlert'].success;
     this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
-    console.log(this.$store.getters['isLoggedOut'].logout);
-    console.log('Component login created')
+    // console.log(this.$store.getters['isLoggedOut'].logout);
+    // console.log('Component login created')
   }
 };
 </script>

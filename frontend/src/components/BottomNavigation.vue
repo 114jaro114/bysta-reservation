@@ -62,7 +62,7 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-    console.log("BottomNavigation mounted");
+    // console.log("BottomNavigation mounted");
     if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
       this.$store.dispatch('bottomNavigationState', {
         status: true
@@ -76,7 +76,7 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log("BottomNavigation updated");
+    // console.log("BottomNavigation updated");
   },
 
   methods: {

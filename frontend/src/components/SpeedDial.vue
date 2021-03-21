@@ -32,7 +32,7 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-    console.log("SpeedDial mounted");
+    // console.log("SpeedDial mounted");
 
     if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
       this.$store.dispatch('speedDialState', {
@@ -47,7 +47,7 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log("SpeedDial updated");
+    // console.log("SpeedDial updated");
   }
 }
 </script>

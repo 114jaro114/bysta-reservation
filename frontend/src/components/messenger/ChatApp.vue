@@ -7,7 +7,7 @@
                 }" transition="scale-transition">
           <v-card elevation="2">
             <v-card-title>
-              <v-row v-if="userChoosed == true">
+              <v-row v-if="this.$store.getters['selectedUser'].id != null">
                 <v-col>
                   <v-btn class="w-100" color="primary" disabled>
                     <v-icon class="mr-1">mdi-facebook-messenger</v-icon>Chat
@@ -40,7 +40,7 @@
             <v-divider class="mb-0" />
 
             <v-card-text>
-              <div v-if="userChoosed == true">
+              <div v-if="this.$store.getters['selectedUser'].id != null">
                 <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
                 <!--  -->
               </div>
@@ -97,7 +97,7 @@ export default {
       messages: [],
       contacts: [],
       users: [],
-      userChoosed: true,
+      // userChoosed: false,
       autoselectMenu: false,
     }
   },
@@ -112,13 +112,22 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        console.log(res);
         this.contacts = res.data;
         this.users = res.data
         this.$store.dispatch('contactListLoader', {
           cancelLoader: false
         });
       });
+    //reset choodes user while come back to the messenger page
+    this.$store.dispatch('selectedUser', {
+      id: null,
+      name: null,
+      email: null,
+      status: null,
+      avatar: null,
+      created_at: null,
+      unread: null,
+    });
   },
 
   created() {
@@ -126,14 +135,20 @@ export default {
     window.Echo.join('messages.' + localStorage.getItem("user_id"))
       .listen('NewMessage', (e) => {
         console.log(e);
+        console.log(e.message.to);
+        console.log(localStorage.getItem("user_id"));
+        console.log("hm");
         this.handleIncoming(e.message);
-        this.$store.dispatch('msgUnreadCounter', {
-          unreadCounter: e.message.totalUnreadMsgTo
-        });
+        if (e.message.to == localStorage.getItem("user_id")) {
+          console.log("fasa");
+          this.$store.dispatch('msgUnreadCounter', {
+            unreadCounter: e.message.totalUnreadMsgTo
+          });
+        }
       })
 
     this.selectedContact = this.$store.getters['selectedUser'];
-
+    console.log(this.$store.getters['selectedUser']);
     //private channel
     // window.Echo.private(`messages.${localStorage.getItem("user_id")}`)
     //   .listen('NewMessage', (e) => {
@@ -142,16 +157,15 @@ export default {
   },
 
   methods: {
-    friend_list() {
-      this.userChoosed = false;
-    },
-
-    chat() {
-      this.userChoosed = true;
-    },
+    // friend_list() {
+    //   this.userChoosed = false;
+    // },
+    //
+    // chat() {
+    //   this.userChoosed = true;
+    // },
 
     startConversationWith(contact) {
-      console.log(contact);
       this.updateUnreadCount(contact, true);
 
       const api = `http://127.0.0.1:8000/api/conversation/${contact.id}`;
@@ -165,17 +179,22 @@ export default {
         .then(res => {
           this.messages = res.data;
           this.selectedContact = contact;
+          //unread messages
+          const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
+          axios.get(api, config)
+            .then((res) => {
+              this.$store.dispatch('msgUnreadCounter', {
+                unreadCounter: res.data
+              });
+            });
         });
     },
     saveNewMessage(message) {
       this.messages.push(message);
-      // console.log(this.messages)
     },
 
     handleIncoming(message) {
-      // console.log(this.selectedContact.id);
       if (this.selectedContact && message.from == this.selectedContact.id) {
-        // console.log(message);
         this.saveNewMessage(message);
         return;
       }
@@ -221,7 +240,7 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    console.log(this.$store.getters['selectedUser']);
+    // console.log(this.$store.getters['selectedUser']);
     this.selectedContact = this.$store.getters['selectedUser'];
   }
 }

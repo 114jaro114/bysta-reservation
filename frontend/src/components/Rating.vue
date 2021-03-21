@@ -337,7 +337,7 @@ export default {
   },
   updated() {
     //do something after updating vue instance
-    console.log(this.$store.getters['ratingState']);
+    // console.log(this.$store.getters['ratingState']);
   }
 }
 </script>

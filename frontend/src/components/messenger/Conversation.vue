@@ -124,10 +124,9 @@ export default {
           config
         )
         .then((res) => {
-          console.log("res")
           this.$emit('new', res.data);
         })
-      console.log(text);
+      // console.log(text);
     },
 
     removeSelectedContact() {

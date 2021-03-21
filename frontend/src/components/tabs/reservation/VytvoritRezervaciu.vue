@@ -446,7 +446,7 @@ export default {
       ],
       note: null,
       noteRules: [
-        v => v.length <= 50 || 'Poznámka musí obsahovať max 50 znakov',
+        v => (v && v.length <= 50) || 'Poznámka musí obsahovať max 50 znakov',
       ],
 
       // Snackbar
@@ -461,6 +461,7 @@ export default {
 
     axios.get(api, config)
       .then(res => {
+        console.log(res);
         if (res.data.length != 0) {
           this.surname = res.data[0].surname;
           this.lastname = res.data[0].lastname;
@@ -669,10 +670,8 @@ export default {
 
   created() {
     //add text that user was sucessfully registered
-    console.log(this.$store.getters['successMakeReservation'].success)
+    // console.log(this.$store.getters['successMakeReservation'].success)
     // this.step1 = this.$store.getters['successMakeReservation'].success
-    console.log(this.step1)
-    console.log('Component login created')
   },
 
   updated() {

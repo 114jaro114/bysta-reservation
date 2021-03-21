@@ -50,22 +50,24 @@
                 <!-- <div v-if="showUploadProgress">
                   Uploading: {{ uploadPercent }} %
                 </div> -->
-
-                <div class="image-upload">
-                  <v-btn @change="updateAvatar($event)" color="primary" block>
-                    <v-icon>mdi-file-find</v-icon>
-                    <label class="file-input-icon-profile" for="file-input">
-                      Zmeniť profilovú fotku
-                    </label>
-                    <input type="file" id="file-input" name="avatar" ref="photo" accept="image/*" @change="updateAvatar($event)">
-                  </v-btn>
-                </div>
-
-                <div class="user-from" block>
-                  <v-btn disabled>
-                    <span>Člen od: <span class="font-weight-bold">{{ memberFrom }}</span></span>
-                  </v-btn>
-                </div>
+                <v-col>
+                  <div class="image-upload">
+                    <v-btn @change="updateAvatar($event)" color="primary" block class="p-0">
+                      <v-icon>mdi-file-find</v-icon>
+                      <label class="file-input-icon-profile" for="file-input">
+                        Zmeniť profilovú fotku
+                      </label>
+                      <input type="file" id="file-input" name="avatar" ref="photo" accept="image/*" @change="updateAvatar($event)">
+                    </v-btn>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="user-from" block>
+                    <v-btn disabled>
+                      <span>Člen od: <span class="font-weight-bold">{{ memberFrom }}</span></span>
+                    </v-btn>
+                  </div>
+                </v-col>
               </v-row>
 
               <v-row justify="center">
@@ -120,7 +122,7 @@
 
           <v-divider />
 
-          <v-card-actions class="pt-0">
+          <v-card-actions class="pt-0 pb-4 pl-4">
             <div v-if="user_acc_info == true">
               <v-btn color="primary" :loading="loading" @click.native="update">
                 <v-icon left dark>mdi-check</v-icon>
@@ -448,9 +450,9 @@ input[type="file"] {
   display: none;
 }
 
-.image-upload {
+/* .image-upload {
   margin-right: 1rem;
-}
+} */
 
 .user-from {
   margin-left: 1rem;

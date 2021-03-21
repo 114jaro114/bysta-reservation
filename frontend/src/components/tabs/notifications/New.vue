@@ -116,7 +116,6 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        console.log(res)
         this.notif = res.data;
         this.notifCount = res.data.length;
         this.$store.dispatch('notificationCounter', {
@@ -162,7 +161,6 @@ export default {
     },
 
     deleteNotification(e) {
-      console.log(e);
       this.snackbar = true;
       this.text = "Notifikácia bola úspešne vymazaná";
       const api = 'http://127.0.0.1:8000/api/deleteNotification';
@@ -185,7 +183,6 @@ export default {
           };
           axios.get(api, config)
             .then(res => {
-              console.log(res)
               this.notif = res.data;
               this.notifCount = res.data.length;
               this.$store.dispatch('notificationCounter', {
@@ -202,7 +199,6 @@ export default {
     window.Echo.join('notif-channel')
       .listen('Notifi', (e) => {
         this.notif = e.notification.notification;
-        console.log(e);
         this.notifCount += 1;
         this.$store.dispatch('notificationCounter', {
           notifCounter: this.notifCount

@@ -177,12 +177,11 @@ export default {
   },
 
   methods: {
-    getColor() {
-      if (this.contacts.status == 'offline') return 'red'
+    getColor(e) {
+      if (e == 'offline') return 'red'
       else return 'green'
     },
     selectContact(item) {
-      console.log(item)
       this.selected = item;
       this.$emit('selected', item);
       this.$store.dispatch('selectedUser', {
@@ -202,7 +201,7 @@ export default {
         this.message += emoji.native;
       } else {
         this.message = emoji.native;
-        console.log(emoji.native);
+        // console.log(emoji.native);
       }
     },
     // chatInput
@@ -249,10 +248,10 @@ export default {
     //   .listen('statusUpdate', (e) => {
     //     console.log("test " + e.message);
     //   })
-    window.Echo.join('allUnreadMessages.' + localStorage.getItem("user_id"))
-      .listen('UnreadMessages', (e) => {
-        console.log(e);
-      })
+    // window.Echo.join('allUnreadMessages.' + localStorage.getItem("user_id"))
+    //   .listen('UnreadMessages', (e) => {
+    //     console.log(e);
+    //   })
   },
 
   computed: {

@@ -5,7 +5,7 @@
       <AvatarImageComponent />
     </v-list-item-avatar>
     <v-list-item class="pl-5">
-      <span class="font-weight-bold">{{ username }}</span>
+      <span class="font-weight-bold text-uppercase">{{ username }}</span>
     </v-list-item>
   </v-list-item>
   <!-- <v-list-item>
@@ -19,7 +19,7 @@
       </v-list-item-title>
     </v-list-item> -->
   <v-divider class="mb-0 mt-0"></v-divider>
-  <v-list nav dense>
+  <v-list class="text-uppercase" nav dense>
     <v-list-item-group v-model="group" active-class="deep-blue--text text--accent-4">
       <v-list-item to="/home">
         <v-icon>mdi-home</v-icon>
@@ -137,6 +137,15 @@ export default {
           localStorage.removeItem("user_id");
           localStorage.removeItem("username");
           localStorage.removeItem("authToken");
+          this.$store.dispatch('selectedUser', {
+            id: null,
+            name: null,
+            email: null,
+            status: null,
+            avatar: null,
+            created_at: null,
+            unread: null,
+          });
           this.$router.push("/login");
         })
         .catch(e => {

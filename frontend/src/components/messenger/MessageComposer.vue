@@ -90,12 +90,12 @@ export default {
   methods: {
     test(a) {
       if (a.toElement.className == 'v-icon notranslate v-icon--link mdi mdi-send theme--light' || a.toElement.className == 'v-icon notranslate v-icon--link mdi mdi-send theme--dark') {
-        console.log(a.toElement.className);
+        // console.log(a.toElement.className);
         this.$emit('send', this.message);
         this.resetIcon();
         this.clearMessage();
       } else {
-        console.log("zle");
+        // console.log("zle");
       }
     },
     // emoji input char
@@ -104,7 +104,7 @@ export default {
         this.message += emoji.native;
       } else {
         this.message = emoji.native;
-        console.log(emoji.native);
+        // console.log(emoji.native);
       }
     },
 

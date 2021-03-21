@@ -27,9 +27,13 @@ export default {
       //for unread messages
       window.Echo.join('messages.' + localStorage.getItem("user_id"))
         .listen('NewMessage', (e) => {
-          this.$store.dispatch('msgUnreadCounter', {
-            unreadCounter: e.message.totalUnreadMsgTo
-          });
+          console.log(e);
+          if (e.message.to == localStorage.getItem("user_id")) {
+            console.log("fasa");
+            this.$store.dispatch('msgUnreadCounter', {
+              unreadCounter: e.message.totalUnreadMsgTo
+            });
+          }
         })
       //for notifications
       window.Echo.join('notif-channel')
@@ -41,7 +45,7 @@ export default {
           // this.notifCount = e.notifications.length;
         })
     }
-
+    console.log("App compoennt created");
   },
   computed: {
     isDark() {
@@ -111,6 +115,10 @@ export default {
           }
         })
     }
+    console.log("App compoennt mounted");
+
+    console.log(this.$store.getters['selectedUser']);
+    console.log(this.$store.getters['isLoggedOut']);
   },
   updated() {
     //do something after updating vue instance
@@ -152,6 +160,7 @@ export default {
           }
         })
     }
+    console.log("App compoennt updated");
   }
 }
 </script>

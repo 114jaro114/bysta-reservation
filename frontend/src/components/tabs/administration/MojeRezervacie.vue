@@ -235,7 +235,6 @@ export default {
       let response = await axios.get('http://127.0.0.1:8000/api/calendar')
       this.currentEvents = response.data.data
       this.searched = this.currentEvents
-      console.log(response.data.data)
     } catch (err) {
       console.log(err)
     }
@@ -280,16 +279,14 @@ export default {
     getEvents() {
       axios.get('http://127.0.0.1:8000/api/calendar')
         .then(resp => {
-          console.log(resp);
           this.currentEvents = resp.data.data
           this.searched = this.currentEvents
           for (var i = 0; i < resp.data.data.length; i++) {
-            console.log(resp.data.data);
             if (resp.data.data[i].username == this.user) {
               this.currentEventsForOneUser.push(resp.data.data[i]);
             }
           }
-          console.log(this.currentEventsForOneUser);
+          // console.log(this.currentEventsForOneUser);
           this.myloadingvariable = false;
         })
         .catch(err => console.log(err.resp.data));
@@ -330,8 +327,7 @@ export default {
       axios.post('http://127.0.0.1:8000/api/calendar/delete', {
           id: this.editedIndex
         })
-        .then(resp => {
-          console.log(resp);
+        .then(() => {
           this.getEvents();
         })
         .catch(err => console.log("Unable to delete event!", err.response.data));
@@ -366,10 +362,8 @@ export default {
             end_date: this.newEvent.end_date,
             color: this.newEvent.color
           })
-          .then(resp => {
-            console.log(resp);
+          .then(() => {
             this.getEvents();
-            console.log("jupi")
           })
           .catch(err => console.log("Unable to update event!", err.response.data));
         Object.assign(this.currentEvents[this.editedIndex], this.editedItem)
@@ -381,8 +375,7 @@ export default {
         axios.post('http://127.0.0.1:8000/api/calendar/store', {
             ...this.newEvent
           })
-          .then(resp => {
-            console.log(resp);
+          .then(() => {
             this.getEvents();
             this.resetForm();
           })

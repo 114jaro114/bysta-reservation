@@ -137,6 +137,19 @@ export default {
         )
         .then((res) => {
           console.log(res);
+          const api = 'http://127.0.0.1:8000/api/friendships';
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("authToken"),
+            },
+          };
+          axios.get(api, config)
+            .then(res => {
+              console.log(res.data);
+              this.myloadingvariable = false;
+              this.users = res.data;
+            });
         })
     },
 
@@ -182,7 +195,7 @@ export default {
     //   }),
     showProfile(item) {
       console.log(item);
-      this.$store.dispatch('actionShowProfile', {
+      this.$store.dispatch('showProfile', {
         avatar: item.avatar,
         created_at: item.created_at,
         email: item.email,

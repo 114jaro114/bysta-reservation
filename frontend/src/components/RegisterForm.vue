@@ -178,7 +178,7 @@ export default {
 
     register() {
       //call API
-      console.log(this.$refs.form);
+      // console.log(this.$refs.form);
       if (this.validate()) {
         this.myloadingvariable = true;
         axios.post('http://127.0.0.1:8000/api/auth/register', {
@@ -187,7 +187,6 @@ export default {
             password: this.password
           })
           .then((res) => {
-            console.log(res.data.user.id);
             const api = 'http://127.0.0.1:8000/api/sendNotification';
             const config = {
               headers: {
@@ -200,10 +199,7 @@ export default {
                 text: "Vítame Vás na stránke chaty Byšta. Pre akékoľvek informácie nás neváhajte kontaktovať cez messenger alebo email.",
                 status: "WelcomeNotif"
               }, config)
-              .then(res => {
-                console.log("res");
-                console.log(res);
-              })
+              .then(() => {})
 
             this.myloadingvariable = false;
             this.alertSuccess = true;
@@ -217,7 +213,6 @@ export default {
           .catch(e => {
             this.alertFail = true;
             this.myloadingvariable = false;
-            console.log(e);
             if (e.response.data.errors.name != null && e.response.data.errors.email != null) {
               this.alertFailText = 'Zadaný email a meno sú už použíté!';
             } else if (e.response.data.errors.email != null) {
@@ -225,7 +220,6 @@ export default {
             } else if (e.response.data.errors.name != null) {
               this.alertFailText = 'Zadané meno je už použíté!';
             }
-            console.log(e);
           })
       }
     },
@@ -233,7 +227,7 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-    console.log('Component Register mounted.')
+    // console.log('Component Register mounted.')
     this.$store.dispatch('isLoggedOut', {
       username: '',
       logout: false
@@ -241,7 +235,7 @@ export default {
   },
 
   created() {
-    console.log('Component Register created')
+    // console.log('Component Register created')
   },
 };
 </script>

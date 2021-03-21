@@ -142,7 +142,7 @@ export default {
     },
   },
   mounted() {
-    console.log('Component Reset mounted.');
+    // console.log('Component Reset mounted.');
     this.$store.dispatch('isLoggedOut', {
       username: '',
       logout: false
@@ -150,7 +150,7 @@ export default {
   },
 
   created() {
-    console.log('Component Reset created')
+    // console.log('Component Reset created')
   }
 };
 </script>

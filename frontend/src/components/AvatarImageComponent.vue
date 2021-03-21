@@ -126,6 +126,15 @@ export default {
           localStorage.removeItem("user_id");
           localStorage.removeItem("username");
           localStorage.removeItem("authToken");
+          this.$store.dispatch('selectedUser', {
+            id: null,
+            name: null,
+            email: null,
+            status: null,
+            avatar: null,
+            created_at: null,
+            unread: null,
+          });
           this.$router.push("/login");
         })
         .catch(e => {
@@ -161,7 +170,6 @@ export default {
             }
           })
           .then((response) => {
-            console.log(response);
             this.avatarImageUrl = response.data.avatar_url
             this.showUploadProgress = false
             this.processingUpload = false
