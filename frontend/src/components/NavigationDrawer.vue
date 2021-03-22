@@ -20,10 +20,10 @@
     </v-list-item> -->
   <v-divider class="mb-0 mt-0"></v-divider>
   <v-list class="text-uppercase" nav dense>
-    <v-list-item-group v-model="group" active-class="deep-blue--text text--accent-4">
+    <v-list-item-group v-model="group" active-class="primary--text text--accent-4">
       <v-list-item to="/home">
         <v-icon>mdi-home</v-icon>
-        <v-list-item-title>Home</v-list-item-title>
+        <v-list-item-title>Domov</v-list-item-title>
       </v-list-item>
       <v-list-item to="/notifications">
         <v-badge :content="this.$store.getters['notificationCounter']" :value="this.$store.getters['notificationCounter']" color="orange" overlap bordered>

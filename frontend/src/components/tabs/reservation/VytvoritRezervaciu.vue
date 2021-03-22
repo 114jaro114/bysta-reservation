@@ -379,7 +379,7 @@ export default {
       step3: true,
       step4: true,
       step5: true,
-      counter1: 0,
+      counter1: 1,
       counter2: 0,
       counter3: 0,
 
@@ -461,7 +461,7 @@ export default {
 
     axios.get(api, config)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.length != 0) {
           this.surname = res.data[0].surname;
           this.lastname = res.data[0].lastname;
@@ -575,7 +575,7 @@ export default {
       }
     },
     decrementValue1() {
-      if (this.counter1 > 0) {
+      if (this.counter1 > 1) {
         this.counter1--;
       }
     },
