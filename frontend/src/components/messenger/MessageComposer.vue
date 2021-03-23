@@ -59,7 +59,7 @@ export default {
       message: '',
       // chatInput
       show: false,
-      show2: false,
+      show2: true,
       autoselectMenu: false,
       i18n: {
         search: 'Vyhľadať',
@@ -95,7 +95,7 @@ export default {
         this.resetIcon();
         this.clearMessage();
       } else {
-        // console.log("zle");
+        this.$emit('send', '👍');
       }
     },
     // emoji input char

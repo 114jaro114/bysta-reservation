@@ -54,13 +54,13 @@ export default {
       user_id: localStorage.getItem("user_id"),
       writingUser: null,
       typingTimer: false,
-      typingStatusNew: false
+      mutableTypingStatus: JSON.parse(this.typingStatus),
     }
   },
 
   computed: {
     typingStatusFunction() {
-      return this.typingStatus;
+      return this.mutableTypingStatus;
     },
 
     isDark() {
@@ -81,12 +81,12 @@ export default {
       })
       .listenForWhisper('typing', (user) => {
         this.writingUser = user;
-        this.typingStatus = true;
+        this.mutableTypingStatus = true;
         if (this.typingTimer) {
           clearTimeout(this.typingTimer);
         }
         this.typingTimer = setTimeout(() => {
-          this.typingStatus = false;
+          this.mutableTypingStatus = false;
         }, 2000);
       })
   },

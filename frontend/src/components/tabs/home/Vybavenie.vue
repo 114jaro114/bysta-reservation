@@ -6,8 +6,8 @@
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
         <v-card>
-          <v-card-title>
-            <!-- <span class="primary--text">Vybavenie</span> -->
+          <v-card-title class="justify-center">
+            <!-- <span class="font-weight-bold primary--text">Vybavenie</span> -->
           </v-card-title>
 
           <v-card-text>
@@ -26,37 +26,37 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span class="secondary--text">1. izba</span>
+                    <span>1. izba</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">2 jednolôžkové postele</span>
+                    <span>2 jednolôžkové postele</span>
                   </v-row>
 
                   <v-row class="justify-center">
-                    <span class="secondary--text">2 prístelky</span>
+                    <span>2 prístelky</span>
                   </v-row>
                 </v-sheet>
                 <!-- </v-col> -->
                 <!-- <v-col> -->
-                <v-sheet color="primary" class="mt-5 p-4 mx-auto" rounded>
+                <v-sheet class="mt-5 p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span class="secondary--text">2. izba</span>
+                    <span>2. izba</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">2 jednolôžkové postele</span>
+                    <span>2 jednolôžkové postele</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">1 prístelka</span>
+                    <span>1 prístelka</span>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -70,53 +70,53 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span class="secondary--text">1. izba</span>
+                    <span>1. izba</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <v-icon class="secondary--text" large>mdi-bed-double</v-icon>
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-double</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">1 manželská posteľ</span>
+                    <span>1 manželská posteľ</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">1 jednolôžková posteľ</span>
-                  </v-row>
-                </v-sheet>
-              </v-col>
-              <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
-                  <v-row class="justify-center">
-                    <span class="secondary--text">2. izba</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <v-icon class="secondary--text" large>mdi-bed-double</v-icon>
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <span class="secondary--text">1 manželská posteľ</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <span class="secondary--text">1 jednolôžková posteľ</span>
+                    <span>1 jednolôžková posteľ</span>
                   </v-row>
                 </v-sheet>
               </v-col>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span class="secondary--text">3. izba</span>
+                    <span>2. izba</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
-                    <v-icon class="secondary--text" large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-double</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">2 jednolôžkové postele</span>
+                    <span>1 manželská posteľ</span>
                   </v-row>
                   <v-row class="justify-center">
-                    <span class="secondary--text">2 prístelky</span>
+                    <span>1 jednolôžková posteľ</span>
+                  </v-row>
+                </v-sheet>
+              </v-col>
+              <v-col>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
+                  <v-row class="justify-center">
+                    <span>3. izba</span>
+                  </v-row>
+                  <v-row class="justify-center">
+                    <v-icon large>mdi-bed-single</v-icon>
+                    <v-icon large>mdi-bed-single</v-icon>
+                  </v-row>
+                  <v-row class="justify-center">
+                    <span>2 jednolôžkové postele</span>
+                  </v-row>
+                  <v-row class="justify-center">
+                    <span>2 prístelky</span>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -132,18 +132,77 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span>Televízor</span>
-                    <span>Domáce kino</span>
-                    <span>Jedáleň - stoly a stoličky</span>
-                    <span>Krb</span>
-                    <span>Pec</span>
-                    <span>2x sedačka</span>
-                    <span>Kuchynska linka s dresom</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <span>Základné vybavenie - uteráky, mydlo, toaletný papier, šampón</span>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Televízor</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Domáce kino</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Jedáleň - stoly a stoličky</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Krb</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Pec</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">2x sedačka</span>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-fridge</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Kuchynska linka s drezom</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -157,7 +216,7 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
                     <v-col class="p-4">
                       <v-row class="justify-center">
@@ -293,14 +352,79 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span class="mr-1">Sprchový kút - </span>
-                    <span class="mr-1">WC - </span>
-                    <span>Umývadlo</span>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Sprchový kút</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">WC</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Umývadlo</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                   <v-row class="justify-center">
-                    <span>Základné vybavenie - uteráky, mydlo, toaletný papier, šampón</span>
+                    <span>Základné vybavenie</span>
+                  </v-row>
+
+                  <v-divider />
+
+                  <v-row class="justify-center">
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">uteráky</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">mydlo</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">toaletný papier</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">šampón</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -314,9 +438,41 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <span>Základné vybavenie - posteľné obliečky, paplóny, vankúše</span>
+                    <span>Základné vybavenie</span>
+                  </v-row>
+
+                  <v-divider />
+
+                  <v-row class="justify-center">
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">posteľné obliečky</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">paplóny</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alpha-p-circle-outline</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">vankúše</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -330,19 +486,31 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
                     <v-icon>mdi-fireplace</v-icon>
                     <span class="ml-1">Vykurovanie chaty na tuhé palivo s teplovzdušnými rozvodmi po celej chate</span>
                   </v-row>
                   <v-divider />
                   <v-row class="justify-center">
-                    <v-icon>mdi-water-boiler</v-icon>
-                    <span class="ml-1">Ohrev vody pomoocu boileru</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <v-icon>mdi-solar-panel-large</v-icon>
-                    <span class="ml-1">Ohrev vody pomoocu solárneho zariadenia</span>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-water-boiler</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Ohrev vody pomoocu boileru</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-solar-panel-large</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Ohrev vody pomoocu solárneho zariadenia</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                 </v-sheet>
               </v-col>
@@ -356,7 +524,7 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
                     <v-icon>mdi-alpha-p-circle-outline</v-icon>
                     <span class="ml-1">parkovanie na pozemku vedľa chaty (max 10 osobných aút)</span>
@@ -373,28 +541,30 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
-                    <v-icon>mdi-calendar-end</v-icon>
-                    <span class="ml-1">
-                      Dlhodobé pobyty povolené - možný pobyt na 28 alebo viac dní
-                    </span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <v-icon>mdi-alert-circle</v-icon>
-                    <span class="ml-1">
-                      Snažíme sa vyriešiť akúkoľvek poruchu 24/7
-                    </span>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-calendar-end</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Dlhodobé pobyty povolené - možný pobyt na 28 alebo viac dní</span>
+                      </v-row>
+                    </v-col>
+                    <v-col class="p-4">
+                      <v-row class="justify-center">
+                        <v-icon>mdi-alert-circle</v-icon>
+                      </v-row>
+
+                      <v-row class="justify-center">
+                        <span class="ml-1">Snažíme sa vyriešiť akúkoľvek poruchu 24/7</span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                 </v-sheet>
               </v-col>
             </v-row>
-
-            <!-- <v-row align="center">
-              <v-divider />
-              Ďalšie
-              <v-divider />
-            </v-row> -->
 
             <v-row align="center">
               <v-divider />
@@ -404,7 +574,7 @@
 
             <v-row>
               <v-col>
-                <v-sheet color="primary" class="p-4 mx-auto" rounded>
+                <v-sheet class="p-4 mx-auto" rounded outlined>
                   <v-row class="justify-center">
                     <v-icon>mdi-wifi-off</v-icon>
                     <span class="ml-1">

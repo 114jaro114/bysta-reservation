@@ -122,7 +122,7 @@
   <!--show all ratings-->
   <div class="col" v-if="!cardHide">
     <v-lazy :options="{
-          threshold: 1
+          threshold: .2
         }" min-height="200" transition="scale-transition">
       <v-card elevation="2" class="mt-3">
         <v-card-title>
@@ -139,7 +139,7 @@
   <!--change rating-->
   <div class="col" v-if="!cardHide2">
     <v-lazy :options="{
-          threshold: 1
+          threshold: .2
         }" min-height="200" transition="scale-transition">
       <v-card elevation="2" class="mt-3">
         <v-card-title>
@@ -149,12 +149,22 @@
         </v-card-title>
         <form @submit.prevent class="p-3">
           <v-rating v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
-          <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" counter clearable clear-icon="mdi-close"></v-textarea>
+          <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter clearable clear-icon="mdi-close"></v-textarea>
           <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
         </form>
       </v-card>
     </v-lazy>
   </div>
+
+  <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" :left="true" :top="true">
+    <v-icon>mdi-check-circle</v-icon>
+    {{ textUpdateReview }}
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" text v-bind="attrs" @click="snackbarUpdateReview = false">
+        Zrušiť
+      </v-btn>
+    </template>
+  </v-snackbar>
 </div>
 </template>
 <script>
@@ -166,7 +176,9 @@ export default {
       cardHide: true,
       cardHide2: true,
       myloadingvariable: true,
-      rules: [v => v.length <= 50 || 'Maximálna dĺžka je 50 znakov'],
+      rules: [
+        v => (v && v.length <= 50) || 'Maximálna dĺžka je 50 znakov'
+      ],
       search: '',
       headers: [{
         text: 'ID',
@@ -216,6 +228,9 @@ export default {
       idToUpdate: null,
       rateForUpdate: null,
       commentForUpdate: null,
+      snackbarUpdateReview: false,
+      multiLine: true,
+      textUpdateReview: '',
     }
   },
   computed: {
@@ -262,6 +277,8 @@ export default {
         })
         .then(() => {
           this.getEvents();
+          this.snackbarUpdateReview = true;
+          this.textUpdateReview = "Vaša recenzia bola aktualizovaná"
         })
         .catch(err => console.log("Unable to update event!", err));
     },

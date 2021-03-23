@@ -1,6 +1,29 @@
 <template>
 <v-app id="app" :style="{background: $vuetify.theme.themes[isDark].background}">
   <router-view />
+
+  <v-snackbar v-model="snackbarUnreadMessages" :multi-line="multiLine" color="orange" :right="true" :bottom="true">
+    <!-- <v-chip class="ma-2" color="white" outlined>
+      NEW
+    </v-chip> -->
+    <v-icon>mdi-message-text-clock</v-icon>
+    {{ textUnreadMessages }}
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" text v-bind="attrs" @click="snackbarUnreadMessages = false">
+        Zrušiť
+      </v-btn>
+    </template>
+  </v-snackbar>
+
+  <v-snackbar v-model="snackbarNotifications" :multi-line="multiLine" color="orange" :right="true" :bottom="true">
+    <v-icon>mdi-bell-ring</v-icon>
+    {{ textNotifications }}
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" text v-bind="attrs" @click="snackbarNotifications = false">
+        Zrušiť
+      </v-btn>
+    </template>
+  </v-snackbar>
 </v-app>
 </template>
 
@@ -13,7 +36,12 @@ export default {
 
   data() {
     return {
-      notifCount: 0
+      notifCount: 0,
+      snackbarUnreadMessages: false,
+      snackbarNotifications: false,
+      multiLine: true,
+      textUnreadMessages: '',
+      textNotifications: '',
     }
   },
 
@@ -27,22 +55,45 @@ export default {
       //for unread messages
       window.Echo.join('messages.' + localStorage.getItem("user_id"))
         .listen('NewMessage', (e) => {
-          console.log(e);
           if (e.message.to == localStorage.getItem("user_id")) {
-            console.log("fasa");
             this.$store.dispatch('msgUnreadCounter', {
               unreadCounter: e.message.totalUnreadMsgTo
             });
+            const api = `http://127.0.0.1:8000/api/user/${e.message.from}`;
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
+            axios.get(api, config)
+              .then(res => {
+                if (e.message.totalUnreadMsgTo == 1) {
+                  // this.textUnreadMessages = `${e.message.totalUnreadMsgTo} neprečítaná správa`;
+                  this.textUnreadMessages = `Nová správa od používateľa ${res.data[0].name}`;
+                } else {
+                  // this.textUnreadMessages = `Máte ${e.message.totalUnreadMsgTo} neprečítaných správ`;
+                  this.textUnreadMessages = `Nová správa od používateľa ${res.data[0].name}`;
+                }
+                this.snackbarUnreadMessages = true;
+              });
           }
         })
       //for notifications
       window.Echo.join('notif-channel')
-        .listen('Notifi', () => {
+        .listen('Notifi', (e) => {
           this.notifCount += 1;
-          this.$store.dispatch('notificationCounter', {
-            notifCounter: this.notifCount
-          });
-          // this.notifCount = e.notifications.length;
+          if (e.notification.to == localStorage.getItem("user_id")) {
+            this.$store.dispatch('notificationCounter', {
+              notifCounter: this.notifCount
+            });
+            if (this.notifCount == 1) {
+              this.textNotifications = `Máte ${this.notifCount} novú notifikáciu`;
+            } else {
+              this.textNotifications = `Máte ${this.notifCount} nové notifikácie`;
+            }
+            this.snackbarNotifications = true;
+          }
         })
     }
     console.log("App compoennt created");
@@ -117,8 +168,8 @@ export default {
     }
     console.log("App compoennt mounted");
 
-    console.log(this.$store.getters['selectedUser']);
-    console.log(this.$store.getters['isLoggedOut']);
+    // console.log(this.$store.getters['selectedUser']);
+    // console.log(this.$store.getters['isLoggedOut']);
   },
   updated() {
     //do something after updating vue instance

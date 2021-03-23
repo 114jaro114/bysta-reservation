@@ -70,6 +70,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/auth/user', [AuthController::class, 'me']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
+Route::get('/user/{id}', [ContactsController::class, 'getUserById']);
+
 Route::get('/checkIfUsernameExist/{name}', [ValidateRegisterLogin::class, 'checkUsername']);
 Route::post('/checkIfEMailExist', [ValidateRegisterLogin::class, 'checkEmail']);
 

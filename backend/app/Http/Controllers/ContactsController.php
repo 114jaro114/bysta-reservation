@@ -122,4 +122,13 @@ class ContactsController extends Controller
     {
         return User::all();
     }
+
+    public function getUserById($id)
+    {
+        $getUserById = DB::table('users')
+                       ->where("id", $id)
+                       ->select('name')
+                       ->get();
+        return $getUserById;
+    }
 }

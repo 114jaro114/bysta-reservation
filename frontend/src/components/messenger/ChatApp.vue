@@ -145,13 +145,8 @@ export default {
     //presence channel
     window.Echo.join('messages.' + localStorage.getItem("user_id"))
       .listen('NewMessage', (e) => {
-        console.log(e);
-        console.log(e.message.to);
-        console.log(localStorage.getItem("user_id"));
-        console.log("hm");
         this.handleIncoming(e.message);
         if (e.message.to == localStorage.getItem("user_id")) {
-          console.log("fasa");
           this.$store.dispatch('msgUnreadCounter', {
             unreadCounter: e.message.totalUnreadMsgTo
           });

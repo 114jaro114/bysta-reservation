@@ -92,11 +92,12 @@ export default {
     return {
       typingStatus: false,
       contactIdExist: null,
+      mutableTypingStatusNew: JSON.parse(this.typingStatusNew),
     }
   },
 
   updated() {
-    this.typingStatus = this.typingStatusNew;
+    this.typingStatus = this.mutableTypingStatusNew;
   },
 
   created() {
