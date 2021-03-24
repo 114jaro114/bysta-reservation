@@ -21,6 +21,8 @@ import Reservation from '../views/Reservation.vue'
 import Administration from '../views/Administration.vue'
 import Messenger from '../views/Messenger.vue'
 import AboutUs from '../views/AboutUs.vue'
+import PriceList from '../views/PriceList.vue'
+import SavedReservations from '../views/SavedReservations.vue'
 
 Vue.use(VueRouter)
 
@@ -198,6 +200,16 @@ const routes = [{
   //     .default,
   //   props: true
   // },
+  {
+    path: '/saved_reservations',
+    name: 'SavedReservations',
+    component: SavedReservations
+  },
+  {
+    path: '/price_list',
+    name: 'PriceList',
+    component: PriceList
+  },
   {
     path: '/about_us',
     name: 'AboutUs',

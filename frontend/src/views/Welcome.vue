@@ -31,10 +31,10 @@
       <v-row justify="center">
         <!-- <v-col> -->
         <div v-if="this.$vuetify.theme.dark">
-          <img src="/img/logo_welcome_theme_dark.png" lazy-src="/img/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
+          <img src="/img/logos/logo_welcome_theme_dark.png" lazy-src="/img/logos/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
         </div>
         <div v-else>
-          <img src="/img/logo_welcome_theme_light.png" lazy-src="/img/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
+          <img src="/img/logos/logo_welcome_theme_light.png" lazy-src="/img/logos/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
         </div>
       </v-row>
     </div>

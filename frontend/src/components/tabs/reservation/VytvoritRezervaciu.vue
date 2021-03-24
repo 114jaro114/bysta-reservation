@@ -10,8 +10,9 @@
           {{ text }}
 
           <template v-slot:action="{ attrs }">
-            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-              Close
+
+            <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+              <v-icon>mdi-close-circle</v-icon>
             </v-btn>
           </template>
         </v-snackbar>
@@ -205,8 +206,129 @@
                     </v-btn>
                   </v-row>
 
-                  <!-- <v-divider></v-divider> -->
+                  <v-row class="m-0 mt-1">
+                    <v-col class="pl-0 pr-0" align="left">
+                      <v-icon color="orange">mdi-information</v-icon>
+                      <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítávajú.</span>
+                    </v-col>
+                  </v-row>
 
+                  <v-divider />
+
+                  <v-row class="m-0">
+                    <v-col></v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span v-bind="attrs" v-on="on">Počet osôb</span>
+                        </template>
+                        <span>Maximálny počet osôb je 20!</span>
+                      </v-tooltip>
+
+                    </v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                          <span>Cena/noc</span>
+                        </template>
+                        <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
+                        <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
+                      </v-tooltip>
+
+                    </v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                        </template>
+                        <span>Od {{start_date}} do {{end_date}}</span>
+                      </v-tooltip>
+                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}} noci</span>
+                      <span v-else>Cena/{{countDaysBetweemTwoDates}} noc</span>
+                    </v-col>
+                  </v-row>
+                  <v-row class="m-0">
+                    <v-col>
+                      <span>Dospelí</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1*priceAdults}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider v-if="counter2 > 0" />
+                  <v-row class="m-0" v-if="counter2 > 0">
+
+                    <v-col>
+                      <span>Deti od 2 do 12 rokov</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2*priceChilds2to12}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider v-if="counter3 > 0" />
+                  <v-row class="m-0" v-if="counter3 > 0">
+                    <v-col>
+                      <span>Deti do 2 rokov</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3*priceChildsto2}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider />
+                  <v-row class="m-0">
+                    <v-col>
+                      <span class="font-weight-bold">Spolu</span>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1+counter2+counter3}}</span>
+                        </template>
+                        <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}} €</span>
+                        </template>
+                        <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
+                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
+                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                        </template>
+                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
+                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
                 </v-card-text>
               </v-card>
 
@@ -275,8 +397,11 @@
               <v-card class="m-3" tile>
                 <v-card-title>Rekapitulácia</v-card-title>
                 <v-card-text>
-                  <span>Kontaknté údaje</span>
-                  <v-divider />
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Kontaknté údaje</span>
+                    <v-divider />
+                  </v-row>
                   <v-row justify="center">
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                       <v-text-field ref="surname" v-model="surname" label="Meno" readonly></v-text-field>
@@ -319,14 +444,172 @@
                     </v-col>
                   </v-row>
 
-                  <span>pocet osob</span>
-                  Dospeli: {{counter1}}
-                  Deti od 2 do 10 rokov: {{counter2}}
-                  Deti do 2 rokov: {{counter3}}
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Dátum a čas príchodu a odchodu</span>
+                    <v-divider />
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Príchod</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-calendar-start</v-icon>
+                            <span>Dátum: {{start_date}}</span>
+                          </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-clock-start</v-icon>
+                            <span>Čas: {{start_time}}</span>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                    <v-col>
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Odchod</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-calendar-end</v-icon>
+                            <span>Dátum: {{end_date}}</span>
+                          </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-clock-end</v-icon>
+                            <span>Čas: {{end_time}}</span>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
 
-                  <span>datum a cas prichodu a odchodu</span>
-                  Datum a cas prichodu: {{start_date}} {{start_time}}
-                  Datum a cas odchodu: {{end_date}} {{end_time}}
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Počet osôb</span>
+                    <v-divider />
+                  </v-row>
+
+                  <v-row class="m-0">
+                    <v-col></v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span v-bind="attrs" v-on="on">Počet osôb</span>
+                        </template>
+                        <span>Maximálny počet osôb je 20!</span>
+                      </v-tooltip>
+
+                    </v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                          <span>Cena/noc</span>
+                        </template>
+                        <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
+                        <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
+                      </v-tooltip>
+
+                    </v-col>
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                        </template>
+                        <span>Od {{start_date}} do {{end_date}}</span>
+                      </v-tooltip>
+                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}} noci</span>
+                      <span v-else>Cena/{{countDaysBetweemTwoDates}} noc</span>
+                    </v-col>
+                  </v-row>
+                  <v-row class="m-0">
+                    <v-col>
+                      <span>Dospelí</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1*priceAdults}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider v-if="counter2 > 0" />
+                  <v-row class="m-0" v-if="counter2 > 0">
+
+                    <v-col>
+                      <span>Deti od 2 do 12 rokov</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2*priceChilds2to12}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider v-if="counter3 > 0" />
+                  <v-row class="m-0" v-if="counter3 > 0">
+                    <v-col>
+                      <span>Deti do 2 rokov</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3*priceChildsto2}} €</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider />
+                  <v-row class="m-0">
+                    <v-col>
+                      <span class="font-weight-bold">Spolu</span>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1+counter2+counter3}}</span>
+                        </template>
+                        <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}} €</span>
+                        </template>
+                        <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
+                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
+                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                        </template>
+                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
+                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
                 </v-card-text>
               </v-card>
 
@@ -353,13 +636,6 @@ import axios from 'axios'
 import moment from 'moment';
 import Calendar from "@/components/Calendar.vue";
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
-const config = {
-  headers: {
-    Accept: "application/json",
-    // 'Content-Type': 'multipart/form-data',
-    Authorization: "Bearer " + localStorage.getItem("authToken"),
-  },
-};
 
 export default {
   name: "VytvoritRezervaciu",
@@ -370,7 +646,7 @@ export default {
   data() {
     return {
       isActive: false,
-      e1: 1,
+      e1: 5,
       rules: [
 
       ],
@@ -387,6 +663,10 @@ export default {
       end_time: null,
       modal1: false,
       modal2: false,
+      priceAdults: 18,
+      priceChildsto2: 0,
+      priceChilds2to12: 18,
+      countDaysBetweemTwoDates: null,
 
       // contact form
       countries: ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua &amp; Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
@@ -458,7 +738,13 @@ export default {
 
   mounted() {
     const api = 'http://127.0.0.1:8000/api/getContactForm';
-
+    const config = {
+      headers: {
+        Accept: "application/json",
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: "Bearer " + localStorage.getItem("authToken"),
+      },
+    };
     axios.get(api, config)
       .then(res => {
         // console.log(res);
@@ -570,8 +856,13 @@ export default {
     },
 
     incrementValue1() {
-      if (this.counter1 < 20) {
-        this.counter1++;
+      if (this.counter1 + this.counter2 < 20) {
+        if (this.counter1 < 20) {
+          this.counter1++;
+        }
+      } else {
+        this.snackbar = true;
+        this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
       }
     },
     decrementValue1() {
@@ -580,12 +871,17 @@ export default {
       }
     },
     resetValue1() {
-      this.counter1 = 0;
+      this.counter1 = 1;
     },
 
     incrementValue2() {
-      if (this.counter2 < 20) {
-        this.counter2++;
+      if (this.counter1 + this.counter2 < 20) {
+        if (this.counter2 < 20) {
+          this.counter2++;
+        }
+      } else {
+        this.snackbar = true;
+        this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
       }
     },
     decrementValue2() {
@@ -680,6 +976,17 @@ export default {
       .format("YYYY-MM-DD");
     this.end_date = moment(this.$store.getters['successReservationData'].end_date)
       .format("YYYY-MM-DD");
+
+    //Difference in number of days
+    // moment.duration(moment(this.start_date, 'YYYY-MM-DD')
+    //     .diff(moment(this.end_date, 'YYYY-MM-DD')))
+    //   .asDays();
+    //
+    // //Difference in number of weeks
+    // moment.duration(start.diff(end))
+    //   .asWeeks();
+    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
+      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
   }
 }
 </script>

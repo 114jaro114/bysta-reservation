@@ -213,11 +213,8 @@ input[type="file"] {
   outline: 0px !important;
 }
 
-.v-card-logout .theme--dark.v-btn--active {
-  color: #21CFF3;
-}
-
-.v-card-logout .theme--light.v-btn--active {
+.v-card-logout .theme--dark.v-btn--active,
+.theme--light.v-btn--active {
   color: #0D47A1;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-<div class="administration w-100 h-100 text-uppercase">
+<div class="price_list w-100 h-100 text-uppercase secondary-color">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <v-lazy :options="{
-        threshold: .4
-      }" min-height="100vh" transition-group="scale-transition">
+          threshold: .4
+        }" min-height="100vh" transition-group="scale-transition">
     <v-card class="v-content">
       <v-toolbar elevation="2" class="mb-3">
         <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -16,18 +16,21 @@
           </span>
         </v-toolbar-title>
         <template v-slot:extension>
-          <v-tabs v-model="tab" grow>
+          <v-tabs grow>
             <v-tab v-for="item in items" :key="item">
               {{ item }}
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-tabs-items v-model="tab" grow>
-        <v-tab-item v-for="item in items" :key="item">
-          <router-view></router-view>
+      <v-tabs-items v-model="tab" class="p-3 pt-1">
+        <v-tab-item v-for="item in items" :key="item" disabled>
         </v-tab-item>
         <NavigationDrawer :drawer="drawer" />
+        <v-card>
+          <v-icon>mdi-volume-high</v-icon>
+          Pripravujeme automatické uloženie nedokončených rezervácií.
+        </v-card>
       </v-tabs-items>
     </v-card>
   </v-lazy>
@@ -36,13 +39,14 @@
   <Footer />
 </div>
 </template>
+
 <script>
 import Footer from "../components/Footer.vue";
 import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 import BottomNavigation from "@/components/BottomNavigation.vue";
 export default {
-  name: "Administration",
+  name: "SavedReservations",
   components: {
     Footer,
     SpeedDial,
@@ -55,38 +59,21 @@ export default {
       username: localStorage.getItem("username"),
       drawer: false,
       tab: null,
-      items: ['Administrácia', ],
+      items: ['Uložené rezervácie'],
+      show: false,
     }
   },
   updated() {
     this.drawer = this.drawerNew;
   },
-  watch: {
-    group() {
-      this.drawer = false
+  methods: {
+    updateRouter(tab) {
+      this.$router.push(tab)
     },
-  },
-  methods: {}
+  }
 }
 </script>
-<style type="scss">
-.v-card.v-content {
-  min-height: 100vh;
-  border-radius: 0px;
-}
 
-.v-card {
-  border-top-left-radius: unset !important;
-  border-top-right-radius: unset !important;
-}
+<style>
 
-.v-navigation-drawer {
-  position: fixed !important;
-  width: 300px !important;
-  box-shadow: unset !important;
-}
-
-.v-overlay__scrim {
-  position: fixed !important;
-}
 </style>

@@ -8,8 +8,8 @@
           <v-icon>mdi-check-circle</v-icon>
           {{ text }}
           <template v-slot:action="{ attrs }">
-            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-              Zrušiť
+            <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+              <v-icon>mdi-close-circle</v-icon>
             </v-btn>
           </template>
         </v-snackbar>

@@ -9,8 +9,8 @@
     <v-icon>mdi-message-text-clock</v-icon>
     {{ textUnreadMessages }}
     <template v-slot:action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="snackbarUnreadMessages = false">
-        Zrušiť
+      <v-btn color="white" v-bind="attrs" @click="snackbarUnreadMessages = false" fab text small>
+        <v-icon>mdi-close-circle</v-icon>
       </v-btn>
     </template>
   </v-snackbar>
@@ -19,8 +19,8 @@
     <v-icon>mdi-bell-ring</v-icon>
     {{ textNotifications }}
     <template v-slot:action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="snackbarNotifications = false">
-        Zrušiť
+      <v-btn color="white" v-bind="attrs" @click="snackbarNotifications = false" fab text small>
+        <v-icon>mdi-close-circle</v-icon>
       </v-btn>
     </template>
   </v-snackbar>

@@ -45,6 +45,10 @@
         </v-badge>
         <v-list-item-title>Messenger</v-list-item-title>
       </v-list-item>
+      <v-list-item to="/saved_reservations">
+        <v-icon>mdi-content-save-edit</v-icon>
+        <v-list-item-title>Uložené rezervácie</v-list-item-title>
+      </v-list-item>
       <v-list-item to="/price_list">
         <v-icon>mdi-credit-card</v-icon>
         <v-list-item-title>Cenník</v-list-item-title>
@@ -75,7 +79,7 @@
     </v-list-item> -->
     <v-list-item>
       <v-btn color="accent" @click="logout()" block>
-        <v-icon class="mr-1">mdi-logout</v-icon>Odhlásiť sa
+        <v-icon class="background--text mr-1">mdi-logout</v-icon><span class="background--text">Odhlásiť sa</span>
       </v-btn>
     </v-list-item>
   </template>
