@@ -104,7 +104,7 @@ export default {
         event_name: "",
         start_date: "",
         end_date: "",
-        color: "",
+        // color: "",
         username: "",
       },
       user: localStorage.getItem("username"),
@@ -120,6 +120,7 @@ export default {
       editId: 0,
       // disabledDates: ['2021-02-26', '2021-02-27', '2021-02-28', '2021-03-01', '2021-03-02'],
       timezone: '',
+      testtt: true,
     }
   },
 
@@ -141,22 +142,22 @@ export default {
         ...this.test.map(todo => ({
           key: todo.id,
           dates: {
-            start: todo.start,
-            end: todo.end
+            start: todo.start_date,
+            end: todo.end_date
           },
           customData: todo,
           order: todo.id,
           highlight: {
             start: {
-              color: todo.color,
+              color: this.color(todo.event_name),
               fillMode: 'solid'
             },
             base: {
-              color: todo.color,
+              color: this.color(todo.event_name),
               fillMode: 'light'
             },
             end: {
-              color: todo.color,
+              color: this.color(todo.event_name),
               fillMode: 'solid'
             },
             opacity: todo.isComplete ? 0.3 : 1,
@@ -175,7 +176,7 @@ export default {
           },
           popover: {
             slot: 'add-todo',
-            label: todo.title + ' používateľa ' + todo.username,
+            label: todo.event_name + ' používateľa ' + todo.username,
             visibility: 'focus',
             // hideIndicator: true,
           },
@@ -205,6 +206,13 @@ export default {
   },
 
   methods: {
+    color(e) {
+      if (e == 'rezervácia') {
+        return 'orange'
+      } else {
+        return 'red'
+      }
+    },
     moveToToday() {
       this.$refs.DatePicker2.move(new Date());
     },
@@ -227,14 +235,15 @@ export default {
     },
 
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/calendar')
+      axios.get('http://127.0.0.1:8000/api/reservation')
         .then(resp => {
           //this code contains disabled dates in datepicker
+          console.log(resp.data.length);
           this.myloadingvariable = false;
           this.disabledDates = [];
-          for (var i = 0; i < resp.data.data.length; i++) {
-            var day1 = moment(resp.data.data[i].end);
-            var day2 = moment(resp.data.data[i].start);
+          for (var i = 0; i < resp.data.length; i++) {
+            var day1 = moment(resp.data[i].end_date);
+            var day2 = moment(resp.data[i].start_date);
             var result = [moment({
               ...day2
             })];
@@ -249,11 +258,12 @@ export default {
               this.disabledDates.push(allDates[a])
             }
           }
+          console.log(this.disabledDates);
           // get data
-          this.test = resp.data.data;
+          this.test = resp.data;
           // this.incId = this.test.length;
-          if (resp.data.data != undefined) {
-            this.incId = resp.data.data[resp.data.data.length - 1].id;
+          if (resp.data != undefined) {
+            this.incId = resp.data[resp.data.length - 1].id;
           }
         })
         .catch(err => console.log(err));
@@ -272,7 +282,7 @@ export default {
           .add(23, 'hours')
           .add(59, 'minutes')
           .format('YYYY-MM-DDTHH:mm:SS'),
-        color: "orange",
+        // color: "orange",
         username: this.user,
       };
       this.$store.dispatch('reservationData', {
@@ -283,7 +293,7 @@ export default {
           .add(23, 'hours')
           .add(59, 'minutes')
           .format('YYYY-MM-DDTHH:mm:SS'),
-        color: "orange",
+        // color: "orange",
         username: this.user,
       });
       this.$store.dispatch('successReservation', {
@@ -399,5 +409,9 @@ export default {
 .vc-container.vc-is-dark {
   background-color: #1E1E1E;
   color: #FFFFFF;
+}
+
+.testtt {
+  background-color: rgba(0,0,0,0,5);
 }
 </style>

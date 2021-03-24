@@ -53,35 +53,49 @@ class ReservationController extends Controller
      */
     public function update(Request $request)
     {
-        $event_name = $request->event_name;
-        $start_date = $request->start_date;
-        $end_date = $request->end_date;
-        $start_time = $request->start_time;
-        $end_time = $request->end_time;
+        // $event_name = $request->event_name;
+        // $start_date = $request->start_date;
+        // $end_date = $request->end_date;
+        // $start_time = $request->start_time;
+        // $end_time = $request->end_time;
+        //
+        // $nights = $request->nights;
+        // $adults = $request->adults;
+        // $childs2to12 = $request->childs2to12;
+        // $childsto2 = $request->childsto2;
+        // $priceForNight = $request->priceForNight;
+        // $overallPriceForNight = $request->overallPriceForNight;
+        // DB::update(
+        //     'update reservations set
+        //             event_name = ?, start_date = ?, end_date = ?,
+        //             start_time = ?, end_time = ?, nights = ?,
+        //             adults = ?, childs2to12 = ?, childsto2 = ?,
+        //             priceForNight = ?, overallPriceForNight = ?
+        //             where username = ?',
+        //     [$event_name, $start_date, $end_date,
+        //              $start_time, $end_time, $nights,
+        //              $adults, $childs2to12, $childsto2,
+        //              $priceForNight, $overallPriceForNight, $request->username]
+        // );
 
-        $nights = $request->nights;
-        $adults = $request->adults;
-        $childs2to12 = $request->childs2to12;
-        $childsto2 = $request->childsto2;
-        $priceForNight = $request->priceForNight;
-        $overallPriceForNight = $request->overallPriceForNight;
-        DB::update(
-            'update reservations set
-                    event_name = ?, start_date = ?, end_date = ?,
-                    start_time = ?, end_time = ?, nights = ?,
-                    adults = ?, childs2to12 = ?, childsto2 = ?,
-                    priceForNight = ?, overallPriceForNight = ?
-                    where username = ?',
-            [$event_name, $start_date, $end_date,
-                     $start_time, $end_time, $nights,
-                     $adults, $childs2to12, $childsto2,
-                     $priceForNight, $overallPriceForNight, $request->username]
-        );
-        // $calendar->update($request->all());
+        $updateDetails = [
+            'event_name' => $request->event_name,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ];
+        $updateReservation = DB::table('reservations')
+                               ->where('id', $request->id)
+                               ->update($updateDetails);
+        // ->update(
+        //     [
+        //      'start_date', '=', $start_date,
+        //     'end_date', '=', $end_date,
+        //     'event_name', '=', $event_name
+        //   ]
+        // );
         return response()->json([
-          'message' => 'Successfully updated event!',
-          'status' => Response::HTTP_ACCEPTED
-      ]);
+            'message' => 'Successfully updated event!'
+        ]);
     }
 
     /**
@@ -90,8 +104,8 @@ class ReservationController extends Controller
      */
     public function destroy(Request $request)
     {
-        Reservation::where('username', $request->username)->delete();
+        Reservation::where('id', $request->id)->delete();
         // $calendar->delete();
-        return response('Event removed successfully!', Response::HTTP_NO_CONTENT);
+        return response('Event removed successfully!');
     }
 }

@@ -6,76 +6,81 @@
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card color="primary">
-          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search" sort-by="id" v-if="user == 'admin'" item-key="title"
+        <v-card>
+          <v-card-title>
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+              <v-btn color="primary" dark class="mb-2" @click="dialog = !dialog"> Nová rezervácia </v-btn>
+            </v-col>
+          </v-card-title>
+          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search" v-if="user == 'admin'" item-key="title"
             :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte">
             <template v-slot:top>
-              <v-toolbar flat>
-                <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
-                <!-- <v-spacer></v-spacer> -->
-                <v-row justify="center">
-                  <v-col cols="12" xl="6" lg="6" md="8" sm="12" xs="12">
-                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-                  </v-col>
-                  <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
-                    <v-dialog v-model="dialog" max-width="500px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Nová rezervácia </v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">{{ formTitle }}</span>
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container>
-                            <v-row>
-                              <v-col class="d-flex" cols="12" sm="12">
-                                <v-select :items="items" item-text="items" label="Status" v-model="newEvent.event_name"></v-select>
-                              </v-col>
-                            </v-row>
-                            <v-row>
-                              <v-col cols="12" sm="6">
-                                <v-menu v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field v-model="newEvent.start_date" label="Dátum začiatku" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
-                                  </template>
-                                  <v-date-picker id="start_date" name="start_date" v-model="newEvent.start_date" @input="menu1 = false"></v-date-picker>
-                                </v-menu>
-                              </v-col>
-                              <v-col cols="12" sm="6">
-                                <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field v-model="newEvent.end_date" label="Dátum konca" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
-                                  </template>
-                                  <v-date-picker id="end_date" name="end_date" v-model="newEvent.end_date" @input="menu2 = false"></v-date-picker>
-                                </v-menu>
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-                          <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                      <v-card>
-                        <v-card-title class="headline text-center">Naozaj chcete zmazať rezerváciu?</v-card-title>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="closeDelete">Zatvoriť</v-btn>
-                          <v-btn color="blue darken-1" text @click="deleteItemConfirm">Áno</v-btn>
-                          <v-spacer></v-spacer>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                  </v-col>
-                </v-row>
-                <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
-                <!-- <v-spacer></v-spacer> -->
-              </v-toolbar>
+              <!-- <v-toolbar flat> -->
+              <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
+              <!-- <v-spacer></v-spacer> -->
+              <v-row justify="center">
+                <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+                  <v-dialog v-model="dialog" max-width="500px">
+                    <!-- <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"> Nová rezervácia </v-btn>
+                  </template> -->
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">{{ formTitle }}</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col class="d-flex" cols="12" sm="12">
+                              <v-select :items="items" item-text="items" label="Status" v-model="newEvent.event_name"></v-select>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <v-menu style="z-index:52" v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field v-model="newEvent.start_date" label="Dátum začiatku" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                </template>
+                                <v-date-picker id="start_date" name="start_date" v-model="newEvent.start_date" @input="menu1 = false"></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <v-menu style="z-index:52" v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field v-model="newEvent.end_date" label="Dátum konca" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                </template>
+                                <v-date-picker id="end_date" name="end_date" v-model="newEvent.end_date" @input="menu2 = false"></v-date-picker>
+                              </v-menu>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
+                        <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-dialog v-model="dialogDelete" max-width="500px">
+                    <v-card>
+                      <v-card-title class="headline text-center">Naozaj chcete zmazať rezerváciu?</v-card-title>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="closeDelete">Zatvoriť</v-btn>
+                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">Áno</v-btn>
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+              <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
+              <!-- <v-spacer></v-spacer> -->
+              <!-- </v-toolbar> -->
             </template>
             <template v-slot:item.event_name="{ item }">
               <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
@@ -155,7 +160,7 @@ export default {
         event_name: "",
         start_date: "",
         end_date: "",
-        color: "",
+        // color: "",
         username: "",
       },
       user: localStorage.getItem("username"),
@@ -178,7 +183,7 @@ export default {
       headers: [{
         text: 'ID',
         align: 'id',
-        sortable: false,
+        sortable: true,
         value: 'id',
       }, {
         text: 'Status',
@@ -186,32 +191,38 @@ export default {
         sortable: false,
       }, {
         text: 'Dátum začiatku',
-        value: 'start_date'
+        value: 'start_date',
+        sortable: true,
       }, {
         text: 'Dátum konca',
-        value: 'end_date'
+        value: 'end_date',
+        sortable: true,
       }, {
         text: 'Používateľ',
         value: 'username',
-        sortable: false,
+        sortable: true,
       }, {
         text: 'Čas príchodu',
         value: 'start_time',
-        sortable: false,
+        sortable: true,
       }, {
         text: 'Čas odchodu',
         value: 'end_time',
         sortable: false,
       }, {
+        text: 'Počet nocí',
+        value: 'nights',
+        sortable: false,
+      }, {
         text: 'Počet osôb',
         value: 'adults',
-        sortable: false,
+        sortable: true,
       }, {
         text: 'Cena',
         value: 'overallPriceForNight',
-        sortable: false,
+        sortable: true,
       }, {
-        text: 'Actions',
+        text: 'Úkony',
         value: 'actions',
         sortable: false
       }, ],
@@ -226,10 +237,12 @@ export default {
         sortable: false,
       }, {
         text: 'Dátum začiatku',
-        value: 'start_date'
+        value: 'start_date',
+        sortable: true,
       }, {
         text: 'Dátum konca',
-        value: 'end_date'
+        value: 'end_date',
+        sortable: true,
       }, {
         text: 'Čas príchodu',
         value: 'start_time',
@@ -239,13 +252,17 @@ export default {
         value: 'end_time',
         sortable: false,
       }, {
+        text: 'Počet nocí',
+        value: 'nights',
+        sortable: true,
+      }, {
         text: 'Počet osôb',
         value: 'adults',
-        sortable: false,
+        sortable: true,
       }, {
         text: 'Cena',
         value: 'overallPriceForNight',
-        sortable: false,
+        sortable: true,
       }, ],
       editedIndex: -1,
       editedItem: {
@@ -290,7 +307,7 @@ export default {
       }
     },
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'Pridať rezerváciu' : 'Editácia rezervácie'
     },
   },
   watch: {
@@ -351,10 +368,10 @@ export default {
       this.editedIndex = this.currentEvents.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.newEvent.id = item.id;
-      this.newEvent.event_name = item.title;
-      this.newEvent.start_date = item.start;
-      this.newEvent.end_date = item.end;
-      this.newEvent.color = item.color;
+      this.newEvent.event_name = item.event_name;
+      this.newEvent.start_date = item.start_date;
+      this.newEvent.end_date = item.end_date;
+      // this.newEvent.color = item.color;
       this.newEvent.username = item.username;
       this.dialog = true
     },
@@ -365,7 +382,7 @@ export default {
     },
     deleteItemConfirm() {
       this.currentEvents.splice(this.editedIndex, 1)
-      axios.post('http://127.0.0.1:8000/api/calendar/delete', {
+      axios.post('http://127.0.0.1:8000/api/reservation/delete', {
           id: this.editedIndex
         })
         .then(() => {
@@ -391,19 +408,15 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         //update
-        if (this.newEvent.event_name == 'rezervované') {
-          this.newEvent.color = 'red';
-        } else {
-          this.newEvent.color = 'orange';
-        }
-        axios.post('http://127.0.0.1:8000/api/calendar/update', {
+        console.log(this.newEvent.event_name)
+        axios.post('http://127.0.0.1:8000/api/reservation/update', {
             id: this.newEvent.id,
             event_name: this.newEvent.event_name,
             start_date: this.newEvent.start_date,
             end_date: this.newEvent.end_date,
-            color: this.newEvent.color
           })
-          .then(() => {
+          .then((res) => {
+            console.log(res);
             this.getEvents();
           })
           .catch(err => console.log("Unable to update event!", err.response.data));
@@ -412,8 +425,7 @@ export default {
         //add
         this.newEvent.event_name = "rezervácia";
         this.newEvent.username = this.user;
-        this.newEvent.color = "orange";
-        axios.post('http://127.0.0.1:8000/api/calendar/store', {
+        axios.post('http://127.0.0.1:8000/api/reservation/store', {
             ...this.newEvent
           })
           .then(() => {

@@ -124,11 +124,11 @@
             <v-row justify="center">
               <v-col class="d-flex pb-0" cols="12" sm="6">
                 <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo>
-                  <template slot="selection" slot-scope="slotProps">
+                  <template class="select_language" slot="selection" slot-scope="slotProps">
                     <i :class="['mr-2', 'mdi', slotProps.item.flag]"></i>
                     {{slotProps.item.name}}
                   </template>
-                  <template v-slot:item="slotProps">
+                  <template class="select_language" v-slot:item="slotProps">
                     <i :class="['mr-2', 'mdi', slotProps.item.flag]"></i>
                     {{slotProps.item.name}}
                   </template>
@@ -280,6 +280,6 @@ export default {
 }
 
 .menuable__content__active {
-  z-index: 51 !important;
+  z-index: 204 !important;
 }
 </style>
