@@ -603,7 +603,7 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
-                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                            {{overallPriceForNight}} €</span>
                         </template>
                         <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
@@ -618,7 +618,7 @@
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
-              <v-btn color="primary" @click="update()">
+              <v-btn color="primary" @click="store()">
                 Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
               </v-btn>
             </v-stepper-content>
@@ -646,7 +646,7 @@ export default {
   data() {
     return {
       isActive: false,
-      e1: 5,
+      e1: 1,
       rules: [
 
       ],
@@ -667,6 +667,7 @@ export default {
       priceChildsto2: 0,
       priceChilds2to12: 18,
       countDaysBetweemTwoDates: null,
+      overallPriceForNight: 18,
 
       // contact form
       countries: ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua &amp; Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
@@ -907,9 +908,33 @@ export default {
       this.counter3 = 0;
     },
 
-    update() {
+    store() {
       if (this.step1 && this.step2 && this.step3 && this.step4) {
-        alert("yes vsetko ok");
+        const api = 'http://127.0.0.1:8000/api/reservation/store';
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.post(api, {
+            event_name: "rezervácia",
+            username: localStorage.getItem('username'),
+            start_date: this.start_date,
+            end_date: this.end_date,
+            start_time: this.start_time,
+            end_time: this.end_time,
+            nights: this.countDaysBetweemTwoDates,
+            adults: this.counter1,
+            childs2to12: this.counter2,
+            childsto2: this.counter3,
+            priceForNight: this.priceAdults,
+            overallPriceForNight: this.overallPriceForNight
+          }, config)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => console.log("nepodarilo sa pridat event", err));
       } else {
         alert("mas chyby");
       }
@@ -963,7 +988,6 @@ export default {
     },
   },
 
-
   created() {
     //add text that user was sucessfully registered
     // console.log(this.$store.getters['successMakeReservation'].success)
@@ -987,6 +1011,7 @@ export default {
     //   .asWeeks();
     this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
       .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
+    this.overallPriceForNight = this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates
   }
 }
 </script>

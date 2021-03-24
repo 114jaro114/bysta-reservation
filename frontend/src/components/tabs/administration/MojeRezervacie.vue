@@ -77,15 +77,22 @@
                 <!-- <v-spacer></v-spacer> -->
               </v-toolbar>
             </template>
-            <template v-slot:item.title="{ item }">
-              <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
+            <template v-slot:item.event_name="{ item }">
+              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
                 <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
                 <!-- {{ item.title }} -->
               </v-chip>
-              <v-chip :color="getColor(item.title)" dark v-else>
+              <v-chip :color="getColor(item.event_name)" dark v-else>
                 <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
                 <!-- {{ item.title }} -->
               </v-chip>
+            </template>
+            <template v-slot:item.adults="{ item }">
+              <span>{{parseInt(item.adults) + parseInt(item.childs2to12) + parseInt(item.childsto2)}}</span>
+            </template>
+
+            <template v-slot:item.overallPriceForNight="{ item }">
+              <span>{{item.overallPriceForNight}}€</span>
             </template>
             <template v-slot:item.actions="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
@@ -100,26 +107,29 @@
             <template v-slot:item.id="{ item }">
               <span>{{ currentEventsForOneUser.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
             </template>
-            <template v-slot:item.title="{ item }">
-              <v-chip :color="getColor(item.title)" dark v-if="item.title == 'rezervácia'">
+            <template v-slot:item.event_name="{ item }">
+              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
                 <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
                 <!-- {{ item.title }} -->
               </v-chip>
-              <v-chip :color="getColor(item.title)" dark v-else>
+              <v-chip :color="getColor(item.event_name)" dark v-else>
                 <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
                 <!-- {{ item.title }} -->
               </v-chip>
             </template>
-            <template v-slot:item.start="{ item }">
-              <span>{{ formatStart_date(item.start) }}</span>
+            <template v-slot:item.start_date="{ item }">
+              <span>{{ formatStart_date(item.start_date) }}</span>
             </template>
-            <template v-slot:item.end="{ item }">
-              <span>{{ formatEnd_date(item.end) }}</span>
+            <template v-slot:item.end_date="{ item }">
+              <span>{{ formatEnd_date(item.end_date) }}</span>
             </template>
 
-            <template v-slot:item.username="{ item }">
-              <v-icon>mdi-account</v-icon>
-              <span>{{item.username}}</span>
+            <template v-slot:item.adults="{ item }">
+              <span>{{parseInt(item.adults) + parseInt(item.childs2to12) + parseInt(item.childsto2)}}</span>
+            </template>
+
+            <template v-slot:item.overallPriceForNight="{ item }">
+              <span>{{item.overallPriceForNight}}€</span>
             </template>
           </v-data-table>
         </v-card>
@@ -167,22 +177,38 @@ export default {
       },
       headers: [{
         text: 'ID',
-        align: 'start',
+        align: 'id',
         sortable: false,
         value: 'id',
       }, {
         text: 'Status',
-        value: 'title',
+        value: 'event_name',
         sortable: false,
       }, {
         text: 'Dátum začiatku',
-        value: 'start'
+        value: 'start_date'
       }, {
         text: 'Dátum konca',
-        value: 'end'
+        value: 'end_date'
       }, {
         text: 'Používateľ',
         value: 'username',
+        sortable: false,
+      }, {
+        text: 'Čas príchodu',
+        value: 'start_time',
+        sortable: false,
+      }, {
+        text: 'Čas odchodu',
+        value: 'end_time',
+        sortable: false,
+      }, {
+        text: 'Počet osôb',
+        value: 'adults',
+        sortable: false,
+      }, {
+        text: 'Cena',
+        value: 'overallPriceForNight',
         sortable: false,
       }, {
         text: 'Actions',
@@ -191,22 +217,34 @@ export default {
       }, ],
       headers2: [{
         text: 'ID',
-        align: 'start',
+        align: 'id',
         sortable: false,
         value: 'id',
       }, {
         text: 'Status',
-        value: 'title',
+        value: 'event_name',
         sortable: false,
       }, {
         text: 'Dátum začiatku',
-        value: 'start'
+        value: 'start_date'
       }, {
         text: 'Dátum konca',
-        value: 'end'
+        value: 'end_date'
       }, {
-        text: 'Používateľ',
-        value: 'username',
+        text: 'Čas príchodu',
+        value: 'start_time',
+        sortable: false,
+      }, {
+        text: 'Čas odchodu',
+        value: 'end_time',
+        sortable: false,
+      }, {
+        text: 'Počet osôb',
+        value: 'adults',
+        sortable: false,
+      }, {
+        text: 'Cena',
+        value: 'overallPriceForNight',
         sortable: false,
       }, ],
       editedIndex: -1,
@@ -228,11 +266,13 @@ export default {
       },
       items: ['rezervácia', 'rezervované'],
       myloadingvariable: true,
+      numberOfPersons: null,
     }
   },
   async created() {
     try {
-      let response = await axios.get('http://127.0.0.1:8000/api/calendar')
+      let response = await axios.get('http://127.0.0.1:8000/api/reservation')
+      console.log(response);
       this.currentEvents = response.data.data
       this.searched = this.currentEvents
     } catch (err) {
@@ -277,13 +317,14 @@ export default {
       this.$router.push("/administration/create_reservation");
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/calendar')
+      axios.get('http://127.0.0.1:8000/api/reservation')
         .then(resp => {
-          this.currentEvents = resp.data.data
+          console.log(resp.data);
+          this.currentEvents = resp.data
           this.searched = this.currentEvents
-          for (var i = 0; i < resp.data.data.length; i++) {
-            if (resp.data.data[i].username == this.user) {
-              this.currentEventsForOneUser.push(resp.data.data[i]);
+          for (var i = 0; i < resp.data.length; i++) {
+            if (resp.data[i].username == this.user) {
+              this.currentEventsForOneUser.push(resp.data[i]);
             }
           }
           // console.log(this.currentEventsForOneUser);

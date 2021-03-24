@@ -11,6 +11,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendshipsController;
 use App\Http\Controllers\ValidateRegisterLogin;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReservationController;
 use App\Traits\Friendable;
 use App\Models\User;
 
@@ -79,6 +80,11 @@ Route::get('/calendar', [CalendarController::class, 'index']);
 Route::post('/calendar/store', [CalendarController::class, 'store']);
 Route::post('/calendar/update', [CalendarController::class, 'update']);
 Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
+
+Route::get('/reservation', [ReservationController::class, 'index']);
+Route::post('/reservation/store', [ReservationController::class, 'store']);
+Route::post('/reservation/update', [ReservationController::class, 'update']);
+Route::post('/reservation/delete', [ReservationController::class, 'destroy']);
 
 Route::get('/rating', [RatingController::class, 'index']);
 Route::post('/rating/store', [RatingController::class, 'store']);
