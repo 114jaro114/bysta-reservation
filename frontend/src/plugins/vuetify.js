@@ -2,8 +2,15 @@ import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 import '@mdi/font/css/materialdesignicons.css';
+import {
+  Ripple
+} from 'vuetify/lib/directives';
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  directives: {
+    Ripple
+  }
+});
 // import colors from 'vuetify/lib/util/colors'
 // https://lobotuerto.com/vuetify-color-theme-builder/#generated-code
 export default new Vuetify({

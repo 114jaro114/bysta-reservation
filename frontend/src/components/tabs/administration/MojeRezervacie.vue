@@ -40,7 +40,7 @@
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6">
-                              <v-menu style="z-index:52" v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                              <v-menu v-model="menu1" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-text-field v-model="newEvent.start_date" label="Dátum začiatku" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                 </template>
@@ -48,7 +48,7 @@
                               </v-menu>
                             </v-col>
                             <v-col cols="12" sm="6">
-                              <v-menu style="z-index:52" v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+                              <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-text-field v-model="newEvent.end_date" label="Dátum konca" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                 </template>
