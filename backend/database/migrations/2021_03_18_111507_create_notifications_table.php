@@ -16,7 +16,10 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('to')->unsigned();
+            $table->text('title');
+            $table->text('subtitle');
             $table->text('text');
+            $table->text('date');
             $table->string('status');
             $table->timestamps();
         });

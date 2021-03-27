@@ -82,7 +82,7 @@
 </template>
 <script>
 import axios from 'axios';
-
+import moment from 'moment'
 export default {
   name: "RegisterForm",
   props: {},
@@ -196,8 +196,12 @@ export default {
             };
             axios.post(api, {
                 recipient: res.data.user.id,
-                text: "Vítame Vás na stránke chaty Byšta. Pre akékoľvek informácie nás neváhajte kontaktovať cez messenger alebo email.",
-                status: "WelcomeNotif"
+                title: "Chata Byšta",
+                subtitle: "Vítame Vás na stránke chaty Byšta",
+                text: "Pre akékoľvek informácie nás neváhajte kontaktovať cez messenger alebo email.",
+                date: moment(new Date())
+                  .format('YYYY-MM-DD HH:mm'),
+                status: "new",
               }, config)
               .then(() => {})
 

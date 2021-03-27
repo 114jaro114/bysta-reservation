@@ -3,7 +3,7 @@
   <v-lazy :options="{
             threshold: .8
           }" transition="fade-transition">
-    <v-row justify="center" class="ml-0 mr-0" v-if="this.$store.getters['notificationCounter'] === 0">
+    <v-row justify="center" class="ml-0 mr-0">
       <v-col>
         <!-- <v-lazy v-model="isActive" :options="{
           threshold: .5
@@ -13,20 +13,24 @@
         </v-btn>
         <!-- </v-lazy> -->
         <v-text-field v-model="form.recipient" label="meno">meno</v-text-field>
+        <v-text-field v-model="form.title" label="text">text</v-text-field>
+        <v-text-field v-model="form.subtitle" label="text">text</v-text-field>
         <v-text-field v-model="form.text" label="text">text</v-text-field>
+        <v-text-field v-model="form.date" label="text">text</v-text-field>
         <v-text-field v-model="form.status" label="status">status</v-text-field>
         <v-btn @click="methodName">odoslat</v-btn>
       </v-col>
     </v-row>
-    <v-row justify="center" class="ml-0 mr-0" v-else>
+    <v-row justify="center" class="ml-0 mr-0">
       <v-col v-for="(item, i) in notif" :key="i" cols="12">
         <v-card color="primary" dark>
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
-              <v-card-title class="headline" v-text="item.status"></v-card-title>
+              <v-card-title class="headline" v-text="item.headline"></v-card-title>
 
-              <v-card-subtitle v-text="item.text"></v-card-subtitle>
-
+              <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
+              <v-card-text v-text="item.title"></v-card-text>
+              <span>{{item.tittle}}</span>
               <v-card-actions>
                 <v-btn class="ml-2 mt-3" fab icon small>
                   <v-icon>mdi-star-box-multiple-outline</v-icon>
@@ -73,7 +77,10 @@
             </div>
 
             <v-avatar class="ma-3" size="125" tile>
-              <v-img :src="item.src"></v-img>
+              <v-btn class="ml-2 mt-3" fab icon small @click="deleteNotif = true">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+              <!-- <v-img :src="item.src"></v-img> -->
             </v-avatar>
           </div>
         </v-card>
@@ -92,9 +99,12 @@ export default {
     return {
       isActive: true,
       form: {
-        recipient: null,
-        text: null,
-        status: null,
+        recipient: 1,
+        title: 'cau',
+        subtitle: 'cau',
+        text: 'cau',
+        date: '2021-03-27 16-00',
+        status: 'new',
       },
       notif: [],
       notifCount: 0,
@@ -137,7 +147,10 @@ export default {
       };
       axios.post(api, {
           recipient: this.form.recipient,
+          title: this.form.title,
+          subtitle: this.form.subtitle,
           text: this.form.text,
+          date: this.form.date,
           status: this.form.status
         }, config)
         .then(() => {

@@ -21,7 +21,10 @@ class NotificationsController extends Controller
     {
         $notification = Notification::create([
             'to' => $request->recipient,
+            'title' => $request->title,
+            'subtitle' => $request->subtitle,
             'text' => $request->text,
+            'date' => $request->date,
             'status' => $request->status,
         ]);
 
@@ -32,8 +35,10 @@ class NotificationsController extends Controller
 
     public function deleteNotification(Request $request)
     {
-        Notification::where('id', $request->id)->delete();
-
-        return response()->json("successfully deleted notification");
+        foreach ($request->ids as $ids):
+          Notification::where('id', $ids)->delete();
+        endforeach;
+        // + "successfully deleted notification"
+        return response()->json($request->ids);
     }
 }
