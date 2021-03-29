@@ -8,25 +8,34 @@
         <v-card>
           <v-toolbar class="notiftoolbar" extended extension-height="4" color="primary" dark>
             <div class="w-75" v-if="selected.length == '0'">
-              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable"></v-text-field>
-              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable"></v-text-field>
+              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable || notif.length == 0"></v-text-field>
+              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable && notif.length != 0"></v-text-field>
             </div>
 
             <div v-else>
-              <v-btn fab icon small>
-                <v-icon>mdi-star-box-multiple-outline</v-icon>
-              </v-btn>
-
-              <v-btn fab icon small @click="deleteNotif = !deleteNotif">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn fab icon small @click="addToRelevant = !addToRelevant" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-star-box-multiple-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>Pridať do dôležitých</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn fab icon small @click="deleteNotif = !deleteNotif" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+                <span>Vymazať</span>
+              </v-tooltip>
             </div>
 
             <v-spacer></v-spacer>
 
             <span style="font-size:12px">Označiť všetko</span>
-            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="myloadingvariable"></v-checkbox>
-            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable"></v-checkbox>
+            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="myloadingvariable || notif.length == 0"></v-checkbox>
+            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable && notif.length != 0"></v-checkbox>
 
             <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
           </v-toolbar>
@@ -43,9 +52,10 @@
                 </v-btn>
               </v-list-item>
 
-              <v-list-item class="justify-center" v-if="notif.length == 0 && !myloadingvariable" disabled>
-                <v-btn color="primary" icon width="170px" height="170px">
-                  <v-icon style="font-size: 150px">mdi-bell-cancel</v-icon>
+              <v-list-item class="justify-center" v-else-if="notif.length == 0 && !myloadingvariable" disabled>
+                <v-btn color="primary" icon width="50px" height="50px">
+                  <v-icon style="font-size: 50px">mdi-bell-cancel</v-icon>
+                  <span class="ml-3">Žiadne notifikácie</span>
                 </v-btn>
               </v-list-item>
               <template v-else v-for="(item, index) in filteredItems">
@@ -80,7 +90,7 @@
                 </v-list-item> -->
 
                 <!-- list notif -->
-                <v-list-item class="p-0" :key="item.title" v-if="!myloadingvariable">
+                <v-list-item class="p-0" :key="item.id" v-if="!myloadingvariable">
                   <template v-slot:default="{ active }">
                     <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
                       <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -108,6 +118,16 @@
                   <v-icon>mdi-check</v-icon>
                 </v-btn>
                 <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="deleteNotif = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-snackbar>
+
+              <v-snackbar :timeout="-1" :value="addToRelevant" absolute centered color="primary" elevation="24">
+                Naozaj chcete Uložiťit notifikáciu/e do dôležitých?
+                <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="addToRelevant = false; addNotificationsToRelevant(item)">
+                  <v-icon>mdi-check</v-icon>
+                </v-btn>
+                <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="addToRelevant = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-snackbar>
@@ -187,6 +207,7 @@ export default {
       },
       // notif snackbars
       deleteNotif: false,
+      addToRelevant: false,
       snackbar: false,
       multiLine: true,
       text: ''
@@ -259,7 +280,7 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
-          const api = `http://127.0.0.1:8000/api/getNotification/${localStorage.getItem('user_id')}`;
+          const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -270,19 +291,45 @@ export default {
             .then(res => {
               console.log(res)
               this.notif = res.data;
-              this.notifCount = res.data.length;
-              this.$store.dispatch('notificationCounter', {
-                notifCounter: this.notifCount
-              });
             });
         })
-    }
+    },
+
+    addNotificationsToRelevant() {
+      this.snackbar = true;
+      this.text = "Notifikácia/cie bola/i premiestnená/é do časti dôležité";
+      const api = 'http://127.0.0.1:8000/api/addToRelevant';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+
+      axios.post(api, {
+          ids: this.selectedAll,
+        }, config)
+        .then(() => {
+          const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("authToken"),
+            },
+          };
+          axios.get(api, config)
+            .then(res => {
+              console.log(res)
+              this.notif = res.data;
+            });
+        })
+    },
   },
 
   mounted() {
     //do something after mounting vue instance
     //do something after mounting vue instance
-    const api = `http://127.0.0.1:8000/api/getNotification/${localStorage.getItem('user_id')}`;
+    const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -296,6 +343,7 @@ export default {
         this.notif = res.data;
       });
   },
+
   computed: {
     filteredItems() {
       return _.orderBy(this.notif.filter(item => {

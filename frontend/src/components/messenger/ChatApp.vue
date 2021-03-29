@@ -77,8 +77,8 @@
       <v-icon>mdi-alert-circle</v-icon>
       {{ text }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-          Zrušiť
+        <v-btn color="white" fab small text v-bind="attrs" @click="snackbar = false">
+          <v-icon>mdi-close-circle</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
@@ -123,6 +123,7 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
+        console.log("hmmm");
         this.contacts = res.data;
         this.users = res.data
         this.$store.dispatch('contactListLoader', {

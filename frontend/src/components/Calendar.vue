@@ -57,9 +57,23 @@
           <v-btn color="primary" @click="resetDate" outlined>
             Resetovať výber
           </v-btn>
+
+          <v-divider></v-divider>
         </div>
       </template>
     </DatePicker2>
+    <v-row class="w-100 justify-center">
+      <v-col>
+        <v-icon color="orange">mdi-rectangle</v-icon>
+        <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+      </v-col>
+    </v-row>
+    <v-row class="w-100 justify-center">
+      <v-col>
+        <v-icon color="red">mdi-rectangle</v-icon>
+        <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+      </v-col>
+    </v-row>
   </v-card>
   <!-- </div> -->
 </div>
@@ -176,7 +190,7 @@ export default {
           },
           popover: {
             slot: 'add-todo',
-            label: todo.event_name + ' používateľa ' + todo.username,
+            label: todo.event_name + ' - používateľ ' + todo.username,
             visibility: 'focus',
             // hideIndicator: true,
           },

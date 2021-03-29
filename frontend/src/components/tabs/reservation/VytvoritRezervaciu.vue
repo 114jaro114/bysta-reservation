@@ -16,6 +16,21 @@
             </v-btn>
           </template>
         </v-snackbar>
+
+        <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" :left="true">
+          <v-icon>mdi-check-circle</v-icon>
+          {{ text }}
+
+          <template v-slot:action="{ attrs }">
+            <v-btn color="white" to="/administration" text small v-bind="attrs" @click="snackbarSuccess = false">
+              <v-icon>mdi-clipboard-arrow-up</v-icon>
+              <span>prejsť do administrácia</span>
+            </v-btn>
+            <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </div>
       <v-col class="pl-0 pr-0">
         <!-- <v-lazy v-model="isActive" :options="{
@@ -56,18 +71,32 @@
               <small v-if="step5 == false">Chyba</small>
             </v-stepper-step>
           </v-stepper-header>
-
           <v-stepper-items class="h-100">
             <v-stepper-content step="1">
+              <div v-if="this.$store.getters['pendingReservation'] != 0">
+                <span>
+                  <v-icon color="orange">mdi-information</v-icon>Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
+                </span>
+              </div>
               <Calendar />
+              <div v-if="this.$store.getters['pendingReservation'] == 0">
+                <v-btn color="accent" disabled class="mr-2" outlined>
+                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                </v-btn>
 
-              <v-btn color="accent" disabled class="mr-2" outlined>
-                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
+                <v-btn color="primary" @click="checkStatus()">
+                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                </v-btn>
+              </div>
+              <div class="" v-else>
+                <v-btn color="accent" disabled class="mr-2" outlined>
+                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                </v-btn>
 
-              <v-btn color="primary" @click="checkStatus()">
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-              </v-btn>
+                <v-btn color="primary" @click="checkStatus()" disabled>
+                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                </v-btn>
+              </div>
             </v-stepper-content>
 
             <v-stepper-content step="2">
@@ -733,6 +762,7 @@ export default {
       // Snackbar
       multiLine: true,
       snackbar: false,
+      snackbarSuccess: false,
       text: '',
     }
   },
@@ -758,6 +788,14 @@ export default {
           this.country = res.data[0].country;
           this.myPhone = res.data[0].phone;
         }
+      });
+
+    const api2 = `http://127.0.0.1:8000/api/checkPendingReservation/${localStorage.getItem('username')}`;
+    axios.get(api2, config)
+      .then(res => {
+        this.$store.dispatch('pendingReservation', {
+          count: res.data
+        });
       });
   },
 
@@ -931,8 +969,30 @@ export default {
             priceForNight: this.priceAdults,
             overallPriceForNight: this.overallPriceForNight
           }, config)
-          .then(res => {
-            console.log(res);
+          .then(() => {
+            const api = 'http://127.0.0.1:8000/api/sendNotification';
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
+            axios.post(api, {
+                recipient: localStorage.getItem('user_id'),
+                title: "Chata Byšta",
+                subtitle: "Úspešne vytvorenie rezervácie",
+                text: `Vážený ${localStorage.getItem('username')}, rezervácia bola úspešne vytvorená a čaká sa na jej potvrdenie. Stav Vašej rezervácie môžete sledovať v časti 'Administrácia'. `,
+                date: moment(new Date())
+                  .format('YYYY-MM-DD HH:mm'),
+                status: "new",
+              }, config)
+              .then(() => {})
+            this.snackbarSuccess = true;
+            this.text = "Rezervácia bola úspešne vytvorená!";
+            setTimeout(function() {
+              this.$router.push("/Administration");
+            }, 3000);
+
           })
           .catch(err => console.log("nepodarilo sa pridat event", err));
       } else {

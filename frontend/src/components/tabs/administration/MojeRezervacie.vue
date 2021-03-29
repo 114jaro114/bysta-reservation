@@ -8,10 +8,10 @@
       <v-col>
         <v-card>
           <v-card-title>
-            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
             </v-col>
-            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
               <v-btn color="primary" dark class="mb-2" @click="dialog = !dialog"> Nová rezervácia </v-btn>
             </v-col>
           </v-card-title>
@@ -84,11 +84,11 @@
             </template>
             <template v-slot:item.event_name="{ item }">
               <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
-                <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
+                <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
                 <!-- {{ item.title }} -->
               </v-chip>
               <v-chip :color="getColor(item.event_name)" dark v-else>
-                <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
+                <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
                 <!-- {{ item.title }} -->
               </v-chip>
             </template>
@@ -114,11 +114,11 @@
             </template>
             <template v-slot:item.event_name="{ item }">
               <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
-                <i class="fas fa-clock pr-1" style="color: orange"></i> <span>Čaká sa</span>
+                <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
                 <!-- {{ item.title }} -->
               </v-chip>
               <v-chip :color="getColor(item.event_name)" dark v-else>
-                <i class="fas fa-check-circle pr-1" style="color: green"></i> <span>Akceptované</span>
+                <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
                 <!-- {{ item.title }} -->
               </v-chip>
             </template>
@@ -357,8 +357,8 @@ export default {
     },
     //vueify table
     getColor(title) {
-      if (title == 'rezervacia') return 'orange'
-      else if (title == 'rezervované') return 'red'
+      if (title == 'rezervácia') return 'orange'
+      else if (title == 'rezervované') return 'green'
     },
     initialize() {
       this.currentEvents;
@@ -416,7 +416,23 @@ export default {
             end_date: this.newEvent.end_date,
           })
           .then((res) => {
-            console.log(res);
+            const api = 'http://127.0.0.1:8000/api/sendNotification';
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
+            axios.post(api, {
+                recipient: res.data[0].id,
+                title: "Chata Byšta",
+                subtitle: "Potvrdenie rezervácie",
+                text: "Dobrý deň, Vaša rezervácia bola potvrdená. Tešíme sa na Vašu návštevu.",
+                date: moment(new Date())
+                  .format('YYYY-MM-DD HH:mm'),
+                status: "new",
+              }, config)
+              .then(() => {})
             this.getEvents();
           })
           .catch(err => console.log("Unable to update event!", err.response.data));

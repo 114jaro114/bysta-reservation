@@ -62,7 +62,8 @@ Route::post('/broadcast', function (Request $request) {
         'scheme' => 'http',
         )
     );
-    return $pusher->presence_auth($request->request->get('channel_name'), $request->request->get('socket_id'), $request->contact_id, $request->text);
+    return $pusher->presence_auth($request->request->get('channel_name'), $request->request->get('socket_id'), $request->contact_id);
+    // return $pusher->presence_auth($request->request->get('channel_name'), $request->request->get('socket_id'), $request->contact_id, $request->text);
     // return $pusher->socket_auth($request->request->get('channel_name'), $request->request->get('socket_id'));
 });
 
@@ -82,6 +83,7 @@ Route::post('/calendar/update', [CalendarController::class, 'update']);
 Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
 
 Route::get('/reservation', [ReservationController::class, 'index']);
+Route::get('/checkPendingReservation/{username}', [ReservationController::class, 'checkPendingReservation']);
 Route::post('/reservation/store', [ReservationController::class, 'store']);
 Route::post('/reservation/update', [ReservationController::class, 'update']);
 Route::post('/reservation/delete', [ReservationController::class, 'destroy']);
@@ -119,7 +121,12 @@ Route::get('/getContactForm', [FriendshipsController::class, 'getContactForm']);
 //notifications
 Route::post('/sendNotification', [NotificationsController::class, 'sendNotification']);
 Route::post('/deleteNotification', [NotificationsController::class, 'deleteNotification']);
+Route::post('/addToRelevant', [NotificationsController::class, 'addToRelevant']);
+Route::post('/markAsRead', [NotificationsController::class, 'markAsRead']);
 Route::get('/getNotification/{id}', [NotificationsController::class, 'getNotification']);
+Route::get('/getNotificationAll/{id}', [NotificationsController::class, 'getNotificationAll']);
+Route::get('/getNotificationNew/{id}', [NotificationsController::class, 'getNotificationNew']);
+Route::get('/getNotificationRelevant/{id}', [NotificationsController::class, 'getNotificationRelevant']);
 
 //
 // Route::get('test', function () {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -86,16 +87,16 @@ class ReservationController extends Controller
         $updateReservation = DB::table('reservations')
                                ->where('id', $request->id)
                                ->update($updateDetails);
-        // ->update(
-        //     [
-        //      'start_date', '=', $start_date,
-        //     'end_date', '=', $end_date,
-        //     'event_name', '=', $event_name
-        //   ]
-        // );
-        return response()->json([
-            'message' => 'Successfully updated event!'
-        ]);
+
+        $username = Reservation::where('id', $request->id)
+                       ->select('username')
+                       ->get();
+                       
+        $user_id = DB::table('users')
+                     ->where('name', $username[0]->username)
+                     ->select('id')
+                     ->get();
+        return response()->json($user_id);
     }
 
     /**
@@ -107,5 +108,10 @@ class ReservationController extends Controller
         Reservation::where('id', $request->id)->delete();
         // $calendar->delete();
         return response('Event removed successfully!');
+    }
+
+    public function checkPendingReservation($username)
+    {
+        return Reservation::where([['username', '=', $username],['event_name', '=', 'rezervácia']])->count();
     }
 }

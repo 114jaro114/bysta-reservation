@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\Notification;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,9 @@ Broadcast::channel('allUnreadMessages.{id}', function ($user, $id) {
 });
 
 //channel for Notifications
-Broadcast::channel('notif-channel', function ($user) {
-    return $user;
+Broadcast::channel('notif-channel.{id}', function ($user, Notification $notifications) {
+    return $user->id === $notifications->to;
+    // return $user->id === (int) $id;
 });
 
 // This is only for testing purposes

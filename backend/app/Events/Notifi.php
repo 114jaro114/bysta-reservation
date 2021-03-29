@@ -33,6 +33,6 @@ class Notifi implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('notif-channel');
+        return new PresenceChannel('notif-channel.' . $this->notification->to);
     }
 }

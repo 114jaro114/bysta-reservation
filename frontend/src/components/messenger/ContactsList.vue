@@ -1,38 +1,19 @@
 <template lang="html">
   <div class="contacts-list">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-0 pr-0">
         <v-card elevation="0">
-          <!-- <v-card-title class="justify-center">
-            <v-icon class="mr-1 primary--text" large>mdi-account-group</v-icon>
-            <span class="primary--text">Zoznam priateľov</span>
-          </v-card-title>
-          <v-divider class="mt-0" /> -->
-        <v-card-text class="p-0">
-          <!-- <v-row justify="center" class="ml-0 mr-0 position-relative" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }"> -->
-            <!-- <div class="row mr-0 ml-0 pl-1 w-100 position-relative" style="color: #6c757d" v-for="contact in sortedContacts" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }"> -->
-              <!-- <div style="width:20px;text-align:left" v-if="contact.status == 'online'">
-                <span class="status online"></span>
-              </div>
-              <div style="width:20px;text-align:left" v-else>
-                <span class="status offline"></span>
-              </div> -->
-              <!-- <div class="avatar">
-                <img :src="contact.profile_image" :alt="contact.name">
-            </div> -->
+          <v-card-text class="p-0">
             <v-data-table no-data-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="contacts" :search="search"  :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" elevation="0">
               <template v-slot:top>
-                <v-toolbar flat>
-                  <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
-                  <!-- <v-spacer></v-spacer> -->
+                <v-toolbar color="primary" dark>
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-                  <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
                   <v-spacer class="mr-1 ml-1"></v-spacer>
-                  <v-btn color="primary" class="mb-2" to="/profile/add_friends" fab small ><v-icon>mdi-account-plus</v-icon></v-btn>
+                  <v-btn color="secondary primary--text" to="/profile/add_friends" fab small ><v-icon>mdi-account-plus</v-icon></v-btn>
                 </v-toolbar>
               </template>
               <template v-slot:item="{ item }" >
-                <div class="p-3" :key="item.id" @click="selectContact(item)" :class="{ 'selected': item == selected }">
+                <div class="p-3" >
                   <v-badge bottom dot bordered :color="getColor(item.status)" offset-x="10" offset-y="10" class="mr-2">
                     <v-avatar color="primary" size="48" v-if="item.avatar == null">
                       <span class="text-uppercase secondary--text">{{ item.name.charAt(0) }}</span>
@@ -45,61 +26,22 @@
                   <v-badge :content="item.unread" :value="item.unread" color="orange">
                     {{ item.name }}
                   </v-badge>
+
+                  <v-btn class="ml-5" color="accent" :key="item.id" @click="selectContact(item)" :class="{ 'selected': item == selected }" text icon large>
+                    <v-icon >
+                      mdi-message-outline
+                    </v-icon>
+                  </v-btn>
                 </div>
                 <!-- <v-chip :color="getColor(item.status)">
                   {{ item.status }}
                 </v-chip> -->
               </template>
             </v-data-table>
-            <!-- <div v-if="contact.status == 'online'">
-              <v-badge bordered bottom dot inline left color="success">
-              </v-badge>
-              <v-badge :content="contact.unread" :value="contact.unread" color="primary">
-                {{ contact.name }}
-              </v-badge>
-            </div>
-            <div v-else>
-              <v-badge bordered bottom dot inline left color="error">
-              </v-badge>
-              <v-badge :content="contact.unread" :value="contact.unread" color="primary" overlap>
-                {{ contact.name }}
-              </v-badge>
-            </div> -->
-              <!-- <div class="contact">
-                <span>{{ contact.name }}</span>
-              </div>
-              <div class="unread" v-if="contact.unread">
-                <span>{{ contact.unread }}</span>
-              </div> -->
-            <!-- </v-row> -->
-            <!-- </div> -->
-            <!-- {{message}} -->
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-    <!-- <v-text-field
-      ref="ta"
-      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-      :append-outer-icon="message ? 'mdi-send' : 'mdi-microphone'"
-      :prepend-icon="icon"
-      :type="show2 ? 'text' : 'password'"
-      filled
-      clearable
-      auto-grow
-      counter
-      rows="1"
-      clear-icon="mdi-close"
-      label="Správa"
-      v-model="message"
-      @click:append="show2 = !show2"
-      @click:prepend="changeIcon"
-      @click:clear="clearMessage"
-    ></v-text-field>
-    <div v-if="autoselectMenu"> -->
-      <!-- <VEmojiPicker @click="selectEmoji" /> -->
-      <!-- <picker :color="`${$vuetify.theme.themes[isDark].primary}`" :showSearch="false" :showPreview="false" :set="'messenger'" :showSkinTones="true" :emojiTooltip="true" :infiniteScroll="false" @select="selectEmoji" :i18n="i18n" />
-    </div> -->
   </div>
 </template>
 <script>
@@ -239,6 +181,9 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
+    this.$store.dispatch('contactListLoader', {
+      cancelLoader: true
+    });
   },
 
   created() {

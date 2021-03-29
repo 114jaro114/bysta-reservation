@@ -60,6 +60,7 @@ export default new Vuex.Store({
     notificationCounter: null,
     msgUnreadCounter: 0,
     ratingState: true,
+    pendingReservation: 0,
   },
   getters: {
     Data: state => {
@@ -108,6 +109,10 @@ export default new Vuex.Store({
 
     ratingState: state => {
       return state.ratingState
+    },
+
+    pendingReservation: state => {
+      return state.pendingReservation
     },
   },
   mutations: {
@@ -180,6 +185,10 @@ export default new Vuex.Store({
     mutationRatingState: (state, payload) => {
       state.ratingState = payload.state
     },
+
+    mutationPendingReservation: (state, payload) => {
+      state.pendingReservation = payload.count
+    },
   },
   actions: {
     showProfile: (context, payload) => {
@@ -227,6 +236,10 @@ export default new Vuex.Store({
 
     ratingState: (context, payload) => {
       context.commit('mutationRatingState', payload)
+    },
+
+    pendingReservation: (context, payload) => {
+      context.commit('mutationPendingReservation', payload)
     },
   }
 });

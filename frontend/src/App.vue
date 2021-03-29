@@ -80,10 +80,11 @@ export default {
           }
         })
       //for notifications
-      window.Echo.join('notif-channel')
+      window.Echo.join('notif-channel.' + localStorage.getItem("user_id"))
         .listen('Notifi', (e) => {
-          this.notifCount += 1;
-          if (e.notification.to == localStorage.getItem("user_id")) {
+          // this.notifCount = this.$store.getters['notificationCounter'];
+          if (e.notification.status == 'new') {
+            this.notifCount += 1;
             this.$store.dispatch('notificationCounter', {
               notifCounter: this.notifCount
             });
@@ -128,7 +129,7 @@ export default {
 
     //get all new notifications after refresh page
     const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
-    const api2 = `http://127.0.0.1:8000/api/getNotification/${localStorage.getItem('user_id')}`;
+    const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
     const api3 = 'http://127.0.0.1:8000/api/rating';
     const config = {
       headers: {
@@ -173,9 +174,12 @@ export default {
   },
   updated() {
     //do something after updating vue instance
+    this.notifCount = this.$store.getters['notificationCounter'];
+
     const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
-    const api2 = `http://127.0.0.1:8000/api/getNotification/${localStorage.getItem('user_id')}`;
+    const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
     const api3 = 'http://127.0.0.1:8000/api/rating';
+    // const api4 = `http://127.0.0.1:8000/api/checkPendingReservation/${localStorage.getItem('username')}`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -211,6 +215,13 @@ export default {
           }
         })
     }
+    // axios.get(api4, config)
+    //   .then(res => {
+    //     this.$store.dispatch('pendingReservation', {
+    //       count: res.data
+    //     });
+    //   });
+    this.notifCount = this.$store.getters['notificationCounter'];
     console.log("App compoennt updated");
   }
 }
