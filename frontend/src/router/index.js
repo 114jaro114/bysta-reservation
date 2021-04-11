@@ -171,11 +171,18 @@ const routes = [{
     name: 'Administration',
     component: Administration,
     children: [{
-      path: '/administration',
-      name: 'MojeRezervacie',
-      component: require('../components/tabs/administration/MojeRezervacie.vue')
-        .default
-    }, ],
+        path: '/administration',
+        name: 'MojeRezervacie',
+        component: require('../components/tabs/administration/MojeRezervacie.vue')
+          .default
+      },
+      {
+        path: '/administration/details',
+        name: 'Detaily',
+        component: require('../components/tabs/administration/Details.vue')
+          .default
+      },
+    ],
   },
   {
     path: '/reservation',
@@ -222,11 +229,12 @@ const routes = [{
     component: AvatarImage
   },
 
-  // {
-  //   path: '/comment',
-  //   name: 'Comment',
-  //   component: Comment
-  // },
+  {
+    path: '/auth/:provider/callback',
+    component: {
+      template: '<div class="auth-component"></div>'
+    }
+  },
 ]
 
 const router = new VueRouter({

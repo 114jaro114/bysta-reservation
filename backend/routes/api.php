@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OutController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ContactsController;
@@ -134,6 +135,9 @@ Route::get('/getNotificationRelevant/{id}', [NotificationsController::class, 'ge
 //     return 'hej';
 // });
 
+//social auth
+// Route::post('/sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
+// Route::get('/auth/{provider}/callback', [OutController::class, 'index']->where('provider', '.*'));
 
 //Traits
 Route::get('/check_relationship_status/{id}', [FriendshipsController::class, 'check']);

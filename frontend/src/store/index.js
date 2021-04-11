@@ -29,6 +29,8 @@ export default new Vuex.Store({
       event_name: '',
       start_date: '',
       end_date: '',
+      start_time: '',
+      end_time: '',
       username: '',
     },
 
@@ -144,6 +146,8 @@ export default new Vuex.Store({
       Vue.set(state.successReservationData, 'event_name', payload.event_name);
       Vue.set(state.successReservationData, 'start_date', payload.start_date);
       Vue.set(state.successReservationData, 'end_date', payload.end_date);
+      Vue.set(state.successReservationData, 'start_time', payload.start_time);
+      Vue.set(state.successReservationData, 'end_time', payload.end_time);
       Vue.set(state.successReservationData, 'username', payload.username);
     },
 

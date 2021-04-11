@@ -9,7 +9,7 @@
         <v-card>
           <v-card-title>
             <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
-              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
+              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable></v-text-field>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
               <v-btn color="primary" dark class="mb-2" @click="dialog = !dialog"> Nová rezervácia </v-btn>
@@ -112,6 +112,9 @@
             <template v-slot:item.id="{ item }">
               <span>{{ currentEventsForOneUser.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
             </template>
+            <template v-slot:item.created_at="{ item }">
+              <span>{{ formatCreated(item.created_at) }}</span>
+            </template>
             <template v-slot:item.event_name="{ item }">
               <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'">
                 <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
@@ -123,10 +126,10 @@
               </v-chip>
             </template>
             <template v-slot:item.start_date="{ item }">
-              <span>{{ formatStart_date(item.start_date) }}</span>
+              <span>{{ formatDate(item.start_date) }}</span>
             </template>
             <template v-slot:item.end_date="{ item }">
-              <span>{{ formatEnd_date(item.end_date) }}</span>
+              <span>{{ formatDate(item.end_date) }}</span>
             </template>
 
             <template v-slot:item.adults="{ item }">
@@ -135,6 +138,268 @@
 
             <template v-slot:item.overallPriceForNight="{ item }">
               <span>{{item.overallPriceForNight}}€</span>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-dialog v-model="diagolShowDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                <template v-slot:activator="{ on: menu, attrs }">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on: tooltip }">
+                      <v-icon v-bind="attrs" v-on="{ ...tooltip, ...menu }" medium @click="showDetail(item)">mdi-information </v-icon>
+                    </template>
+                    <span>Detail rezervácie</span>
+                  </v-tooltip>
+                </template>
+                <v-card>
+                  <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="diagolShowDetail = false">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title class="justify-center">Detail rezervácie</v-toolbar-title>
+                    <!-- <v-spacer></v-spacer> -->
+                    <!-- <v-toolbar-items>
+                      <v-btn dark text @click="diagolShowDetail = false">
+                        Save
+                      </v-btn>
+                    </v-toolbar-items> -->
+                  </v-toolbar>
+                  <v-list three-line subheader>
+                    <v-subheader>Kontaktné údaje</v-subheader>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <!-- <v-list-item-title>Password</v-list-item-title>
+                        <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle> -->
+                        <v-row justify="center">
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="surname" v-model="surname" label="Meno" readonly></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" readonly></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                            <v-text-field ref="address" v-model="address" label="Adresa" readonly></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="city" v-model="city" label="Mesto" readonly></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
+                            <v-text-field ref="postcode" v-model="postcode" label="PSČ" readonly></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" readonly>
+                            </v-autocomplete>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" readonly></VueTelInputVuetify>
+                          </v-col>
+
+                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                            <div v-if="note == null">
+                              <v-textarea value="-" label=" Poznámka" rows="1" readonly>
+                              </v-textarea>
+                            </div>
+                            <div v-else>
+                              <v-textarea v-model="note" label=" Poznámka" rows="1" readonly>
+                              </v-textarea>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                  <v-divider></v-divider>
+                  <v-list three-line subheader>
+                    <v-subheader>Dátum a čas vytvorenia rezervácie</v-subheader>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-sheet class="p-4 mx-auto" rounded outlined>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-calendar-clock</v-icon>
+                                  <span>{{reservationDetails.created_at}}</span>
+                                </v-col>
+                              </v-row>
+                            </v-sheet>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-subheader>Dátum a čas príchodu a odchodu</v-subheader>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-row>
+                          <v-col>
+                            <v-sheet class="p-4 mx-auto" rounded outlined>
+                              <v-row class="justify-center">
+                                <span>Príchod</span>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-calendar-start</v-icon>
+                                  <span>Dátum: {{reservationDetails.start_date}}</span>
+                                </v-col>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-clock-start</v-icon>
+                                  <span>Čas: {{reservationDetails.start_time}}</span>
+                                </v-col>
+                              </v-row>
+                            </v-sheet>
+                          </v-col>
+                          <v-col>
+                            <v-sheet class="p-4 mx-auto" rounded outlined>
+                              <v-row class="justify-center">
+                                <span>Odchod</span>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-calendar-end</v-icon>
+                                  <span>Dátum: {{reservationDetails.end_date}}</span>
+                                </v-col>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-clock-end</v-icon>
+                                  <span>Čas: {{reservationDetails.end_time}}</span>
+                                </v-col>
+                              </v-row>
+                            </v-sheet>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                  <v-divider></v-divider>
+                  <v-list three-line subheader>
+                    <v-subheader>Počet osôb</v-subheader>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-row class="m-0">
+                          <v-col></v-col>
+                          <v-col class="font-weight-bold">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <span v-bind="attrs" v-on="on">Počet osôb</span>
+                              </template>
+                              <span>Maximálny počet osôb je 20!</span>
+                            </v-tooltip>
+
+                          </v-col>
+                          <v-col class="font-weight-bold">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                                <span>Cena/noc</span>
+                              </template>
+                              <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
+                              <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
+                            </v-tooltip>
+
+                          </v-col>
+                          <v-col class="font-weight-bold">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                              </template>
+                              <span>Od {{reservationDetails.start_date}} do {{reservationDetails.end_date}}</span>
+                            </v-tooltip>
+                            <span v-if="reservationDetails.nights > 1">Cena/{{reservationDetails.nights}} noci</span>
+                            <span v-else>Cena/{{reservationDetails.nights}} noc</span>
+                          </v-col>
+                        </v-row>
+                        <v-row class="m-0">
+                          <v-col>
+                            <span>Dospelí</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter1}}</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter1*priceAdults}} €</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter1*priceAdults*reservationDetails.nights}} €</span>
+                          </v-col>
+                        </v-row>
+
+                        <v-divider v-if="counter2 > 0" />
+                        <v-row class="m-0" v-if="counter2 > 0">
+                          <v-col>
+                            <span>Deti od 2 do 12 rokov</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter2}}</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter2*priceChilds2to12}} €</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter2*priceChilds2to12*reservationDetails.nights}} €</span>
+                          </v-col>
+                        </v-row>
+
+                        <v-divider v-if="counter3 > 0" />
+                        <v-row class="m-0" v-if="counter3 > 0">
+                          <v-col>
+                            <span>Deti do 2 rokov</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter3}}</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter3*priceChildsto2}} €</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{counter3*priceChildsto2*reservationDetails.nights}} €</span>
+                          </v-col>
+                        </v-row>
+
+                        <v-divider />
+                        <v-row class="m-0">
+                          <v-col>
+                            <span class="font-weight-bold">Spolu</span>
+                          </v-col>
+                          <v-col>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1+counter2+counter3}}</span>
+                              </template>
+                              <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
+                            </v-tooltip>
+                          </v-col>
+                          <v-col>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}} €</span>
+                              </template>
+                              <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
+                              <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
+                            </v-tooltip>
+                          </v-col>
+                          <v-col>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
+                                  {{reservationDetails.overallPriceForNight}} €</span>
+                              </template>
+                              <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1 + counter2 + counter3}} osoby na {{reservationDetails.nights}} noci</span>
+                              <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{reservationDetails.nights}} noci</span>
+                            </v-tooltip>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-dialog>
             </template>
           </v-data-table>
         </v-card>
@@ -146,10 +411,13 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
 
 export default {
   name: "MojeRezervacie",
-  components: {},
+  components: {
+    VueTelInputVuetify
+  },
   data() {
     return {
       currentEvents: [],
@@ -172,6 +440,7 @@ export default {
       menu1: false,
       menu2: false,
       dialog: false,
+      diagolShowDetail: false,
       dialogDelete: false,
       footerProps: {
         itemsPerPageText: 'Počet riadkov',
@@ -227,43 +496,54 @@ export default {
         sortable: false
       }, ],
       headers2: [{
-        text: 'ID',
-        align: 'id',
-        sortable: false,
-        value: 'id',
-      }, {
-        text: 'Status',
-        value: 'event_name',
-        sortable: false,
-      }, {
-        text: 'Dátum začiatku',
-        value: 'start_date',
-        sortable: true,
-      }, {
-        text: 'Dátum konca',
-        value: 'end_date',
-        sortable: true,
-      }, {
-        text: 'Čas príchodu',
-        value: 'start_time',
-        sortable: false,
-      }, {
-        text: 'Čas odchodu',
-        value: 'end_time',
-        sortable: false,
-      }, {
-        text: 'Počet nocí',
-        value: 'nights',
-        sortable: true,
-      }, {
-        text: 'Počet osôb',
-        value: 'adults',
-        sortable: true,
-      }, {
-        text: 'Cena',
-        value: 'overallPriceForNight',
-        sortable: true,
-      }, ],
+          text: 'ID',
+          align: 'id',
+          sortable: false,
+          value: 'id',
+        }, {
+          text: 'Vytvorená',
+          value: 'created_at',
+          sortable: true,
+        }, {
+          text: 'Status',
+          value: 'event_name',
+          sortable: false,
+        }, {
+          text: 'Dátum začiatku',
+          value: 'start_date',
+          sortable: true,
+        }, {
+          text: 'Dátum konca',
+          value: 'end_date',
+          sortable: true,
+        },
+        // {
+        //   text: 'Čas príchodu',
+        //   value: 'start_time',
+        //   sortable: false,
+        // }, {
+        //   text: 'Čas odchodu',
+        //   value: 'end_time',
+        //   sortable: false,
+        // }, {
+        //   text: 'Počet nocí',
+        //   value: 'nights',
+        //   sortable: true,
+        // }, {
+        //   text: 'Počet osôb',
+        //   value: 'adults',
+        //   sortable: true,
+        // }, {
+        //   text: 'Cena',
+        //   value: 'overallPriceForNight',
+        //   sortable: true,
+        // },
+        {
+          text: 'Detail',
+          value: 'actions',
+          sortable: false
+        }
+      ],
       editedIndex: -1,
       editedItem: {
         id: "",
@@ -284,6 +564,29 @@ export default {
       items: ['rezervácia', 'rezervované'],
       myloadingvariable: true,
       numberOfPersons: null,
+
+      reservationDetails: {
+        id: "",
+        event_name: "",
+        created_at: "",
+        start_date: "",
+        end_date: "",
+        start_time: "",
+        end_time: "",
+        adults: "",
+        childs2to12: "",
+        childsto2: "",
+        nights: "",
+        overallPriceForNight: "",
+        priceForNight: "",
+      },
+      counter1: "",
+      counter2: "",
+      counter3: "",
+      counter4: "",
+      priceAdults: 18,
+      priceChildsto2: 0,
+      priceChilds2to12: 18,
     }
   },
   async created() {
@@ -322,14 +625,40 @@ export default {
     this.getEvents();
   },
   methods: {
-    formatStart_date(value) {
+    formatDate(value) {
       return moment(value)
         .format("YYYY-MM-DD")
     },
-    formatEnd_date(value) {
+
+    formatCreated(value) {
       return moment(value)
-        .format("YYYY-MM-DD")
+        .format("YYYY-MM-DD HH:mm:ss")
+
     },
+
+    showDetail(item) {
+      console.log(item);
+      this.dialogShowDetail = true;
+      console.log(this.dialogShowDetail)
+      this.reservationDetails.id = item.id;
+      this.reservationDetails.event_name = item.event_name;
+      this.reservationDetails.created_at = moment(item.created_at)
+        .format('YYYY/MM/DD HH:mm:ss');
+      this.reservationDetails.start_date = item.start_date;
+      this.reservationDetails.end_date = item.end_date;
+      this.reservationDetails.start_time = item.start_time;
+      this.reservationDetails.end_time = item.end_time;
+      this.reservationDetails.adults = item.adults;
+      this.reservationDetails.childs2to12 = item.childs2to12;
+      this.reservationDetails.childsto2 = item.childsto2;
+      this.reservationDetails.nights = item.nights;
+      this.reservationDetails.overallPriceForNight = item.overallPriceForNight;
+      this.reservationDetails.priceForNight = item.priceForNight;
+      this.counter1 = parseInt(item.adults);
+      this.counter2 = parseInt(item.childs2to12);
+      this.counter3 = parseInt(item.childsto2);
+    },
+
     addReservation() {
       this.$router.push("/administration/create_reservation");
     },
@@ -473,4 +802,21 @@ export default {
 .md-dialog .md-dialog-actions {
     padding: 12px !important;
 }
+
+// data-table animations
+// .list-enter-active,
+// .list-leave-active {
+//     transition: all 0.8s;
+// }
+// .list-enter,
+// .list-leave-to {
+//     opacity: 0;
+//     transform: translateY(100%);
+// }
+// .list-move {
+//     transition: transform 0.5s;
+// }
+// .item-row {
+//     display: table-row;
+// }
 </style>

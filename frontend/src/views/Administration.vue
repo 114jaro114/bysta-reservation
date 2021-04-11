@@ -16,16 +16,14 @@
           </span>
         </v-toolbar-title>
         <template v-slot:extension>
-          <v-tabs v-model="tab" grow>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-            </v-tab>
+          <v-tabs grow>
+            <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-tabs-items v-model="tab" grow>
-        <v-tab-item v-for="item in items" :key="item">
-          <router-view></router-view>
+      <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+        <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
+          <router-view />
         </v-tab-item>
         <NavigationDrawer :drawer="drawer" />
       </v-tabs-items>
@@ -54,8 +52,16 @@ export default {
     return {
       username: localStorage.getItem("username"),
       drawer: false,
-      tab: null,
-      items: ['Administrácia', ],
+      activeTab: '/administration',
+      tabs: [{
+        id: 1,
+        name: 'Administrácia',
+        route: '/administration'
+      }, {
+        id: 2,
+        name: 'Detaily',
+        route: '/administration/details'
+      }, ],
     }
   },
   updated() {

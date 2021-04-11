@@ -39,36 +39,36 @@
         <v-stepper v-model="e1">
           <v-stepper-header>
             <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
-              Dátum
+              Dátum a čas príchodu a odchodu
               <small v-if="step1 == false">Chyba</small>
             </v-stepper-step>
+
+            <!-- <v-divider></v-divider>
+
+            <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
+              Čas príchodu a odchodu
+              <small v-if="step2 == false">Chyba</small>
+            </v-stepper-step> -->
 
             <v-divider></v-divider>
 
             <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
-              Čas príchodu a odchodu
+              Počet osôb
               <small v-if="step2 == false">Chyba</small>
             </v-stepper-step>
 
             <v-divider></v-divider>
 
             <v-stepper-step color="primary" :complete="e1 > 3" :rules="[() => step3]" step="3" error-icon="mdi-alert-circle">
-              Počet osôb
+              Kontaktné informácie
               <small v-if="step3 == false">Chyba</small>
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step color="primary" :complete="e1 > 4" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
-              Kontaktné informácie
-              <small v-if="step4 == false">Chyba</small>
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step color="primary" :rules="[() => step5]" step="5" error-icon="mdi-alert-circle">
+            <v-stepper-step color="primary" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
               Rekapitulácia
-              <small v-if="step5 == false">Chyba</small>
+              <small v-if="step4 == false">Chyba</small>
             </v-stepper-step>
           </v-stepper-header>
           <v-stepper-items class="h-100">
@@ -99,7 +99,7 @@
               </div>
             </v-stepper-content>
 
-            <v-stepper-content step="2">
+            <!-- <v-stepper-content step="2">
               <v-card class="m-3" tile>
                 <v-card-text>
                   <v-row justify="center" align="center">
@@ -112,8 +112,8 @@
                       <v-time-picker v-model="end_time" :landscape="$vuetify.breakpoint.smAndUp"></v-time-picker>
                     </v-col>
                   </v-row>
-                </v-card-text>
-                <!-- <v-col cols="11" sm="5">
+                </v-card-text> -->
+            <!-- <v-col cols="11" sm="5">
                 <v-dialog ref="dialog_start_time" v-model="modal1" :return-value.sync="start_time" persistent width="290px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field v-model="start_time" label="Dátum začiatku" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" clearable clear-icon="mdi-close-circle"></v-text-field>
@@ -144,7 +144,7 @@
                   </v-time-picker>
                 </v-dialog>
               </v-col> -->
-                <!-- <v-row justify="space-around" align="center">
+            <!-- <v-row justify="space-around" align="center">
                 <v-col style="width: 350px; flex: 0 1 auto;">
                   <h2>Start:</h2>
                   <v-time-picker v-model="start" :max="end"></v-time-picker>
@@ -154,7 +154,7 @@
                   <v-time-picker v-model="end" :min="start"></v-time-picker>
                 </v-col>
               </v-row> -->
-              </v-card>
+            <!-- </v-card>
 
               <v-btn color="accent" @click="e1 = 1; backStep1()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
@@ -163,9 +163,9 @@
               <v-btn color="primary" @click="checkStatus2()">
                 Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
               </v-btn>
-            </v-stepper-content>
+            </v-stepper-content> -->
 
-            <v-stepper-content step="3">
+            <v-stepper-content step="2">
               <v-card class="m-3" tile>
                 <v-card-text>
                   <v-row class="m-0">
@@ -361,7 +361,7 @@
                 </v-card-text>
               </v-card>
 
-              <v-btn color="accent" @click="e1 = 2; backStep2()" class="mr-2" outlined>
+              <v-btn color="accent" @click="e1 = 1; backStep2()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
@@ -370,7 +370,7 @@
               </v-btn>
             </v-stepper-content>
 
-            <v-stepper-content step="4">
+            <v-stepper-content step="3">
               <v-card class="m-3" tile>
                 <!-- <v-row justify="center">
                 <v-col cols="12" sm="12" md="12" lg="6"> -->
@@ -413,7 +413,7 @@
                 </v-card-text>
               </v-card>
 
-              <v-btn color="accent" @click="e1 = 3; backStep3()" class="mr-2" outlined>
+              <v-btn color="accent" @click="e1 = 2; backStep3()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
@@ -422,13 +422,13 @@
               </v-btn>
             </v-stepper-content>
 
-            <v-stepper-content step="5">
+            <v-stepper-content step="4">
               <v-card class="m-3" tile>
                 <v-card-title>Rekapitulácia</v-card-title>
                 <v-card-text>
                   <v-row align="center">
                     <v-divider />
-                    <span class="font-weight-bold">Kontaknté údaje</span>
+                    <span class="font-weight-bold">Kontaktné údaje</span>
                     <v-divider />
                   </v-row>
                   <v-row justify="center">
@@ -643,7 +643,7 @@
               </v-card>
 
 
-              <v-btn color="accent" @click="e1 = 4; backStep4()" class="mr-2" outlined>
+              <v-btn color="accent" @click="e1 = 3; backStep4()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
@@ -837,16 +837,16 @@ export default {
       }
     },
 
-    checkStatus2() {
-      if (this.start_time == null || this.end_time == null) {
-        this.step2 = false;
-        this.snackbar = true;
-        this.text = "Je potrebné vybrať čas príchodu a odchodu!";
-      } else {
-        this.step2 = true;
-        this.e1 = 3;
-      }
-    },
+    // checkStatus2() {
+    //   if (this.start_time == null || this.end_time == null) {
+    //     this.step2 = false;
+    //     this.snackbar = true;
+    //     this.text = "Je potrebné vybrať čas príchodu a odchodu!";
+    //   } else {
+    //     this.step2 = true;
+    //     this.e1 = 3;
+    //   }
+    // },
 
     checkStatus3() {
       if (this.counter1 == 0 && this.counter2 == 0 && this.counter3 == 0) {
@@ -855,7 +855,7 @@ export default {
         this.text = "Je potrebné zadať počet osôb!";
       } else {
         this.step3 = true;
-        this.e1 = 4;
+        this.e1 = 3;
       }
     },
 
@@ -874,7 +874,7 @@ export default {
         this.text = "Je potrebné vyplniť kontaktné údaje!";
       } else {
         this.step4 = true;
-        this.e1 = 5;
+        this.e1 = 4;
       }
     },
 
@@ -1060,6 +1060,8 @@ export default {
       .format("YYYY-MM-DD");
     this.end_date = moment(this.$store.getters['successReservationData'].end_date)
       .format("YYYY-MM-DD");
+    this.start_time = this.$store.getters['successReservationData'].start_time;
+    this.end_time = this.$store.getters['successReservationData'].end_time;
 
     //Difference in number of days
     // moment.duration(moment(this.start_date, 'YYYY-MM-DD')

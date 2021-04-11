@@ -2,7 +2,8 @@
 <div class='calendar'>
   <!-- <div class="row bb ml-0 mr-0 pt-3"> -->
   <v-card class="m-3" :loading="myloadingvariable">
-    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="date" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone" is-expanded>
+    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
+      :timezone="timezone" is-expanded>
       <!--=========DAY POPOVER HEADER SLOT=========-->
       <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
         {{ getPopoverHeaderLabel(day) }}
@@ -135,6 +136,12 @@ export default {
       // disabledDates: ['2021-02-26', '2021-02-27', '2021-02-28', '2021-03-01', '2021-03-02'],
       timezone: '',
       testtt: true,
+
+      modelConfig: {
+        type: 'string',
+        mask: 'iso',
+        timeAdjust: 'now',
+      },
     }
   },
 
@@ -285,6 +292,8 @@ export default {
   },
 
   updated() {
+    this.start_time = moment(this.range.start)
+      .format('HH:mm:ss');
     //do something after updating vue instance
     if (this.range.start != '' && this.range.end != '') {
       this.newEvent = {
@@ -307,6 +316,10 @@ export default {
           .add(23, 'hours')
           .add(59, 'minutes')
           .format('YYYY-MM-DDTHH:mm:SS'),
+        start_time: moment(this.range.start)
+          .format('HH:mm:SS'),
+        end_time: moment(this.range.end)
+          .format('HH:mm:SS'),
         // color: "orange",
         username: this.user,
       });

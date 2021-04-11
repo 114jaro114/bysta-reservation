@@ -6,6 +6,9 @@ import store from './store'
 //vuetify import
 import vuetify from './plugins/vuetify'
 
+//vuetify import
+import social_auth from './social_auth/index'
+
 //vuelidate
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
@@ -101,6 +104,7 @@ new Vue({
     router,
     vuetify,
     store,
+    social_auth,
     // i18n,
     render: h => h(App),
   })

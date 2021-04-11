@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Socialite;
 
 class AuthController extends Controller
 {
@@ -71,4 +72,11 @@ class AuthController extends Controller
             'token' => $token
         ], 201);
     }
+
+    // public function SocialSignup($provider)
+    // {
+    //     // Socialite will pick response data automatic
+    //     $user = Socialite::driver($provider)->stateless()->user();
+    //     return response()->json($user);
+    // }
 }

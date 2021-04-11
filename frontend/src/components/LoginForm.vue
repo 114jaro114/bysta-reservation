@@ -74,25 +74,25 @@
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
-              <v-btn fab small color="blue">
+              <v-btn fab small color="blue" @click="AuthProvider('facebook')">
                 <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="red">
+              <v-btn class="ml-5" fab small color="red" @click="AuthProvider('google')">
                 <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="light-blue">
+              <v-btn class="ml-5" fab small color="light-blue" @click="AuthProvider('twitter')">
                 <v-icon color="white">
                   mdi-twitter
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="brown">
+              <v-btn class="ml-5" fab small color="brown" @click="AuthProvider('github')">
                 <v-icon color="white">
                   mdi-github
                 </v-icon>
@@ -107,6 +107,7 @@
 </template>
 <script>
 import axios from 'axios';
+
 export default {
   names: ['LoginForm', 'CheckboxHueColors', 'FormValidation'],
   props: {},
@@ -149,8 +150,6 @@ export default {
     // this.alertSuccessRegister =
   },
   methods: {
-
-
     validate() {
       return this.$refs.form.validate();
     },
@@ -200,6 +199,42 @@ export default {
           })
       }
     },
+    //VueSocialauth
+    // AuthProvider(provider) {
+    //   console.log(provider);
+    //   var self = this
+    //   this.$auth.authenticate(provider)
+    //     .then(response => {
+    //       self.SocialLogin(provider, response)
+    //     })
+    //     .catch(err => {
+    //       console.log({
+    //         err: err
+    //       })
+    //     })
+    // },
+    //
+    // SocialLogin(provider, response) {
+    //   console.log(provider);
+    //   axios.post('http://127.0.0.1:8000/sociallogin/' + provider, response)
+    //     .then(response => {
+    //       console.log(response.data)
+    //     })
+    //     .catch(err => {
+    //       console.log({
+    //         err: err
+    //       })
+    //     })
+    // this.$http.post('http://127.0.0.1:8000/sociallogin/' + provider, response)
+    //   .then(response => {
+    //     console.log(response.data)
+    //   })
+    //   .catch(err => {
+    //     console.log({
+    //       err: err
+    //     })
+    //   })
+    // },
   },
   updated() {
 
