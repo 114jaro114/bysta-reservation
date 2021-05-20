@@ -1,12 +1,11 @@
 <template>
-<div class="profile w-100 h-100 text-uppercase mt-1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="profile w-100 h-100 text-uppercase mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card elevation="2">
+        <v-card class="rounded" elevation="0">
           <v-card-text>
             <v-flex class="mb-4">
               <v-container fluid>

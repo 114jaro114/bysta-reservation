@@ -1,12 +1,11 @@
 <template>
-<div class="moje_rezervacie w-100 h-100 text-uppercase mt-1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="moje_rezervacie w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card>
+        <v-card class="rounded" elevation="0">
           <v-card-title>
             <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable></v-text-field>

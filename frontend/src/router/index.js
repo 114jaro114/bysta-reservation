@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import goTo from 'vuetify/es5/services/goto'
 // import {
 //   isLoggedIn
 // } from '../utils/auth'
@@ -98,12 +99,12 @@ const routes = [{
         component: require('../components/tabs/profile/Profile.vue')
           .default
       },
-      {
-        path: '/profile/my_profile',
-        name: 'MyProfile',
-        component: require('../components/tabs/profile/MyProfile.vue')
-          .default
-      },
+      // {
+      //   path: '/profile/my_profile',
+      //   name: 'MyProfile',
+      //   component: require('../components/tabs/profile/MyProfile.vue')
+      //     .default
+      // },
       {
         path: '/profile/add_friends',
         name: 'AddFriends',
@@ -238,6 +239,18 @@ const routes = [{
 ]
 
 const router = new VueRouter({
+  scrollBehavior: (to, from, savedPosition) => {
+    let scrollTo = 0
+
+    if (to.hash) {
+      scrollTo = to.hash
+    } else if (savedPosition) {
+      scrollTo = savedPosition.y
+    }
+
+    return goTo(scrollTo)
+  },
+
   mode: 'history',
   // base: process.env.BASE_URL,
   routes

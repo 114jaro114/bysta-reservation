@@ -60,4 +60,8 @@ export default {
 #create .v-btn--floating {
   position: relative;
 }
+
+.v-speed-dial--bottom {
+  bottom: 150px !important;
+}
 </style>

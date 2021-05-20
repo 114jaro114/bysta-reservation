@@ -1,10 +1,9 @@
 <template>
 <div class="RegisterForm padding-top-height">
   <div class="p-3 position-ref body-height">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <v-card :loading="myloadingvariable" tile>
+        <v-card class="rounded" :loading="myloadingvariable" tile>
           <v-card-title>
             <v-row justify="center" class="p-3">
               <span class="font-weight-bold text-center primary--text">Registrácia</span>

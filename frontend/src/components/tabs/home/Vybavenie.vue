@@ -1,11 +1,11 @@
 <template>
-<div class="vybavenie w-100 h-100 text-uppercase mt-1">
+<div class="vybavenie w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card>
+        <v-card class="rounded" elevation="0">
           <v-card-title class="justify-center">
             <!-- <span class="font-weight-bold primary--text">Vybavenie</span> -->
           </v-card-title>

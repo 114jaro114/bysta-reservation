@@ -1,9 +1,15 @@
 <template>
 <div class='calendar'>
   <!-- <div class="row bb ml-0 mr-0 pt-3"> -->
+<<<<<<< HEAD
   <v-card class="m-3" :loading="myloadingvariable">
     <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone"
       is-expanded>
+=======
+  <v-card class="m-3 rounded" :loading="myloadingvariable" elevation="0">
+    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
+      :timezone="timezone" is-expanded>
+>>>>>>> 54781a4e8c8832c4ada9932fb97071d11ea3d978
       <!--=========DAY POPOVER HEADER SLOT=========-->
       <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
         {{ getPopoverHeaderLabel(day) }}

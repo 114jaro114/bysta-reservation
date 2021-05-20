@@ -1,87 +1,82 @@
 <template>
-<div class="price_list w-100 h-100 text-uppercase secondary-color">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <v-lazy :options="{
-          threshold: .4
-        }" min-height="100vh" transition-group="scale-transition">
-    <v-card class="v-content">
-      <v-toolbar elevation="2" class="mb-3">
-        <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title class="position-absolute" style="right:14px">
-          <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-            <img class="logo2 align-middle" src="/img/logos/logo_home_theme_dark.png">
-          </span>
-          <span class="md-title font-weight-bold" v-else>
-            <img class="logo2 align-middle" src="/img/logos/logo_home_theme_light.png">
-          </span>
-        </v-toolbar-title>
-        <template v-slot:extension>
-          <v-tabs grow>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-            </v-tab>
-          </v-tabs>
-        </template>
-      </v-toolbar>
-      <v-tabs-items v-model="tab" class="p-3 pt-1">
-        <v-tab-item v-for="item in items" :key="item" disabled>
-        </v-tab-item>
-        <NavigationDrawer :drawer="drawer" />
-        <v-card>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" lg="12" md="12" sm="12" class="mb-5">
-                <v-sheet class="p-4 mx-auto" rounded outlined>
-                  <v-sheet class="v-sheet--offset mx-auto mt-3" color="grey lighten-5" elevation="0" max-width="calc(100% - 32px)" rounded>
-                    <div id="chart">
-                      <apexchart type="line" height="298" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-                    </div>
-                  </v-sheet>
+<div class="price_list w-100 h-100 mt-3">
+  <v-card elevation="0">
+    <v-app-bar fixed flat>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-                  <v-card-text class="pt-0">
-                    <div class="title font-weight-light mb-2">
-                      Cena za noc/osoba/obdobie
-                    </div>
-                    <v-divider class="my-2"></v-divider>
-                    <v-icon class="mr-2" small>
-                      mdi-clock
-                    </v-icon>
-                    <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
-                  </v-card-text>
-                </v-sheet>
-              </v-col>
-              <v-col>
-                <v-sheet class="p-4 mx-auto" rounded outlined>
-                  <v-row class="justify-center">
-                    <span>Upratovanie</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <v-icon large>mdi-broom</v-icon>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <span>Poplatok +100€ k cene rezervácie</span>
-                  </v-row>
+      <v-toolbar-title class="position-absolute" style="right:14px">
+        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
+          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_dark.png">
+        </span>
+        <span class="md-title font-weight-bold" v-else>
+          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_light.png">
+        </span>
+      </v-toolbar-title>
 
-                </v-sheet>
-              </v-col>
-              <v-col>
-                <v-sheet class="p-4 mx-auto" rounded outlined>
-                  <v-row class="justify-center">
-                    <span>Rezervácia do 5 dospelích osôb</span>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <v-icon large>mdi-account-group</v-icon>
-                  </v-row>
-                  <v-row class="justify-center">
-                    <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
-                  </v-row>
-                </v-sheet>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-tabs-items>
-    </v-card>
+      <template v-slot:extension>
+        <v-tabs grow>
+          <v-tab v-for="item in items" :key="item">
+            {{ item }}
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
+
+    <v-tabs-items v-model="tab" class="p-3 pt-1">
+      <v-tab-item v-for="item in items" :key="item" disabled>
+      </v-tab-item>
+      <NavigationDrawer :drawer="drawer" />
+      <v-card>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" lg="12" md="12" sm="12" class="mb-5">
+              <div id="chart">
+                <apexchart type="line" height="298" :options="chartOptionsLine" :series="seriesLine"></apexchart>
+              </div>
+
+              <v-card-text class="pt-0">
+                <div class="title font-weight-light mb-2">
+                  Cena za noc/osoba/obdobie
+                </div>
+                <v-divider class="my-2"></v-divider>
+                <v-icon class="mr-2" small>
+                  mdi-clock
+                </v-icon>
+                <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
+              </v-card-text>
+            </v-col>
+            <v-col>
+              <v-sheet class="p-4 mx-auto" rounded outlined>
+                <v-row class="justify-center">
+                  <span>Upratovanie</span>
+                </v-row>
+                <v-row class="justify-center">
+                  <v-icon large>mdi-broom</v-icon>
+                </v-row>
+                <v-row class="justify-center">
+                  <span>Poplatok +100€ k cene rezervácie</span>
+                </v-row>
+
+              </v-sheet>
+            </v-col>
+            <v-col>
+              <v-sheet class="p-4 mx-auto" rounded outlined>
+                <v-row class="justify-center">
+                  <span>Rezervácia do 5 dospelích osôb</span>
+                </v-row>
+                <v-row class="justify-center">
+                  <v-icon large>mdi-account-group</v-icon>
+                </v-row>
+                <v-row class="justify-center">
+                  <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
+                </v-row>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-tabs-items>
+  </v-card>
   </v-lazy>
   <SpeedDial />
   <BottomNavigation />

@@ -1,272 +1,365 @@
 <template>
-<div class="app_settings w-100 h-100 text-uppercase mt-1">
+<div class="app_settings w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
-          }" transition="scale-transition">
-    <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
-        <v-card color="primary" dark>
-          <v-card-title class="headline">
-          </v-card-title>
+          }" min-height="100vh" transition-group="scale-transition">
+    <div class="">
+      <v-row justify="center" class="ml-0 mr-0">
+        <v-col>
+          <!-- <v-card> -->
+          <v-list class="rounded" flat subheader three-line>
+            <v-list-item-group v-model="ntf" multiple active-class="">
+              <v-subheader>Notifikácie</v-subheader>
+              <v-list-item>
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-checkbox :input-value="active"></v-checkbox>
+                  </v-list-item-action>
 
-          <span class="secondary--color">Dark/Light mod</span>
+                  <v-list-item-content>
+                    <v-list-item-title>Notifikácie</v-list-item-title>
+                    <v-list-item-subtitle>Informovať ma o nových udalostiach</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
+            <v-list-item-group v-model="ntfs" multiple active-class="">
+              <v-list-item>
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-checkbox :input-value="active"></v-checkbox>
+                  </v-list-item-action>
 
-          <v-card-text>
-            <v-row justify="center">
-              <v-col class="d-flex" cols="12" sm="6">
-                <v-tooltip v-if="!$vuetify.theme.dark" bottom>
-                  <template v-slot:activator="{ on }">
-                    <!-- <v-btn v-on="on" small fab @click="darkMode">
-                      <v-icon class="mr-1">mdi-moon-waxing-crescent</v-icon>
-                    </v-btn> -->
-                    <v-btn v-on="on" @click="toggle_dark_mode" block large>
-                      <v-icon>mdi-theme-light-dark</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Zapnúť dark mód</span>
-                </v-tooltip>
+                  <v-list-item-content>
+                    <v-list-item-title>Zvuky</v-list-item-title>
+                    <v-list-item-subtitle>Zapnúť alebo vypnúť zvuky k notifikáciám</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
 
-                <v-tooltip v-else bottom>
-                  <template v-slot:activator="{ on }">
-                    <!-- <v-btn v-on="on" small fab @click="darkMode">
-                      <v-icon>mdi-white-balance-sunny</v-icon>
-                    </v-btn> -->
-                    <v-btn v-on="on" @click="toggle_dark_mode" block large>
-                      <v-icon>mdi-theme-light-dark</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Vypnúť dark mód</span>
-                </v-tooltip>
-              </v-col>
-            </v-row>
+            <v-divider></v-divider>
 
-          </v-card-text>
 
-          <v-divider class="secondary" />
+            <v-list-item-group v-model="dlm" multiple active-class="">
+              <v-subheader>Nastavenie režimu</v-subheader>
+              <!-- <v-list-item-title>Tmavý/Svetlý režim</v-list-item-title> -->
+              <v-row class="pl-3 pr-3 pb-3" justify="center">
+                <v-col class="d-flex" cols="12" sm="6">
+                  <v-tooltip v-if="!$vuetify.theme.dark" bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
+                        <v-icon>mdi-theme-light-dark</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Zapnúť dark mód</span>
+                  </v-tooltip>
 
-          <span class="secondary--color">Speed dial (<v-icon medium>mdi-web</v-icon>)</span>
+                  <v-tooltip v-else bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
+                        <v-icon>mdi-theme-light-dark</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Vypnúť dark mód</span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+              <!-- <v-list-item>
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-switch color="primary" :input-value="active" @click="bottomNavigation()" inset></v-switch>
+              </v-list-item-action>
 
-          <v-card-text>
-            <v-row justify="center">
-              <v-col class="d-flex" cols="12" sm="6">
-                <!-- <v-tooltip v-if="switch1" bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn v-on="on" :ripple="false" class="speed_dial_switch" block large depressed>
-                      <span class="pr-4">skryť</span>
-                      <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
-                      <span>Zobraziť</span>
-                      <v-icon style="right:0px" small>mdi-information</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Skryť speed dial</span>
-                  <span>
-                    <v-btn color="primary" fab dark x-small absolute bottom left>
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </span>
-                </v-tooltip>
-                <v-tooltip v-else bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn v-on="on" :ripple="false" class="speed_dial_switch" block large>
-                      <span class="pr-4">skryť</span>
-                      <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
-                      <span>Zobraziť</span>
-                    </v-btn>
-                  </template>
-                  <span>Zobraziť speed dial</span>
-                </v-tooltip> -->
-                <v-btn :ripple="false" class="speed_dial_switch" block large>
-                  <span class="pr-4">skryť</span>
-                  <v-switch color="primary" v-model="switch1" inset @click="speedDial()"></v-switch>
-                  <span>Zobraziť</span>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
+              <v-list-item-content>
+                <v-list-item-title>Tmavý/Svetlý režim</v-list-item-title>
+                <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded</v-list-item-subtitle>
+              </v-list-item-content>
+            </template>
+          </v-list-item> -->
 
-          <v-divider class="secondary" />
+              <v-list-item>
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-switch color="primary" :input-value="active" inset></v-switch>
+                  </v-list-item-action>
 
-          <span class="secondary--color">Notifikácie</span>
+                  <v-list-item-content>
+                    <v-list-item-title>Automatický režim </v-list-item-title>
+                    <v-list-item-subtitle>Automatické nastavenie tmavého/svetlého režimu (nemusí fungovať na všetkých prehliadačoch)</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
 
-          <v-card-text>
-            <v-row justify="center">
+            <v-divider></v-divider>
+
+            <v-list-item-group v-model="sd" multiple active-class="">
+              <v-list-item :disabled="lockSpeedDial">
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-switch color="primary" :input-value="active" inset></v-switch>
+                  </v-list-item-action>
+
+                  <v-list-item-content>
+                    <v-list-item-title>Speed dial (<v-icon medium>mdi-web</v-icon>)</v-list-item-title>
+                    <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie speed dialu (len rozlíšenie webu)</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
+
+            <v-divider></v-divider>
+
+            <v-list-item-group v-model="bn" multiple active-class="">
+              <v-list-item :disabled="lockBottomNavigation">
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-switch color="primary" :input-value="active" inset></v-switch>
+                  </v-list-item-action>
+
+                  <v-list-item-content>
+                    <v-list-item-title>spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</v-list-item-title>
+                    <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie spodnej lišty (len pre mobily)</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
+
+            <v-divider></v-divider>
+
+            <v-subheader>Jazyk aplikácie</v-subheader>
+            <!-- <v-list-item-title>Jazyk aplikácie</v-list-item-title> -->
+            <v-row class="pr-3 pl-3" justify="center">
               <v-col class="d-flex pb-0" cols="12" sm="6">
-                <v-btn :ripple="false" class="speed_dial_switch" block large>
-                  <span class="pr-4">vypnúť</span>
-                  <v-switch color="primary" v-model="switch2" inset></v-switch>
-                  <span>Zapnúť</span>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-divider class="secondary" />
-
-          <span class="secondary--color">spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</span>
-
-          <v-card-text>
-            <v-row justify="center">
-              <v-col class="d-flex pb-0" cols="12" sm="6">
-                <v-btn :ripple="false" class="speed_dial_switch" block large>
-                  <span class="pr-4">skryt</span>
-                  <v-switch color="primary" v-model="switch3" @click="bottomNavigation()" inset></v-switch>
-                  <span>Zobraziť</span>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-divider class="secondary" />
-
-          <span class="secondary--color">Jazyk aplikácie</span>
-
-          <v-card-text class="select_country">
-            <v-row justify="center">
-              <v-col class="d-flex pb-0" cols="12" sm="6">
-                <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo>
+                <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo :menu-props="{ top: true, offsetY: true }">
                   <template class="select_language" slot="selection" slot-scope="slotProps">
-                    <i :class="['mr-2', 'mdi', slotProps.item.flag]"></i>
+                    <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
                     {{slotProps.item.name}}
                   </template>
                   <template class="select_language" v-slot:item="slotProps">
-                    <i :class="['mr-2', 'mdi', slotProps.item.flag]"></i>
+                    <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
                     {{slotProps.item.name}}
                   </template>
                   <span>Vybrať jayzk</span>
                 </v-select>
               </v-col>
             </v-row>
-          </v-card-text>
-
-          <v-card-actions>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+          </v-list>
+        </v-col>
+      </v-row>
+    </div>
   </v-lazy>
 </div>
 </template>
 
 <script>
+import CountryFlag from 'vue-country-flag';
 export default {
   name: "AppSettings",
-  components: {},
+  components: {
+    CountryFlag
+  },
   data() {
     return {
-      select: 'Slovensky',
+      windowWidth: window.innerWidth,
+      txt: '',
+      lockSpeedDial: false,
+      lockBottomNavigation: false,
+      autoDLMon: false,
+      settings: [],
+
+      ntf: [],
+      ntfs: [],
+      dlm: [],
+      sd: [],
+      bn: [],
+
+      arraySwitchesSliders: [],
+      ////
+      select: localStorage.getItem('language'),
       countries: [{
-          name: "Slovensky",
-          flag: "vti__flag sk"
+          name: "Slovenský jazyk",
+          flag: "sk"
         },
         {
-          name: "Česky",
-          flag: "vti__flag cz"
+          name: "Anglický jazyk",
+          flag: "gb"
         },
         {
-          name: "Anglicky",
-          flag: "vti__flag gb"
-        },
-        {
-          name: "Nemecky",
-          flag: "vti__flag de"
-        },
-        {
-          name: "Poľsky",
-          flag: "vti__flag pl"
+          name: "Ruský jazyk",
+          flag: "rus"
         },
       ],
-      switch1: JSON.parse(localStorage.getItem("speed_dial")),
-      switch2: true,
-      switch3: JSON.parse(localStorage.getItem("bottom_navigation")),
+      // switch1: JSON.parse(localStorage.getItem("speed_dial")),
+      // switch2: true,
+      // switch3: JSON.parse(localStorage.getItem("bottom_navigation")),
     }
   },
+
   mounted() {
+    if (!(localStorage.getItem('language'))) {
+      localStorage.setItem('language', 'Slovenský jazyk');
+    }
+
+    if (this.windowWidth <= 480) {
+      this.lockSpeedDial = true;
+      this.lockBottomNavigation = false;
+    } else {
+      this.lockSpeedDial = false;
+      this.lockBottomNavigation = true;
+    }
+    window.addEventListener('resize', () => {
+      this.windowWidth = window.innerWidth
+      if (this.windowWidth <= 480) {
+        this.lockSpeedDial = true;
+        this.lockBottomNavigation = false;
+      } else {
+        this.lockSpeedDial = false;
+        this.lockBottomNavigation = true;
+      }
+    });
+
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
       if (theme === "true") {
         this.$vuetify.theme.dark = true;
+        localStorage.setItem('graph_theme', 'dark');
+        localStorage.setItem('graph_text_color', '#ffffff');
       } else {
         this.$vuetify.theme.dark = false;
+        localStorage.setItem('graph_theme', 'light');
+        localStorage.setItem('graph_text_color', '#2c3e50');
       }
-    } else if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-    ) {
-      this.$vuetify.theme.dark = true;
-      localStorage.setItem(
-        "dark_theme",
-        this.$vuetify.theme.dark.toString()
-      );
+    }
+
+    if (JSON.parse(localStorage.getItem("auto_dlm")) == true) {
+      this.autoDLMon = true;
+      this.dlm.push(0);
+      this.$store.dispatch('autoDarkLightModeState', {
+        status: true
+      });
+    } else {
+      this.autoDLMon = false;
+      this.dlm.splice(0, 1);
+      this.$store.dispatch('autoDarkLightModeState', {
+        status: false
+      });
+    }
+
+    if (JSON.parse(localStorage.getItem("notifState")) == true) {
+      this.ntf.push(0);
+    }
+
+    if (JSON.parse(localStorage.getItem("notifSoundState")) == true) {
+      this.ntfs.push(0);
     }
 
     if (JSON.parse(localStorage.getItem("speed_dial")) == true) {
+      this.sd.push(0);
       this.$store.dispatch('speedDialState', {
         status: true
       });
     } else {
+      this.sd.splice(0, 1);
       this.$store.dispatch('speedDialState', {
         status: false
       });
     }
 
     if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
+      this.bn.push(0);
       this.$store.dispatch('bottomNavigationState', {
         status: true
       });
     } else {
+      this.bn.splice(0, 1);
       this.$store.dispatch('bottomNavigationState', {
         status: false
       });
     }
-
     this.select = localStorage.getItem('language');
   },
+
   methods: {
     toggle_dark_mode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
-    },
-
-    speedDial() {
-      if (JSON.parse(localStorage.getItem('speed_dial')) == true) {
-        localStorage.setItem('speed_dial', false);
-        this.switch1 = false;
-        this.$store.dispatch('speedDialState', {
-          status: false
-        });
+      if (this.$vuetify.theme.dark == true) {
+        localStorage.setItem('graph_theme', 'dark');
+        localStorage.setItem('graph_text_color', '#ffffff');
       } else {
-        localStorage.setItem('speed_dial', true);
-        this.switch1 = true;
-        this.$store.dispatch('speedDialState', {
-          status: true
-        });
-      }
-    },
-
-    bottomNavigation() {
-      if (JSON.parse(localStorage.getItem('bottom_navigation')) == true) {
-        localStorage.setItem('bottom_navigation', false);
-        this.switch3 = false;
-        this.$store.dispatch('bottomNavigationState', {
-          status: false
-        });
-      } else {
-        localStorage.setItem('bottom_navigation', true);
-        this.switch3 = true;
-        this.$store.dispatch('bottomNavigationState', {
-          status: true
-        });
+        localStorage.setItem('graph_theme', 'light');
+        localStorage.setItem('graph_text_color', '#2c3e50');
       }
     },
   },
 
   updated() {
     //do something after updating vue instance
+    if (this.ntf.length != 0) {
+      localStorage.setItem('notifState', true);
+    } else {
+      localStorage.setItem('notifState', false);
+    }
+
+    if (this.ntfs.length != 0) {
+      localStorage.setItem('notifSoundState', true);
+    } else {
+      localStorage.setItem('notifSoundState', false);
+    }
+    if (this.dlm.length != 0) {
+      this.autoDLMon = true;
+      localStorage.setItem('auto_dlm', true);
+      this.$store.dispatch('autoDarkLightModeState', {
+        status: true
+      });
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
+        .matches) {
+        this.$vuetify.theme.dark = true;
+        localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
+        localStorage.setItem('graph_theme', 'dark');
+        localStorage.setItem('graph_text_color', '#ffffff');
+      } else {
+        this.$vuetify.theme.dark = false;
+        localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
+        localStorage.setItem('graph_theme', 'light');
+        localStorage.setItem('graph_text_color', '#2c3e50');
+      }
+    } else {
+      this.autoDLMon = false;
+      localStorage.setItem('auto_dlm', false);
+      this.$store.dispatch('autoDarkLightModeState', {
+        status: false
+      });
+    }
+
+    if (this.sd.length != 0) {
+      localStorage.setItem('speed_dial', true);
+      this.$store.dispatch('speedDialState', {
+        status: true
+      });
+    } else {
+      localStorage.setItem('speed_dial', false);
+      this.$store.dispatch('speedDialState', {
+        status: false
+      });
+    }
+
+    if (this.bn.length != 0) {
+      localStorage.setItem('bottom_navigation', true);
+      this.$store.dispatch('bottomNavigationState', {
+        status: true
+      });
+    } else {
+      localStorage.setItem('bottom_navigation', false);
+      this.$store.dispatch('bottomNavigationState', {
+        status: false
+      });
+    }
+
     localStorage.setItem('language', this.select);
-    console.log(this.$store.getters['speedDialState'].state);
-    console.log(this.$store.getters['bottomNavigationState'].state);
-  }
+  },
 }
 </script>
 

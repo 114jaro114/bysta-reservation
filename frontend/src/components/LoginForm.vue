@@ -1,7 +1,6 @@
 <template>
 <div class="LoginForm padding-top-height">
   <div class="p-3 position-ref body-height">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="row justify-content-center">
       <div class="text-center">
         <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
@@ -15,7 +14,7 @@
         </v-snackbar>
       </div>
       <div class="col-md-6">
-        <v-card :loading="myloadingvariable" tile>
+        <v-card class="rounded" :loading="myloadingvariable" tile>
           <v-card-title>
             <v-row justify="center" class="p-3">
               <span class="font-weight-bold text-center primary--text">Prihlásenie</span>
