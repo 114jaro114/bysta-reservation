@@ -1,45 +1,43 @@
 <template>
-<div class="notifications w-100 h-100 text-uppercase secondary-color">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <v-lazy :options="{
-        threshold: .4
-      }" min-height="100vh" transition-group="scale-transition">
-    <v-card class="v-content">
-      <v-toolbar elevation="2" class="mb-3">
-        <v-app-bar-nav-icon :drawerNew="drawerNew" @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title class="position-absolute" style="right:14px">
-          <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-            <img class="logo2 align-middle" src="/img/logos/logo_home_theme_dark.png">
-          </span>
-          <span class="md-title font-weight-bold" v-else>
-            <img class="logo2 align-middle" src="/img/logos/logo_home_theme_light.png">
-          </span>
-        </v-toolbar-title>
-        <template v-slot:extension>
-          <v-tabs grow>
-            <v-tab :to="tabs[0].route" exact>
-              Všetky
-            </v-tab>
-            <v-tab :to="tabs[1].route">
-              <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="orange">
-                Nové
-              </v-badge>
-            </v-tab>
-            <v-tab :to="tabs[2].route">
-              Dôležité
-            </v-tab>
-            <!-- <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab> -->
-          </v-tabs>
-        </template>
-      </v-toolbar>
-      <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
-        <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-          <router-view />
-        </v-tab-item>
-        <NavigationDrawer :drawer="drawer" />
-      </v-tabs-items>
-    </v-card>
-  </v-lazy>
+<div class="notifications w-100 h-100">
+  <v-card elevation="0">
+    <v-app-bar fixed flat>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-title class="position-absolute" style="right:14px">
+        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
+          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_dark.png">
+        </span>
+        <span class="md-title font-weight-bold" v-else>
+          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_light.png">
+        </span>
+      </v-toolbar-title>
+
+      <template v-slot:extension>
+        <v-tabs grow>
+          <v-tab :to="tabs[0].route" exact>
+            Všetky
+          </v-tab>
+          <v-tab :to="tabs[1].route">
+            <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="orange">
+              Nové
+            </v-badge>
+          </v-tab>
+          <v-tab :to="tabs[2].route">
+            Dôležité
+          </v-tab>
+          <!-- <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab> -->
+        </v-tabs>
+      </template>
+    </v-app-bar>
+
+    <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
+        <router-view />
+      </v-tab-item>
+      <NavigationDrawer :drawer="drawer" />
+    </v-tabs-items>
+  </v-card>
   <SpeedDial />
   <BottomNavigation />
   <Footer />

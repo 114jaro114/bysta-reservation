@@ -1,16 +1,17 @@
 <template>
-<div class="domov w-100 h-100 text-uppercase mt-1">
+<div class="domov w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card>
+        <v-card class="rounded" elevation="0">
           <v-card-text>
             <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
           </v-card-text>
 
           <v-divider />
+
           <v-card-text>
             <h1 class="primary--text">Galéria</h1>
             <!-- <v-skeleton-loader v-bind="attrs" type="image image"></v-skeleton-loader> -->

@@ -42,6 +42,10 @@ export default new Vuex.Store({
       state: false,
     },
 
+    autoDarkLightModeState: {
+      state: false,
+    },
+
     isLoggedOut: {
       username: '',
       logout: false
@@ -87,6 +91,10 @@ export default new Vuex.Store({
 
     bottomNavigationState: state => {
       return state.bottomNavigationState
+    },
+
+    autoDarkLightModeState: state => {
+      return state.autoDarkLightModeState
     },
 
     isLoggedOut: state => {
@@ -159,6 +167,10 @@ export default new Vuex.Store({
       Vue.set(state.bottomNavigationState, 'state', payload.status);
     },
 
+    mutationAutoDarkLightModeState: (state, payload) => {
+      Vue.set(state.autoDarkLightModeState, 'state', payload.status);
+    },
+
     mutationLogout: (state, payload) => {
       Vue.set(state.isLoggedOut, 'username', payload.username);
       Vue.set(state.isLoggedOut, 'logout', payload.logout);
@@ -217,6 +229,10 @@ export default new Vuex.Store({
 
     bottomNavigationState: (context, payload) => {
       context.commit('mutationBottomNavigationState', payload)
+    },
+
+    autoDarkLightModeState: (context, payload) => {
+      context.commit('mutationAutoDarkLightModeState', payload)
     },
 
     isLoggedOut: (context, payload) => {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0675f6c3d65ead73688aabac9b822e1b",
+    "content-hash": "fb69d0ef06f142fed5029128877d8c53",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1138,7 +1138,7 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.20.1",
+            "version": "v8.40.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",

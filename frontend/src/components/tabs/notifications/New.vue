@@ -1,5 +1,5 @@
 <template>
-<div class="new w-100 h-100 text-uppercase mt-1">
+<div class="new w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .8
           }" transition="fade-transition">
@@ -15,8 +15,8 @@
       </v-col> -->
 
       <v-col>
-        <v-card>
-          <v-toolbar class="notiftoolbar" extended extension-height="4" color="primary" dark>
+        <v-card class="rounded" elevation="0">
+          <v-toolbar class="notiftoolbar rounded-top" extended extension-height="4" color="primary" flat dark>
             <div class="w-75" v-if="selected.length == '0'">
               <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable || notif.length == 0"></v-text-field>
               <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable &&  notif.length != 0"></v-text-field>

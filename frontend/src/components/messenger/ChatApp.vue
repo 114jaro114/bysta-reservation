@@ -1,11 +1,11 @@
 <template lang="html">
-  <div class="chat-app w-100 h-100 mt-1">
+  <div class="chat-app w-100 h-100 mt-3">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
         <v-lazy :options="{
                   threshold: .4
                 }" transition="scale-transition">
-          <v-card elevation="2">
+          <v-card class="rounded" elevation="0">
             <v-card-title>
               <v-row v-if="this.$store.getters['selectedUser'].id != null">
                 <v-col>

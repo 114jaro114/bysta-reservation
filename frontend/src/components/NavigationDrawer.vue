@@ -183,7 +183,7 @@ export default {
 }
 
 .v-list-item-group .theme--dark.v-list-item--active {
-  color: #21CFF3;
+  color: #0D47A1;
 }
 
 .v-list-item-group .v-list-item--active.theme--light {

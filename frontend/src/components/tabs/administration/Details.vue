@@ -1,95 +1,87 @@
 <template>
-<div class="details w-100 h-100 text-uppercase mt-1">
+<div class="details w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
-          }" transition="scale-transition" style="padding-top:25px">
+          }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
-        <v-row>
-          <v-col cols="12" lg="6" md="6" sm="12" class="mb-5">
-            <v-card class="">
-              <v-sheet class="v-sheet--offset mx-auto rounded-lg" color="grey lighten-5" elevation="0" max-width="calc(100% - 32px)">
-                <div id="chart">
-                  <apexchart type="radialBar" height="350" :options="chartOptionsStroked_gauge" :series="seriesStroked_gauge"></apexchart>
-                </div>
-              </v-sheet>
+      <v-col cols="12" lg="6" md="6" sm="12">
+        <v-card class="rounded" elevation="0">
+          <div class="pt-3" id="chart">
+            <apexchart type="radialBar" height="350" :options="chartOptionsStroked_gauge" :series="seriesStroked_gauge"></apexchart>
+          </div>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Vlhkosť - Tlak - Teplota
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Vlhkosť - Tlak - Teplota
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <v-col cols="12" lg="6" md="6" sm="12" class="mb-5">
-            <v-card class="toolbar-mb">
-              <v-sheet class="v-sheet--offset mx-auto" color="grey lighten-5" elevation="0" max-width="calc(100% - 32px)" rounded>
-                <div id="chart">
-                  <apexchart type="line" height="298" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-                </div>
-              </v-sheet>
+      <v-col cols="12" lg="6" md="6" sm="12">
+        <v-card class="rounded" elevation="0">
+          <div class="pt-3" id="chart">
+            <apexchart type="line" height="298" :options="chartOptionsLine" :series="seriesLine"></apexchart>
+          </div>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Cena za noc/osoba/obdobie
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Cena za noc/osoba/obdobie
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <v-col cols="12" lg="6" md="6" sm="12" class="mb-5">
-            <v-card class="toolbar-mb">
-              <v-sheet class="v-sheet--offset mx-auto" color="grey lighten-5" elevation="0" max-width="calc(100% - 32px)" rounded>
-                <div id="chart">
-                  <apexchart type="radialBar" height="333" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
-                </div>
-              </v-sheet>
+      <v-col cols="12" lg="6" md="6" sm="12">
+        <v-card class="rounded" elevation="0">
+          <div class="pt-3" id="chart">
+            <apexchart type="radialBar" height="333" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
+          </div>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Vlhkosť - Tlak - Teplota
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Vlhkosť - Tlak - Teplota
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <v-col cols="12" lg="6" md="6" sm="12">
-            <v-card class="toolbar-mb">
-              <v-sheet class="v-sheet--offset mx-auto" color="grey lighten-5" elevation="0" max-width="calc(100% - 32px)" rounded>
-                <div id="chart">
-                  <apexchart type="bar" height="298" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-                </div>
-              </v-sheet>
+      <v-col cols="12" lg="6" md="6" sm="12">
+        <v-card class="rounded" elevation="0">
+          <div class="pt-3" id="chart">
+            <apexchart type="bar" height="298" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+          </div>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Vlhkosť - Tlak - Teplota
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia pred 26 minutami</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Vlhkosť - Tlak - Teplota
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-lazy>
@@ -289,13 +281,4 @@ export default {
 </script>
 
 <style type="scss">
-.v-expansion-panels>*:first-child {
-  border-top-left-radius: unset !important;
-  border-top-right-radius: unset !important;
-}
-
-.v-sheet--offset {
-  top: -24px;
-  position: relative;
-}
 </style>

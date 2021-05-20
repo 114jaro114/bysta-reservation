@@ -1,7 +1,7 @@
 <template>
-<div class="phone-viewport w-100 m-auto">
+<div class="phone-viewport w-100" :style="test">
   <!-- v-model="value" -->
-  <v-bottom-navigation color="secondary" :input-value="this.$store.getters['bottomNavigationState'].state" background-color="primary" shift grow>
+  <v-bottom-navigation color="secondary" :input-value="this.$store.getters['bottomNavigationState'].state" background-color="primary" app shift grow>
     <v-btn to="/home" value="home">
       <span>Domov</span>
       <v-icon color="secondary">mdi-home</v-icon>
@@ -57,12 +57,14 @@ export default {
     return {
       value: '',
       num: 5,
+      test: null,
     }
   },
 
   mounted() {
     //do something after mounting vue instance
-    // console.log("BottomNavigation mounted");
+    this.bottomNavigationStyle();
+
     if (JSON.parse(localStorage.getItem("bottom_navigation")) == true) {
       this.$store.dispatch('bottomNavigationState', {
         status: true
@@ -76,10 +78,24 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    // console.log("BottomNavigation updated");
+    this.bottomNavigationStyle();
   },
 
   methods: {
+    bottomNavigationStyle() {
+      if (window.innerWidth <= 480 && this.$store.getters['bottomNavigationState'].state == true) {
+        this.test = 'margin-top:56px;display:block';
+      } else {
+        this.test = 'margin-top:0px;display:none';
+      }
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 480 && this.$store.getters['bottomNavigationState'].state == true) {
+          this.test = 'margin-top:56px;display:block';
+        } else {
+          this.test = 'margin-top:0px;display:none';
+        }
+      });
+    }
     // home() {
     //   this.$router.push('/home');
     // },
@@ -118,5 +134,9 @@ export default {
       }
     }
   }
+}
+
+.v-bottom-navigation {
+  z-index: 12 !important;
 }
 </style>

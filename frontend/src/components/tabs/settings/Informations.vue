@@ -1,11 +1,11 @@
 <template>
-<div class="informations w-100 h-100 text-uppercase mt-1">
+<div class="informations w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-expansion-panels accordion>
+        <v-expansion-panels flat accordion focusable>
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Krajina/región</span>
@@ -14,7 +14,7 @@
               <span>krajina</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>O aktuálnej verzií</span>
@@ -23,7 +23,7 @@
               <span>O aktuálnej verzií</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Podmienky používania</span>
@@ -32,7 +32,7 @@
               <span>Podmienky používania</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Zásady ochrany osobných údajov</span>
@@ -41,7 +41,7 @@
               <span>Zásady ochrany osobných údajov</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Časté otázky</span>
@@ -50,7 +50,7 @@
               <span>Časté otázky</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Kontakt</span>
@@ -59,7 +59,7 @@
               <span>Kontakt</span>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
+          <v-divider class="m-0" />
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Poďakovanie</span>
@@ -162,8 +162,4 @@ export default {
 </script>
 
 <style type="scss">
-.v-expansion-panels>*:first-child {
-  border-top-left-radius: unset !important;
-  border-top-right-radius: unset !important;
-}
 </style>

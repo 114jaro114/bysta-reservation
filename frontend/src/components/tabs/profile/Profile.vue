@@ -1,12 +1,12 @@
 <template>
-<div class="profile w-100 h-100 text-uppercase mt-1">
+<div class="profile w-100 h-100 text-uppercase mt-3">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
-        <v-card elevation="2" :loading="myloadingvariable">
+        <v-card class="rounded" elevation="0" :loading="myloadingvariable">
           <v-card-title>
             <v-row v-if="user_acc_info == true">
               <v-col>

@@ -1,5 +1,5 @@
 <template>
-<div class="vytvorit_rezervaciu w-100 h-100">
+<div class="vytvorit_rezervaciu w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
