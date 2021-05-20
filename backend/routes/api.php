@@ -37,11 +37,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'internal', 'middleware' => ['auth:api']], function () {
-    Route::get('sockets/serve', function () {
-        \Illuminate\Support\Facades\Artisan::call('websockets:serve');
-    });
-});
+// Route::group(['prefix' => 'internal', 'middleware' => ['auth:api']], function () {
+//     Route::get('sockets/serve', function () {
+//         \Illuminate\Support\Facades\Artisan::call('websockets:serve');
+//     });
+// });
 
 // Route::post('/broadcast', function (Request $request) {
 //     $pusher = new Pusher\Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'));
@@ -84,6 +84,7 @@ Route::post('/calendar/update', [CalendarController::class, 'update']);
 Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
 
 Route::get('/reservation', [ReservationController::class, 'index']);
+// Route::get('/getReservationsForCurrentUser', [ReservationController::class, 'getAuthReservation']);
 Route::get('/checkPendingReservation/{username}', [ReservationController::class, 'checkPendingReservation']);
 Route::post('/reservation/store', [ReservationController::class, 'store']);
 Route::post('/reservation/update', [ReservationController::class, 'update']);
@@ -111,6 +112,7 @@ Route::get('/comments', [CommentController::class, 'fetchComments']);
 Route::post('/comments', [CommentController::class, 'store']);
 
 //Friendships
+Route::get('/checkContactForm', [FriendshipsController::class, 'checkIfContactFormExist']);
 Route::get('/friendships', [FriendshipsController::class, 'getFriendships']);
 Route::get('/getAllPossibleFriends', [FriendshipsController::class, 'getAllPossibleFriends']);
 Route::post('/friendships/sendFriendshipRequest', [FriendshipsController::class, 'sendFriendshipRequest']);

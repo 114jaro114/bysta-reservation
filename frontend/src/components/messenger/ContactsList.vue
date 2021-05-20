@@ -4,12 +4,14 @@
       <v-col class="pl-0 pr-0">
         <v-card elevation="0">
           <v-card-text class="p-0">
-            <v-data-table no-data-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="contacts" :search="search"  :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" elevation="0">
+            <v-data-table no-data-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :loading="myloadingvariable" :items="contacts" :search="search" loading-text="Načítavanie... Prosím počkajte" elevation="0">
               <template v-slot:top>
-                <v-toolbar color="primary" dark>
+                <v-toolbar extended extension-height="4" dark color="primary">
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
                   <v-spacer class="mr-1 ml-1"></v-spacer>
                   <v-btn color="secondary primary--text" to="/profile/add_friends" fab small ><v-icon>mdi-account-plus</v-icon></v-btn>
+
+                  <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
                 </v-toolbar>
               </template>
               <template v-slot:item="{ item }" >
@@ -181,6 +183,7 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
+    this.myloadingvariable = true;
     this.$store.dispatch('contactListLoader', {
       cancelLoader: true
     });

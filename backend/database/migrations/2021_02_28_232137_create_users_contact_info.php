@@ -23,7 +23,6 @@ class CreateUsersContactInfo extends Migration
             $table->string('postcode')->nullable();
             $table->string('country')->nullable();
             $table->string('phone')->nullable();
-            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

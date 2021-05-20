@@ -197,7 +197,6 @@ class FriendshipsController extends Controller
         $postcode = $request->postcode;
         $country = $request->country;
         $phone = $request->phone;
-        $note = $request->note;
 
         $checker = DB::table('users_contact_info')->select('user_id')->where('user_id', auth()->user()->id)->exists();
         if ($checker) {
@@ -209,8 +208,7 @@ class FriendshipsController extends Controller
                       'city' => $request->city,
                       'postcode' => $request->postcode,
                       'country' => $request->country,
-                      'phone' => $request->phone,
-                      'note' => $request->note]);
+                      'phone' => $request->phone]);
             return response()->json('data boli uspesne aktualizovane');
         } else {
             DB::table('users_contact_info')->insert([
@@ -221,11 +219,23 @@ class FriendshipsController extends Controller
                       'city' => $request->city,
                       'postcode' => $request->postcode,
                       'country' => $request->country,
-                      'phone' => $request->phone,
-                      'note' => $request->note]);
+                      'phone' => $request->phone]);
             return response()->json('data boli uspesne ulozene');
         }
         return response()->json('error');
+    }
+
+    public function checkIfContactFormExist()
+    {
+        $contactFormExist = DB::table('users_contact_info')
+          ->where('user_id', '=', auth()->user()->id)
+          ->first();
+
+        if ($contactFormExist) {
+            return response('1');
+        } else {
+            return response('0');
+        }
     }
 
     public function getContactForm()

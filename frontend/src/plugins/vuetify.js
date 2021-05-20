@@ -27,11 +27,6 @@ export default new Vuetify({
         error: '#EA1616',
         // background: '#1E1E1E',
         background: '#333333',
-
-        // facebook: '#4CAF50',
-        // google: '#4CAF50',
-        // twitter: '#4CAF50',
-        // github: '#4CAF50'
       },
       light: {
         primary: '#0D47A1',

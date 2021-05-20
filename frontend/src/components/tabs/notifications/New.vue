@@ -4,7 +4,7 @@
             threshold: .8
           }" transition="fade-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <!-- <v-col>
+      <v-col>
         <v-text-field v-model="form.recipient" label="meno">meno</v-text-field>
         <v-text-field v-model="form.title" label="text">text</v-text-field>
         <v-text-field v-model="form.subtitle" label="text">text</v-text-field>
@@ -12,7 +12,7 @@
         <v-text-field v-model="form.date" label="text">text</v-text-field>
         <v-text-field v-model="form.status" label="status">status</v-text-field>
         <v-btn @click="methodName">odoslat</v-btn>
-      </v-col> -->
+      </v-col>
 
       <v-col>
         <v-card>

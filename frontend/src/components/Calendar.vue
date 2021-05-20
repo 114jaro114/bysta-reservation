@@ -2,8 +2,8 @@
 <div class='calendar'>
   <!-- <div class="row bb ml-0 mr-0 pt-3"> -->
   <v-card class="m-3" :loading="myloadingvariable">
-    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
-      :timezone="timezone" is-expanded>
+    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates" :timezone="timezone"
+      is-expanded>
       <!--=========DAY POPOVER HEADER SLOT=========-->
       <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
         {{ getPopoverHeaderLabel(day) }}
@@ -50,27 +50,24 @@
           <v-divider></v-divider>
         </template> -->
       <template v-slot:footer>
-        <div class="bg-gray-100 text-center p-2 border-t rounded-b-lg">
-          <v-divider></v-divider>
+        <div class="bg-gray-100 text-center p-2 pt-0 border-t rounded-b-lg">
+          <v-divider class="mt-0"></v-divider>
           <v-btn color="primary" @click="moveToToday" class="mr-3">
             Dnes
           </v-btn>
           <v-btn color="primary" @click="resetDate" outlined>
             Resetovať výber
           </v-btn>
-
           <v-divider></v-divider>
         </div>
       </template>
     </DatePicker2>
-    <v-row class="w-100 justify-center">
-      <v-col>
+    <v-row class="justify-center">
+      <v-col cols="12" lg="6" md="12" sm="12">
         <v-icon color="orange">mdi-rectangle</v-icon>
         <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
       </v-col>
-    </v-row>
-    <v-row class="w-100 justify-center">
-      <v-col>
+      <v-col cols="12" lg="6" md="12" sm="12">
         <v-icon color="red">mdi-rectangle</v-icon>
         <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
       </v-col>
@@ -256,7 +253,15 @@ export default {
     },
 
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/reservation')
+      const api = 'http://127.0.0.1:8000/api/reservation';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        // axios.get('http://127.0.0.1:8000/api/reservation')
         .then(resp => {
           //this code contains disabled dates in datepicker
           console.log(resp.data.length);
@@ -311,11 +316,11 @@ export default {
       this.$store.dispatch('reservationData', {
         event_name: "rezervácia",
         start_date: moment(this.range.start)
-          .format('YYYY-MM-DDTHH:mm:SS'),
+          .format('YYYY-MM-DD'),
         end_date: moment(this.range.end)
           .add(23, 'hours')
           .add(59, 'minutes')
-          .format('YYYY-MM-DDTHH:mm:SS'),
+          .format('YYYY-MM-DD'),
         start_time: moment(this.range.start)
           .format('HH:mm:SS'),
         end_time: moment(this.range.end)
@@ -347,6 +352,7 @@ export default {
     return day.date.toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options);
   },
   addTodo(day) {
+
     this.editId = ++this.incId;
     this.test.push({
       id: this.editId,
@@ -440,5 +446,9 @@ export default {
 
 .testtt {
   background-color: rgba(0,0,0,0,5);
+}
+
+.vc-time-picker {
+  text-align: center;
 }
 </style>

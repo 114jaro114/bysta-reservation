@@ -107,10 +107,10 @@
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template> -->
           </v-data-table>
-          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEventsForOneUser" :search="search" item-key="name" :loading="myloadingvariable"
+          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents" :search="search" item-key="name" :loading="myloadingvariable"
             loading-text="Načítavanie... Prosím počkajte" v-else>
             <template v-slot:item.id="{ item }">
-              <span>{{ currentEventsForOneUser.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
+              <span>{{ currentEvents.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
             </template>
             <template v-slot:item.created_at="{ item }">
               <span>{{ formatCreated(item.created_at) }}</span>
@@ -150,7 +150,7 @@
                   </v-tooltip>
                 </template>
                 <v-card>
-                  <v-toolbar dark color="primary">
+                  <v-toolbar extended extension-height="4" dark color="primary">
                     <v-btn icon dark @click="diagolShowDetail = false">
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -161,6 +161,7 @@
                         Save
                       </v-btn>
                     </v-toolbar-items> -->
+                    <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
                   </v-toolbar>
                   <v-list three-line subheader>
                     <v-subheader>Kontaktné údaje</v-subheader>
@@ -170,41 +171,41 @@
                         <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle> -->
                         <v-row justify="center">
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="surname" v-model="surname" label="Meno" readonly></v-text-field>
+                            <v-text-field ref="surname" v-model="reservationContacts.surname" label="Meno" readonly></v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" readonly></v-text-field>
+                            <v-text-field ref="lastname" v-model="reservationContacts.lastname" label="Priezvisko" readonly></v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                            <v-text-field ref="address" v-model="address" label="Adresa" readonly></v-text-field>
+                            <v-text-field ref="address" v-model="reservationContacts.address" label="Adresa" readonly></v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="city" v-model="city" label="Mesto" readonly></v-text-field>
+                            <v-text-field ref="city" v-model="reservationContacts.city" label="Mesto" readonly></v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                            <v-text-field ref="postcode" v-model="postcode" label="PSČ" readonly></v-text-field>
+                            <v-text-field ref="postcode" v-model="reservationContacts.postcode" label="PSČ" readonly></v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" readonly>
-                            </v-autocomplete>
+                            <v-text-field ref="country" v-model="reservationContacts.country" label="Krajina" readonly>
+                            </v-text-field>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" readonly></VueTelInputVuetify>
+                            <VueTelInputVuetify v-model="reservationContacts.myPhone" label="Mobilné číslo" placeholder="" disabled readonly></VueTelInputVuetify>
                           </v-col>
 
                           <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                            <div v-if="note == null">
+                            <div v-if="reservationDetails.note  == null">
                               <v-textarea value="-" label=" Poznámka" rows="1" readonly>
                               </v-textarea>
                             </div>
                             <div v-else>
-                              <v-textarea v-model="note" label=" Poznámka" rows="1" readonly>
+                              <v-textarea v-model="reservationDetails.note " label=" Poznámka" rows="1" readonly>
                               </v-textarea>
                             </div>
                           </v-col>
@@ -421,7 +422,6 @@ export default {
   data() {
     return {
       currentEvents: [],
-      currentEventsForOneUser: [],
       indexToUpdate: "",
       newEvent: {
         id: "",
@@ -497,23 +497,27 @@ export default {
       }, ],
       headers2: [{
           text: 'ID',
-          align: 'id',
-          sortable: false,
+          align: 'center',
+          sortable: true,
           value: 'id',
         }, {
           text: 'Vytvorená',
+          align: 'center',
           value: 'created_at',
           sortable: true,
         }, {
           text: 'Status',
+          align: 'center',
           value: 'event_name',
           sortable: false,
         }, {
           text: 'Dátum začiatku',
+          align: 'center',
           value: 'start_date',
           sortable: true,
         }, {
           text: 'Dátum konca',
+          align: 'center',
           value: 'end_date',
           sortable: true,
         },
@@ -540,6 +544,7 @@ export default {
         // },
         {
           text: 'Detail',
+          align: 'center',
           value: 'actions',
           sortable: false
         }
@@ -579,7 +584,18 @@ export default {
         nights: "",
         overallPriceForNight: "",
         priceForNight: "",
+        note: "",
       },
+      reservationContacts: {
+        surname: "",
+        lastname: "",
+        address: "",
+        city: "",
+        postcode: "",
+        country: "",
+        myPhone: "",
+      },
+
       counter1: "",
       counter2: "",
       counter3: "",
@@ -587,12 +603,18 @@ export default {
       priceAdults: 18,
       priceChildsto2: 0,
       priceChilds2to12: 18,
+      toolbarLoading: true,
     }
   },
   async created() {
     try {
-      let response = await axios.get('http://127.0.0.1:8000/api/reservation')
-      console.log(response);
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      let response = await axios.get('http://127.0.0.1:8000/api/reservation', config)
       this.currentEvents = response.data.data
       this.searched = this.currentEvents
     } catch (err) {
@@ -654,25 +676,56 @@ export default {
       this.reservationDetails.nights = item.nights;
       this.reservationDetails.overallPriceForNight = item.overallPriceForNight;
       this.reservationDetails.priceForNight = item.priceForNight;
+
       this.counter1 = parseInt(item.adults);
       this.counter2 = parseInt(item.childs2to12);
       this.counter3 = parseInt(item.childsto2);
+
+      this.reservationDetails.note = item.note;
+
+      const api2 = 'http://127.0.0.1:8000/api/getContactForm';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api2, config)
+        .then(res => {
+          if (res.data.length != 0) {
+            this.reservationContacts.surname = res.data[0].surname;
+            this.reservationContacts.lastname = res.data[0].lastname;
+            this.reservationContacts.address = res.data[0].address;
+            this.reservationContacts.city = res.data[0].city;
+            this.reservationContacts.postcode = res.data[0].postcode;
+            this.reservationContacts.country = res.data[0].country;
+            this.reservationContacts.myPhone = res.data[0].phone;
+          }
+          this.toolbarLoading = false;
+        });
     },
 
     addReservation() {
       this.$router.push("/administration/create_reservation");
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/reservation')
+      const api = 'http://127.0.0.1:8000/api/reservation';
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
         .then(resp => {
           console.log(resp.data);
           this.currentEvents = resp.data
           this.searched = this.currentEvents
-          for (var i = 0; i < resp.data.length; i++) {
-            if (resp.data[i].username == this.user) {
-              this.currentEventsForOneUser.push(resp.data[i]);
-            }
-          }
+          // for (var i = 0; i < resp.data.length; i++) {
+          //   if (resp.data[i].username == this.user) {
+          //     this.currentEventsForOneUser.push(resp.data[i]);
+          //   }
+          // }
           // console.log(this.currentEventsForOneUser);
           this.myloadingvariable = false;
         })

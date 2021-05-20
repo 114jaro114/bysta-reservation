@@ -5,6 +5,29 @@
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <div class="text-center">
+        <v-dialog v-model="contactFormDialog" max-width="290">
+          <v-card>
+            <v-card-title class="headline">
+              Uloženie kontaktných informácií
+            </v-card-title>
+
+            <v-card-text>
+              Prajete si zadané kontaktné informácie uložiť do Vášho účtu?
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="green darken-1" text @click="contactFormDialogOutput('no')">
+                Nie
+              </v-btn>
+
+              <v-btn color="green darken-1" text @click="contactFormDialogOutput('yes')">
+                Áno
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" :left="true">
           <v-icon>mdi-alert-circle</v-icon>
           {{ text }}
@@ -37,7 +60,7 @@
           threshold: .8
         }" min-height="200" transition="fade-transition"> -->
         <v-stepper v-model="e1">
-          <v-stepper-header>
+          <v-stepper-header elevation="5">
             <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
               Dátum a čas príchodu a odchodu
               <small v-if="step1 == false">Chyba</small>
@@ -78,8 +101,20 @@
                   <v-icon color="orange">mdi-information</v-icon>Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
                 </span>
               </div>
+              <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
               <Calendar />
-              <div v-if="this.$store.getters['pendingReservation'] == 0">
+              <!-- <v-row class="justify-center">
+                  <v-col cols="12" lg="6" md="12" sm="12">
+                    <v-icon color="orange">mdi-rectangle</v-icon>
+                    <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+                  </v-col>
+                  <v-col cols="12" lg="6" md="12" sm="12">
+                    <v-icon color="red">mdi-rectangle</v-icon>
+                    <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+                  </v-col>
+                </v-row> -->
+              <!-- </v-card> -->
+              <div class="pt-3" v-if="this.$store.getters['pendingReservation'] == 0">
                 <v-btn color="accent" disabled class="mr-2" outlined>
                   <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
                 </v-btn>
@@ -88,7 +123,7 @@
                   Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
                 </v-btn>
               </div>
-              <div class="" v-else>
+              <div class="pt-3" v-else>
                 <v-btn color="accent" disabled class="mr-2" outlined>
                   <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
                 </v-btn>
@@ -238,7 +273,7 @@
                   <v-row class="m-0 mt-1">
                     <v-col class="pl-0 pr-0" align="left">
                       <v-icon color="orange">mdi-information</v-icon>
-                      <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítávajú.</span>
+                      <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočitávajú.</span>
                     </v-col>
                   </v-row>
 
@@ -424,7 +459,7 @@
 
             <v-stepper-content step="4">
               <v-card class="m-3" tile>
-                <v-card-title>Rekapitulácia</v-card-title>
+                <v-card-title class="justify-center">Rekapitulácia</v-card-title>
                 <v-card-text>
                   <v-row align="center">
                     <v-divider />
@@ -634,7 +669,7 @@
                           <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
                             {{overallPriceForNight}} €</span>
                         </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
+                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1}} {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
                       </v-tooltip>
                     </v-col>
@@ -648,7 +683,7 @@
               </v-btn>
 
               <v-btn color="primary" @click="store()">
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                Odoslať rezerváciu<v-icon>mdi-arrow-right-thick</v-icon>
               </v-btn>
             </v-stepper-content>
           </v-stepper-items>
@@ -764,6 +799,9 @@ export default {
       snackbar: false,
       snackbarSuccess: false,
       text: '',
+      contactFormDialog: false,
+      contactFormDialogOut: '',
+      rowContactForm: '',
     }
   },
 
@@ -850,13 +888,45 @@ export default {
 
     checkStatus3() {
       if (this.counter1 == 0 && this.counter2 == 0 && this.counter3 == 0) {
-        this.step3 = false;
+        this.step2 = false;
         this.snackbar = true;
         this.text = "Je potrebné zadať počet osôb!";
       } else {
-        this.step3 = true;
+        this.step2 = true;
         this.e1 = 3;
       }
+    },
+
+    contactFormDialogOutput(param) {
+      this.contactFormDialogOut = param;
+      this.contactFormDialog = false;
+      if (param == 'yes') {
+        const api = 'http://127.0.0.1:8000/api/contactForm';
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.post(api, {
+              surname: this.surname,
+              lastname: this.lastname,
+              address: this.address,
+              city: this.city,
+              postcode: this.postcode,
+              country: this.country,
+              phone: this.phone.number,
+            },
+            config
+          )
+          .then(res => {
+            console.log(res);
+          })
+      } else {
+        console.log('no');
+      }
+      this.step3 = true;
+      this.e1 = 4;
     },
 
     checkStatus4() {
@@ -869,12 +939,29 @@ export default {
         this.country == null ||
         this.myPhone == null
       ) {
-        this.step4 = false;
+        this.step3 = false;
         this.snackbar = true;
         this.text = "Je potrebné vyplniť kontaktné údaje!";
       } else {
-        this.step4 = true;
-        this.e1 = 4;
+        const api = 'http://127.0.0.1:8000/api/checkContactForm';
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            console.log(res);
+            this.rowContactForm = res.data;
+          });
+        if (this.rowContactForm == 0) {
+          console.log(this.rowContactForm);
+          this.contactFormDialog = true;
+        } else {
+          this.step3 = true;
+          this.e1 = 4;
+        }
       }
     },
 
@@ -967,7 +1054,8 @@ export default {
             childs2to12: this.counter2,
             childsto2: this.counter3,
             priceForNight: this.priceAdults,
-            overallPriceForNight: this.overallPriceForNight
+            overallPriceForNight: this.overallPriceForNight,
+            note: this.note
           }, config)
           .then(() => {
             const api = 'http://127.0.0.1:8000/api/sendNotification';
@@ -1060,6 +1148,8 @@ export default {
       .format("YYYY-MM-DD");
     this.end_date = moment(this.$store.getters['successReservationData'].end_date)
       .format("YYYY-MM-DD");
+
+    console.log(this.start_date);
     this.start_time = this.$store.getters['successReservationData'].start_time;
     this.end_time = this.$store.getters['successReservationData'].end_time;
 

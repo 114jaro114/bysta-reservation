@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Calendar extends Model
 {
     protected $guarded = [];
+    protected $table="humidities";
 }

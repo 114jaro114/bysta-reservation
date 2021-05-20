@@ -499,7 +499,7 @@
                       </v-row>
 
                       <v-row class="justify-center">
-                        <span class="ml-1">Ohrev vody pomoocu boileru</span>
+                        <span class="ml-1">Ohrev vody pomocou boileru</span>
                       </v-row>
                     </v-col>
                     <v-col class="p-4">
@@ -508,7 +508,7 @@
                       </v-row>
 
                       <v-row class="justify-center">
-                        <span class="ml-1">Ohrev vody pomoocu solárneho zariadenia</span>
+                        <span class="ml-1">Ohrev vody pomocou solárneho zariadenia</span>
                       </v-row>
                     </v-col>
                   </v-row>

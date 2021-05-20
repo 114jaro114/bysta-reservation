@@ -27,6 +27,7 @@ class CreateReservationsTable extends Migration
             $table->string('childsto2');
             $table->string('priceForNight');
             $table->string('overallPriceForNight');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

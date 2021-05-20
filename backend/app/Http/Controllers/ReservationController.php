@@ -16,8 +16,24 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        return Reservation::all();
+        $username = auth()->user()->name;
+        if ($username == 'admin') {
+            return DB::table('reservations')->get();
+        // return Reservation::all();
+        } else {
+            // $checkIfReservationExist = DB::table('reservations')
+            //   ->where('username', '=', auth()->user()->name)
+            //   ->first();
+            // if ($checkIfReservationExist) {
+            return DB::table('reservations')->where('username', '=', $username)->get();
+            // }
+        }
     }
+
+    // public function getAuthReservation()
+    // {
+    //     return Reservation::where('user_id', auth()->user()->id)->get();
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -40,6 +56,7 @@ class ReservationController extends Controller
           'childsto2' => $request->childsto2,
           'priceForNight' => $request->priceForNight,
           'overallPriceForNight' => $request->overallPriceForNight,
+          'note' => $request->note
       ]);
         // $new_calendar = Reservation::create($request->all());
         return response()->json($reservation);
@@ -91,7 +108,7 @@ class ReservationController extends Controller
         $username = Reservation::where('id', $request->id)
                        ->select('username')
                        ->get();
-                       
+
         $user_id = DB::table('users')
                      ->where('name', $username[0]->username)
                      ->select('id')
