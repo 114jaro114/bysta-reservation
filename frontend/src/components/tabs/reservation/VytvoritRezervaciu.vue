@@ -6,7 +6,7 @@
     <v-row justify="center" class="ml-0 mr-0">
       <div class="text-center">
         <v-dialog v-model="contactFormDialog" max-width="290">
-          <v-card>
+          <v-card class="rounded" elevation="0">
             <v-card-title class="headline">
               Uloženie kontaktných informácií
             </v-card-title>
@@ -119,7 +119,7 @@
                   <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
                 </v-btn>
 
-                <v-btn color="primary" @click="checkStatus()">
+                <v-btn color="primary" @click="checkStatus(); toTop()">
                   Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
                 </v-btn>
               </div>
@@ -201,7 +201,7 @@
             </v-stepper-content> -->
 
             <v-stepper-content step="2">
-              <v-card class="m-3" tile>
+              <v-card class="m-3 rounded" elevation="0">
                 <v-card-text>
                   <v-row class="m-0">
                     <span>Dospelí</span>
@@ -400,48 +400,48 @@
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
-              <v-btn color="primary" @click="checkStatus3()">
+              <v-btn color="primary" @click="checkStatus3(); toTop()">
                 Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
               </v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <v-card class="m-3" tile>
+              <v-card class="m-3 rounded" elevation="0">
                 <!-- <v-row justify="center">
                 <v-col cols="12" sm="12" md="12" lg="6"> -->
                 <v-card-text>
-                  <v-row justify="center">
+                  <v-row justify="center" class="mt-3">
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable required></v-text-field>
+                      <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable required></v-text-field>
+                      <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable required></v-text-field>
+                      <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable required></v-text-field>
+                      <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable required></v-text-field>
+                      <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable required>
+                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable filled required>
                       </v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" clearable></VueTelInputVuetify>
+                      <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled clearable></VueTelInputVuetify>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" clearable>
+                      <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled clearable>
                       </v-textarea>
                     </v-col>
                   </v-row>
@@ -452,13 +452,13 @@
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
 
-              <v-btn color="primary" @click="checkStatus4()">
+              <v-btn color="primary" @click="checkStatus4(); toTop()">
                 Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
               </v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="4">
-              <v-card class="m-3" tile>
+              <v-card class="m-3 rounded" elevation="0">
                 <v-card-title class="justify-center">Rekapitulácia</v-card-title>
                 <v-card-text>
                   <v-row align="center">
@@ -468,41 +468,41 @@
                   </v-row>
                   <v-row justify="center">
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="surname" v-model="surname" label="Meno" readonly></v-text-field>
+                      <v-text-field ref="surname" v-model="surname" label="Meno" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" readonly></v-text-field>
+                      <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="address" v-model="address" label="Adresa" readonly></v-text-field>
+                      <v-text-field ref="address" v-model="address" label="Adresa" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="city" v-model="city" label="Mesto" readonly></v-text-field>
+                      <v-text-field ref="city" v-model="city" label="Mesto" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                      <v-text-field ref="postcode" v-model="postcode" label="PSČ" readonly></v-text-field>
+                      <v-text-field ref="postcode" v-model="postcode" label="PSČ" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" readonly>
+                      <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" filled readonly>
                       </v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" readonly></VueTelInputVuetify>
+                      <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" filled readonly></VueTelInputVuetify>
                     </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
                       <div v-if="note == null">
-                        <v-textarea value="-" label=" Poznámka" rows="1" readonly>
+                        <v-textarea value="-" label=" Poznámka" rows="1" filled readonly>
                         </v-textarea>
                       </div>
                       <div v-else>
-                        <v-textarea v-model="note" label=" Poznámka" rows="1" readonly>
+                        <v-textarea v-model="note" label=" Poznámka" rows="1" filled readonly>
                         </v-textarea>
                       </div>
                     </v-col>
@@ -838,6 +838,11 @@ export default {
   },
 
   methods: {
+    toTop() {
+      this.$vuetify.goTo(0);
+      console.log("cau");
+    },
+
     onInput(formattedNumber, {
       number,
       valid,

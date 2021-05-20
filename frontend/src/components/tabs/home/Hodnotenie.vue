@@ -4,7 +4,7 @@
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
           <Rating />
         </v-card>

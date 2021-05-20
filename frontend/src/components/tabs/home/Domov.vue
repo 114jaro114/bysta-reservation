@@ -4,8 +4,13 @@
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
+          <!-- <v-toolbar class="rounded-top" color="primary" flat dark>
+            <v-row align="center">
+              <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
+            </v-row>
+          </v-toolbar> -->
           <v-card-text>
             <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
           </v-card-text>

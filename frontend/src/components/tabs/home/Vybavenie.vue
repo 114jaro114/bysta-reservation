@@ -4,20 +4,18 @@
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
-          <v-card-title class="justify-center">
-            <!-- <span class="font-weight-bold primary--text">Vybavenie</span> -->
-          </v-card-title>
-
-          <v-card-text>
+          <v-toolbar class="rounded-top" color="primary" flat dark>
             <v-row align="center">
               <v-divider />
               <span>5 spální · 16 lôžok · 1 kúpeľňa + wc</span>
               <v-divider />
             </v-row>
+          </v-toolbar>
 
-            <h5 class="m-5 font-weight-bold">Usporiadanie lôžok</h5>
+          <v-card-text>
+            <h5 class="mt-3 m-5 font-weight-bold">Usporiadanie lôžok</h5>
 
             <v-row align="center">
               <v-divider />

@@ -20,7 +20,7 @@
                   <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
                 </v-alert>
 
-                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
 
                 <div class="row">
                   <div class="col text-center">

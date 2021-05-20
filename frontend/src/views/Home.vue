@@ -6,10 +6,10 @@
 
       <v-toolbar-title class="position-absolute" style="right:14px">
         <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_dark.png">
+          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_dark.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_dark.png')"></v-img>
         </span>
         <span class="md-title font-weight-bold" v-else>
-          <img class="logo2 align-middle" src="/img/logos/logo_home_theme_light.png">
+          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_light.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_light.png')"></v-img>
         </span>
       </v-toolbar-title>
 

@@ -4,11 +4,11 @@
   <v-card-title class="justify-center">
     <span class="primary--text">Pridať hodnotenie</span>
   </v-card-title>
-  <v-divider class="mt-0 mb-0" horizontal></v-divider>
+  <v-divider class="mt-0" horizontal></v-divider>
   <form @submit.prevent>
     <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
     <div class="p-3">
-      <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable clear-icon="mdi-close"></v-textarea>
+      <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
       <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
     </div>
   </form>
@@ -125,14 +125,16 @@
           threshold: .2
         }" min-height="200" transition="scale-transition">
       <v-card elevation="2" class="mt-3">
-        <v-card-title>
+        <v-toolbar class="rounded-top" color="primary" flat dark>
           <span>Hodnotenia</span>
           <v-spacer></v-spacer>
-          <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details></v-text-field>
+          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details clearable filled dense></v-text-field>
           <v-spacer></v-spacer>
-          <v-icon v-on:click="cardHide = !cardHide" style="position:relative;top:-10px">mdi-close</v-icon>
-        </v-card-title>
-        <v-data-table :headers="headers" :items="items" :search="search" item-key="name" class="elevation-0" :loading="myloadingvariable" loading-text="Loading... Please wait"></v-data-table>
+          <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
+        </v-toolbar>
+
+        <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0"
+          :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
       </v-card>
     </v-lazy>
   </div>
@@ -142,14 +144,15 @@
           threshold: .2
         }" min-height="200" transition="scale-transition">
       <v-card elevation="2" class="mt-3">
-        <v-card-title>
+        <v-toolbar class="rounded-top" color="primary" flat dark>
           <span>Zmeniť hodnotenie</span>
           <v-spacer></v-spacer>
           <v-icon v-on:click="cardHide2 = !cardHide2">mdi-close</v-icon>
-        </v-card-title>
+        </v-toolbar>
+
         <form @submit.prevent class="p-3">
-          <v-rating v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
-          <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter clearable clear-icon="mdi-close"></v-textarea>
+          <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
+          <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea>
           <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
         </form>
       </v-card>
@@ -179,6 +182,10 @@ export default {
       rules: [
         v => (v && v.length <= 50) || 'Maximálna dĺžka je 50 znakov'
       ],
+      footerProps: {
+        itemsPerPageText: 'Počet riadkov',
+        itemsPerPageOptions: [5, 10, 15, -1],
+      },
       search: '',
       headers: [{
         text: 'ID',

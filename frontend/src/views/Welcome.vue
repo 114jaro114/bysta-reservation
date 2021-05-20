@@ -29,12 +29,13 @@
     <!-- content -->
     <div class="content verticalhorizontal">
       <v-row justify="center">
-        <!-- <v-col> -->
         <div v-if="this.$vuetify.theme.dark">
-          <img src="/img/logos/logo_welcome_theme_dark.png" lazy-src="/img/logos/logo_welcome_theme_dark.png" class="m-auto w-100" color="primary">
+          <v-img class="ma-lg-0 ma-md-0 m-auto w-100" :lazy-src="require('../../public/img/logos/logo_welcome_theme_dark.png')" :max-height="maxHeight" :max-width="maxWidth" contain
+            :src="require('../../public/img/logos/logo_welcome_theme_dark.png')"></v-img>
         </div>
         <div v-else>
-          <img src="/img/logos/logo_welcome_theme_light.png" lazy-src="/img/logos/logo_welcome_theme_light.png" class="m-auto w-100" color="primary">
+          <v-img class="ma-lg-0 ma-md-0 m-auto w-100" :lazy-src="require('../../public/img/logos/logo_welcome_theme_light.png')" :max-height="maxHeight" :max-width="maxWidth" contain
+            :src="require('../../public/img/logos/logo_welcome_theme_light.png')"></v-img>
         </div>
       </v-row>
     </div>
@@ -47,7 +48,47 @@ export default {
   name: "Welcome",
   components: {},
   data() {
-    return {}
+    return {
+      maxWidth: 600,
+      maxHeight: 160,
+    }
+  },
+
+  methods: {
+    bottomNavigationStyle() {
+      if (window.innerWidth <= 750 && window.innerWidth > 600) {
+        this.maxWidth = 500;
+        this.maxHeight = 140;
+      } else if (window.innerWidth <= 600 && window.innerWidth > 500) {
+        this.maxWidth = 400;
+        this.maxHeight = 100;
+      } else if (window.innerWidth <= 500 && window.innerWidth > 400) {
+        this.maxWidth = 350;
+        this.maxHeight = 100;
+      } else if (window.innerWidth <= 400) {
+        this.maxWidth = 300;
+        this.maxHeight = 80;
+      }
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 750 && window.innerWidth > 600) {
+          this.maxWidth = 500;
+          this.maxHeight = 140;
+        } else if (window.innerWidth <= 600 && window.innerWidth > 500) {
+          this.maxWidth = 400;
+          this.maxHeight = 100;
+        } else if (window.innerWidth <= 500 && window.innerWidth > 400) {
+          this.maxWidth = 350;
+          this.maxHeight = 100;
+        } else if (window.innerWidth <= 400) {
+          this.maxWidth = 300;
+          this.maxHeight = 80;
+        }
+      });
+    }
+  },
+
+  updated() {
+    this.bottomNavigationStyle();
   },
 
   mounted() {
@@ -57,11 +98,13 @@ export default {
       username: '',
       logout: false
     });
+    this.bottomNavigationStyle();
   },
 
   created() {
     console.log('Component Welcome created')
   },
+
 };
 </script>
 

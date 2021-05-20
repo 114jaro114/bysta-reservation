@@ -4,7 +4,7 @@
             threshold: .8
           }" transition="fade-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
           <v-toolbar class="notiftoolbar rounded-top" extended extension-height="4" color="primary" flat dark>
             <div class="w-75" v-if="selected.length == '0'">
@@ -75,9 +75,8 @@
                     </v-card>
                   </template>
                 </v-list-item> -->
-
                 <!-- list notif -->
-                <v-list-item class="p-0" :key="item.id" v-if="!myloadingvariable">
+                <v-list-item class="p-0" :key="item.name" v-if="!myloadingvariable">
                   <template v-slot:default="{ active }">
                     <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
                       <v-list-item-title v-text="item.title"></v-list-item-title>

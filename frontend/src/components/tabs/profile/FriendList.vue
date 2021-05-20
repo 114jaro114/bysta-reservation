@@ -4,11 +4,12 @@
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
-          <v-card-title>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details></v-text-field>
-          </v-card-title>
+          <v-toolbar class="rounded-top" color="primary" flat dark>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
+          </v-toolbar>
+
           <v-data-table no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
             loading-text="Načítavanie... Prosím počkajte">
             <template v-slot:item.name="{ item }">
@@ -18,7 +19,7 @@
               </v-btn> -->
               <v-dialog v-model="dialogShowProfile" fullscreen hide-overlay transition="dialog-bottom-transition">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn text class="mr-3" color="primary" @click="showProfile(item)" outlined v-bind="attrs" v-on="on">
+                  <v-btn text class="mr-3" color="primary" @click="showProfile(item)" v-bind="attrs" v-on="on">
                     <v-icon>mdi-account</v-icon>
                     <span>{{item.name}}</span>
                   </v-btn>
@@ -93,8 +94,8 @@
                         <span class="ml-1">Prijať žiadosť</span>
                       </v-btn>
                       <div v-else>
-                        <v-btn class="mr-3" color="warning">
-                          <v-icon>mdi-account-clock</v-icon>
+                        <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
+                          <v-icon color="warning">mdi-account-clock</v-icon>
                           <span class="ml-1">Žiadosť odoslaná</span>
                         </v-btn>
                         <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
@@ -134,8 +135,8 @@
                 <span class="ml-1">Prijať žiadosť</span>
               </v-btn>
               <div v-else>
-                <v-btn class="mr-3" color="warning">
-                  <v-icon>mdi-account-clock</v-icon>
+                <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
+                  <v-icon color="warning">mdi-account-clock</v-icon>
                   <span class="ml-1">Žiadosť odoslaná</span>
                 </v-btn>
                 <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
@@ -170,16 +171,18 @@ export default {
       },
       headers: [{
           text: 'Status',
-          align: 'start',
+          align: 'center',
           filterable: false,
           sortable: false,
           value: 'status',
         },
         {
+          align: 'center',
           text: 'Meno',
           value: 'name',
         },
         {
+          align: 'center',
           text: 'Stav',
           value: 'friendship_status',
           sortable: false,
@@ -366,5 +369,21 @@ export default {
 
 .friend_list .md-content {
   min-height: auto !important;
+}
+
+#custom-disabled.v-btn--disabled.theme--light {
+  color: orange !important;
+}
+
+#custom-disabled.v-btn--disabled.theme--dark {
+  color: orange !important;
+}
+
+#custom-disabled.theme--light.v-btn.v-btn--disabled .v-icon {
+  color: orange !important;
+}
+
+#custom-disabled.theme--dark.v-btn.v-btn--disabled .v-icon {
+  color: orange !important;
 }
 </style>

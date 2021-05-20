@@ -35,10 +35,10 @@
                 <span>Používateľský účet bol úspešne vytvorený!</span>
               </v-alert>
 
-              <v-text-field prepend-icon="mdi-email" v-model="email" :error-messages="error" :rules="emailRules" label="Email" clearable clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field prepend-icon="mdi-email" v-model="email" :error-messages="error" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close" counter></v-text-field>
 
               <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="error" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo"
-                hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" clearable clear-icon="mdi-close"></v-text-field>
+                hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
               <v-row justify="center">
                 <v-col class="text-center pb-0 pt-5">
                   <v-checkbox v-model="remember" name="remember" id="remember" label="Zapamätať"></v-checkbox>

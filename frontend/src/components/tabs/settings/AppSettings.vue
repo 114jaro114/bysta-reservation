@@ -3,69 +3,68 @@
   <v-lazy :options="{
             threshold: .4
           }" min-height="100vh" transition-group="scale-transition">
-    <div class="">
-      <v-row justify="center" class="ml-0 mr-0">
-        <v-col>
-          <!-- <v-card> -->
-          <v-list class="rounded" flat subheader three-line>
-            <v-list-item-group v-model="ntf" multiple active-class="">
-              <v-subheader>Notifikácie</v-subheader>
-              <v-list-item>
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col class="pl-3 pr-3">
+        <!-- <v-card> -->
+        <v-list class="rounded" flat subheader three-line>
+          <v-list-item-group v-model="ntf" multiple active-class="">
+            <v-subheader>Notifikácie</v-subheader>
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-checkbox :input-value="active"></v-checkbox>
+                </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>Notifikácie</v-list-item-title>
-                    <v-list-item-subtitle>Informovať ma o nových udalostiach</v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-            </v-list-item-group>
-            <v-list-item-group v-model="ntfs" multiple active-class="">
-              <v-list-item>
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Notifikácie</v-list-item-title>
+                  <v-list-item-subtitle>Informovať ma o nových udalostiach</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+          <v-list-item-group v-model="ntfs" multiple active-class="">
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-checkbox :input-value="active"></v-checkbox>
+                </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>Zvuky</v-list-item-title>
-                    <v-list-item-subtitle>Zapnúť alebo vypnúť zvuky k notifikáciám</v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-            </v-list-item-group>
+                <v-list-item-content>
+                  <v-list-item-title>Zvuky</v-list-item-title>
+                  <v-list-item-subtitle>Zapnúť alebo vypnúť zvuky k notifikáciám</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
 
-            <v-divider></v-divider>
+          <v-divider></v-divider>
 
 
-            <v-list-item-group v-model="dlm" multiple active-class="">
-              <v-subheader>Nastavenie režimu</v-subheader>
-              <!-- <v-list-item-title>Tmavý/Svetlý režim</v-list-item-title> -->
-              <v-row class="pl-3 pr-3 pb-3" justify="center">
-                <v-col class="d-flex" cols="12" sm="6">
-                  <v-tooltip v-if="!$vuetify.theme.dark" bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
-                        <v-icon>mdi-theme-light-dark</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Zapnúť dark mód</span>
-                  </v-tooltip>
+          <v-list-item-group v-model="dlm" multiple active-class="">
+            <v-subheader>Nastavenie režimu</v-subheader>
+            <!-- <v-list-item-title>Tmavý/Svetlý režim</v-list-item-title> -->
+            <v-row class="pl-3 pr-3 pb-3" justify="center">
+              <v-col class="d-flex" cols="12" sm="6">
+                <v-tooltip v-if="!$vuetify.theme.dark" bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
+                      <v-icon>mdi-theme-light-dark</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Zapnúť dark mód</span>
+                </v-tooltip>
 
-                  <v-tooltip v-else bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
-                        <v-icon>mdi-theme-light-dark</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Vypnúť dark mód</span>
-                  </v-tooltip>
-                </v-col>
-              </v-row>
-              <!-- <v-list-item>
+                <v-tooltip v-else bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn :disabled="autoDLMon" v-on="on" @click="toggle_dark_mode" block large>
+                      <v-icon>mdi-theme-light-dark</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Vypnúť dark mód</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+            <!-- <v-list-item>
             <template v-slot:default="{ active }">
               <v-list-item-action>
                 <v-switch color="primary" :input-value="active" @click="bottomNavigation()" inset></v-switch>
@@ -78,77 +77,76 @@
             </template>
           </v-list-item> -->
 
-              <v-list-item>
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-switch color="primary" :input-value="active" inset></v-switch>
-                  </v-list-item-action>
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-switch color="primary" :input-value="active" inset></v-switch>
+                </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>Automatický režim </v-list-item-title>
-                    <v-list-item-subtitle>Automatické nastavenie tmavého/svetlého režimu (nemusí fungovať na všetkých prehliadačoch)</v-list-item-subtitle>
-                  </v-list-item-content>
+                <v-list-item-content>
+                  <v-list-item-title>Automatický režim </v-list-item-title>
+                  <v-list-item-subtitle>Automatické nastavenie tmavého/svetlého režimu (nemusí fungovať na všetkých prehliadačoch)</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+
+          <v-divider></v-divider>
+
+          <v-list-item-group v-model="sd" multiple active-class="">
+            <v-list-item :disabled="lockSpeedDial">
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-switch color="primary" :input-value="active" inset></v-switch>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>Speed dial (<v-icon medium>mdi-web</v-icon>)</v-list-item-title>
+                  <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie speed dialu (len rozlíšenie webu)</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+
+          <v-divider></v-divider>
+
+          <v-list-item-group v-model="bn" multiple active-class="">
+            <v-list-item :disabled="lockBottomNavigation">
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-switch color="primary" :input-value="active" inset></v-switch>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</v-list-item-title>
+                  <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie spodnej lišty (len pre mobily)</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+
+          <v-divider></v-divider>
+
+          <v-subheader>Jazyk aplikácie</v-subheader>
+          <!-- <v-list-item-title>Jazyk aplikácie</v-list-item-title> -->
+          <v-row class="pr-3 pl-3" justify="center">
+            <v-col class="d-flex pb-0" cols="12" sm="6">
+              <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo :menu-props="{ top: true, offsetY: true }">
+                <template class="select_language" slot="selection" slot-scope="slotProps">
+                  <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
+                  {{slotProps.item.name}}
                 </template>
-              </v-list-item>
-            </v-list-item-group>
-
-            <v-divider></v-divider>
-
-            <v-list-item-group v-model="sd" multiple active-class="">
-              <v-list-item :disabled="lockSpeedDial">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-switch color="primary" :input-value="active" inset></v-switch>
-                  </v-list-item-action>
-
-                  <v-list-item-content>
-                    <v-list-item-title>Speed dial (<v-icon medium>mdi-web</v-icon>)</v-list-item-title>
-                    <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie speed dialu (len rozlíšenie webu)</v-list-item-subtitle>
-                  </v-list-item-content>
+                <template class="select_language" v-slot:item="slotProps">
+                  <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
+                  {{slotProps.item.name}}
                 </template>
-              </v-list-item>
-            </v-list-item-group>
-
-            <v-divider></v-divider>
-
-            <v-list-item-group v-model="bn" multiple active-class="">
-              <v-list-item :disabled="lockBottomNavigation">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-switch color="primary" :input-value="active" inset></v-switch>
-                  </v-list-item-action>
-
-                  <v-list-item-content>
-                    <v-list-item-title>spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</v-list-item-title>
-                    <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie spodnej lišty (len pre mobily)</v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-            </v-list-item-group>
-
-            <v-divider></v-divider>
-
-            <v-subheader>Jazyk aplikácie</v-subheader>
-            <!-- <v-list-item-title>Jazyk aplikácie</v-list-item-title> -->
-            <v-row class="pr-3 pl-3" justify="center">
-              <v-col class="d-flex pb-0" cols="12" sm="6">
-                <v-select v-model="select" :items="countries" item-text="name" label="Jazyk" solo :menu-props="{ top: true, offsetY: true }">
-                  <template class="select_language" slot="selection" slot-scope="slotProps">
-                    <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
-                    {{slotProps.item.name}}
-                  </template>
-                  <template class="select_language" v-slot:item="slotProps">
-                    <CountryFlag class="mr-2" :country='slotProps.item.flag' size='normal' />
-                    {{slotProps.item.name}}
-                  </template>
-                  <span>Vybrať jayzk</span>
-                </v-select>
-              </v-col>
-            </v-row>
-          </v-list>
-        </v-col>
-      </v-row>
-    </div>
+                <span>Vybrať jayzk</span>
+              </v-select>
+            </v-col>
+          </v-row>
+        </v-list>
+      </v-col>
+    </v-row>
   </v-lazy>
 </div>
 </template>

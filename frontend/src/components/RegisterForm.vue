@@ -16,14 +16,14 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text class="p-3">
 
-              <v-text-field prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" clearable @click:clear="callItBackUsername()" clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" filled clearable @click:clear="callItBackUsername()" clear-icon="mdi-close" counter></v-text-field>
 
-              <v-text-field ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" clearable @click:clear="callItBackEMail()" clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" filled clearable @click:clear="callItBackEMail()" clear-icon="mdi-close" counter></v-text-field>
 
               <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
-                @click:append="togglePassword = !togglePassword" clearable clear-icon="mdi-close"></v-text-field>
+                @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
               <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules" :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova"
-                hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" clearable clear-icon="mdi-close"></v-text-field>
+                hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
 
               <div class="row">
                 <div class="col text-center">

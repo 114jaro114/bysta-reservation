@@ -4,8 +4,8 @@
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
-        <v-expansion-panels flat accordion focusable>
+      <v-col class="pl-3 pr-3">
+        <v-expansion-panels class="elevation-0" accordion focusable>
           <v-expansion-panel>
             <v-expansion-panel-header>
               <span>Krajina/región</span>
@@ -162,4 +162,7 @@ export default {
 </script>
 
 <style type="scss">
+.v-expansion-panel:before {
+  box-shadow: none !important;
+}
 </style>

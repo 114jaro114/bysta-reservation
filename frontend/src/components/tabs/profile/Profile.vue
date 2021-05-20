@@ -1,11 +1,10 @@
 <template>
-<div class="profile w-100 h-100 text-uppercase mt-3">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="profile w-100 h-100 mt-3">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
-      <v-col>
+      <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0" :loading="myloadingvariable">
           <v-card-title>
             <v-row v-if="user_acc_info == true">
@@ -72,16 +71,16 @@
 
               <v-row justify="center">
                 <v-col cols="12" sm="12" md="12" lg="12" class="pb-0">
-                  <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" clearable></v-text-field>
+                  <v-text-field v-model="name" label="Meno" prepend-icon="mdi-account" earable :rules="rules" counter="15" filled clearable></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                  <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" clearable></v-text-field>
+                  <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" :rules="rules" counter="25" filled clearable></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
                   <v-text-field v-model="password" label="Heslo" prepend-icon="mdi-lock" :rules="rules" counter="25" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" hint="Minimálne 4 znaky" @click:append="show1 = !show1"
-                    :type="show1 ? 'text' : 'password'" clearable>
+                    :type="show1 ? 'text' : 'password'" filled clearable>
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -89,32 +88,33 @@
             <div v-else>
               <v-row justify="center">
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <v-text-field ref="surname" v-model="surname" label="Meno" counter clearable required></v-text-field>
+                  <v-text-field ref="surname" v-model="surname" label="Meno" counter clearable filled required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" counter clearable required></v-text-field>
+                  <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" counter clearable filled required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                  <v-text-field ref="address" v-model="address" label="Adresa" counter clearable required></v-text-field>
+                  <v-text-field ref="address" v-model="address" label="Adresa" counter clearable filled required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <v-text-field ref="city" v-model="city" label="Mesto" counter clearable required></v-text-field>
+                  <v-text-field ref="city" v-model="city" label="Mesto" counter clearable filled required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <v-text-field ref="postcode" v-model="postcode" label="PSČ" counter clearable required></v-text-field>
+                  <v-text-field ref="postcode" v-model="postcode" label="PSČ" counter clearable filled required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :items="countries" label="Krajina" counter clearable required>
+                  <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :items="countries" label="Krajina" counter clearable filled required>
                   </v-autocomplete>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                  <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" counter clearable></VueTelInputVuetify>
+                  <VueTelInputVuetify v-model="myPhone" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" counter filled clearable>
+                  </VueTelInputVuetify>
                 </v-col>
               </v-row>
             </div>
@@ -456,6 +456,19 @@ input[type="file"] {
 
 .user-from {
   margin-left: 1rem;
+}
+
+.vue-tel-input-vuetify .country-code {
+  width: 85px !important;
+}
+
+.vue-tel-input-vuetify .country-code .v-text-field.v-text-field--enclosed {
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 0px !important;
+}
+
+.vue-tel-input-vuetify .v-text-field.v-text-field--enclosed {
+  border-top-left-radius: 0px !important;
 }
 
 /* .menuable__content__active {
