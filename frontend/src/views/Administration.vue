@@ -19,7 +19,8 @@
         </v-tabs>
       </template>
     </v-app-bar>
-    <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
       <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
         <router-view />
       </v-tab-item>
@@ -27,28 +28,22 @@
     </v-tabs-items>
   </v-card>
   <SpeedDial />
-  <BottomNavigation />
   <Footer />
 </div>
 </template>
 <script>
-import Footer from "../components/Footer.vue";
-import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import BottomNavigation from "@/components/BottomNavigation.vue";
 export default {
   name: "Administration",
   components: {
-    Footer,
-    SpeedDial,
     NavigationDrawer,
-    BottomNavigation
   },
   props: ['drawerNew'],
   data() {
     return {
       username: localStorage.getItem("username"),
       drawer: false,
+      tab: null,
       activeTab: '/administration',
       tabs: [{
         id: 1,
@@ -69,7 +64,11 @@ export default {
       this.drawer = false
     },
   },
-  methods: {}
+  methods: {
+    updateRouter(tab) {
+      this.$router.push(tab)
+    },
+  }
 }
 </script>
 <style type="scss">

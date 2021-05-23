@@ -1,5 +1,5 @@
 <template>
-<div class="price_list w-100 h-100 mt-3">
+<div class="price_list w-100 h-100">
   <v-card elevation="0">
     <v-app-bar fixed flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -22,101 +22,99 @@
       </template>
     </v-app-bar>
 
-    <v-tabs-items v-model="tab" class="p-3 pt-1">
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="tab" grow>
       <v-tab-item v-for="item in items" :key="item" disabled>
       </v-tab-item>
       <NavigationDrawer :drawer="drawer" />
 
-      <v-row>
-        <v-col cols="12" lg="6" md="12" sm="12">
-          <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateLine">
-            <div class="pt-3" id="chart">
-              <apexchart type="area" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-            </div>
-
-            <v-card-text class="pt-0">
-              <div class="title font-weight-light mb-2">
-                Cena za noc/osoba/obdobie
+      <v-lazy :options="{
+                      threshold: .4
+                    }" transition="scale-transition">
+        <v-row justify="center" class="ml-0 mr-0">
+          <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
+            <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateLine">
+              <div class="pt-3" id="chart">
+                <apexchart type="area" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
               </div>
-              <v-divider class="my-2"></v-divider>
-              <v-icon class="mr-2" small>
-                mdi-clock
-              </v-icon>
-              <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-              <span class="font-weight-bold">{{lastUpdate}}</span>
-            </v-card-text>
-          </v-card>
-        </v-col>
 
-        <v-col cols="12" lg="6" md="12" sm="12">
-          <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateColumn">
-            <div class="pt-3" id="chart">
-              <apexchart type="bar" ref="column_chart" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-            </div>
+              <v-card-text class="pt-0">
+                <div class="title font-weight-light mb-2">
+                  Cena za noc/osoba/obdobie
+                </div>
+                <v-divider class="my-2"></v-divider>
+                <v-icon class="mr-2" small>
+                  mdi-clock
+                </v-icon>
+                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                <span class="font-weight-bold">{{lastUpdate}}</span>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-            <v-card-text class="pt-0">
-              <div class="title font-weight-light mb-2">
-                Vlhkosť za jednotlivé mesiace v roku
+          <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
+            <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateColumn">
+              <div class="pt-3" id="chart">
+                <apexchart type="bar" ref="column_chart" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
               </div>
-              <v-divider class="my-2"></v-divider>
-              <v-icon class="mr-2" small>
-                mdi-clock
-              </v-icon>
-              <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-              <span class="font-weight-bold">{{lastUpdate}}</span>
-            </v-card-text>
-          </v-card>
-        </v-col>
 
-        <v-col cols="12" lg="12" md="12" sm="12">
-          <v-card elevation="0">
-            <v-card-text>
-              <v-row>
-                <v-col>
-                  <v-sheet class="p-4 mx-auto" rounded outlined>
-                    <v-row class="justify-center">
-                      <span>Upratovanie</span>
-                    </v-row>
-                    <v-row class="justify-center">
-                      <v-icon large>mdi-broom</v-icon>
-                    </v-row>
-                    <v-row class="justify-center">
-                      <span>Poplatok +100€ k cene rezervácie</span>
-                    </v-row>
+              <v-card-text class="pt-0">
+                <div class="title font-weight-light mb-2">
+                  Vlhkosť za jednotlivé mesiace v roku
+                </div>
+                <v-divider class="my-2"></v-divider>
+                <v-icon class="mr-2" small>
+                  mdi-clock
+                </v-icon>
+                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                <span class="font-weight-bold">{{lastUpdate}}</span>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-                  </v-sheet>
-                </v-col>
-                <v-col>
-                  <v-sheet class="p-4 mx-auto" rounded outlined>
-                    <v-row class="justify-center">
-                      <span>Rezervácia do 5 dospelích osôb</span>
-                    </v-row>
-                    <v-row class="justify-center">
-                      <v-icon large>mdi-account-group</v-icon>
-                    </v-row>
-                    <v-row class="justify-center">
-                      <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
-                    </v-row>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+          <v-col cols="12" lg="12" md="12" sm="12" class="pl-3 pr-3">
+            <v-card elevation="0">
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-sheet class="p-4 mx-auto" rounded outlined>
+                      <v-row class="justify-center">
+                        <span>Upratovanie</span>
+                      </v-row>
+                      <v-row class="justify-center">
+                        <v-icon large>mdi-broom</v-icon>
+                      </v-row>
+                      <v-row class="justify-center">
+                        <span>Poplatok +100€ k cene rezervácie</span>
+                      </v-row>
+
+                    </v-sheet>
+                  </v-col>
+                  <v-col>
+                    <v-sheet class="p-4 mx-auto" rounded outlined>
+                      <v-row class="justify-center">
+                        <span>Rezervácia do 5 dospelích osôb</span>
+                      </v-row>
+                      <v-row class="justify-center">
+                        <v-icon large>mdi-account-group</v-icon>
+                      </v-row>
+                      <v-row class="justify-center">
+                        <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
+                      </v-row>
+                    </v-sheet>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-lazy>
     </v-tabs-items>
   </v-card>
-  <SpeedDial />
-  <BottomNavigation />
-  <Footer />
 </div>
 </template>
 
 <script>
-import Footer from "../components/Footer.vue";
-import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import BottomNavigation from "@/components/BottomNavigation.vue";
 import VueApexCharts from 'vue-apexcharts'
 
 var _seed = 42;
@@ -127,10 +125,7 @@ Math.random = function() {
 export default {
   name: "PriceList",
   components: {
-    Footer,
-    SpeedDial,
     NavigationDrawer,
-    BottomNavigation,
     apexchart: VueApexCharts,
   },
   props: ['drawerNew'],

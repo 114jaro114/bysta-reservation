@@ -1,18 +1,23 @@
 <template>
 <div v-if="this.$store.getters['ratingState']">
-  <!-- <v-card elevation="2"> -->
-  <v-card-title class="justify-center">
-    <span class="primary--text">Pridať hodnotenie</span>
-  </v-card-title>
-  <v-divider class="mt-0" horizontal></v-divider>
-  <form @submit.prevent>
-    <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
-    <div class="p-3">
-      <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
-      <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
-    </div>
-  </form>
-  <!-- </v-card> -->
+  <v-card elevation="0">
+    <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
+      <v-spacer />
+      <v-toolbar-title>
+        Pridať hodnotenie
+      </v-toolbar-title>
+      <v-spacer />
+    </v-toolbar>
+
+    <!-- <v-divider class="mt-0" horizontal></v-divider> -->
+    <form @submit.prevent class="mt-3">
+      <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
+      <div class="p-3">
+        <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
+        <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
+      </div>
+    </form>
+  </v-card>
 </div>
 <div class="rates" v-else>
   <v-row no-gutters>

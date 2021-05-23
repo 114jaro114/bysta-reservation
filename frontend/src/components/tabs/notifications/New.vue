@@ -1,5 +1,5 @@
 <template>
-<div class="new w-100 h-100 mt-3">
+<div class="new w-100 h-100">
   <v-lazy :options="{
             threshold: .8
           }" transition="fade-transition">

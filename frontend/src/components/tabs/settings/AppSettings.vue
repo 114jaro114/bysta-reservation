@@ -1,5 +1,5 @@
 <template>
-<div class="app_settings w-100 h-100 mt-3">
+<div class="app_settings w-100 h-100">
   <v-lazy :options="{
             threshold: .4
           }" min-height="100vh" transition-group="scale-transition">

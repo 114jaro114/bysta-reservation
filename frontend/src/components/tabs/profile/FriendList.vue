@@ -1,16 +1,19 @@
 <template>
-<div class="friend_list w-100 h-100 mt-3">
+<div class="friend_list w-100 h-100">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
-          <v-toolbar class="rounded-top" color="primary" flat dark>
+          <v-toolbar extended extension-height="4" class="rounded-top" color="primary" flat dark>
+            <v-spacer />
             <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
+            <v-spacer />
+            <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
           </v-toolbar>
 
-          <v-data-table no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name" :loading="myloadingvariable"
+          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name"
             loading-text="Načítavanie... Prosím počkajte">
             <template v-slot:item.name="{ item }">
               <!-- <v-btn class="mr-3" @click="showProfile(item)">

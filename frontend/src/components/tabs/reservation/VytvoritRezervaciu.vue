@@ -1,7 +1,7 @@
 <template>
-<div class="vytvorit_rezervaciu w-100 h-100 mt-3">
+<div class="vytvorit_rezervaciu w-100 h-100">
   <v-lazy :options="{
-            threshold: .4
+            threshold: .1
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <div class="text-center">
@@ -269,18 +269,25 @@
                       Resetovať
                     </v-btn>
                   </v-row>
-
-                  <v-row class="m-0 mt-1">
+                  <v-divider />
+                  <v-row class="m-0 mt-3">
                     <v-col class="pl-0 pr-0" align="left">
                       <v-icon color="orange">mdi-information</v-icon>
                       <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočitávajú.</span>
                     </v-col>
                   </v-row>
 
+                  <v-row class="m-0 mt-1">
+                    <v-col class="pl-0 pr-0" align="left">
+                      <v-icon color="orange">mdi-information</v-icon>
+                      <span class="ml-1">Ak je počet osôb rezervácie menší ako 6, platí sa poplatok za celú chatu v cene 150€/noc. <span class="font-weight-bold">(Deti do 2 rokov sa do počtu nezapočitávajú!)</span> </span>
+                    </v-col>
+                  </v-row>
+
                   <v-divider />
 
                   <v-row class="m-0">
-                    <v-col></v-col>
+                    <!-- <v-col></v-col>
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -288,19 +295,35 @@
                         </template>
                         <span>Maximálny počet osôb je 20!</span>
                       </v-tooltip>
-
                     </v-col>
+
+                    <v-col class="font-weight-bold">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
+                          <span>Jednotková cena</span>
+                        </template>
+                        <span v-if="counter1 + counter2 > 5">Cena za osobu na noc</span>
+                        <span v-else>Cena za celú chatu na 1 noc pri počte osôb &lt;6</span>
+                      </v-tooltip>
+                    </v-col>
+
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
                           <span>Cena/noc</span>
                         </template>
-                        <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
-                        <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
+                        <div v-if="counter1 + counter2 > 5">
+                          <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
+                          <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
+                        </div>
+                        <div v-else>
+                          <span>Cena za celú chatu na 1 noc pri počte osôb &lt;6</span>
+                        </div>
                       </v-tooltip>
-
                     </v-col>
+
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -308,11 +331,30 @@
                         </template>
                         <span>Od {{start_date}} do {{end_date}}</span>
                       </v-tooltip>
-                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}} noci</span>
-                      <span v-else>Cena/{{countDaysBetweemTwoDates}} noc</span>
+                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}}noci</span>
+                      <span v-else>Cena/{{countDaysBetweemTwoDates}}noc</span>
                     </v-col>
                   </v-row>
-                  <v-row class="m-0">
+
+                  <v-row class="m-0" v-if="counter1 + counter2 < 6">
+                    <v-col>
+                      <span>Cena za celú chatu <span class="font-weight-bold"> (&lt;6 osôb)</span></span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1 + counter2}}</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{priceCabinUnderSixPpl}}€</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{priceCabinUnderSixPpl}}€</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{priceCabinUnderSixPpl*countDaysBetweemTwoDates}}€</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-row class="m-0" v-if="counter1 + counter2 > 5">
                     <v-col>
                       <span>Dospelí</span>
                     </v-col>
@@ -320,15 +362,18 @@
                       <span>{{counter1}}</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter1*priceAdults}} €</span>
+                      <span>{{priceAdults}}€</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}} €</span>
+                      <span>{{counter1*priceAdults}}€</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}}€</span>
                     </v-col>
                   </v-row>
 
-                  <v-divider v-if="counter2 > 0" />
-                  <v-row class="m-0" v-if="counter2 > 0">
+                  <v-divider v-if="counter2 > 0 && counter1 + counter2 > 5" />
+                  <v-row class="m-0" v-if="counter2 > 0 && counter1 + counter2 > 5">
 
                     <v-col>
                       <span>Deti od 2 do 12 rokov</span>
@@ -337,10 +382,13 @@
                       <span>{{counter2}}</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter2*priceChilds2to12}} €</span>
+                      <span>{{priceChilds2to12}}€</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}} €</span>
+                      <span>{{counter2*priceChilds2to12}}€</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}}€</span>
                     </v-col>
                   </v-row>
 
@@ -353,10 +401,37 @@
                       <span>{{counter3}}</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter3*priceChildsto2}} €</span>
+                      <span>{{priceChildsto2}}€</span>
                     </v-col>
                     <v-col>
-                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                      <span>{{counter3*priceChildsto2}}€</span>
+                    </v-col>
+                    <v-col>
+                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}}€</span>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider />
+                  <v-row class="m-0">
+                    <v-col>
+                      <span>Upratovanie</span>
+                    </v-col>
+                    <v-col>
+                      <span>-</span>
+                    </v-col>
+                    <v-col>
+                      <span>-</span>
+                    </v-col>
+                    <v-col>
+                      <span>-</span>
+                    </v-col>
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{cleaningFee}}€</span>
+                        </template>
+                        <span>Poplatok za upratovaie</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
 
@@ -373,29 +448,76 @@
                         <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
                       </v-tooltip>
                     </v-col>
+
                     <v-col>
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}} €</span>
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">{{priceAdults}}€</span>
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
+                            {{priceCabinUnderSixPpl}}€
+                          </span>
                         </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
-                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
+                        <span v-if="counter1+counter2 > 5">Jednotková cena za osobu na jednu noc</span>
+                        <span v-else>Cena je za celú chatu pri počte osob &lt;6 <span class="font-weight-bold">(Deti do 2 rokov sa do počtu osôb nezaratávajú!)</span> </span>
                       </v-tooltip>
                     </v-col>
+
                     <v-col>
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
-                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
+                          <span class="font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}}€</span>
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
+                            {{priceCabinUnderSixPpl}}€
+                          </span>
                         </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
-                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
+                        <div v-if="counter1 + counter2 > 5">
+                          <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
+                          <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
+                        </div>
+                        <div v-else>
+                          <span>Cena je za celú chatu pri počte osob &lt;6 <span class="font-weight-bold">(Deti do 2 rokov sa do počtu osôb nezaratávajú!)</span> </span>
+                        </div>
                       </v-tooltip>
+                    </v-col>
+
+                    <v-col>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">
+                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates + cleaningFee}} €
+                          </span>
+                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
+                            {{priceCabinUnderSixPpl + cleaningFee}}€
+                          </span>
+                        </template>
+                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci (vrátane poplatku za upratovanie)</span>
+                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noc (vrátane poplatku za upratovanie)</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row> -->
+                    <!-- <v-row> -->
+                    <v-col>
+                      <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
+                        <template v-slot:header="{ props: { headers } }">
+                          <thead>
+                            <tr>
+                              <th v-for="(h, i) in headers" :key="i">
+                                <v-tooltip bottom v-if="i != 3">
+                                  <template v-slot:activator="{ on }">
+                                    <span v-on="on">{{h.text}}</span>
+                                  </template>
+                                  <span>{{headerTooltips[i - 1]}}</span>
+                                </v-tooltip>
+                                <span v-if="i == 3">{{h.text}}</span>
+                              </th>
+                            </tr>
+                          </thead>
+                        </template>
+                      </v-data-table>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
-
               <v-btn color="accent" @click="e1 = 1; backStep2()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
@@ -561,7 +683,7 @@
                   </v-row>
 
                   <v-row class="m-0">
-                    <v-col></v-col>
+                    <!-- <v-col></v-col>
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -672,11 +794,29 @@
                         <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1}} {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
                       </v-tooltip>
+                    </v-col> -->
+                    <v-col>
+                      <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
+                        <template v-slot:header="{ props: { headers } }">
+                          <thead>
+                            <tr>
+                              <th v-for="(h, i) in headers" :key="i">
+                                <v-tooltip bottom v-if="i != 3">
+                                  <template v-slot:activator="{ on }">
+                                    <span v-on="on">{{h.text}}</span>
+                                  </template>
+                                  <span>{{headerTooltips[i - 1]}}</span>
+                                </v-tooltip>
+                                <span v-if="i == 3">{{h.text}}</span>
+                              </th>
+                            </tr>
+                          </thead>
+                        </template>
+                      </v-data-table>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
-
 
               <v-btn color="accent" @click="e1 = 3; backStep4()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
@@ -710,7 +850,7 @@ export default {
   data() {
     return {
       isActive: false,
-      e1: 1,
+      e1: 2,
       rules: [
 
       ],
@@ -722,9 +862,6 @@ export default {
       counter1: 1,
       counter2: 0,
       counter3: 0,
-
-      start_time: null,
-      end_time: null,
       modal1: false,
       modal2: false,
       priceAdults: 18,
@@ -732,6 +869,44 @@ export default {
       priceChilds2to12: 18,
       countDaysBetweemTwoDates: null,
       overallPriceForNight: 18,
+      //cleaning cabin
+      cleaningFee: 100,
+      priceCabinUnderSixPpl: 150,
+
+      //table prices
+      headers: [{
+          id: 1,
+          text: '           ',
+          sortable: false,
+          value: 'text',
+        },
+        {
+          id: 2,
+          text: 'Počet osôb',
+          value: 'p1',
+          sortable: false,
+        },
+        {
+          id: 3,
+          text: 'Jednotková cena',
+          value: 'p2',
+          sortable: false,
+        },
+        {
+          id: 4,
+          text: 'Cena/noc',
+          value: 'p3',
+          sortable: false,
+        },
+        {
+          id: 5,
+          text: `${'Cena' + this.countDaysBetweemTwoDates + 'noc'}`,
+          value: 'p4',
+          sortable: false,
+        },
+      ],
+      prices: [],
+      headerTooltips: [],
 
       // contact form
       countries: ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua &amp; Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
@@ -750,8 +925,10 @@ export default {
       ],
       errorMessages: '',
 
-      start_date: null,
-      end_date: null,
+      start_time: '14:29:71',
+      end_time: '14:29:71',
+      start_date: '2021-05-27',
+      end_date: '2021-05-28',
 
       phone: {
         number: '',
@@ -806,6 +983,29 @@ export default {
   },
 
   mounted() {
+    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
+      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
+    this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noc';
+    this.headerTooltipsConfig();
+    this.prices.push({
+      text: 'Cena za celú chatu (<6 osôb)',
+      p1: this.counter1 + this.counter2,
+      p2: this.priceCabinUnderSixPpl + '€',
+      p3: this.priceCabinUnderSixPpl + '€',
+      p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
+    }, {
+      text: 'Upratovanie',
+      p1: '',
+      p2: '',
+      p3: '',
+      p4: this.cleaningFee + '€',
+    }, {
+      text: 'Spolu',
+      p1: this.counter1 + this.counter2 + this.counter3,
+      p2: this.priceCabinUnderSixPpl + '€',
+      p3: this.priceCabinUnderSixPpl + '€',
+      p4: this.priceCabinUnderSixPpl + this.cleaningFee + '€',
+    });
     const api = 'http://127.0.0.1:8000/api/getContactForm';
     const config = {
       headers: {
@@ -990,7 +1190,9 @@ export default {
       if (this.counter1 + this.counter2 < 20) {
         if (this.counter1 < 20) {
           this.counter1++;
+          this.countingPrices();
         }
+
       } else {
         this.snackbar = true;
         this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
@@ -999,16 +1201,19 @@ export default {
     decrementValue1() {
       if (this.counter1 > 1) {
         this.counter1--;
+        this.countingPrices();
       }
     },
     resetValue1() {
       this.counter1 = 1;
+      this.countingPrices();
     },
 
     incrementValue2() {
       if (this.counter1 + this.counter2 < 20) {
         if (this.counter2 < 20) {
           this.counter2++;
+          this.countingPrices();
         }
       } else {
         this.snackbar = true;
@@ -1018,24 +1223,114 @@ export default {
     decrementValue2() {
       if (this.counter2 > 0) {
         this.counter2--;
+        this.countingPrices();
       }
     },
     resetValue2() {
       this.counter2 = 0;
+      this.countingPrices();
     },
 
     incrementValue3() {
       if (this.counter3 < 20) {
         this.counter3++;
+        this.countingPrices();
       }
     },
     decrementValue3() {
       if (this.counter3 > 0) {
         this.counter3--;
+        this.countingPrices();
       }
     },
     resetValue3() {
       this.counter3 = 0;
+      this.countingPrices();
+    },
+
+    handleClick(row) {
+      console.log(row);
+    },
+
+
+    headerTooltipsConfig() {
+      this.headerTooltips = [];
+      this.headerTooltips.push('Maximálny počet osôb je 20!');
+
+      if (this.counter1 + this.counter2 > 5) {
+        this.headerTooltips.push('Cena za osobu na noc');
+        this.headerTooltips.push('');
+      } else {
+        this.headerTooltips.push('Cena za celú chatu na 1 noc pri počte osôb <6');
+        this.headerTooltips.push('');
+      }
+      this.headerTooltips.push(`${'Od ' + this.start_date + ' do ' + this.end_date}`);
+    },
+
+    countingPrices() {
+      this.headerTooltipsConfig();
+      this.prices = [];
+      if (this.counter1 + this.counter2 > 5) {
+        if (this.counter2 > 0) {
+          this.prices.splice(1, 0, {
+            text: 'Deti od 2 do 12 rokov',
+            p1: this.counter2 + '€',
+            p2: this.priceChilds2to12 + '€',
+            p3: this.counter2 * this.priceChilds2to12 + '€',
+            p4: this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + '€',
+          });
+        }
+        if (this.counter3 > 0) {
+          this.prices.splice(2, 0, {
+            text: 'Deti do 2 rokov',
+            p1: this.counter3 + '€',
+            p2: this.priceChildsto2 + '€',
+            p3: this.counter3 * this.priceChildsto2 + '€',
+            p4: this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + '€',
+          });
+        }
+        this.prices.splice(0, 0, {
+          text: 'Dospelí',
+          p1: this.counter1 + '€',
+          p2: this.priceAdults + '€',
+          p3: this.counter1 * this.priceAdults + '€',
+          p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + '€',
+        });
+
+        this.prices.push({
+          text: 'Upratovanie',
+          p1: '',
+          p2: '',
+          p3: '',
+          p4: this.cleaningFee + '€',
+        }, {
+          text: 'Spolu',
+          p1: this.counter1 + this.counter2 + this.counter3,
+          p2: this.priceAdults + '€',
+          p3: this.counter1 * this.priceAdults + this.counter2 * this.priceChilds2to12 + this.counter3 * this.priceChildsto2 + '€',
+          p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + this.cleaningFee + '€',
+        });
+      } else {
+        this.prices.push({
+          text: 'Cena za celú chatu (<6 osôb)',
+          p1: this.counter1 + this.counter2,
+          p2: this.priceCabinUnderSixPpl + '€',
+          p3: this.priceCabinUnderSixPpl + '€',
+          p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
+        }, {
+          text: 'Upratovanie',
+          p1: '',
+          p2: '',
+          p3: '',
+          p4: this.cleaningFee + '€',
+        }, {
+          text: 'Spolu',
+          p1: this.counter1 + this.counter2 + this.counter3,
+          p2: this.priceCabinUnderSixPpl + '€',
+          p3: this.priceCabinUnderSixPpl + '€',
+          p4: this.priceCabinUnderSixPpl + this.cleaningFee + '€',
+        });
+      }
     },
 
     store() {
@@ -1149,14 +1444,15 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    this.start_date = moment(this.$store.getters['successReservationData'].start_date)
-      .format("YYYY-MM-DD");
-    this.end_date = moment(this.$store.getters['successReservationData'].end_date)
-      .format("YYYY-MM-DD");
 
-    console.log(this.start_date);
-    this.start_time = this.$store.getters['successReservationData'].start_time;
-    this.end_time = this.$store.getters['successReservationData'].end_time;
+    // this.start_date = moment(this.$store.getters['successReservationData'].start_date)
+    //   .format("YYYY-MM-DD");
+    // this.end_date = moment(this.$store.getters['successReservationData'].end_date)
+    //   .format("YYYY-MM-DD");
+    //
+    // console.log(this.start_date);
+    // this.start_time = this.$store.getters['successReservationData'].start_time;
+    // this.end_time = this.$store.getters['successReservationData'].end_time;
 
     //Difference in number of days
     // moment.duration(moment(this.start_date, 'YYYY-MM-DD')
@@ -1166,6 +1462,7 @@ export default {
     // //Difference in number of weeks
     // moment.duration(start.diff(end))
     //   .asWeeks();
+
     this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
       .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
     this.overallPriceForNight = this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="chat-app w-100 h-100 mt-3">
+  <div class="chat-app w-100 h-100">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col>
         <v-lazy :options="{

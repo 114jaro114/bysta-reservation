@@ -1,5 +1,5 @@
 <template>
-<div class="price_list w-100 h-100 mt-3">
+<div class="price_list w-100 h-100">
   <v-card elevation="0">
     <v-app-bar fixed flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -22,34 +22,33 @@
       </template>
     </v-app-bar>
 
-    <v-tabs-items v-model="tab" class="p-3 pt-1">
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="tab" grow>
       <v-tab-item v-for="item in items" :key="item" disabled>
       </v-tab-item>
       <NavigationDrawer :drawer="drawer" />
-      <v-card class="rounded p-5" elevation="0">
-        <v-icon>mdi-volume-high</v-icon>
-        Pripravujeme automatické uloženie nedokončených rezervácií.
-      </v-card>
+      <v-lazy :options="{
+                      threshold: .4
+                    }" transition="scale-transition">
+        <v-row justify="center" class="ml-0 mr-0">
+          <v-col class="pl-3 pr-3">
+            <v-card class="rounded p-5" elevation="0">
+              <v-icon>mdi-volume-high</v-icon>
+              Pripravujeme automatické uloženie nedokončených rezervácií.
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-lazy>
     </v-tabs-items>
   </v-card>
-  <SpeedDial />
-  <BottomNavigation />
-  <Footer />
 </div>
 </template>
 
 <script>
-import Footer from "../components/Footer.vue";
-import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import BottomNavigation from "@/components/BottomNavigation.vue";
 export default {
   name: "SavedReservations",
   components: {
-    Footer,
-    SpeedDial,
     NavigationDrawer,
-    BottomNavigation
   },
   props: ['drawerNew'],
   data() {

@@ -1,22 +1,23 @@
 <template>
-<div class="moje_rezervacie w-100 h-100 mt-3">
+<div class="moje_rezervacie w-100 h-100">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
     <v-row justify="center" class="ml-0 mr-0">
       <v-col class="pl-3 pr-3">
         <v-card class="rounded" elevation="0">
-          <v-toolbar class="reservationToolbar rounded-top" color="primary" flat dark>
+          <v-toolbar extended extension-height="4" class="reservationtoolbar rounded-top" color="primary" flat dark>
             <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
               <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
               <v-btn text color="secondary" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
             </v-col>
+            <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
           </v-toolbar>
 
-          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search"
-            v-if="user == 'admin'" item-key="title" :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte">
+          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents"
+            :search="search" v-if="user == 'admin'" item-key="title" loading-text="Načítavanie... Prosím počkajte">
             <template v-slot:top>
               <!-- <v-toolbar flat> -->
               <!-- <v-toolbar-title>Rezervácie</v-toolbar-title> -->
@@ -70,11 +71,13 @@
                   </v-dialog>
                   <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
-                      <v-card-title class="headline text-center">Naozaj chcete zmazať rezerváciu?</v-card-title>
+                      <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
+                        <v-toolbar-title>Naozaj chcete zmazať rezerváciu?</v-toolbar-title>
+                      </v-toolbar>
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" text @click="closeDelete">Zatvoriť</v-btn>
-                        <v-btn color="primary" text @click="deleteItemConfirm">Áno</v-btn>
+                        <v-btn color="primary" @click="deleteItemConfirm">Áno</v-btn>
                         <v-spacer></v-spacer>
                       </v-card-actions>
                     </v-card>
@@ -110,8 +113,8 @@
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template> -->
           </v-data-table>
-          <v-data-table no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents" :search="search" item-key="name"
-            :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" v-else>
+          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents"
+            :search="search" item-key="name" :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" v-else>
             <template v-slot:item.id="{ item }">
               <span>{{ currentEvents.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
             </template>

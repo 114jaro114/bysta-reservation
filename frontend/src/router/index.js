@@ -155,14 +155,14 @@ const routes = [{
     component: Settings,
     children: [{
         path: '/settings',
-        name: 'Informations',
-        component: require('../components/tabs/settings/Informations.vue')
+        name: 'AppSettings',
+        component: require('../components/tabs/settings/AppSettings.vue')
           .default
       },
       {
-        path: '/settings/app_settings',
-        name: 'AppSettings',
-        component: require('../components/tabs/settings/AppSettings.vue')
+        path: '/settings/info',
+        name: 'Informations',
+        component: require('../components/tabs/settings/Informations.vue')
           .default
       },
     ],
@@ -179,7 +179,7 @@ const routes = [{
       },
       {
         path: '/administration/details',
-        name: 'Detaily',
+        name: 'Details',
         component: require('../components/tabs/administration/Details.vue')
           .default
       },

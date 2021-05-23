@@ -1,5 +1,5 @@
 <template>
-<div class="profile w-100 h-100 text-uppercase mt-3">
+<div class="profile w-100 h-100">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">

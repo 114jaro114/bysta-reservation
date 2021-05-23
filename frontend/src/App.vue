@@ -28,15 +28,28 @@
       </v-btn>
     </template>
   </v-snackbar>
+  <div v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'Reset'">
+    <SpeedDial />
+    <Footer />
+    <BottomNavigation />
+  </div>
 </v-app>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 import axios from 'axios';
+import Footer from "@/components/Footer.vue";
+import SpeedDial from "@/components/SpeedDial.vue";
+import BottomNavigation from "@/components/BottomNavigation.vue";
 
 export default {
   name: 'App',
+  components: {
+    Footer,
+    SpeedDial,
+    BottomNavigation
+  },
 
   data() {
     return {

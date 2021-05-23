@@ -3,7 +3,7 @@
   <div class="p-3 position-ref body-height">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <v-card class="rounded" :loading="myloadingvariable" tile>
+        <v-card class="rounded" :loading="myloadingvariable" elevation="0">
           <v-card-title>
             <v-row justify="center" class="p-3">
               <span class="font-weight-bold text-center primary--text">Registrácia</span>
@@ -244,7 +244,7 @@ export default {
 </script>
 <style lang="css" scoped>
   .padding-top-height {
-    padding-top: 10vh;
+    padding-top: 5vh;
   }
 
   .md-error-pl {

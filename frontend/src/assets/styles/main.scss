@@ -2,6 +2,7 @@
 @import 'libraries'; // @import 'datepicker2';
 @import 'chat.scss'; /* Hide scrollbar for Chrome, Safari and Opera */
 @import 'colorApp.scss';
+@import 'scrollbar.scss';
 
 #app {
   margin: 0;
@@ -11,7 +12,6 @@ body::-webkit-scrollbar {
   display: none;
 }
 /* Hide scrollbar for IE, Edge and Firefox */
-
 body {
   -ms-overflow-style: none;
   /* IE and Edge */
@@ -19,30 +19,33 @@ body {
   /* Firefox */
 }
 //toolbar
-
-.notiftoolbar .v-toolbar {
-  height: 56px !important;
-}
-
-.notiftoolbar .v-toolbar__content {
-  height: 52px !important;
-}
-
-.notiftoolbar .v-toolbar__extension {
-  height: 4px !important;
-}
-
-.v-toolbar {
-  height: 56px !important;
-}
-
-.v-toolbar__content {
-  height: 56px !important;
-}
-
-.v-app-bar {
-  height: 104px !important;
-}
+// .notiftoolbar .v-toolbar {
+//   height: 64px !important;
+// }
+//
+// .notiftoolbar .v-toolbar__content {
+//   height: 64px !important;
+// }
+//
+// .notiftoolbar .v-toolbar__extension {
+//   height: 4px !important;
+// }
+//
+// .reservationtoolbar .v-toolbar {
+//   height: 64px !important;
+// }
+//
+// .toptoolbar .v-toolbar {
+//   height: 56px !important;
+// }
+//
+// .toptoolbar .v-toolbar__content {
+//   height: 56px !important;
+// }
+//
+// .v-app-bar {
+//   height: 104px !important;
+// }
 //
 
 button:focus {
@@ -143,6 +146,10 @@ button:focus {
   display: block !important;
 }
 @media only screen and (max-width: 480px) {
+  .phone-viewport {
+    display: block;
+  }
+
   .v-speed-dial {
     display: none !important;
   }
@@ -191,7 +198,6 @@ a:hover {
   padding: 10px;
 }
 /* rate */
-
 .rating {
   float: left;
   transform: rotateY(180deg);
@@ -269,14 +275,12 @@ a:hover {
   width: 70%;
 }
 /* Clear floats after the columns */
-
 .row:after {
   content: "";
   display: table;
   clear: both;
 }
 /* The bar container */
-
 .bar-container {
   width: 100%;
   background-color: #f1f1f1;

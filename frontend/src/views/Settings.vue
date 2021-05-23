@@ -20,31 +20,22 @@
       </template>
     </v-app-bar>
 
-    <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
       <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
         <router-view />
       </v-tab-item>
       <NavigationDrawer :drawer="drawer" />
     </v-tabs-items>
   </v-card>
-  <SpeedDial />
-  <BottomNavigation />
-  <Footer />
 </div>
 </template>
 
 <script>
-import Footer from "../components/Footer.vue";
-import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import BottomNavigation from "@/components/BottomNavigation.vue";
 export default {
   name: "Settings",
   components: {
-    Footer,
-    SpeedDial,
     NavigationDrawer,
-    BottomNavigation
   },
   props: ['drawerNew'],
   data() {
@@ -55,12 +46,12 @@ export default {
       activeTab: '/settings',
       tabs: [{
         id: 1,
-        name: 'Informácie',
+        name: 'Nastavenia',
         route: '/settings'
       }, {
         id: 2,
-        name: 'Nastavenia',
-        route: '/settings/app_settings'
+        name: 'Informácie',
+        route: '/settings/info'
       }],
     }
   },

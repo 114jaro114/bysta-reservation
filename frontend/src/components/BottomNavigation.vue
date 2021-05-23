@@ -1,6 +1,5 @@
 <template>
 <div class="phone-viewport w-100" :style="test">
-  <!-- v-model="value" -->
   <v-bottom-navigation color="secondary" :input-value="this.$store.getters['bottomNavigationState'].state" background-color="primary" app shift grow>
     <v-btn to="/home" value="home">
       <span>Domov</span>
@@ -14,13 +13,13 @@
       <span>Rezervácia</span>
       <v-icon color="secondary">mdi-calendar-month</v-icon>
     </v-btn>
-    <v-btn to="/messenger" value="messenger">
-      <span>Messenger</span>
-      <!-- <v-badge :content="num" :value="num" color="green" style="top:10px;" overlap bordered>
+    <!-- <v-btn to="/messenger" value="messenger">
+      <span>Messenger</span> -->
+    <!-- <v-badge :content="num" :value="num" color="green" style="top:10px;" overlap bordered>
         <v-icon color="secondary">mdi-facebook-messenger</v-icon>
       </v-badge> -->
-      <v-icon color="secondary">mdi-facebook-messenger</v-icon>
-    </v-btn>
+    <!-- <v-icon color="secondary">mdi-facebook-messenger</v-icon>
+    </v-btn> -->
     <v-btn to="/settings" value="settings">
       <span>Nastavenia</span>
       <v-icon color="secondary">mdi-cog</v-icon>
@@ -116,7 +115,7 @@ export default {
 </script>
 
 <style>
-.bottom-nav {
+/* .bottom-nav {
   .btn:not(.btn--active) {
     filter: none;
     opacity: 1;
@@ -134,9 +133,15 @@ export default {
       }
     }
   }
-}
+} */
 
 .v-bottom-navigation {
   z-index: 12 !important;
+}
+
+.phone-viewport .v-btn:not(.v-btn--round).v-size--default {
+  height: 56px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
 }
 </style>

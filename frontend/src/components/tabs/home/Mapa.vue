@@ -1,5 +1,5 @@
 <template>
-<div class="mapa w-100 h-100 mt-3">
+<div class="mapa w-100 h-100">
   <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">

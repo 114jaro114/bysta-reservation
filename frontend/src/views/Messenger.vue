@@ -20,7 +20,7 @@
       </template>
     </v-app-bar>
 
-    <v-tabs-items v-model="activeTab" grow>
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" grow>
       <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
         <!-- messenger -->
         <chat-app></chat-app>
@@ -28,26 +28,17 @@
       <NavigationDrawer :drawer="drawer" />
     </v-tabs-items>
   </v-card>
-  <SpeedDial />
-  <BottomNavigation />
-  <Footer />
 </div>
 </template>
 
 <script>
-import Footer from "../components/Footer.vue";
 import ChatApp from "../components/messenger/ChatApp.vue";
-import SpeedDial from "@/components/SpeedDial.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import BottomNavigation from "@/components/BottomNavigation.vue";
 export default {
   name: "Messenger",
   components: {
-    Footer,
     ChatApp,
-    SpeedDial,
     NavigationDrawer,
-    BottomNavigation
   },
   props: ['drawerNew'],
   data() {

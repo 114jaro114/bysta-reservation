@@ -14,7 +14,7 @@
         </v-snackbar>
       </div>
       <div class="col-md-6">
-        <v-card class="rounded" :loading="myloadingvariable" tile>
+        <v-card class="rounded" :loading="myloadingvariable" elevation="0">
           <v-card-title>
             <v-row justify="center" class="p-3">
               <span class="font-weight-bold text-center primary--text">Prihlásenie</span>
