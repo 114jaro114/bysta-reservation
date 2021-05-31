@@ -97,19 +97,11 @@
                                                             <tr>
                                                               <td>
                                                                 <table  style="font-family:'Open Sans', sans-serif, Verdana; font-size:14px; color:#3b3a3a; font-weight:normal; line-height:24px;">
-                                                                  <!-- <tr>
-                                                                    <td>Your password reset code: <strong>{{ $random }}</strong></td>
-                                                                  </tr> -->
                                                                   <tr>
-                                                                    <!-- <td>Your password reset link:
-                                                                      <strong><a href="{!! $link !!}">{!! $link !!}</a></strong>
-                                                                    </td> -->
                                                                     <td>
-                                                                    <!-- <button class="btn btn-primary" href="{!! $link !!}">Resetovat heslo</button> -->
-                                                                    <!-- <a href="{!! $link !!}" class="btn btn-xs btn-info pull-right">Resetovat heslo</a> -->
-                                                                    <button href="{!! $link !!}" type="button" class="btn btn-primary">Resetovat heslo</button>
-                                                                    <button type="button" class="btn btn-primary">Resetovat heslo</button>
-                                                                  </td>
+                                                                      <a href="{!! $link !!}" class="btn btn-xs btn-info pull-right">Resetovat heslo</a>
+                                                                      <!-- <button href="{!! $link !!}" type="button" class="btn btn-primary">Resetovat heslo</button> -->
+                                                                    </td>
                                                                   </tr>
 
                                                                 </table>

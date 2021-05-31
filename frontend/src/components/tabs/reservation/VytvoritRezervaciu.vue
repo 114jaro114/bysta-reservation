@@ -28,7 +28,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" :left="true">
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
           <v-icon>mdi-alert-circle</v-icon>
           {{ text }}
 
@@ -40,7 +40,7 @@
           </template>
         </v-snackbar>
 
-        <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" :left="true">
+        <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
           <v-icon>mdi-check-circle</v-icon>
           {{ text }}
 

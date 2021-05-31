@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Laravel\Socialite\Facades\Socialite;
 
+use Illuminate\Support\Facades\DB;
 use Mail;
 // use App\Mail\TestMail;
 use Carbon\Carbon;
@@ -25,14 +26,29 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
+        $random = Str::random(60);
+
         $user = new User([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'status'  => 'offline',
-            'account_verified' => Str::random(60),
+            'account_verified' => $random
         ]);
         $user->save();
+
+        $userData = array(
+          'email' => $validatedData['email'],
+          'name' => $validatedData['name'],
+          'random' => $random,
+          'link' => 'http://localhost:8080/activation-account/'.$random
+        );
+
+        Mail::send('emails.verification_account', $userData, function ($message) use ($userData) {
+          $message->from('chatabysta@gmail.com', 'Activate account');
+          $message->to($userData['email']);
+          $message->subject('Actiovation link requested');
+        });
 
         $token = JWTAuth::fromUser($user);
 
@@ -57,11 +73,12 @@ class AuthController extends Controller
                 'error' => 'Bad credentials.'
             ], 401);
         } else {
-          // $users = DB::table('users')
-          //   ->select('name', 'email as user_email')
-          //   ->get();
-          $account_verified = User::select('account_verified')->where('id', auth()->user()->id)->get();
-          if ($account_verified == 'verified') {
+          $user = DB::table('users')
+            ->select('account_verified')
+            ->where('id', auth()->user()->id)
+            ->get();
+          // $account_verified = User::select('account_verified')->where('id', auth()->user()->id)->get();
+          if ($user[0]->account_verified == 'verified') {
             User::where('id', auth()->user()->id)->update(['status' => 'online']);
           } else {
             return response()->json([
@@ -130,6 +147,31 @@ class AuthController extends Controller
          $user = Socialite::driver($provider)->stateless()->user();
 
          return response()->json($user);
+     }
+
+     public function callVerificationAccount(Request $request)
+     {
+         $user = User::where('account_verified', $request->token)->first();
+         if (!$user) {
+           return response()->json([
+             'message' => 'User not found/Invalid code',
+             'status_code' => 401
+           ], 401);
+         } else {
+           $user->account_verified = 'verified';
+
+           if ($user->save()) {
+             return response()->json([
+               'message' => 'Account verified successfully',
+               'status_code' => 200
+             ], 200);
+           } else {
+             return response()->json([
+               'message' => 'Some error occurred, Please try again',
+               'status_code' => 500
+             ], 500);
+           }
+        }
      }
 
      /**

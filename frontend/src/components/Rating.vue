@@ -164,7 +164,7 @@
     </v-lazy>
   </div>
 
-  <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" :left="true" :top="true">
+  <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
     <v-icon>mdi-check-circle</v-icon>
     {{ textUpdateReview }}
     <template v-slot:action="{ attrs }">

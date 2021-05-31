@@ -22,8 +22,8 @@
 
               <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
                 @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
-              <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules" :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova"
-                hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
+              <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova" hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
 
               <div class="row">
                 <div class="col text-center">
@@ -130,7 +130,11 @@ export default {
       errorEmail: [],
     }
   },
-  computed: {},
+  computed: {
+    passwordConfirmationRule() {
+      return this.password === this.confirmPassword || "Zadané hesla sa nezhodujú";
+    }
+  },
   watch: {
     name() {
       if (this.name.length >= 4) {

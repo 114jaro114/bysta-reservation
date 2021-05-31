@@ -39,10 +39,10 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                   <title>Callback</title>
-  <!-- <script>
-    window.opener.postMessage({ email: "{{ $email }}", name: "{{ $name }}" }, "http://localhost:8000/api/auth/google/callback");
-    window.close();
-  </script> -->
+                  <!-- <script>
+                    window.opener.postMessage({ email: "{{ $email }}", name: "{{ $name }}" }, "http://localhost:8080/auth/google/callback");
+                    window.close();
+                  </script> -->
                 </div>
             </div>
         </div>

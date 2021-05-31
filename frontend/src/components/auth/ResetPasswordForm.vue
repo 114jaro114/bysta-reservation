@@ -3,6 +3,15 @@
   <div id="blur-effect">
     <div class="p-3 position-ref body-height">
       <div class="row justify-content-center">
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
+          <v-icon>mdi-alert-circle</v-icon>
+          {{ text }}
+          <template v-slot:action="{ attrs }">
+            <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
         <div class="col-md-6">
           <v-card class="rounded" :loading="myloadingvariable" elevation="0">
             <v-card-title>
@@ -16,21 +25,11 @@
             <hr class="mt-0 mb-0 custom-hr">
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-card-text class="p-3">
-                <v-snackbar v-model="alertFailResetPassword" :multi-line="multiLine" color="success" :bottom="true">
-                  <v-icon>mdi-check-circle</v-icon>
-                  {{ text }}
-                  <template v-slot:action="{ attrs }">
-                    <v-btn color="white" fab text small v-bind="attrs" @click="alertFailResetPassword = false">
-                      <v-icon>mdi-close-circle</v-icon>
-                    </v-btn>
-                  </template>
-                </v-snackbar>
-
                 <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
-                <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
+                <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Nové heslo" hint="Minimálne 4 znaky" counter
                   @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
-                <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules" :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova"
-                  hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                  :type="togglePasswordConfirm ? 'text' : 'password'" label="Nové heslo znova" hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
               </v-card-text>
               <hr class="mt-0 mb-0 custom-hr">
               <v-card-actions>
@@ -40,48 +39,6 @@
               </v-card-actions>
             </v-form>
           </v-card>
-          <!-- <form novalidate method="POST" @submit.prevent='validateLogin'>
-            <md-card>
-              <md-card-header>
-                <div class="md-title font-weight-bold text-center">Obnovenie hesla</div>
-                <router-link :to="{ name: 'Welcome' }">
-                  <button type="button" class="close">&times;</button>
-                </router-link>
-              </md-card-header>
-
-              <hr class="mt-0 mb-0 custom-hr">
-
-              <md-card-content>
-                <div class="row pl-3 pr-3" v-show="hasErrorMessage">
-                  <span class="alert w-100 mb-1 m-auto font-weight-bold" role="alert" style="color: #ff1744; border-color: #ff1744">
-                    <i class="fa fa-info-circle"></i> Bad email or password
-                  </span>
-                </div>
-
-                <md-field :class="[getValidationClass('email'), errorMessageClass]" md-clearable>
-                  <md-icon class="fa fa-envelope"></md-icon>
-                  <label for="email">Email</label>
-                  <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" />
-                  <span class="md-error md-error-pl" v-if="!$v.form.email.required">The email is required</span>
-                  <span class="md-error md-error-pl" v-else-if="!$v.form.email.email">The email is invalid</span>
-                </md-field>
-                <div class="row">
-                  <div class="col text-center">
-                    <router-link :to="{ name: 'Register' }">
-                      <span class="forgot-pass">Ešte nemáš účet?</span><span class="primary-color"> Zaregistruj sa</span>
-                    </router-link>
-                  </div>
-                </div>
-
-              </md-card-content>
-
-              <hr class="mt-0 mb-0 custom-hr">
-
-              <md-card-actions>
-                <md-button type="submit" class="md-raised md-primary" id="md-primary">Odoslať odkaz na obnovenie hesla</md-button>
-              </md-card-actions>
-            </md-card>
-          </form> -->
         </div>
       </div>
     </div>
@@ -92,7 +49,7 @@
 <script>
 import axios from 'axios';
 export default {
-  names: ['ResetPasswordForm', 'CheckboxHueColors', 'FormValidation'],
+  names: ['ResetPasswordForm', 'FormValidation'],
   props: {},
   data() {
     return {
@@ -101,7 +58,7 @@ export default {
       togglePassword: false,
       togglePasswordConfirm: false,
 
-      alertFailResetPassword: false,
+      snackbar: false,
       email: '',
       emailRules: [
         v => !!v || 'E-mail je povinný',
@@ -124,6 +81,12 @@ export default {
     }
   },
 
+  computed: {
+    passwordConfirmationRule() {
+      return this.password === this.confirmPassword || "Zadané hesla sa nezhodujú";
+    }
+  },
+
   methods: {
     validate() {
       return this.$refs.form.validate();
@@ -142,19 +105,18 @@ export default {
             password: this.password,
             password_confirmation: this.password_confirmation
           })
-          .then(resp => {
-            console.log(resp);
+          .then(() => {
             this.myloadingvariable = false;
             this.reset();
-            this.$store.dispatch('successfullyUpdatedPassword', {
+            this.$store.dispatch('updatedPassword', {
               state: true
             });
             this.$router.push("/login");
           })
           .catch(e => {
             this.myloadingvariable = false;
-            this.alertFailResetPassword = true;
-            this.text = "Vyskytol sa nejaký problém. Prosím skúste to znova";
+            this.snackbar = true;
+            this.text = "Vyskytol sa nejaký problém. Prosím skúste to znova.";
             this.errors.push(e)
           })
       }
@@ -162,10 +124,6 @@ export default {
   },
   mounted() {
     // console.log('Component Reset mounted.');
-    this.$store.dispatch('isLoggedOut', {
-      username: '',
-      logout: false
-    });
   },
 
   created() {

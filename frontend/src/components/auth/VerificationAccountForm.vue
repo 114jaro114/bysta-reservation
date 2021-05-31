@@ -3,6 +3,15 @@
   <div id="blur-effect">
     <div class="p-3 position-ref body-height">
       <div class="row justify-content-center">
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
+          <v-icon>mdi-alert-circle</v-icon>
+          {{ text }}
+          <template v-slot:action="{ attrs }">
+            <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
         <div class="col-md-6">
           <v-card class="rounded" :loading="myloadingvariable" elevation="0">
             <v-card-title>
@@ -10,9 +19,9 @@
                 <span class="font-weight-bold text-center primary--text">Aktivácia účtu</span>
               </v-row>
             </v-card-title>
-            <v-card-text>
-              <v-icon>mdi-check-circle</v-icon>
-              <span>Používateľský účet bol úspešne aktivovaný. O malu chvíľu budete presmernovaný na stránku s príhlásením</span>
+            <hr class="mt-0 mb-0 custom-hr">
+            <v-card-text class="p-3">
+              <v-btn color="primary" elevation="2" large x-large @click="verif_account">Aktivovať účet</v-btn>
             </v-card-text>
           </v-card>
         </div>
@@ -29,39 +38,38 @@ export default {
   props: {},
   data() {
     return {
+      snackbar: false,
+      multiLine: true,
       myloadingvariable: false,
-      token: null,
+      token: this.$route.params.token,
     }
   },
 
   methods: {
     verif_account() {
+      console.log(this.token);
       this.myloadingvariable = true;
       // call API
-      axios.post('http://127.0.0.1:8000/api/auth/reset/password/', {
+      axios.post('http://127.0.0.1:8000/api/auth/verification/account/', {
           token: this.$route.params.token,
         })
-        .then(resp => {
-          console.log(resp);
+        .then(() => {
           this.myloadingvariable = false;
-          // this.$store.dispatch('successfullyUpdatedPassword', {
-          //   state: true
-          // });
-          // this.$router.push("/login");
+          this.$store.dispatch('activatedAccount', {
+            state: true
+          });
+          this.$router.push("/login");
         })
         .catch(e => {
+          this.snackbar = true;
           this.myloadingvariable = false;
           this.text = "Vyskytol sa nejaký problém. Prosím skúste to znova";
-          this.errors.push(e)
+          this.errors.push(e);
         })
     },
   },
   mounted() {
     // console.log('Component Reset mounted.');
-    this.$store.dispatch('isLoggedOut', {
-      username: '',
-      logout: false
-    });
   },
 
   created() {

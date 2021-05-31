@@ -79,6 +79,8 @@ Route::post('/auth/logout', [AuthController::class, 'logout']);
 Route::post('/auth/reset-password', [AuthController::class, 'sendPasswordResetLink']);
 // handle reset password form process
 Route::post('/auth/reset/password', [AuthController::class, 'callResetPassword']);
+// handle activate account form process
+Route::post('/auth/verification/account', [AuthController::class, 'callVerificationAccount']);
 
 Route::get('/user/{id}', [ContactsController::class, 'getUserById']);
 

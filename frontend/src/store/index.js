@@ -51,7 +51,7 @@ export default new Vuex.Store({
       logout: false
     },
 
-    successfullyUpdatedPassword: false,
+    updatedPassword: false,
 
     contactListLoader: true,
 
@@ -69,6 +69,7 @@ export default new Vuex.Store({
     msgUnreadCounter: 0,
     ratingState: true,
     pendingReservation: 0,
+    activatedAccount: false,
   },
   getters: {
     Data: state => {
@@ -103,8 +104,8 @@ export default new Vuex.Store({
       return state.isLoggedOut
     },
 
-    successfullyUpdatedPassword: state => {
-      return state.successfullyUpdatedPassword
+    updatedPassword: state => {
+      return state.updatedPassword
     },
 
     contactListLoader: state => {
@@ -129,6 +130,10 @@ export default new Vuex.Store({
 
     pendingReservation: state => {
       return state.pendingReservation
+    },
+
+    activatedAccount: state => {
+      return state.activatedAccount
     },
   },
   mutations: {
@@ -182,8 +187,8 @@ export default new Vuex.Store({
       Vue.set(state.isLoggedOut, 'logout', payload.logout);
     },
 
-    mutationSuccessfullyUpdatedPassword: (state, payload) => {
-      state.successfullyUpdatedPassword = payload.state;
+    mutationUpdatedPassword: (state, payload) => {
+      state.updatedPassword = payload.state;
     },
 
     mutationContactListLoader: (state, payload) => {
@@ -214,6 +219,10 @@ export default new Vuex.Store({
 
     mutationPendingReservation: (state, payload) => {
       state.pendingReservation = payload.count
+    },
+
+    mutationActivatedAccount: (state, payload) => {
+      state.activatedAccount = payload.state
     },
   },
   actions: {
@@ -249,8 +258,8 @@ export default new Vuex.Store({
       context.commit('mutationLogout', payload)
     },
 
-    successfullyUpdatedPassword: (context, payload) => {
-      context.commit('mutationSuccessfullyUpdatedPassword', payload)
+    updatedPassword: (context, payload) => {
+      context.commit('mutationUpdatedPassword', payload)
     },
 
     contactListLoader: (context, payload) => {
@@ -275,6 +284,10 @@ export default new Vuex.Store({
 
     pendingReservation: (context, payload) => {
       context.commit('mutationPendingReservation', payload)
+    },
+
+    activatedAccount: (context, payload) => {
+      context.commit('mutationActivatedAccount', payload)
     },
   }
 });

@@ -2,17 +2,35 @@
 <div class="LoginForm padding-top-height">
   <div class="p-3 position-ref body-height">
     <div class="row justify-content-center">
-      <div class="text-center">
-        <v-snackbar v-model="snackbar" :multi-line="multiLine" :color="snackbar_color" :bottom="true" :left="true">
-          <v-icon>{{snackbar_icon}}</v-icon>
-          {{ text }}
-          <template v-slot:action="{ attrs }">
-            <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
-              <v-icon>mdi-close-circle</v-icon>
-            </v-btn>
-          </template>
-        </v-snackbar>
-      </div>
+      <v-snackbar v-model="snackbar" :multi-line="multiLine" :color="snackbar_color" :timeout="snackbar_timeout" bottom left class="m-3">
+        <v-icon>{{snackbar_icon}}</v-icon>
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-snackbar v-model="snackbarRegister" :multi-line="multiLine" color="success" bottom left class="m-3">
+        <v-icon>mdi-check-circle</v-icon>
+        <span>Používateľský účet bol úspešne vytvorený! Na zadaný email bol odoslaný aktivačný link pre aktiváciu účtu.</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" fab text small v-bind="attrs" @click="snackbarRegister = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-snackbar v-model="snackbarActivateAcc" :multi-line="multiLine" color="success" bottom left class="m-3">
+        <v-icon>mdi-check-circle</v-icon>
+        <span>Používateľský účet bol úspešne aktivovaný!</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" fab text small v-bind="attrs" @click="snackbarActivateAcc = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
       <div class="col-md-6">
         <v-card class="rounded" :loading="myloadingvariable" elevation="0">
           <v-card-title>
@@ -99,41 +117,6 @@
 <script>
 import axios from 'axios';
 
-function openWindow(url, title, options = {}) {
-  if (typeof url === 'object') {
-    options = url
-    url = ''
-  }
-
-  options = {
-    url,
-    title,
-    width: 600,
-    height: 720,
-    ...options
-  }
-
-  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left
-  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top
-  const width = window.innerWidth || document.documentElement.clientWidth || window.screen.width
-  const height = window.innerHeight || document.documentElement.clientHeight || window.screen.height
-
-  options.left = ((width / 2) - (options.width / 2)) + dualScreenLeft
-  options.top = ((height / 2) - (options.height / 2)) + dualScreenTop
-
-  const optionsStr = Object.keys(options).reduce((acc, key) => {
-    acc.push(`${key}=${options[key]}`)
-    return acc
-  }, []).join(',')
-
-  const newWindow = window.open(url, title, optionsStr)
-
-  if (window.focus) {
-    newWindow.focus()
-  }
-
-  return newWindow
-}
 export default {
   names: ['LoginForm', 'CheckboxHueColors', 'FormValidation'],
   props: {},
@@ -162,17 +145,17 @@ export default {
 
       multiLine: true,
       snackbar: false,
+      snackbarRegister: false,
+      snackbarActivateAcc: false,
       snackbar_color: '',
       snackbar_icon: '',
+      snackbar_timeout: '',
       text: '',
     }
   },
 
   computed: {},
 
-  beforeDestroy() {
-    window.removeEventListener('message', this.onMessage)
-  },
   methods: {
     validate() {
       return this.$refs.form.validate();
@@ -225,6 +208,7 @@ export default {
             }
             this.snackbar_color = 'red';
             this.snackbar_icon = 'mdi-alert-circle';
+            this.snackbar_timeout = '-1';
             this.error = ' ';
             this.errors.push(e)
           })
@@ -235,9 +219,11 @@ export default {
       var self = this
       this.$auth.authenticate(provider)
         .then(response => {
+          console.log('1');
           self.SocialLogin(provider, response)
         })
         .catch(err => {
+          console.log('1error');
           console.log({
             err: err
           })
@@ -245,18 +231,14 @@ export default {
     },
 
     SocialLogin(provider, response) {
-      const newWindow = openWindow('', 'message')
       axios.post('http://localhost:8000/api/sociallogin/' + provider, response)
         .then(response => {
+          console.log('2');
           console.log(response.data);
-          newWindow.location.href = response.data;
-          // axios.get('http://localhost:8000/api/auth/' + provider + '/callback')
-          //   .then(res => {
-          //     console.log(res);
-          //   })
           this.$router.replace("/home");
         })
         .catch(err => {
+          console.log('2error');
           console.log({
             err: err
           })
@@ -272,37 +254,49 @@ export default {
       //   })
     },
   },
-  updated() {
-
-  },
+  updated() {},
   mounted() {
+    if (this.$store.getters['updatedPassword'] != false) {
+      this.snackbar = true;
+      this.text = "Heslo bolo úspešne zmenené";
+      this.snackbar_color = 'green';
+      this.snackbar_icon = 'mdi-check-circle';
+      this.snackbar_timeout = '5000';
+
+      this.$store.dispatch('updatedPassword', {
+        state: false
+      });
+    } else {
+      this.snackbar = false;
+    }
+
     if (this.$store.getters['isLoggedOut'].logout != false) {
       this.snackbar = true;
       this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
       this.snackbar_color = 'green';
       this.snackbar_icon = 'mdi-check-circle';
+      this.snackbar_timeout = '5000';
+
+      this.$store.dispatch('isLoggedOut', {
+        username: '',
+        logout: false
+      });
     } else {
       this.snackbar = false;
     }
 
-    if (this.$store.getters['successfullyUpdatedPassword'] != false) {
-      this.snackbar = true;
-      this.text = "Heslo bolo úspešne zmenené";
-      this.snackbar_color = 'green';
-      this.snackbar_icon = 'mdi-check-circle';
-    } else {
-      this.snackbar = false;
-    }
-
-    window.addEventListener('message', this.onMessage, false)
     // console.log('Component login mounted.')
   },
   created() {
-    //add text that user was sucessfully registered
-    this.snackbar = this.$store.getters['successRegisterAlert'].success;
-    this.text = 'Používateľský účet bol úspešne vytvorený! Na zadaný email bol odoslaný aktivačný link pre aktiváciu účtu.';
-    this.snackbar_color = 'green';
-    this.snackbar_icon = 'mdi-check-circle';
+    //add text when user was successfully registered
+    this.snackbarRegister = this.$store.getters['successRegisterAlert'].success;
+    this.$store.dispatch('successRegister', {
+      success: false
+    });
+    this.snackbarActivateAcc = this.$store.getters['activatedAccount'];
+    this.$store.dispatch('activatedAccount', {
+      state: false
+    });
   }
 };
 </script>

@@ -70,7 +70,7 @@ const routes = [{
     // },
   },
   {
-    path: '/actiovation-account/:token',
+    path: '/activation-account/:token',
     name: 'VerificationAccount',
     component: VerificationAccount,
     // meta: {
@@ -273,6 +273,19 @@ const router = new VueRouter({
   // base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeResolve((to, from, next) => {
+//
+//   if (to.matched.some(record => record.meta.middlewareAuth)) {
+//         if (!AuthData.check()) {
+//             next('/login');
+//
+//             return;
+//         }
+//     }
+//  }
+// })
+
 
 // router.beforeEach((to, from, next) => {
 //   if (((to.name == 'Login') || (to.name == 'Register') || (to.name == 'Welcome')) && isLoggedIn()) {
