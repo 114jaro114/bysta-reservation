@@ -51,6 +51,8 @@ export default new Vuex.Store({
       logout: false
     },
 
+    successfullyUpdatedPassword: false,
+
     contactListLoader: true,
 
     selectedUser: {
@@ -99,6 +101,10 @@ export default new Vuex.Store({
 
     isLoggedOut: state => {
       return state.isLoggedOut
+    },
+
+    successfullyUpdatedPassword: state => {
+      return state.successfullyUpdatedPassword
     },
 
     contactListLoader: state => {
@@ -176,6 +182,10 @@ export default new Vuex.Store({
       Vue.set(state.isLoggedOut, 'logout', payload.logout);
     },
 
+    mutationSuccessfullyUpdatedPassword: (state, payload) => {
+      state.successfullyUpdatedPassword = payload.state;
+    },
+
     mutationContactListLoader: (state, payload) => {
       state.contactListLoader = payload.cancelLoader;
     },
@@ -238,6 +248,11 @@ export default new Vuex.Store({
     isLoggedOut: (context, payload) => {
       context.commit('mutationLogout', payload)
     },
+
+    successfullyUpdatedPassword: (context, payload) => {
+      context.commit('mutationSuccessfullyUpdatedPassword', payload)
+    },
+
     contactListLoader: (context, payload) => {
       context.commit('mutationContactListLoader', payload)
     },

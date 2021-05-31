@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OutController;
+use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ContactsController;
@@ -16,6 +16,8 @@ use App\Http\Controllers\ReservationController;
 use App\Traits\Friendable;
 use App\Models\User;
 
+
+use App\Http\Controllers\TestController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -72,6 +74,11 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/auth/user', [AuthController::class, 'me']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+// Send reset password mail
+Route::post('/auth/reset-password', [AuthController::class, 'sendPasswordResetLink']);
+// handle reset password form process
+Route::post('/auth/reset/password', [AuthController::class, 'callResetPassword']);
 
 Route::get('/user/{id}', [ContactsController::class, 'getUserById']);
 
@@ -137,11 +144,20 @@ Route::get('/getNotificationRelevant/{id}', [NotificationsController::class, 'ge
 //     return 'hej';
 // });
 
-//social auth
-// Route::post('/sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
-// Route::get('/auth/{provider}/callback', [OutController::class, 'index']->where('provider', '.*'));
-
 //Traits
 Route::get('/check_relationship_status/{id}', [FriendshipsController::class, 'check']);
 Route::get('/add_friend/{id}', [FriendshipsController::class, 'add_friend']);
 Route::get('/accept_friend/{id}', [FriendshipsController::class, 'accept_friend']);
+
+//social auth
+Route::post('/sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
+Route::get('/auth/{provider}/callback', [OAuthController::class, 'handleProviderCallback'])->where('provider', '.*');
+// Route::post('sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
+// Route::post('auth/{provider}', [OutController::class, 'index'])->where('vue', '.*');
+// Route::post('auth/{provider}/callback', [OutController::class, 'index'])->where('vue', '.*');
+
+// Route::post('oauth/{driver}', [OAuthController::class, 'redirect']);
+// Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
+
+
+// Route::get('/testmail', [TestController::class, 'testmail']);

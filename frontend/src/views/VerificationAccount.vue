@@ -1,21 +1,21 @@
 <template>
-<div class="register">
+<div class="verification_account">
   <v-lazy :options="{
           threshold: .4
         }" min-height="100vh" transition-group="scale-transition">
-    <RegisterForm />
+    <VerificationAccountForm />
   </v-lazy>
 </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import RegisterForm from "@/components/auth/RegisterForm.vue";
+import VerificationAccountForm from "@/components/auth/VerificationAccountForm.vue";
 
 export default {
-  name: "Register",
+  name: "VerificationAccount",
   components: {
-    RegisterForm,
+    VerificationAccountForm,
   },
 };
 </script>

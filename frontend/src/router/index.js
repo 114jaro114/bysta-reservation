@@ -9,7 +9,9 @@ import goTo from 'vuetify/es5/services/goto'
 //auth
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Reset from '../views/Reset.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+import ResetPassword from '../views/ResetPassword.vue'
+import VerificationAccount from '../views/VerificationAccount.vue'
 import AvatarImage from '../views/AvatarImage.vue'
 
 //views
@@ -52,9 +54,25 @@ const routes = [{
     // },
   },
   {
-    path: '/reset',
-    name: 'Reset',
-    component: Reset,
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword,
+    // meta: {
+    //   allowAnonymous: true
+    // },
+  },
+  {
+    path: '/reset-password/:token',
+    name: 'ResetPassword',
+    component: ResetPassword,
+    // meta: {
+    //   allowAnonymous: true
+    // },
+  },
+  {
+    path: '/actiovation-account/:token',
+    name: 'VerificationAccount',
+    component: VerificationAccount,
     // meta: {
     //   allowAnonymous: true
     // },
@@ -229,9 +247,9 @@ const routes = [{
     name: 'AvatarImage',
     component: AvatarImage
   },
-
+  //socialite
   {
-    path: '/auth/:provider/callback',
+    path: '/auth/:provide/callback',
     component: {
       template: '<div class="auth-component"></div>'
     }
@@ -251,7 +269,7 @@ const router = new VueRouter({
     return goTo(scrollTo)
   },
 
-  mode: 'history',
+  mode: 'history', //eliminates # thing from the URL.
   // base: process.env.BASE_URL,
   routes
 })

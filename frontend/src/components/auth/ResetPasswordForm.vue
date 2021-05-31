@@ -1,5 +1,5 @@
 <template>
-<div class="LoginForm padding-top-height">
+<div class="ResetPasswordForm padding-top-height">
   <div id="blur-effect">
     <div class="p-3 position-ref body-height">
       <div class="row justify-content-center">
@@ -7,7 +7,7 @@
           <v-card class="rounded" :loading="myloadingvariable" elevation="0">
             <v-card-title>
               <v-row justify="center" class="p-3">
-                <span class="font-weight-bold text-center primary--text">Obnova hesla</span>
+                <span class="font-weight-bold text-center primary--text">Nové heslo</span>
                 <router-link :to="{ name: 'Login' }">
                   <button type="button" class="primary--text close">&times;</button>
                 </router-link>
@@ -16,24 +16,26 @@
             <hr class="mt-0 mb-0 custom-hr">
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-card-text class="p-3">
-                <v-alert v-if="alert" dismissible color="success" border="left" elevation="2" colored-border icon="mdi-check-circle">
-                  <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
-                </v-alert>
+                <v-snackbar v-model="alertFailResetPassword" :multi-line="multiLine" color="success" :bottom="true">
+                  <v-icon>mdi-check-circle</v-icon>
+                  {{ text }}
+                  <template v-slot:action="{ attrs }">
+                    <v-btn color="white" fab text small v-bind="attrs" @click="alertFailResetPassword = false">
+                      <v-icon>mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-snackbar>
 
                 <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
-
-                <div class="row">
-                  <div class="col text-center">
-                    <router-link :to="{ name: 'Register' }">
-                      <span class="forgot-pass accent--text">Ešte nemáš účet? <span class="primary--text font-weight-bold">Zaregistruj sa</span></span>
-                    </router-link>
-                  </div>
-                </div>
+                <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
+                  @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules" :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova"
+                  hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
               </v-card-text>
               <hr class="mt-0 mb-0 custom-hr">
               <v-card-actions>
-                <v-btn color="primary" @click="sendNewPassword" block>
-                  Resetovať heslo
+                <v-btn color="primary" @click="resetPassword" block>
+                  Uložiť nové heslo
                 </v-btn>
               </v-card-actions>
             </v-form>
@@ -90,18 +92,35 @@
 <script>
 import axios from 'axios';
 export default {
-  names: ['LoginForm', 'CheckboxHueColors', 'FormValidation'],
+  names: ['ResetPasswordForm', 'CheckboxHueColors', 'FormValidation'],
   props: {},
   data() {
     return {
       valid: true,
       myloadingvariable: false,
-      alert: false,
+      togglePassword: false,
+      togglePasswordConfirm: false,
+
+      alertFailResetPassword: false,
       email: '',
       emailRules: [
         v => !!v || 'E-mail je povinný',
         v => /.+@.+\..+/.test(v) || 'E-mail musí mať valídny tvar',
       ],
+      password: '',
+      passwordRules: [
+        v => !!v || 'Heslo je povinné',
+        v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
+      ],
+      confirmPassword: '',
+      confirmPasswordRules: [
+        v => !!v || 'Potvrdenie hesla je povinné',
+        v => v.length >= 4 || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
+        v => v === this.password || 'Zadané hesla sa nezhodujú',
+      ],
+      token: null,
+      multiLine: true,
+      text: '',
     }
   },
 
@@ -113,27 +132,29 @@ export default {
       this.$refs.form.reset()
     },
 
-    sendNewPassword() {
+    resetPassword() {
       if (this.validate()) {
         this.myloadingvariable = true;
         // call API
-        axios.post('http://127.0.0.1:8000/api/auth/login', {
+        axios.post('http://127.0.0.1:8000/api/auth/reset/password/', {
+            token: this.$route.params.token,
             email: this.email,
             password: this.password,
-            remember: this.remember,
-            status: "online"
+            password_confirmation: this.password_confirmation
           })
           .then(resp => {
+            console.log(resp);
             this.myloadingvariable = false;
-            this.alert = true;
-            localStorage.setItem('username', resp.data.user.name);
-            localStorage.setItem('user_id', resp.data.user.id);
-            localStorage.setItem('authToken', resp.data.token);
             this.reset();
-            this.$router.push("/home");
+            this.$store.dispatch('successfullyUpdatedPassword', {
+              state: true
+            });
+            this.$router.push("/login");
           })
           .catch(e => {
             this.myloadingvariable = false;
+            this.alertFailResetPassword = true;
+            this.text = "Vyskytol sa nejaký problém. Prosím skúste to znova";
             this.errors.push(e)
           })
       }

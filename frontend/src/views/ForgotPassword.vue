@@ -1,21 +1,21 @@
 <template>
-<div class="reset">
+<div class="forgot_password">
   <v-lazy :options="{
           threshold: .4
         }" min-height="100vh" transition-group="scale-transition">
-    <ResetForm />
+    <ForgotPasswordForm />
   </v-lazy>
 </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ResetForm from "@/components/ResetForm.vue";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.vue";
 
 export default {
-  name: "Reset",
+  name: "ForgotPassword",
   components: {
-    ResetForm,
+    ForgotPasswordForm,
   },
 };
 </script>

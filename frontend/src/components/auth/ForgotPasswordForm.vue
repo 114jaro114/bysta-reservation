@@ -1,0 +1,211 @@
+<template>
+<div class="ForgotPasswordForm padding-top-height">
+  <div id="blur-effect">
+    <div class="p-3 position-ref body-height">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <v-card class="rounded" :loading="myloadingvariable" elevation="0">
+            <v-card-title>
+              <v-row justify="center" class="p-3">
+                <span class="font-weight-bold text-center primary--text">Obnova hesla</span>
+                <router-link :to="{ name: 'Login' }">
+                  <button type="button" class="primary--text close">&times;</button>
+                </router-link>
+              </v-row>
+            </v-card-title>
+            <hr class="mt-0 mb-0 custom-hr">
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-card-text class="p-3">
+                <v-snackbar v-model="alert" :multi-line="multiLine" color="success" :bottom="true">
+                  <v-icon>mdi-check-circle</v-icon>
+                  <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
+                  <template v-slot:action="{ attrs }">
+                    <v-btn color="white" fab text small v-bind="attrs" @click="alert = false">
+                      <v-icon>mdi-close-circle</v-icon>
+                    </v-btn>
+                  </template>
+                </v-snackbar>
+                <!-- <v-alert v-if="alert" dismissible color="success" border="left" elevation="2" colored-border icon="mdi-check-circle">
+                  <span>Na zadaný email bol odoslaný link na vytvorenie nového hesla!</span>
+                </v-alert> -->
+
+                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
+
+                <div class="row">
+                  <div class="col text-center">
+                    <router-link :to="{ name: 'Register' }">
+                      <span class="forgot-pass accent--text">Ešte nemáš účet? <span class="primary--text font-weight-bold">Zaregistruj sa</span></span>
+                    </router-link>
+                  </div>
+                </div>
+              </v-card-text>
+              <hr class="mt-0 mb-0 custom-hr">
+              <v-card-actions>
+                <v-btn color="primary" @click="requestResetPassword" block>
+                  Odoslať link na obnovenie hesla
+                </v-btn>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+          <!-- <form novalidate method="POST" @submit.prevent='validateLogin'>
+            <md-card>
+              <md-card-header>
+                <div class="md-title font-weight-bold text-center">Obnovenie hesla</div>
+                <router-link :to="{ name: 'Welcome' }">
+                  <button type="button" class="close">&times;</button>
+                </router-link>
+              </md-card-header>
+
+              <hr class="mt-0 mb-0 custom-hr">
+
+              <md-card-content>
+                <div class="row pl-3 pr-3" v-show="hasErrorMessage">
+                  <span class="alert w-100 mb-1 m-auto font-weight-bold" role="alert" style="color: #ff1744; border-color: #ff1744">
+                    <i class="fa fa-info-circle"></i> Bad email or password
+                  </span>
+                </div>
+
+                <md-field :class="[getValidationClass('email'), errorMessageClass]" md-clearable>
+                  <md-icon class="fa fa-envelope"></md-icon>
+                  <label for="email">Email</label>
+                  <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" />
+                  <span class="md-error md-error-pl" v-if="!$v.form.email.required">The email is required</span>
+                  <span class="md-error md-error-pl" v-else-if="!$v.form.email.email">The email is invalid</span>
+                </md-field>
+                <div class="row">
+                  <div class="col text-center">
+                    <router-link :to="{ name: 'Register' }">
+                      <span class="forgot-pass">Ešte nemáš účet?</span><span class="primary-color"> Zaregistruj sa</span>
+                    </router-link>
+                  </div>
+                </div>
+
+              </md-card-content>
+
+              <hr class="mt-0 mb-0 custom-hr">
+
+              <md-card-actions>
+                <md-button type="submit" class="md-raised md-primary" id="md-primary">Odoslať odkaz na obnovenie hesla</md-button>
+              </md-card-actions>
+            </md-card>
+          </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+import axios from 'axios';
+export default {
+  names: ['ForgotPasswordForm', 'CheckboxHueColors', 'FormValidation'],
+  props: {},
+  data() {
+    return {
+      valid: true,
+      myloadingvariable: false,
+      alert: false,
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail je povinný',
+        v => /.+@.+\..+/.test(v) || 'E-mail musí mať valídny tvar',
+      ],
+      multiLine: true,
+    }
+  },
+
+  methods: {
+    validate() {
+      return this.$refs.form.validate();
+    },
+    reset() {
+      this.$refs.form.reset()
+    },
+
+    requestResetPassword() {
+      if (this.validate()) {
+        this.myloadingvariable = true;
+        // call API
+        axios.post('http://127.0.0.1:8000/api/auth/reset-password', {
+            email: this.email,
+          })
+          .then(resp => {
+            console.log(resp);
+            this.myloadingvariable = false;
+            this.alert = true;
+            this.reset();
+          })
+          .catch(e => {
+            this.myloadingvariable = false;
+            this.errors.push(e)
+          })
+      }
+    },
+  },
+  mounted() {
+    // console.log('Component Reset mounted.');
+    this.$store.dispatch('isLoggedOut', {
+      username: '',
+      logout: false
+    });
+  },
+
+  created() {
+    // console.log('Component Reset created')
+  }
+};
+</script>
+
+<style lang="css">
+  .md-title{
+    color: #007bff;
+  }
+  .padding-top-height {
+    padding-top: 5vh;
+  }
+  .md-checkbox {
+    display: flex;
+    margin: 0 !important;
+  }
+  .md-field:last-child {
+    margin-bottom: 40px;
+  }
+  .md-field.md-theme-default>.md-icon:after {
+    background-color: rgb(255,255,255) !important;
+  }
+  .md-button.md-theme-default.md-primary {
+    background-color: #007bff;
+  }
+  .forgot-pass {
+    color: black;
+    /* margin: 16px 0px 16px 16px; */
+  }
+  .md-button {
+    width: 100%;
+  }
+  .md-icon.fa-envelope {
+    font-size: 18px !important;
+  }
+  .custom-hr {
+    border-width: 3px;
+  }
+  .close {
+    margin-right: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .md-theme-default a:not(.md-button):hover {
+    text-decoration: unset !important;
+  }
+
+  .md-error-pl {
+    padding-left: 36px;
+  }
+
+  .md-invalid .md-icon {
+    color: #ff1744 !important;
+  }
+</style>

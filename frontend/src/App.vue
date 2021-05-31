@@ -28,7 +28,7 @@
       </v-btn>
     </template>
   </v-snackbar>
-  <div v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'Reset'">
+  <div v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'ForgotPassword'">
     <SpeedDial />
     <Footer />
     <BottomNavigation />

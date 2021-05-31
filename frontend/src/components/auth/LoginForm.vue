@@ -3,8 +3,8 @@
   <div class="p-3 position-ref body-height">
     <div class="row justify-content-center">
       <div class="text-center">
-        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
-          <v-icon>mdi-check-circle</v-icon>
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" :color="snackbar_color" :bottom="true" :left="true">
+          <v-icon>{{snackbar_icon}}</v-icon>
           {{ text }}
           <template v-slot:action="{ attrs }">
             <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
@@ -27,14 +27,6 @@
           <hr class="mt-0 mb-0 custom-hr">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text class="p-3">
-              <v-alert v-if="alert" dismissible color="error" border="left" elevation="2" colored-border icon="mdi-alert-circle">
-                <span>Nesprávny email alebo heslo!</span>
-              </v-alert>
-
-              <v-alert v-if="alertSuccessRegister" dismissible color="success" border="left" elevation="2" colored-border icon="mdi-check-circle">
-                <span>Používateľský účet bol úspešne vytvorený!</span>
-              </v-alert>
-
               <v-text-field prepend-icon="mdi-email" v-model="email" :error-messages="error" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close" counter></v-text-field>
 
               <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="error" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo"
@@ -44,7 +36,7 @@
                   <v-checkbox v-model="remember" name="remember" id="remember" label="Zapamätať"></v-checkbox>
                 </v-col>
                 <v-col class="pb-0 pt-5 float-right text-right">
-                  <router-link :to="{ name: 'Reset' }">
+                  <router-link :to="{ name: 'ForgotPassword' }">
                     <span class="forgot-pass primary--text font-weight-bold">Zabudnuté <span class="primary-color font-weight-bold">heslo?</span></span>
                   </router-link>
                 </v-col>
@@ -85,7 +77,7 @@
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="light-blue" @click="AuthProvider('twitter')">
+              <!-- <v-btn class="ml-5" fab small color="light-blue" @click="AuthProvider('twitter')">
                 <v-icon color="white">
                   mdi-twitter
                 </v-icon>
@@ -95,7 +87,7 @@
                 <v-icon color="white">
                   mdi-github
                 </v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-row>
           </v-container>
         </v-card>
@@ -107,15 +99,48 @@
 <script>
 import axios from 'axios';
 
+function openWindow(url, title, options = {}) {
+  if (typeof url === 'object') {
+    options = url
+    url = ''
+  }
+
+  options = {
+    url,
+    title,
+    width: 600,
+    height: 720,
+    ...options
+  }
+
+  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left
+  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top
+  const width = window.innerWidth || document.documentElement.clientWidth || window.screen.width
+  const height = window.innerHeight || document.documentElement.clientHeight || window.screen.height
+
+  options.left = ((width / 2) - (options.width / 2)) + dualScreenLeft
+  options.top = ((height / 2) - (options.height / 2)) + dualScreenTop
+
+  const optionsStr = Object.keys(options).reduce((acc, key) => {
+    acc.push(`${key}=${options[key]}`)
+    return acc
+  }, []).join(',')
+
+  const newWindow = window.open(url, title, optionsStr)
+
+  if (window.focus) {
+    newWindow.focus()
+  }
+
+  return newWindow
+}
 export default {
   names: ['LoginForm', 'CheckboxHueColors', 'FormValidation'],
   props: {},
   data() {
     return {
-      alertSuccessRegister: false,
       myloadingvariable: false,
       togglePassword: false,
-      alert: false,
       valid: true,
       name: '',
       nameRules: [
@@ -137,16 +162,16 @@ export default {
 
       multiLine: true,
       snackbar: false,
+      snackbar_color: '',
+      snackbar_icon: '',
       text: '',
     }
   },
 
-  computed: {
-    // user() {
-    //
-    //   return this.$store.getters['security/localUser']
-    // },
-    // this.alertSuccessRegister =
+  computed: {},
+
+  beforeDestroy() {
+    window.removeEventListener('message', this.onMessage)
   },
   methods: {
     validate() {
@@ -162,7 +187,7 @@ export default {
       if (this.validate()) {
         this.myloadingvariable = true;
         this.error = '';
-        this.alert = false;
+        this.snackbar = false;
         // call API
         axios.post('http://127.0.0.1:8000/api/auth/login', {
             email: this.email,
@@ -191,49 +216,61 @@ export default {
             }
           })
           .catch(e => {
-            this.myloadingvariable = false,
-              this.alert = true,
-              this.error = ' ',
-              this.errors.push(e)
+            this.myloadingvariable = false;
+            this.snackbar = true;
+            if (e.response.status == 500) {
+              this.text = 'Pred prvotným prihlásením je potrebné aktivovať účet pomocou mailu.';
+            } else {
+              this.text = 'Nesprávny email alebo heslo.';
+            }
+            this.snackbar_color = 'red';
+            this.snackbar_icon = 'mdi-alert-circle';
+            this.error = ' ';
+            this.errors.push(e)
           })
       }
     },
-    //VueSocialauth
-    // AuthProvider(provider) {
-    //   console.log(provider);
-    //   var self = this
-    //   this.$auth.authenticate(provider)
-    //     .then(response => {
-    //       self.SocialLogin(provider, response)
-    //     })
-    //     .catch(err => {
-    //       console.log({
-    //         err: err
-    //       })
-    //     })
-    // },
-    //
-    // SocialLogin(provider, response) {
-    //   console.log(provider);
-    //   axios.post('http://127.0.0.1:8000/sociallogin/' + provider, response)
-    //     .then(response => {
-    //       console.log(response.data)
-    //     })
-    //     .catch(err => {
-    //       console.log({
-    //         err: err
-    //       })
-    //     })
-    // this.$http.post('http://127.0.0.1:8000/sociallogin/' + provider, response)
-    //   .then(response => {
-    //     console.log(response.data)
-    //   })
-    //   .catch(err => {
-    //     console.log({
-    //       err: err
-    //     })
-    //   })
-    // },
+    // VueSocialauth
+    AuthProvider(provider) {
+      var self = this
+      this.$auth.authenticate(provider)
+        .then(response => {
+          self.SocialLogin(provider, response)
+        })
+        .catch(err => {
+          console.log({
+            err: err
+          })
+        })
+    },
+
+    SocialLogin(provider, response) {
+      const newWindow = openWindow('', 'message')
+      axios.post('http://localhost:8000/api/sociallogin/' + provider, response)
+        .then(response => {
+          console.log(response.data);
+          newWindow.location.href = response.data;
+          // axios.get('http://localhost:8000/api/auth/' + provider + '/callback')
+          //   .then(res => {
+          //     console.log(res);
+          //   })
+          this.$router.replace("/home");
+        })
+        .catch(err => {
+          console.log({
+            err: err
+          })
+        })
+      // this.$http.post('http://127.0.0.1:8000/api/sociallogin/' + provider, response)
+      //   .then(response => {
+      //     console.log(response.data)
+      //   })
+      //   .catch(err => {
+      //     console.log({
+      //       err: err
+      //     })
+      //   })
+    },
   },
   updated() {
 
@@ -241,17 +278,31 @@ export default {
   mounted() {
     if (this.$store.getters['isLoggedOut'].logout != false) {
       this.snackbar = true;
+      this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
+      this.snackbar_color = 'green';
+      this.snackbar_icon = 'mdi-check-circle';
     } else {
       this.snackbar = false;
     }
+
+    if (this.$store.getters['successfullyUpdatedPassword'] != false) {
+      this.snackbar = true;
+      this.text = "Heslo bolo úspešne zmenené";
+      this.snackbar_color = 'green';
+      this.snackbar_icon = 'mdi-check-circle';
+    } else {
+      this.snackbar = false;
+    }
+
+    window.addEventListener('message', this.onMessage, false)
     // console.log('Component login mounted.')
   },
   created() {
     //add text that user was sucessfully registered
-    this.alertSuccessRegister = this.$store.getters['successRegisterAlert'].success;
-    this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
-    // console.log(this.$store.getters['isLoggedOut'].logout);
-    // console.log('Component login created')
+    this.snackbar = this.$store.getters['successRegisterAlert'].success;
+    this.text = 'Používateľský účet bol úspešne vytvorený! Na zadaný email bol odoslaný aktivačný link pre aktiváciu účtu.';
+    this.snackbar_color = 'green';
+    this.snackbar_icon = 'mdi-check-circle';
   }
 };
 </script>

@@ -60,7 +60,7 @@
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="light-blue">
+              <!-- <v-btn class="ml-5" fab small color="light-blue">
                 <v-icon color="white">
                   mdi-twitter
                 </v-icon>
@@ -70,7 +70,7 @@
                 <v-icon color="white">
                   mdi-github
                 </v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-row>
           </v-container>
         </v-card>
@@ -126,7 +126,6 @@ export default {
       ],
       remember: true,
       alertFailText: '',
-
       errorUsername: [],
       errorEmail: [],
     }
