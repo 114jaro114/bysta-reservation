@@ -12,11 +12,16 @@ body::-webkit-scrollbar {
   display: none;
 }
 /* Hide scrollbar for IE, Edge and Firefox */
+
 body {
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+.vue-tel-input-vuetify .v-text-field .v-select__selections .vti__flag {
+  margin-left: 0;
 }
 //toolbar
 // .notiftoolbar .v-toolbar {
@@ -198,6 +203,7 @@ a:hover {
   padding: 10px;
 }
 /* rate */
+
 .rating {
   float: left;
   transform: rotateY(180deg);
@@ -275,12 +281,14 @@ a:hover {
   width: 70%;
 }
 /* Clear floats after the columns */
+
 .row:after {
   content: "";
   display: table;
   clear: both;
 }
 /* The bar container */
+
 .bar-container {
   width: 100%;
   background-color: #f1f1f1;

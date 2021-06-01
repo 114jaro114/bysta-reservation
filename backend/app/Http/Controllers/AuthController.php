@@ -154,7 +154,7 @@ class AuthController extends Controller
          $user = User::where('account_verified', $request->token)->first();
          if (!$user) {
            return response()->json([
-             'message' => 'User not found/Invalid code',
+             'message' => 'Account was already activated/Invalid code/',
              'status_code' => 401
            ], 401);
          } else {

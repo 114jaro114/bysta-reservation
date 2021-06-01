@@ -3,8 +3,8 @@
   <div id="blur-effect">
     <div class="p-3 position-ref body-height">
       <div class="row justify-content-center">
-        <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
-          <v-icon>mdi-alert-circle</v-icon>
+        <v-snackbar v-model="snackbar" :multi-line="multiLine" :color="snackbar_color" :timeout="snackbar_timeout" bottom left class="m-3">
+          <v-icon>{{snackbar_icon}}</v-icon>
           {{ text }}
           <template v-slot:action="{ attrs }">
             <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
@@ -23,6 +23,20 @@
             <v-card-text class="p-3">
               <v-btn color="primary" elevation="2" large x-large @click="verif_account">Aktivovať účet</v-btn>
             </v-card-text>
+
+            <hr class="mt-0 mb-0 custom-hr">
+
+            <v-card-actions class="p-3">
+              <div class="row">
+                <div class="col text-center">
+                  <router-link :to="{ name: 'Login' }">
+                    <span class="forgot-pass accent--text">Prejsť na stránku s <span class="primary--text font-weight-bold">prihlásením</span></span>
+                  </router-link>
+                </div>
+              </div>
+            </v-card-actions>
+
+
           </v-card>
         </div>
       </div>
@@ -40,6 +54,10 @@ export default {
     return {
       snackbar: false,
       multiLine: true,
+      snackbar_color: '',
+      snackbar_icon: '',
+      snackbar_timeout: '',
+      text: '',
       myloadingvariable: false,
       token: this.$route.params.token,
     }
@@ -63,7 +81,17 @@ export default {
         .catch(e => {
           this.snackbar = true;
           this.myloadingvariable = false;
-          this.text = "Vyskytol sa nejaký problém. Prosím skúste to znova";
+          if (e.response.status == 401) {
+            this.text = 'Používateľský účet už bol aktivovaný.';
+            this.snackbar_color = 'orange';
+            this.snackbar_icon = 'mdi-information';
+            this.snackbar_timeout = '-1';
+          } else {
+            this.text = "Vyskytol sa nejaký problém. Prosím, skúste to znova.";
+            this.snackbar_color = 'red';
+            this.snackbar_icon = 'mdi-alert-circle';
+            this.snackbar_timeout = '-1';
+          }
           this.errors.push(e);
         })
     },

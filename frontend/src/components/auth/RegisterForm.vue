@@ -33,8 +33,7 @@
                 </div>
               </div>
             </v-card-text>
-            <v-divider class="mt-0" />
-            <!-- <hr class="mt-0 mb-0 custom-hr"> -->
+            <hr class="mt-0 custom-hr">
             <v-card-actions>
               <v-btn color="primary" @click="register" block>
                 Zaregistrovať sa

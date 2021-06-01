@@ -114,7 +114,7 @@
           </template> -->
           </v-data-table>
           <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents"
-            :search="search" item-key="name" :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte" v-else>
+            :search="search" item-key="name" loading-text="Načítavanie... Prosím počkajte" v-else>
             <template v-slot:item.id="{ item }">
               <span>{{ currentEvents.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
             </template>

@@ -68,8 +68,7 @@
                 </div>
               </div>
             </v-card-text>
-            <v-divider class="mt-0" />
-            <!-- <hr class="mt-0 mb-0 custom-hr"> -->
+            <hr class="mt-0 custom-hr">
             <v-card-actions>
               <v-btn color="primary" @click="login" block>
                 Prihlásiť sa
@@ -272,7 +271,7 @@ export default {
 
     if (this.$store.getters['isLoggedOut'].logout != false) {
       this.snackbar = true;
-      this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený`;
+      this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený.`;
       this.snackbar_color = 'green';
       this.snackbar_icon = 'mdi-check-circle';
       this.snackbar_timeout = '5000';

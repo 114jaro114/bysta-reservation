@@ -496,7 +496,7 @@
                     </v-col>
                   </v-row> -->
                     <!-- <v-row> -->
-                    <v-col>
+                    <v-col class="pl-0 pr-0">
                       <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
                         <template v-slot:header="{ props: { headers } }">
                           <thead>
@@ -516,8 +516,28 @@
                       </v-data-table>
                     </v-col>
                   </v-row>
+
+                  <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                    <template v-slot:activator="{ on: menu, attrs }">
+                      <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
+                        <v-icon color="white" medium>mdi-information </v-icon>
+                        <span style="color:white" class="font-weight-bold">Detail</span>
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-toolbar dark color="primary" class="rounded-0">
+                        <!-- extended extension-height="4"  -->
+                        <v-btn icon dark @click="dialogOrderDetail = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                        <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                      </v-toolbar>
+                    </v-card>
+                  </v-dialog>
                 </v-card-text>
               </v-card>
+
               <v-btn color="accent" @click="e1 = 1; backStep2()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
               </v-btn>
@@ -795,7 +815,7 @@
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
                       </v-tooltip>
                     </v-col> -->
-                    <v-col>
+                    <v-col class="pl-0 pr-0">
                       <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
                         <template v-slot:header="{ props: { headers } }">
                           <thead>
@@ -815,6 +835,24 @@
                       </v-data-table>
                     </v-col>
                   </v-row>
+                  <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                    <template v-slot:activator="{ on: menu, attrs }">
+                      <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
+                        <v-icon color="white" medium>mdi-information </v-icon>
+                        <span style="color:white" class="font-weight-bold">Detail</span>
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-toolbar dark color="primary" class="rounded-0">
+                        <!-- extended extension-height="4"  -->
+                        <v-btn icon dark @click="dialogOrderDetail = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                        <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                      </v-toolbar>
+                    </v-card>
+                  </v-dialog>
                 </v-card-text>
               </v-card>
 
@@ -873,6 +911,7 @@ export default {
       cleaningFee: 100,
       priceCabinUnderSixPpl: 150,
 
+      dialogOrderDetail: false,
       //table prices
       headers: [{
           id: 1,
@@ -1274,7 +1313,7 @@ export default {
         if (this.counter2 > 0) {
           this.prices.splice(1, 0, {
             text: 'Deti od 2 do 12 rokov',
-            p1: this.counter2 + '€',
+            p1: this.counter2,
             p2: this.priceChilds2to12 + '€',
             p3: this.counter2 * this.priceChilds2to12 + '€',
             p4: this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + '€',
@@ -1283,7 +1322,7 @@ export default {
         if (this.counter3 > 0) {
           this.prices.splice(2, 0, {
             text: 'Deti do 2 rokov',
-            p1: this.counter3 + '€',
+            p1: this.counter3,
             p2: this.priceChildsto2 + '€',
             p3: this.counter3 * this.priceChildsto2 + '€',
             p4: this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + '€',
@@ -1291,7 +1330,7 @@ export default {
         }
         this.prices.splice(0, 0, {
           text: 'Dospelí',
-          p1: this.counter1 + '€',
+          p1: this.counter1,
           p2: this.priceAdults + '€',
           p3: this.counter1 * this.priceAdults + '€',
           p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + '€',
