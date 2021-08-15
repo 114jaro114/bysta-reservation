@@ -9,7 +9,8 @@
   <v-row justify="center" class="ml-0 mr-0">
     <!-- circle chart -->
     <v-col cols="12" lg="6" md="6" sm="12">
-      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle">
+      <!-- :loading="loaderStateCircle" -->
+      <v-card class="rounded" elevation="0" loader-height="6">
         <div class="pt-3" id="chart">
           <apexchart type="radialBar" height="365" :options="chartOptionsCircle" :series="seriesCircle"></apexchart>
         </div>
@@ -29,7 +30,8 @@
     </v-col>
 
     <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateLine">
+      <!-- :loading="loaderStateLine" -->
+      <v-card class="rounded" elevation="0" loader-height="6">
         <div class="pt-3" id="chart">
           <apexchart type="line" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
         </div>
@@ -49,7 +51,8 @@
     </v-col>
 
     <v-col cols="12" lg="6" md="12" sm="12">
-      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle_multiple">
+      <!-- :loading="loaderStateCircle_multiple" -->
+      <v-card class="rounded" elevation="0" loader-height="6">
         <div class="pt-3" id="chart">
           <apexchart type="radialBar" height="365" ref="circleMultipleChart" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
         </div>
@@ -69,7 +72,8 @@
     </v-col>
 
     <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateColumn">
+      <!-- :loading="loaderStateColumn" -->
+      <v-card class="rounded" elevation="0" loader-height="6">
         <div class="pt-3" id="chart">
           <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
         </div>
@@ -90,7 +94,8 @@
 
     <!-- historical chart -->
     <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
-      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateSeries">
+      <!-- :loading="loaderStateSeries" -->
+      <v-card class="rounded" elevation="0" loader-height="6">
         <div class="pt-3" id="chart">
           <div class="toolbar pt-3">
             <v-btn icon color="#0066ff" id="one_hour" @click="updateData('one_hour')" class="mr-2" :class="{active: selection==='one_hour'}">

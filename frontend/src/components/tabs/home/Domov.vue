@@ -33,7 +33,8 @@
             </v-row> -->
               <!-- </v-container> -->
               <!-- <v-row> -->
-              <lightbox :cells="3" :items="images" @load="onImgLoad"></lightbox>
+              <lightbox :cells="3" :items="images"></lightbox>
+              <!-- @load="onImgLoad" -->
               <!-- </v-row> -->
 
               <!-- <CoolLightBox :items="images" :index="index" :fullScreen="true" @close="index = null">

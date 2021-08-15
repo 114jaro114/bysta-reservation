@@ -17,7 +17,8 @@
       </template>
     </v-snackbar>
     <v-col class="pl-3 pr-3">
-      <v-card class="rounded" elevation="0" :loading="myloadingvariable">
+      <!-- :loading="myloadingvariable" -->
+      <v-card class="rounded" elevation="0">
         <v-card-title>
           <v-row v-if="user_acc_info == true">
             <v-col>

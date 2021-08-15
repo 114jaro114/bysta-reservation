@@ -16,7 +16,7 @@
           <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
             <v-btn text color="secondary" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
           </v-col>
-          <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+          <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
         </v-toolbar>
 
         <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search"
@@ -170,7 +170,7 @@
                         Save
                       </v-btn>
                     </v-toolbar-items> -->
-                  <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+                  <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
                 </v-toolbar>
                 <v-list three-line subheader>
                   <v-subheader>Kontaktné údaje</v-subheader>

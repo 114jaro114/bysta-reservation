@@ -13,7 +13,7 @@
           <v-spacer />
           <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
           <v-spacer />
-          <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+          <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
         </v-toolbar>
 
         <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadny používatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name"

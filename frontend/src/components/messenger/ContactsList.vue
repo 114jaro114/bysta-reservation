@@ -11,7 +11,7 @@
                   <v-spacer class="mr-1 ml-1"></v-spacer>
                   <v-btn color="secondary primary--text" to="/profile/add_friends" text small ><v-icon>mdi-account-plus</v-icon></v-btn>
 
-                  <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+                  <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
                 </v-toolbar>
               </template>
               <template v-slot:item="{ item }" >
