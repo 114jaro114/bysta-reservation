@@ -1,5 +1,5 @@
 <template>
-<div v-if="this.$store.getters['ratingState']">
+<!-- <div v-if="this.$store.getters['ratingState']">
   <v-card elevation="0">
     <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
       <v-spacer />
@@ -8,8 +8,6 @@
       </v-toolbar-title>
       <v-spacer />
     </v-toolbar>
-
-    <!-- <v-divider class="mt-0" horizontal></v-divider> -->
     <form @submit.prevent class="mt-3">
       <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
       <div class="p-3">
@@ -18,8 +16,8 @@
       </div>
     </form>
   </v-card>
-</div>
-<div class="rates" v-else>
+</div> -->
+<div class="rates">
   <v-row no-gutters>
     <v-col cols="12" xl="4" lg="5" md="6" sm="12" xs="12">
       <v-container>
@@ -259,7 +257,7 @@ export default {
   methods: {
     addNewEvent() {
       this.newEvent.name = this.user;
-      axios.post('http://127.0.0.1:8000/api/rating/store', {
+      axios.post(`${process.env.VUE_APP_API_URL}/rating/store`, {
           ...this.newEvent
         })
         .then(() => {
@@ -284,7 +282,7 @@ export default {
       if (this.newEvent2.Koment == "") {
         this.newEvent2.Koment = this.commentForUpdate;
       }
-      axios.post(`http://127.0.0.1:8000/api/rating/update`, {
+      axios.post(`${process.env.VUE_APP_API_URL}/rating/update`, {
           ...this.newEvent2
         })
         .then(() => {
@@ -313,7 +311,7 @@ export default {
       this.Five2 = 0;
     },
     getEvents() {
-      axios.get('http://127.0.0.1:8000/api/rating')
+      axios.get(`${process.env.VUE_APP_API_URL}/rating`)
         .then(resp => {
           this.resetEvents();
           this.items = resp.data.data;

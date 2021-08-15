@@ -136,20 +136,23 @@ export default {
   },
   watch: {
     name() {
-      if (this.name.length >= 4) {
-        axios.get(`http://127.0.0.1:8000/api/checkIfUsernameExist/${this.name}`)
+      console.log("hmm");
+      if (this.name) {
+        axios.post(`${process.env.VUE_APP_API_URL}/checkIfUsernameExist`, {
+            name: this.name
+          })
           .then(valid => {
             this.errorUsername = valid.data;
             // this.errorUsername = valid ? [] : ['async error']
           });
       } else {
-        this.errorUsername = [];
+        this.errorUsername = '';
       }
     },
 
     email() {
       if (/.+@.+\..+/.test(this.email)) {
-        axios.post('http://127.0.0.1:8000/api/checkIfEMailExist', {
+        axios.post(`${process.env.VUE_APP_API_URL}/checkIfEMailExist`, {
             email: this.email
           })
           .then(valid => {
@@ -180,15 +183,15 @@ export default {
     register() {
       //call API
       // console.log(this.$refs.form);
-      if (this.validate()) {
+      if (this.validate() && this.errorUsername.length == 0 && this.errorEmail.length == 0) {
         this.myloadingvariable = true;
-        axios.post('http://127.0.0.1:8000/api/auth/register', {
+        axios.post(`${process.env.VUE_APP_API_URL}/auth/register`, {
             email: this.email,
             name: this.name,
             password: this.password
           })
           .then((res) => {
-            const api = 'http://127.0.0.1:8000/api/sendNotification';
+            const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
             const config = {
               headers: {
                 Accept: "application/json",

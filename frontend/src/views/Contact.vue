@@ -1,5 +1,5 @@
 <template>
-<div class="administration w-100 h-100">
+<div class="contact w-100 h-100">
   <v-card elevation="0">
     <v-app-bar fixed flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -15,25 +15,38 @@
 
       <template v-slot:extension>
         <v-tabs grow>
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
+          <v-tab v-for="item in items" :key="item">
+            {{ item }}
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
 
-    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
-      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-        <router-view />
+    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="tab" grow>
+      <v-tab-item v-for="item in items" :key="item" disabled>
       </v-tab-item>
       <NavigationDrawer :drawer="drawer" />
+      <v-lazy :options="{
+                      threshold: .4
+                    }" transition="scale-transition">
+        <v-row justify="center" class="ml-0 mr-0">
+          <v-col class="pl-3 pr-3">
+            <v-card class="rounded p-5" elevation="0">
+              <v-icon>mdi-volume-high</v-icon>
+              Pripravujeme automatické uloženie nedokončených rezervácií.
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-lazy>
     </v-tabs-items>
   </v-card>
-  <Footer />
 </div>
 </template>
+
 <script>
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 export default {
-  name: "Administration",
+  name: "Contact",
   components: {
     NavigationDrawer,
   },
@@ -43,25 +56,12 @@ export default {
       username: localStorage.getItem("username"),
       drawer: false,
       tab: null,
-      activeTab: '/administration',
-      tabs: [{
-        id: 1,
-        name: 'Administrácia',
-        route: '/administration'
-      }, {
-        id: 2,
-        name: 'Detaily',
-        route: '/administration/details'
-      }, ],
+      items: ['Kontakt'],
+      show: false,
     }
   },
   updated() {
     this.drawer = this.drawerNew;
-  },
-  watch: {
-    group() {
-      this.drawer = false
-    },
   },
   methods: {
     updateRouter(tab) {
@@ -70,15 +70,7 @@ export default {
   }
 }
 </script>
-<style type="scss">
-/*
-.v-navigation-drawer {
-  position: fixed !important;
-  width: 300px !important;
-  box-shadow: unset !important;
-}
 
-.v-overlay__scrim {
-  position: fixed !important;
-} */
+<style>
+
 </style>

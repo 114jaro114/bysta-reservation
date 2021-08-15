@@ -203,7 +203,7 @@ export default {
 
   mounted: function mounted() {
     this.getEvents();
-    const api = 'http://127.0.0.1:8000/api/user';
+    const api = `${process.env.VUE_APP_API_URL}/auth/user`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -251,7 +251,7 @@ export default {
     },
 
     getEvents() {
-      const api = 'http://127.0.0.1:8000/api/reservation';
+      const api = `${process.env.VUE_APP_API_URL}/reservation`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -262,9 +262,9 @@ export default {
         // axios.get('http://127.0.0.1:8000/api/reservation')
         .then(resp => {
           //this code contains disabled dates in datepicker
-          console.log(resp.data.length);
           this.myloadingvariable = false;
           this.disabledDates = [];
+          this.$emit('loaded-events', false);
           for (var i = 0; i < resp.data.length; i++) {
             var day1 = moment(resp.data[i].end_date);
             var day2 = moment(resp.data[i].start_date);
@@ -282,7 +282,6 @@ export default {
               this.disabledDates.push(allDates[a])
             }
           }
-          console.log(this.disabledDates);
           // get data
           this.test = resp.data;
           // this.incId = this.test.length;
@@ -290,7 +289,7 @@ export default {
             this.incId = resp.data[resp.data.length - 1].id;
           }
         })
-        .catch(err => console.log(err));
+        .catch(() => {});
     },
   },
 

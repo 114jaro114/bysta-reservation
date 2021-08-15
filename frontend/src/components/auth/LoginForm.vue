@@ -171,7 +171,7 @@ export default {
         this.error = '';
         this.snackbar = false;
         // call API
-        axios.post('http://127.0.0.1:8000/api/auth/login', {
+        axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, {
             email: this.email,
             password: this.password,
             remember: this.remember,
@@ -230,7 +230,7 @@ export default {
     },
 
     SocialLogin(provider, response) {
-      axios.post('http://localhost:8000/api/sociallogin/' + provider, response)
+      axios.post(`${process.env.VUE_APP_API_URL}/sociallogin/` + provider, response)
         .then(response => {
           console.log('2');
           console.log(response.data);

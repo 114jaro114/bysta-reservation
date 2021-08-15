@@ -57,6 +57,10 @@
         <v-icon>mdi-cog</v-icon>
         <v-list-item-title>Nastavenia</v-list-item-title>
       </v-list-item>
+      <v-list-item to="/contact">
+        <v-icon>mdi-account-box</v-icon>
+        <v-list-item-title>Kontakt</v-list-item-title>
+      </v-list-item>
       <v-list-item to="/about_us">
         <v-icon>mdi-information</v-icon>
         <v-list-item-title>O nás</v-list-item-title>
@@ -124,7 +128,7 @@ export default {
   methods: {
     logout() {
       this.$emit('childToParent', 'true');
-      const api = 'http://127.0.0.1:8000/api/auth/logout';
+      const api = `${process.env.VUE_APP_API_URL}/auth/logout`;
       const config = {
         headers: {
           Accept: "application/json",

@@ -110,7 +110,7 @@ export default {
         return;
       }
 
-      const api = 'http://127.0.0.1:8000/api/conversation/send';
+      const api = `${process.env.VUE_APP_API_URL}/conversation/send`;
       const config = {
         headers: {
           Accept: "application/json",

@@ -13,6 +13,8 @@ use App\Http\Controllers\FriendshipsController;
 use App\Http\Controllers\ValidateRegisterLogin;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReservationController;
+
+use App\Http\Controllers\UpdateAccountSettingsController;
 use App\Traits\Friendable;
 use App\Models\User;
 
@@ -84,7 +86,10 @@ Route::post('/auth/verification/account', [AuthController::class, 'callVerificat
 
 Route::get('/user/{id}', [ContactsController::class, 'getUserById']);
 
-Route::get('/checkIfUsernameExist/{name}', [ValidateRegisterLogin::class, 'checkUsername']);
+//update account settings
+Route::post('/updateAccountSettings', [UpdateAccountSettingsController::class, 'updateAccountSettings']);
+
+Route::post('/checkIfUsernameExist', [ValidateRegisterLogin::class, 'checkUsername']);
 Route::post('/checkIfEMailExist', [ValidateRegisterLogin::class, 'checkEmail']);
 
 Route::get('/calendar', [CalendarController::class, 'index']);

@@ -1,142 +1,145 @@
 <template>
 <div class="details w-100 h-100">
-  <v-lazy :options="{
+  <!-- <v-lazy :options="{
             threshold: .4
-          }" transition="scale-transition">
-    <v-row justify="center" class="ml-0 mr-0">
-      <!-- circle chart -->
-      <v-col cols="12" lg="6" md="6" sm="12">
-        <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle">
-          <div class="pt-3" id="chart">
-            <apexchart type="radialBar" height="365" :options="chartOptionsCircle" :series="seriesCircle"></apexchart>
+          }" transition="scale-transition"> -->
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+  <v-row justify="center" class="ml-0 mr-0">
+    <!-- circle chart -->
+    <v-col cols="12" lg="6" md="6" sm="12">
+      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle">
+        <div class="pt-3" id="chart">
+          <apexchart type="radialBar" height="365" :options="chartOptionsCircle" :series="seriesCircle"></apexchart>
+        </div>
+
+        <v-card-text class="pt-0">
+          <div class="title font-weight-light mb-2">
+            Aktuálna cena osoba/noc
+          </div>
+          <v-divider class="my-2"></v-divider>
+          <v-icon class="mr-2" small>
+            mdi-clock
+          </v-icon>
+          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+          <span class="font-weight-bold">{{lastUpdate}}</span>
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
+      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateLine">
+        <div class="pt-3" id="chart">
+          <apexchart type="line" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
+        </div>
+
+        <v-card-text class="pt-0">
+          <div class="title font-weight-light mb-2">
+            Cena za noc/osoba/obdobie
+          </div>
+          <v-divider class="my-2"></v-divider>
+          <v-icon class="mr-2" small>
+            mdi-clock
+          </v-icon>
+          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+          <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" lg="6" md="12" sm="12">
+      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle_multiple">
+        <div class="pt-3" id="chart">
+          <apexchart type="radialBar" height="365" ref="circleMultipleChart" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
+        </div>
+
+        <v-card-text class="pt-0">
+          <div class="title font-weight-light mb-2">
+            Celkova suma za rezervácie
+          </div>
+          <v-divider class="my-2"></v-divider>
+          <v-icon class="mr-2" small>
+            mdi-clock
+          </v-icon>
+          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+          <span class="font-weight-bold">{{lastUpdate}}</span>
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
+      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateColumn">
+        <div class="pt-3" id="chart">
+          <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+        </div>
+
+        <v-card-text class="pt-0">
+          <div class="title font-weight-light mb-2">
+            Cena osoba/noc S DPH/BEZ DPH/DPH
+          </div>
+          <v-divider class="my-2"></v-divider>
+          <v-icon class="mr-2" small>
+            mdi-clock
+          </v-icon>
+          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+          <span class="font-weight-bold">{{lastUpdate}}</span>
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <!-- historical chart -->
+    <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
+      <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateSeries">
+        <div class="pt-3" id="chart">
+          <div class="toolbar pt-3">
+            <v-btn icon color="#0066ff" id="one_hour" @click="updateData('one_hour')" class="mr-2" :class="{active: selection==='one_hour'}">
+              1H
+            </v-btn>
+            <v-btn icon color="#0066ff" id="one_day" @click="updateData('one_day')" class="mr-2" :class="{active: selection==='one_day'}">
+              1D
+            </v-btn>
+            <v-btn icon color="#0066ff" id="one_month" @click="updateData('one_month')" class="mr-2" :class="{active: selection==='one_month'}">
+              1M
+            </v-btn>
+
+            <v-btn icon color="#0066ff" id="six_months" @click="updateData('six_months')" class="mr-2" :class="{active: selection==='six_months'}">
+              6M
+            </v-btn>
+
+            <v-btn icon color="#0066ff" id="one_year" @click="updateData('one_year')" class="mr-2" :class="{active: selection==='one_year'}">
+              1Y
+            </v-btn>
+
+            <v-btn icon color="#0066ff" id="ytd" @click="updateData('ytd')" class="mr-2" :class="{active: selection==='ytd'}">
+              YTD
+            </v-btn>
+
+            <v-btn icon color="#0066ff" id="all" @click="updateData('all')" :class="{active: selection==='all'}">
+              ALL
+            </v-btn>
           </div>
 
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-              Aktuálna cena osoba/noc
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon class="mr-2" small>
-              mdi-clock
-            </v-icon>
-            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-            <span class="font-weight-bold">{{lastUpdate}}</span>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-        <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateLine">
-          <div class="pt-3" id="chart">
-            <apexchart type="line" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
+          <div id="chart-timeline">
+            <apexchart type="area" height="350" ref="historicalChart" :options="chartOptions" :series="series"></apexchart>
           </div>
+        </div>
 
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-              Cena za noc/osoba/obdobie
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon class="mr-2" small>
-              mdi-clock
-            </v-icon>
-            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-            <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" lg="6" md="12" sm="12">
-        <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateCircle_multiple">
-          <div class="pt-3" id="chart">
-            <apexchart type="radialBar" height="365" ref="circleMultipleChart" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
+        <v-card-text class="pt-0">
+          <div class="title font-weight-light mb-2">
+            Historický graf vývoja ceny
           </div>
-
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-              Celkova suma za rezervácie
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon class="mr-2" small>
-              mdi-clock
-            </v-icon>
-            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-            <span class="font-weight-bold">{{lastUpdate}}</span>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-        <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateColumn">
-          <div class="pt-3" id="chart">
-            <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-          </div>
-
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-              Cena osoba/noc S DPH/BEZ DPH/DPH
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon class="mr-2" small>
-              mdi-clock
-            </v-icon>
-            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-            <span class="font-weight-bold">{{lastUpdate}}</span>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <!-- historical chart -->
-      <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
-        <v-card class="rounded" elevation="0" loader-height="6" :loading="loaderStateSeries">
-          <div class="pt-3" id="chart">
-            <div class="toolbar pt-3">
-              <v-btn icon color="#0066ff" id="one_hour" @click="updateData('one_hour')" class="mr-2" :class="{active: selection==='one_hour'}">
-                1H
-              </v-btn>
-              <v-btn icon color="#0066ff" id="one_day" @click="updateData('one_day')" class="mr-2" :class="{active: selection==='one_day'}">
-                1D
-              </v-btn>
-              <v-btn icon color="#0066ff" id="one_month" @click="updateData('one_month')" class="mr-2" :class="{active: selection==='one_month'}">
-                1M
-              </v-btn>
-
-              <v-btn icon color="#0066ff" id="six_months" @click="updateData('six_months')" class="mr-2" :class="{active: selection==='six_months'}">
-                6M
-              </v-btn>
-
-              <v-btn icon color="#0066ff" id="one_year" @click="updateData('one_year')" class="mr-2" :class="{active: selection==='one_year'}">
-                1Y
-              </v-btn>
-
-              <v-btn icon color="#0066ff" id="ytd" @click="updateData('ytd')" class="mr-2" :class="{active: selection==='ytd'}">
-                YTD
-              </v-btn>
-
-              <v-btn icon color="#0066ff" id="all" @click="updateData('all')" :class="{active: selection==='all'}">
-                ALL
-              </v-btn>
-            </div>
-
-            <div id="chart-timeline">
-              <apexchart type="area" height="350" ref="historicalChart" :options="chartOptions" :series="series"></apexchart>
-            </div>
-          </div>
-
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-              Historický graf vývoja ceny
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon class="mr-2" small>
-              mdi-clock
-            </v-icon>
-            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-            <span class="font-weight-bold">{{lastUpdate}}</span>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-lazy>
+          <v-divider class="my-2"></v-divider>
+          <v-icon class="mr-2" small>
+            mdi-clock
+          </v-icon>
+          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+          <span class="font-weight-bold">{{lastUpdate}}</span>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
+  <!-- </v-lazy> -->
 </div>
 </template>
 
@@ -150,6 +153,7 @@ export default {
   },
   data() {
     return {
+      overlay: true,
       loaderStateCircle: true,
       loaderStateLine: true,
       loaderStateCircle_multiple: true,

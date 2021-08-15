@@ -77,7 +77,7 @@ export default {
             this.$store.dispatch('msgUnreadCounter', {
               unreadCounter: e.message.totalUnreadMsgTo
             });
-            const api = `http://127.0.0.1:8000/api/user/${e.message.from}`;
+            const api = `${process.env.VUE_APP_API_URL}/user/${e.message.from}`;
             const config = {
               headers: {
                 Accept: "application/json",
@@ -138,9 +138,9 @@ export default {
     }
 
     //get all new notifications after refresh page
-    const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
-    const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
-    const api3 = 'http://127.0.0.1:8000/api/rating';
+    const api = `${process.env.VUE_APP_API_URL}/getAllUnreadMessages`;
+    const api2 = `${process.env.VUE_APP_API_URL}/getNotificationNew/${localStorage.getItem('user_id')}`;
+    const api3 = `${process.env.VUE_APP_API_URL}/rating`;
     const config = {
       headers: {
         Accept: "application/json",

@@ -1,7 +1,5 @@
 // Body
-$body-bg: #f8fafc;
-
-// Typography
+$body-bg: #f8fafc; // Typography
 // $font-family-sans-serif: 'Nunito', sans-serif;
 // $font-size-base: 0.9rem;
 // $line-height-base: 1.6;
@@ -26,7 +24,6 @@ $body-bg: #f8fafc;
 /* =============================================================
  * VARIABLES
  * ============================================================*/
-
 $white: #fff;
 $black: #000;
 $gray: #424b53;
@@ -43,9 +40,9 @@ $font-12: 12px;
 /* =============================================================
   * RESPONSIVE LAYOUT HELPERS
   * ============================================================*/
-
 $tablet: "(min-width: 480px) and (max-width: 767px)";
 $phone: "(max-width: 479px)";
 $desktop: "(min-width: 768px)";
 $up-to-tablet: "(max-width: 767px)";
 $extra-small-screen: "(max-width: 23em)";
+$skeleton-loader-image-height: 100%;

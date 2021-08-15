@@ -1,65 +1,68 @@
 <template>
 <div class="friend_list w-100 h-100">
-  <v-lazy :options="{
+  <!-- <v-lazy :options="{
             threshold: .4
-          }" transition="scale-transition">
-    <v-row justify="center" class="ml-0 mr-0">
-      <v-col class="pl-3 pr-3">
-        <v-card class="rounded" elevation="0">
-          <v-toolbar extended extension-height="4" class="rounded-top" color="primary" flat dark>
-            <v-spacer />
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
-            <v-spacer />
-            <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
-          </v-toolbar>
+          }" transition="scale-transition"> -->
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col class="pl-3 pr-3">
+      <v-card class="rounded" elevation="0">
+        <v-toolbar extended extension-height="4" class="rounded-top" color="primary" flat dark>
+          <v-spacer />
+          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
+          <v-spacer />
+          <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+        </v-toolbar>
 
-          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name"
-            loading-text="Načítavanie... Prosím počkajte">
-            <template v-slot:item.name="{ item }">
-              <!-- <v-btn class="mr-3" @click="showProfile(item)">
+        <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadny priatelia" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="users" :search="search" item-key="name"
+          loading-text="Načítavanie... Prosím počkajte">
+          <template v-slot:item.name="{ item }">
+            <!-- <v-btn class="mr-3" @click="showProfile(item)">
                 <v-icon>mdi-account</v-icon>
                 <span>{{item.name}}</span>
               </v-btn> -->
-              <v-dialog v-model="dialogShowProfile" fullscreen hide-overlay transition="dialog-bottom-transition">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn text class="mr-3" color="primary" @click="showProfile(item)" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-account</v-icon>
-                    <span>{{item.name}}</span>
+            <v-dialog v-model="dialogShowProfile" fullscreen hide-overlay transition="dialog-bottom-transition">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn text class="mr-3" color="primary" @click="showProfile(item)" v-bind="attrs" v-on="on">
+                  <v-icon>mdi-account</v-icon>
+                  <span>{{item.name}}</span>
+                </v-btn>
+              </template>
+              <v-card elevation="0">
+                <v-toolbar tile dark color="primary">
+                  <v-btn icon dark @click="dialogShowProfile = false">
+                    <v-icon>mdi-close</v-icon>
                   </v-btn>
-                </template>
-                <v-card elevation="0">
-                  <v-toolbar tile dark color="primary">
-                    <v-btn icon dark @click="dialogShowProfile = false">
-                      <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title class="justify-center">Informácie o používateľovi</v-toolbar-title>
-                  </v-toolbar>
+                  <v-toolbar-title class="justify-center">Informácie o používateľovi</v-toolbar-title>
+                </v-toolbar>
 
-                  <v-card elevation="0" class="mt-5">
-                    <v-card-text>
-                      <v-row justify="center">
-                        <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                          <v-avatar color="primary" size="48" class="mr-3" v-if="!avatarImageUrl">
-                            <span style="color:white" class="text-uppercase font-weight-bold">{{ usernameInitial }}</span>
-                          </v-avatar>
-                          <v-avatar color="primary" size="48" class="mr-3" v-else>
-                            <img :src="avatarImageUrl">
-                          </v-avatar>
-                        </v-col>
+                <v-card elevation="0" class="mt-5">
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-avatar color="primary" size="48" class="mr-3" v-if="!avatarImageUrl">
+                          <span style="color:white" class="text-uppercase font-weight-bold">{{ usernameInitial }}</span>
+                        </v-avatar>
+                        <v-avatar color="primary" size="48" class="mr-3" v-else>
+                          <img :src="avatarImageUrl">
+                        </v-avatar>
+                      </v-col>
 
-                        <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                          <v-text-field ref="address" v-model="memberFrom" label="Člen od:" filled readonly></v-text-field>
-                        </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="address" v-model="memberFrom" label="Člen od:" filled readonly></v-text-field>
+                      </v-col>
 
-                        <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                          <v-text-field ref="surname" v-model="name" label="Prezívka" filled readonly></v-text-field>
-                        </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="surname" v-model="name" label="Prezívka" filled readonly></v-text-field>
+                      </v-col>
 
-                        <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                          <v-text-field ref="lastname" v-model="email" label="Email" filled readonly></v-text-field>
-                        </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="lastname" v-model="email" label="Email" filled readonly></v-text-field>
+                      </v-col>
 
-                        <!-- <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <!-- <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
                           <div v-if="country == null">
                             <v-text-field value="-" ref="country" label="Krajina" readonly></v-text-field>
                           </div>
@@ -67,92 +70,92 @@
                             <v-text-field ref="country" v-model="country" :items="countries" label="Krajina" readonly></v-text-field>
                           </div>
                         </v-col> -->
-                      </v-row>
-                    </v-card-text>
+                    </v-row>
+                  </v-card-text>
 
-                    <v-divider class="mt-0" />
+                  <v-divider class="mt-0" />
 
-                    <v-card-actions>
-                      <v-btn class="mr-3" color="primary">
-                        <v-icon left dark>mdi-message-text-lock</v-icon>
-                        Poslať súkromnú správu
-                      </v-btn>
+                  <v-card-actions>
+                    <v-btn class="mr-3" color="primary">
+                      <v-icon left dark>mdi-message-text-lock</v-icon>
+                      Poslať súkromnú správu
+                    </v-btn>
 
-                      <v-btn class="mr-3" color="info" @click="sendFriendshipRequest(item)" v-if="friendship_status == '0'">
-                        <v-icon>mdi-account-plus</v-icon>
-                        <span class="ml-1">Poslať žiadosť o priateľstvo</span>
+                    <v-btn class="mr-3" color="info" @click="sendFriendshipRequest(item)" v-if="friendship_status == '0'">
+                      <v-icon>mdi-account-plus</v-icon>
+                      <span class="ml-1">Poslať žiadosť o priateľstvo</span>
+                    </v-btn>
+                    <div v-else-if="friendship_status == '1'">
+                      <v-btn class="mr-3" color="success">
+                        <v-icon>mdi-account-check</v-icon>
+                        <span class="ml-1">Priatelia</span>
                       </v-btn>
-                      <div v-else-if="friendship_status == '1'">
-                        <v-btn class="mr-3" color="success">
-                          <v-icon>mdi-account-check</v-icon>
-                          <span class="ml-1">Priatelia</span>
-                        </v-btn>
-                        <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                          <v-icon>mdi-close-circle</v-icon>
-                          <span class="ml-1">Zrušiť priateľstvo</span>
-                        </v-btn>
-                      </div>
-                      <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="friendship_status == '2' && user_requested == actualUser">
-                        <v-icon>mdi-arrow-right-bold</v-icon>
-                        <span class="ml-1">Prijať žiadosť</span>
+                      <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                        <v-icon>mdi-close-circle</v-icon>
+                        <span class="ml-1">Zrušiť priateľstvo</span>
                       </v-btn>
-                      <div v-else>
-                        <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
-                          <v-icon color="warning">mdi-account-clock</v-icon>
-                          <span class="ml-1">Žiadosť odoslaná</span>
-                        </v-btn>
-                        <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                          <v-icon>mdi-close-circle</v-icon>
-                          <span class="ml-1">Zrušiť žiadosť</span>
-                        </v-btn>
-                      </div>
-                    </v-card-actions>
-                  </v-card>
+                    </div>
+                    <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="friendship_status == '2' && user_requested == actualUser">
+                      <v-icon>mdi-arrow-right-bold</v-icon>
+                      <span class="ml-1">Prijať žiadosť</span>
+                    </v-btn>
+                    <div v-else>
+                      <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
+                        <v-icon color="warning">mdi-account-clock</v-icon>
+                        <span class="ml-1">Žiadosť odoslaná</span>
+                      </v-btn>
+                      <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                        <v-icon>mdi-close-circle</v-icon>
+                        <span class="ml-1">Zrušiť žiadosť</span>
+                      </v-btn>
+                    </div>
+                  </v-card-actions>
                 </v-card>
-              </v-dialog>
-            </template>
+              </v-card>
+            </v-dialog>
+          </template>
 
-            <template v-slot:item.status="{ item }">
-              <v-icon color="error" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
-              <v-icon color="success" v-else>mdi-checkbox-blank-circle</v-icon>
-              <span>{{item.status}}</span>
-            </template>
+          <template v-slot:item.status="{ item }">
+            <v-icon color="error" v-if="item.status == 'offline'">mdi-checkbox-blank-circle</v-icon>
+            <v-icon color="success" v-else>mdi-checkbox-blank-circle</v-icon>
+            <span>{{item.status}}</span>
+          </template>
 
-            <template v-slot:item.friendship_status="{ item }">
-              <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.friendship_status == '0'">
-                <v-icon>mdi-account-plus</v-icon>
-                <span class="ml-1">Pridať priateľa</span>
+          <template v-slot:item.friendship_status="{ item }">
+            <v-btn class="mr-3" color="primary" @click="sendFriendshipRequest(item)" v-if="item.friendship_status == '0'">
+              <v-icon>mdi-account-plus</v-icon>
+              <span class="ml-1">Pridať priateľa</span>
+            </v-btn>
+            <div v-else-if="item.friendship_status == '1'">
+              <v-btn class="mr-3" color="success">
+                <v-icon>mdi-account-check</v-icon>
+                <span class="ml-1">Priatelia</span>
               </v-btn>
-              <div v-else-if="item.friendship_status == '1'">
-                <v-btn class="mr-3" color="success">
-                  <v-icon>mdi-account-check</v-icon>
-                  <span class="ml-1">Priatelia</span>
-                </v-btn>
-                <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                  <v-icon>mdi-close-circle</v-icon>
-                  <span class="ml-1">Zrušiť priateľstvo</span>
-                </v-btn>
-              </div>
-              <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="item.friendship_status == '2' && item.user_requested == actualUser">
-                <v-icon>mdi-arrow-right-bold</v-icon>
-                <span class="ml-1">Prijať žiadosť</span>
+              <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                <v-icon>mdi-close-circle</v-icon>
+                <span class="ml-1">Zrušiť priateľstvo</span>
               </v-btn>
-              <div v-else>
-                <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
-                  <v-icon color="warning">mdi-account-clock</v-icon>
-                  <span class="ml-1">Žiadosť odoslaná</span>
-                </v-btn>
-                <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
-                  <v-icon>mdi-close-circle</v-icon>
-                  <span class="ml-1">Zrušiť žiadosť</span>
-                </v-btn>
-              </div>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-lazy>
+            </div>
+            <v-btn class="mr-3" color="warning" @click="acceptFriendshipRequest(item)" v-else-if="item.friendship_status == '2' && item.user_requested == actualUser">
+              <v-icon>mdi-arrow-right-bold</v-icon>
+              <span class="ml-1">Prijať žiadosť</span>
+            </v-btn>
+            <div v-else>
+              <v-btn text class="mr-3" color="warning" disabled id="custom-disabled">
+                <v-icon color="warning">mdi-account-clock</v-icon>
+                <span class="ml-1">Žiadosť odoslaná</span>
+              </v-btn>
+              <v-btn class="mr-3" color="error" @click="removeFromFriendshipList(item)">
+                <v-icon>mdi-close-circle</v-icon>
+                <span class="ml-1">Zrušiť žiadosť</span>
+              </v-btn>
+            </div>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-col>
+  </v-row>
+  <!-- </v-lazy> -->
 </div>
 </template>
 
@@ -205,11 +208,13 @@ export default {
       friendship_status: '0',
       requester: '',
       user_requested: '',
+
+      overlay: true,
     }
   },
 
   mounted() {
-    const api = 'http://127.0.0.1:8000/api/friendships';
+    const api = `${process.env.VUE_APP_API_URL}/friendships`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -220,6 +225,7 @@ export default {
       .then(res => {
         console.log(res.data);
         this.myloadingvariable = false;
+        this.overlay = false;
         this.users = res.data;
       });
   },
@@ -227,7 +233,7 @@ export default {
   methods: {
     acceptFriendshipRequest(item) {
       console.log(item);
-      const api = 'http://127.0.0.1:8000/api/friendships/acceptFriendshipRequest';
+      const api = `${process.env.VUE_APP_API_URL}/friendships/acceptFriendshipRequest`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -244,7 +250,7 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          const api = 'http://127.0.0.1:8000/api/friendships';
+          const api = `${process.env.VUE_APP_API_URL}/friendships`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -262,7 +268,7 @@ export default {
 
     removeFromFriendshipList(item) {
       this.myloadingvariable = true;
-      const api = 'http://127.0.0.1:8000/api/friendships/removeFromFriendshipList';
+      const api = `${process.env.VUE_APP_API_URL}/friendships/removeFromFriendshipList`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -278,7 +284,7 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          const api = 'http://127.0.0.1:8000/api/friendships';
+          const api = `${process.env.VUE_APP_API_URL}/friendships`;
           const config = {
             headers: {
               Accept: "application/json",

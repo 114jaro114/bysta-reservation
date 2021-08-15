@@ -1,66 +1,69 @@
 <template>
 <div class="all w-100 h-100">
-  <v-lazy :options="{
+  <!-- <v-lazy :options="{
             threshold: .8
-          }" transition="fade-transition">
-    <v-row justify="center" class="ml-0 mr-0">
-      <v-col class="pl-3 pr-3">
-        <v-card class="rounded" elevation="0">
-          <v-toolbar class="notiftoolbar rounded-top" extended extension-height="4" color="primary" flat dark>
-            <div class="w-75" v-if="selected.length == '0'">
-              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable || notif.length == 0"></v-text-field>
-              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable && notif.length != 0"></v-text-field>
-            </div>
+          }" transition="fade-transition"> -->
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+  <v-row justify="center" class="ml-0 mr-0">
+    <v-col class="pl-3 pr-3">
+      <v-card class="rounded" elevation="0">
+        <v-toolbar class="notiftoolbar rounded-top" extended extension-height="4" color="primary" flat dark>
+          <div class="w-75" v-if="selected.length == '0'">
+            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable || notif.length == 0"></v-text-field>
+            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable && notif.length != 0"></v-text-field>
+          </div>
 
-            <div v-else>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn fab icon small @click="addToRelevant = !addToRelevant" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-star-box-multiple-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>Pridať do dôležitých</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn fab icon small @click="deleteNotif = !deleteNotif" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </template>
-                <span>Vymazať</span>
-              </v-tooltip>
-            </div>
-
-            <v-spacer></v-spacer>
-
-            <span style="font-size:12px">Označiť všetko</span>
-            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="myloadingvariable || notif.length == 0"></v-checkbox>
-            <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable && notif.length != 0"></v-checkbox>
-
-            <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
-          </v-toolbar>
-
-          <v-list class="pb-0" three-line>
-            <v-list-item-group v-model="selected" active-class="primary--text" multiple>
-              <v-list-item class="justify-center" v-if="myloadingvariable" disabled>
-                Načítavanie... Prosím počkajte
-              </v-list-item>
-              <v-list-item class="justify-center" v-if="filteredItems.length == 0 && !myloadingvariable && notif.length != 0" disabled>
-                <v-btn color="primary" icon width="50px" height="50px">
-                  <v-icon style="font-size: 50px">mdi-cancel</v-icon>
-                  <span class="ml-3">Žiadne výsledky</span>
+          <div v-else>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab icon small @click="addToRelevant = !addToRelevant" v-bind="attrs" v-on="on">
+                  <v-icon>mdi-star-box-multiple-outline</v-icon>
                 </v-btn>
-              </v-list-item>
-
-              <v-list-item class="justify-center" v-else-if="notif.length == 0 && !myloadingvariable" disabled>
-                <v-btn color="primary" icon width="50px" height="50px">
-                  <v-icon style="font-size: 50px">mdi-bell-cancel</v-icon>
-                  <span class="ml-3">Žiadne notifikácie</span>
+              </template>
+              <span>Pridať do dôležitých</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab icon small @click="deleteNotif = !deleteNotif" v-bind="attrs" v-on="on">
+                  <v-icon>mdi-delete</v-icon>
                 </v-btn>
-              </v-list-item>
-              <template v-else v-for="(item, index) in filteredItems">
-                <!-- card notif -->
-                <!-- <v-list-item class="p-0" :key="item.title" v-if="!myloadingvariable">
+              </template>
+              <span>Vymazať</span>
+            </v-tooltip>
+          </div>
+
+          <v-spacer></v-spacer>
+
+          <span style="font-size:12px">Označiť všetko</span>
+          <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="myloadingvariable || notif.length == 0"></v-checkbox>
+          <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable && notif.length != 0"></v-checkbox>
+
+          <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear>
+        </v-toolbar>
+
+        <v-list class="pb-0" three-line>
+          <v-list-item-group v-model="selected" active-class="primary--text" multiple>
+            <v-list-item class="justify-center" v-if="myloadingvariable" disabled>
+              Načítavanie... Prosím počkajte
+            </v-list-item>
+            <v-list-item class="justify-center" v-if="filteredItems.length == 0 && !myloadingvariable && notif.length != 0" disabled>
+              <v-btn color="primary" icon width="50px" height="50px">
+                <v-icon style="font-size: 50px">mdi-cancel</v-icon>
+                <span class="ml-3">Žiadne výsledky</span>
+              </v-btn>
+            </v-list-item>
+
+            <v-list-item class="justify-center" v-else-if="notif.length == 0 && !myloadingvariable" disabled>
+              <v-btn color="primary" icon width="50px" height="50px">
+                <v-icon style="font-size: 50px">mdi-bell-cancel</v-icon>
+                <span class="ml-3">Žiadne notifikácie</span>
+              </v-btn>
+            </v-list-item>
+            <template v-else v-for="(item, index) in filteredItems">
+              <!-- card notif -->
+              <!-- <v-list-item class="p-0" :key="item.title" v-if="!myloadingvariable">
                   <template v-slot:default="{ active }">
                     <v-card class="w-100" elevation="0" tile>
                       <div class="d-flex flex-no-wrap">
@@ -89,64 +92,64 @@
                   </template>
                 </v-list-item> -->
 
-                <!-- list notif -->
-                <v-list-item class="p-0" :key="item.name" v-if="!myloadingvariable">
-                  <template v-slot:default="{ active }">
-                    <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
-                      <v-list-item-title v-text="item.title"></v-list-item-title>
+              <!-- list notif -->
+              <v-list-item class="p-0" :key="item.name" v-if="!myloadingvariable">
+                <template v-slot:default="{ active }">
+                  <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
 
-                      <v-list-item-subtitle class="text--primary" v-text="item.subtitle"></v-list-item-subtitle>
+                    <v-list-item-subtitle class="text--primary" v-text="item.subtitle"></v-list-item-subtitle>
 
-                      <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
-                    </v-list-item-content>
+                    <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
+                  </v-list-item-content>
 
-                    <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
-                      <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
+                  <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
+                    <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
 
-                      <v-checkbox value v-if="!active"></v-checkbox>
+                    <v-checkbox value v-if="!active"></v-checkbox>
 
-                      <v-checkbox input-value="true" value v-else></v-checkbox>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-                <v-divider class="m-0" v-if="index < notif.length - 1 && !myloadingvariable" :key="index"></v-divider>
-              </template>
-              <!-- snackbard -->
-              <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="24">
-                Naozaj chcete vymazať túto notifikáciu?
-                <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="deleteNotif = false; deleteNotification(item)">
-                  <v-icon>mdi-check</v-icon>
-                </v-btn>
-                <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="deleteNotif = false">
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-              </v-snackbar>
-
-              <v-snackbar :timeout="-1" :value="addToRelevant" absolute centered color="primary" elevation="24">
-                Naozaj chcete Uložiťit notifikáciu/e do dôležitých?
-                <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="addToRelevant = false; addNotificationsToRelevant(item)">
-                  <v-icon>mdi-check</v-icon>
-                </v-btn>
-                <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="addToRelevant = false">
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-              </v-snackbar>
-
-              <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
-                <v-icon>mdi-check-circle</v-icon>
-                {{ text }}
-                <template v-slot:action="{ attrs }">
-                  <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-                    Zrušiť
-                  </v-btn>
+                    <v-checkbox input-value="true" value v-else></v-checkbox>
+                  </v-list-item-action>
                 </template>
-              </v-snackbar>
-              <!-- ///////// -->
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-      </v-col>
-      <!-- <v-col v-for="(item, i) in items" :key="i" cols="12">
+              </v-list-item>
+              <v-divider class="m-0" v-if="index < notif.length - 1 && !myloadingvariable" :key="index"></v-divider>
+            </template>
+            <!-- snackbard -->
+            <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="24">
+              Naozaj chcete vymazať túto notifikáciu?
+              <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="deleteNotif = false; deleteNotification(item)">
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+              <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="deleteNotif = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-snackbar>
+
+            <v-snackbar :timeout="-1" :value="addToRelevant" absolute centered color="primary" elevation="24">
+              Naozaj chcete Uložiťit notifikáciu/e do dôležitých?
+              <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="addToRelevant = false; addNotificationsToRelevant(item)">
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+              <v-btn class="ml-2 mt-3" color="secondary accent--text" fab x-small medium @click="addToRelevant = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-snackbar>
+
+            <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
+              <v-icon>mdi-check-circle</v-icon>
+              {{ text }}
+              <template v-slot:action="{ attrs }">
+                <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+                  Zrušiť
+                </v-btn>
+              </template>
+            </v-snackbar>
+            <!-- ///////// -->
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-col>
+    <!-- <v-col v-for="(item, i) in items" :key="i" cols="12">
         <v-card color="primary" dark>
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
@@ -181,8 +184,8 @@
           </div>
         </v-card>
       </v-col> -->
-    </v-row>
-  </v-lazy>
+  </v-row>
+  <!-- </v-lazy> -->
 </div>
 </template>
 
@@ -210,7 +213,9 @@ export default {
       addToRelevant: false,
       snackbar: false,
       multiLine: true,
-      text: ''
+      text: '',
+
+      overlay: true,
     }
   },
 
@@ -269,7 +274,7 @@ export default {
     deleteNotification() {
       this.snackbar = true;
       this.text = "Notifikácia bola úspešne vymazaná";
-      const api = 'http://127.0.0.1:8000/api/deleteNotification';
+      const api = `${process.env.VUE_APP_API_URL}/deleteNotification`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -280,7 +285,7 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
-          const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
+          const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -298,7 +303,7 @@ export default {
     addNotificationsToRelevant() {
       this.snackbar = true;
       this.text = "Notifikácia/cie bola/i premiestnená/é do časti dôležité";
-      const api = 'http://127.0.0.1:8000/api/addToRelevant';
+      const api = `${process.env.VUE_APP_API_URL}/addToRelevant`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -310,7 +315,7 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
-          const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
+          const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -329,7 +334,7 @@ export default {
   mounted() {
     //do something after mounting vue instance
     //do something after mounting vue instance
-    const api = `http://127.0.0.1:8000/api/getNotificationAll/${localStorage.getItem('user_id')}`;
+    const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -341,6 +346,7 @@ export default {
         console.log(res);
         this.myloadingvariable = false;
         this.notif = res.data;
+        this.overlay = false;
       });
   },
 

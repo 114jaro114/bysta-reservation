@@ -26,6 +26,7 @@ import Messenger from '../views/Messenger.vue'
 import AboutUs from '../views/AboutUs.vue'
 import PriceList from '../views/PriceList.vue'
 import SavedReservations from '../views/SavedReservations.vue'
+import Contact from '../views/Contact.vue'
 
 Vue.use(VueRouter)
 
@@ -241,7 +242,11 @@ const routes = [{
     name: 'AboutUs',
     component: AboutUs
   },
-
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: Contact
+  },
   {
     path: '/avatar',
     name: 'AvatarImage',

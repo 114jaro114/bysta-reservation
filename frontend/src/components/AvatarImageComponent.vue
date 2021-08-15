@@ -89,7 +89,7 @@ export default {
   },
   mounted() {
     this.avatarImageUrl = this.avatarUrl
-    const api = 'http://127.0.0.1:8000/api/user';
+    const api = `${process.env.VUE_APP_API_URL}/auth/user`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -109,7 +109,7 @@ export default {
   methods: {
     logout() {
       this.$emit('childToParent', 'true');
-      const api = 'http://127.0.0.1:8000/api/auth/logout';
+      const api = `${process.env.VUE_APP_API_URL}/auth/logout`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -149,7 +149,7 @@ export default {
         this.uploadPercent = 0
         let formData = new FormData();
         formData.append('avatar', event.target.files[0]);
-        const api = 'http://127.0.0.1:8000/api/upload_avatar';
+        const api = `${process.env.VUE_APP_API_URL}/upload_avatar`;
         const config = {
           headers: {
             Accept: "application/json",

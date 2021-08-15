@@ -1,10 +1,13 @@
 <template lang="html">
   <div class="chat-app w-100 h-100">
     <v-row justify="center" class="ml-0 mr-0">
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
       <v-col>
-        <v-lazy :options="{
+        <!-- <v-lazy :options="{
                   threshold: .4
-                }" transition="scale-transition">
+                }" transition="scale-transition"> -->
           <v-card class="rounded" elevation="0">
             <v-card-title>
               <v-row v-if="this.$store.getters['selectedUser'].id != null">
@@ -70,7 +73,7 @@
 
             </v-card-actions> -->
           </v-card>
-        </v-lazy>
+        <!-- </v-lazy> -->
       </v-col>
     </v-row>
     <v-snackbar v-model="snackbar" color="error" :left="true">
@@ -110,11 +113,13 @@ export default {
       autoselectMenu: false,
       text: '',
       snackbar: false,
+
+      overlay: true,
     }
   },
 
   mounted() {
-    const api = 'http://127.0.0.1:8000/api/contacts';
+    const api = `${process.env.VUE_APP_API_URL}/contacts`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -123,9 +128,9 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        console.log("hmmm");
         this.contacts = res.data;
         this.users = res.data
+        this.overlay = false;
         this.$store.dispatch('contactListLoader', {
           cancelLoader: false
         });
@@ -185,7 +190,7 @@ export default {
     startConversationWith(contact) {
       this.updateUnreadCount(contact, true);
 
-      const api = `http://127.0.0.1:8000/api/conversation/${contact.id}`;
+      const api = `${process.env.VUE_APP_API_URL}/conversation/${contact.id}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -197,7 +202,7 @@ export default {
           this.messages = res.data;
           this.selectedContact = contact;
           //unread messages
-          const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
+          const api = `${process.env.VUE_APP_API_URL}/getAllUnreadMessages`;
           axios.get(api, config)
             .then((res) => {
               this.$store.dispatch('msgUnreadCounter', {
@@ -221,7 +226,7 @@ export default {
 
     fetchMessages() {
       if (this.selectedContact != null) {
-        const api = `http://127.0.0.1:8000/api/conversation/${this.selectedContact.id}`;
+        const api = `${process.env.VUE_APP_API_URL}/conversation/${this.selectedContact.id}`;
         const config = {
           headers: {
             Accept: "application/json",

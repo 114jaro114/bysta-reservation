@@ -99,7 +99,7 @@ export default {
       if (this.validate()) {
         this.myloadingvariable = true;
         // call API
-        axios.post('http://127.0.0.1:8000/api/auth/reset/password/', {
+        axios.post(`${process.env.VUE_APP_API_URL}/auth/reset/password/`, {
             token: this.$route.params.token,
             email: this.email,
             password: this.password,

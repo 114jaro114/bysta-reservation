@@ -68,7 +68,7 @@ export default {
       console.log(this.token);
       this.myloadingvariable = true;
       // call API
-      axios.post('http://127.0.0.1:8000/api/auth/verification/account/', {
+      axios.post(`${process.env.VUE_APP_API_URL}/auth/verification/account/`, {
           token: this.$route.params.token,
         })
         .then(() => {

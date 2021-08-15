@@ -72,7 +72,7 @@ window.Echo = new Echo({
   broadcaster: 'pusher',
   key: "websocketkey",
   // cluster: 'mt1',
-  authEndpoint: 'http://localhost:8000/api/broadcast',
+  authEndpoint: `${process.env.VUE_APP_API_URL}/broadcast`,
   // authHost: "http://localhost",
   // authEndpoint: "/broadcasting/auth",
   // authEndpoint: 'http://127.0.0.1/public/broadcasting/auth',

@@ -1,9 +1,8 @@
 <template>
-<div class="price_list w-100 h-100">
+<div class="saved_reservations w-100 h-100">
   <v-card elevation="0">
     <v-app-bar fixed flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
       <v-toolbar-title class="position-absolute" style="right:14px">
         <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
           <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_dark.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_dark.png')"></v-img>
@@ -25,19 +24,23 @@
     <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="tab" grow>
       <v-tab-item v-for="item in items" :key="item" disabled>
       </v-tab-item>
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
       <NavigationDrawer :drawer="drawer" />
-      <v-lazy :options="{
+      <!-- <v-lazy :options="{
                       threshold: .4
-                    }" transition="scale-transition">
-        <v-row justify="center" class="ml-0 mr-0">
-          <v-col class="pl-3 pr-3">
-            <v-card class="rounded p-5" elevation="0">
-              <v-icon>mdi-volume-high</v-icon>
-              Pripravujeme automatické uloženie nedokončených rezervácií.
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-lazy>
+                    }" transition="scale-transition"> -->
+      <v-row justify="center" class="ml-0 mr-0">
+        <v-col class="pl-3 pr-3">
+          <v-card class="rounded p-5" elevation="0">
+            <v-icon>mdi-volume-high</v-icon>
+            Pripravujeme automatické uloženie nedokončených rezervácií.
+          </v-card>
+
+        </v-col>
+      </v-row>
+      <!-- </v-lazy> -->
     </v-tabs-items>
   </v-card>
 </div>
@@ -58,6 +61,7 @@ export default {
       tab: null,
       items: ['Uložené rezervácie'],
       show: false,
+      overlay: true,
     }
   },
   updated() {
@@ -67,7 +71,7 @@ export default {
     updateRouter(tab) {
       this.$router.push(tab)
     },
-  }
+  },
 }
 </script>
 
