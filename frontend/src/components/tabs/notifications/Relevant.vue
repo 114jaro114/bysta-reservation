@@ -234,7 +234,6 @@ export default {
           };
           axios.get(api, config)
             .then(res => {
-              console.log(res)
               this.notif = res.data;
             });
         })
@@ -253,7 +252,6 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        console.log(res);
         this.myloadingvariable = false;
         this.notif = res.data;
         this.overlay = false;

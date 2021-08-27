@@ -1,6 +1,6 @@
 <template>
 <div class='calendar'>
-  <!-- :loading="myloadingvariable" -->
+  <!-- :loading="events" -->
   <v-card class="m-3 rounded" elevation="0">
     <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
       :timezone="timezone" is-expanded>
@@ -49,6 +49,8 @@
       <!-- <template v-slot:header>
           <v-divider></v-divider>
         </template> -->
+
+
       <template v-slot:footer>
         <div class="bg-gray-100 text-center p-2 pt-0 border-t rounded-b-lg">
           <v-divider class="mt-0"></v-divider>
@@ -295,19 +297,23 @@ export default {
   },
 
   updated() {
-    this.start_time = moment(this.range.start)
-      .format('HH:mm:ss');
     //do something after updating vue instance
     if (this.range.start != '' && this.range.end != '') {
+      const arrayDate = [];
+      arrayDate.push(moment(this.range.start)
+        .format('YYYY-MM-DDTHH:mm:ss'), moment(this.range.end)
+        .format('YYYY-MM-DDTHH:mm:ss'))
+      console.log(arrayDate);
+      this.$emit('array-dates', arrayDate);
       this.newEvent = {
         // event_id: "",
         event_name: "rezervácia",
         start_date: moment(this.range.start)
-          .format('YYYY-MM-DDTHH:mm:SS'),
+          .format('YYYY-MM-DDTHH:mm:ss'),
         end_date: moment(this.range.end)
           .add(23, 'hours')
           .add(59, 'minutes')
-          .format('YYYY-MM-DDTHH:mm:SS'),
+          .format('YYYY-MM-DDTHH:mm:ss'),
         // color: "orange",
         username: this.user,
       };
@@ -320,9 +326,9 @@ export default {
           .add(59, 'minutes')
           .format('YYYY-MM-DD'),
         start_time: moment(this.range.start)
-          .format('HH:mm:SS'),
+          .format('HH:mm:ss'),
         end_time: moment(this.range.end)
-          .format('HH:mm:SS'),
+          .format('HH:mm:ss'),
         // color: "orange",
         username: this.user,
       });

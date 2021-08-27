@@ -41,6 +41,24 @@ Vue.use(VueGoogleMaps, {
   }
 });
 
+import {
+  VueReCaptcha
+} from 'vue-recaptcha-v3'
+
+// For more options see below
+Vue.use(VueReCaptcha, {
+  siteKey: '6LfbpgIcAAAAAFMpeCHNKMRnodKzrVXwja7QmU9i',
+  loaderOptions: {
+    useRecaptchaNet: true,
+    autoHideBadge: false
+  },
+  explicitRenderParameters: {
+    container: 'inline-badge',
+    badge: 'inline',
+    size: 'invisible'
+  }
+})
+
 // vue scrollbar
 import Vuebar from 'vuebar';
 Vue.use(Vuebar);

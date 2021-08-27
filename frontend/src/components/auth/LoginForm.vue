@@ -59,6 +59,10 @@
                   </router-link>
                 </v-col>
               </v-row>
+              <!-- <vue-recaptcha ref="recaptcha" @verify="onCaptchaVerified" @expired="onCaptchaExpired" size="invisible" sitekey="6LeaSgQcAAAAAHltKQ2SLzqgH476BcGhP9nb0K_u">
+              </vue-recaptcha> -->
+              <!-- <v-btn @click="recaptcha">Recaptcha</v-btn> -->
+              <div id="inline-badge"></div>
               <v-divider class="mx-0"></v-divider>
               <div class="row">
                 <div class="col text-center">
@@ -93,18 +97,6 @@
                   mdi-google
                 </v-icon>
               </v-btn>
-
-              <!-- <v-btn class="ml-5" fab small color="light-blue" @click="AuthProvider('twitter')">
-                <v-icon color="white">
-                  mdi-twitter
-                </v-icon>
-              </v-btn>
-
-              <v-btn class="ml-5" fab small color="brown" @click="AuthProvider('github')">
-                <v-icon color="white">
-                  mdi-github
-                </v-icon>
-              </v-btn> -->
             </v-row>
           </v-container>
         </v-card>
@@ -114,11 +106,15 @@
 </div>
 </template>
 <script>
+// import VueRecaptcha from 'vue-recaptcha';
 import axios from 'axios';
 
 export default {
   names: ['LoginForm', 'CheckboxHueColors', 'FormValidation'],
   props: {},
+  components: {
+    // 'vue-recaptcha': VueRecaptcha,
+  },
   data() {
     return {
       myloadingvariable: false,
@@ -150,6 +146,8 @@ export default {
       snackbar_icon: '',
       snackbar_timeout: '',
       text: '',
+
+      recaptchaVerified: false,
     }
   },
 
@@ -165,7 +163,45 @@ export default {
     // resetValidation() {
     //   this.$refs.form.resetValidation()
     // },
+
+    recaptcha() {
+      this.$recaptcha('login').then((token) => {
+        console.log(token) // Will print the token
+        axios.post(
+            `https://www.google.com/recaptcha/api/siteverify?secret=6LfbpgIcAAAAAFMpeCHNKMRnodKzrVXwja7QmU9i&response=${token}`, {}, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+              },
+            })
+          .then(resp => {
+            console.log(resp);
+          })
+      })
+    },
+
+    onCaptchaVerified() {
+      this.$recaptcha('login').then((token) => {
+        const secretkey = '6LeaSgQcAAAAAEU_BHXN5pJyUWBglQsZqxwox_Ri';
+        this.$refs.recaptcha.reset();
+        console.log(token);
+        axios.post(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${secretkey}&response=${token}`, {}, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+              },
+            })
+          .then(resp => {
+            console.log(resp);
+          })
+      })
+    },
+
+    onCaptchaExpired: function() {
+      this.$refs.recaptcha.reset();
+    },
+
     login() {
+      this.onCaptchaVerified();
       if (this.validate()) {
         this.myloadingvariable = true;
         this.error = '';

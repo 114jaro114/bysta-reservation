@@ -31,6 +31,12 @@
         </v-badge>
         <v-list-item-title>Notifikácie</v-list-item-title>
       </v-list-item>
+      <v-list-item to="/inbox">
+        <!-- <v-badge :content="this.$store.getters['notificationCounter']" :value="this.$store.getters['notificationCounter']" color="orange" overlap bordered> -->
+        <v-icon>mdi-inbox</v-icon>
+        <!-- </v-badge> -->
+        <v-list-item-title>Správy</v-list-item-title>
+      </v-list-item>
       <v-list-item to="/administration">
         <v-icon>mdi-clipboard-text</v-icon>
         <v-list-item-title>Administrácia</v-list-item-title>
@@ -60,10 +66,6 @@
       <v-list-item to="/contact">
         <v-icon>mdi-account-box</v-icon>
         <v-list-item-title>Kontakt</v-list-item-title>
-      </v-list-item>
-      <v-list-item to="/about_us">
-        <v-icon>mdi-information</v-icon>
-        <v-list-item-title>O nás</v-list-item-title>
       </v-list-item>
     </v-list-item-group>
   </v-list>

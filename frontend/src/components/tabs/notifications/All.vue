@@ -105,6 +105,23 @@
 
                   <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
                     <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
+                    <v-dialog v-model="dialogNotifDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                      <template v-slot:activator="{ on: menu, attrs }">
+                        <v-btn class="mb-2 m-right" icon large color="primary" v-bind="attrs" v-on="{ ...menu }" @click="getNotifDetail(item, active)">
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <v-toolbar dark color="primary" class="rounded-0">
+                          <!-- extended extension-height="4"  -->
+                          <v-btn icon dark @click="dialogNotifDetail = false">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                          <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                          <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                        </v-toolbar>
+                      </v-card>
+                    </v-dialog>
 
                     <v-checkbox value v-if="!active"></v-checkbox>
 
@@ -201,6 +218,7 @@ export default {
       selected: [],
       selectedAll: [],
       notif: [],
+      dialogNotifDetail: false,
       myloadingvariable: true,
       checkbox: true,
       item_1: {
@@ -250,6 +268,11 @@ export default {
       }
     },
 
+    getNotifDetail(item, active) {
+      console.log(item);
+      console.log(active);
+    },
+
     checkUncheckAll(event) {
       if (event == true) {
         this.item_1.checked = true;
@@ -294,7 +317,6 @@ export default {
           };
           axios.get(api, config)
             .then(res => {
-              console.log(res)
               this.notif = res.data;
             });
         })
@@ -324,7 +346,6 @@ export default {
           };
           axios.get(api, config)
             .then(res => {
-              console.log(res)
               this.notif = res.data;
             });
         })
@@ -343,7 +364,6 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        console.log(res);
         this.myloadingvariable = false;
         this.notif = res.data;
         this.overlay = false;

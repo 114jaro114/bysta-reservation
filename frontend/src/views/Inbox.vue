@@ -1,5 +1,5 @@
 <template>
-<div class="administration w-100 h-100">
+<div class="inbox w-100 h-100">
   <v-card elevation="0">
     <v-app-bar fixed flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -13,23 +13,18 @@
         </span>
       </v-toolbar-title>
 
-      <!-- <template v-slot:extension>
-        <v-tabs grow>
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
-        </v-tabs>
-      </template> -->
       <template v-slot:extension>
         <v-tabs grow>
           <v-tab :to="tabs[0].route" exact>
-            {{tabs[0].name}}
+            Odoslané
           </v-tab>
           <v-tab :to="tabs[1].route">
-            <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="orange">
-              {{tabs[1].name}}
-            </v-badge>
+            <!-- <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="orange"> -->
+            Doručené
+            <!-- </v-badge> -->
           </v-tab>
-          <v-tab :to="tabs[2].route" v-if="username == 'admin'">
-            {{tabs[2].name}}
+          <v-tab :to="tabs[2].route" exact>
+            Dôležité
           </v-tab>
           <!-- <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab> -->
         </v-tabs>
@@ -43,13 +38,12 @@
       <NavigationDrawer :drawer="drawer" />
     </v-tabs-items>
   </v-card>
-  <Footer />
 </div>
 </template>
 <script>
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 export default {
-  name: "Administration",
+  name: "Inbox",
   components: {
     NavigationDrawer,
   },
@@ -59,30 +53,28 @@ export default {
       username: localStorage.getItem("username"),
       drawer: false,
       tab: null,
-      activeTab: '/administration',
+      activeTab: '/inbox',
       tabs: [{
         id: 1,
-        name: 'Administrácia',
-        route: '/administration'
+        name: 'Odoslané',
+        route: '/inbox'
       }, {
         id: 2,
-        name: 'Detaily',
-        route: '/administration/details'
+        name: 'Doručené',
+        route: '/inbox/delivered'
       }, {
         id: 3,
-        name: 'Ceny',
-        route: '/administration/prices'
-      }, ],
+        name: 'Dôležité',
+        route: '/inbox/relevant'
+      }],
+      // notifications: null,
     }
   },
   updated() {
     this.drawer = this.drawerNew;
+    // this.notifications = this.$store.getters['notificationCounter'];
   },
-  watch: {
-    group() {
-      this.drawer = false
-    },
-  },
+
   methods: {
     updateRouter(tab) {
       this.$router.push(tab)
@@ -91,14 +83,5 @@ export default {
 }
 </script>
 <style type="scss">
-/*
-.v-navigation-drawer {
-  position: fixed !important;
-  width: 300px !important;
-  box-shadow: unset !important;
-}
 
-.v-overlay__scrim {
-  position: fixed !important;
-} */
 </style>

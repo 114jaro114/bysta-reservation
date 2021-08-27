@@ -224,10 +224,12 @@ export default {
         this.$vuetify.theme.dark = true;
         localStorage.setItem('graph_theme', 'dark');
         localStorage.setItem('graph_text_color', '#ffffff');
+        localStorage.setItem('recaptcha_theme', 'dark');
       } else {
         this.$vuetify.theme.dark = false;
         localStorage.setItem('graph_theme', 'light');
         localStorage.setItem('graph_text_color', '#2c3e50');
+        localStorage.setItem('recaptcha_theme', 'light');
       }
     }
 
@@ -286,9 +288,11 @@ export default {
       if (this.$vuetify.theme.dark == true) {
         localStorage.setItem('graph_theme', 'dark');
         localStorage.setItem('graph_text_color', '#ffffff');
+        localStorage.setItem('recaptcha_theme', 'dark');
       } else {
         localStorage.setItem('graph_theme', 'light');
         localStorage.setItem('graph_text_color', '#2c3e50');
+        localStorage.setItem('recaptcha_theme', 'light');
       }
     },
   },
@@ -318,11 +322,13 @@ export default {
         localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
         localStorage.setItem('graph_theme', 'dark');
         localStorage.setItem('graph_text_color', '#ffffff');
+        localStorage.setItem('recaptcha_theme', 'dark');
       } else {
         this.$vuetify.theme.dark = false;
         localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
         localStorage.setItem('graph_theme', 'light');
         localStorage.setItem('graph_text_color', '#2c3e50');
+        localStorage.setItem('recaptcha_theme', 'light');
       }
     } else {
       this.autoDLMon = false;

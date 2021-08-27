@@ -159,7 +159,7 @@
                 </v-tooltip>
               </template>
               <v-card>
-                <v-toolbar extended extension-height="4" dark color="primary">
+                <v-toolbar extended extension-height="4" dark color="primary" class="rounded-0">
                   <v-btn icon dark @click="diagolShowDetail = false">
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
@@ -670,6 +670,7 @@ export default {
     },
 
     showDetail(item) {
+      this.overlay = true
       console.log(item);
       this.dialogShowDetail = true;
       console.log(this.dialogShowDetail)
@@ -713,6 +714,7 @@ export default {
             this.reservationContacts.myPhone = res.data[0].phone;
           }
           this.toolbarLoading = false;
+          this.overlay = false;
         });
     },
 

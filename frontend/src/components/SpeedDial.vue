@@ -10,7 +10,7 @@
     <v-btn color="primary" fab small to="/messenger">
       <v-icon>mdi-facebook-messenger</v-icon>
     </v-btn>
-    <v-btn color="primary" fab small to="/contact_us">
+    <v-btn color="primary" fab small to="/contact">
       <v-icon>mdi-email</v-icon>
     </v-btn>
   </v-speed-dial>

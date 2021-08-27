@@ -13,6 +13,7 @@ use App\Http\Controllers\FriendshipsController;
 use App\Http\Controllers\ValidateRegisterLogin;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\PricesController;
 
 use App\Http\Controllers\UpdateAccountSettingsController;
 use App\Traits\Friendable;
@@ -144,7 +145,11 @@ Route::get('/getNotification/{id}', [NotificationsController::class, 'getNotific
 Route::get('/getNotificationAll/{id}', [NotificationsController::class, 'getNotificationAll']);
 Route::get('/getNotificationNew/{id}', [NotificationsController::class, 'getNotificationNew']);
 Route::get('/getNotificationRelevant/{id}', [NotificationsController::class, 'getNotificationRelevant']);
-
+//prices
+Route::post('/prices/updatePrices', [PricesController::class, 'updatePrices']);
+Route::post('/prices/updatePricesForEachMonth', [PricesController::class, 'updatePricesForEachMonth']);
+Route::get('/prices/getPricesForEachMonth', [PricesController::class, 'getPricesForEachMonth']);
+Route::get('/prices/getPricesForGraph', [PricesController::class, 'getPricesForGraph']);
 //
 // Route::get('test', function () {
 //     event(new App\Events\Test());

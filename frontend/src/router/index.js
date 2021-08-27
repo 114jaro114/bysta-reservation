@@ -19,11 +19,11 @@ import Welcome from '../views/Welcome.vue'
 import Home from '../views/Home.vue'
 import Profile from '../views/Profile.vue'
 import Notifications from '../views/Notifications.vue'
+import Inbox from '../views/Inbox.vue'
 import Settings from '../views/Settings.vue'
 import Reservation from '../views/Reservation.vue'
 import Administration from '../views/Administration.vue'
 import Messenger from '../views/Messenger.vue'
-import AboutUs from '../views/AboutUs.vue'
 import PriceList from '../views/PriceList.vue'
 import SavedReservations from '../views/SavedReservations.vue'
 import Contact from '../views/Contact.vue'
@@ -169,6 +169,30 @@ const routes = [{
     ],
   },
   {
+    path: '/inbox',
+    name: 'Inbox',
+    component: Inbox,
+    children: [{
+        path: '/inbox',
+        name: 'Sent',
+        component: require('../components/tabs/inbox/Sent.vue')
+          .default
+      },
+      {
+        path: '/inbox/delivered',
+        name: 'Delivered',
+        component: require('../components/tabs/inbox/Delivered.vue')
+          .default
+      },
+      {
+        path: '/inbox/relevant',
+        name: 'Relevant',
+        component: require('../components/tabs/inbox/Relevant.vue')
+          .default
+      }
+    ],
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: Settings,
@@ -185,8 +209,7 @@ const routes = [{
           .default
       },
     ],
-  },
-  {
+  }, {
     path: '/administration',
     name: 'Administration',
     component: Administration,
@@ -202,9 +225,14 @@ const routes = [{
         component: require('../components/tabs/administration/Details.vue')
           .default
       },
+      {
+        path: '/administration/prices',
+        name: 'Ceny',
+        component: require('../components/tabs/administration/Ceny.vue')
+          .default
+      },
     ],
-  },
-  {
+  }, {
     path: '/reservation',
     name: 'Reservation',
     component: Reservation,
@@ -214,8 +242,7 @@ const routes = [{
       component: require('../components/tabs/reservation/VytvoritRezervaciu.vue')
         .default
     }, ],
-  },
-  {
+  }, {
     path: '/messenger',
     name: 'Messenger',
     component: Messenger
@@ -231,23 +258,15 @@ const routes = [{
     path: '/saved_reservations',
     name: 'SavedReservations',
     component: SavedReservations
-  },
-  {
+  }, {
     path: '/price_list',
     name: 'PriceList',
     component: PriceList
-  },
-  {
-    path: '/about_us',
-    name: 'AboutUs',
-    component: AboutUs
-  },
-  {
+  }, {
     path: '/contact',
     name: 'Contact',
     component: Contact
-  },
-  {
+  }, {
     path: '/avatar',
     name: 'AvatarImage',
     component: AvatarImage

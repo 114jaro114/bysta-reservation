@@ -105,7 +105,7 @@
               </span>
             </div>
             <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
-            <Calendar @loaded-events="loadedEvents" />
+            <Calendar @loaded-events="loadedEvents" @array-dates="arrayDates" />
             <!-- <v-row class="justify-center">
                   <v-col cols="12" lg="6" md="12" sm="12">
                     <v-icon color="orange">mdi-rectangle</v-icon>
@@ -967,10 +967,10 @@ export default {
       ],
       errorMessages: '',
 
-      start_time: '14:29:71',
-      end_time: '14:29:71',
-      start_date: '2021-05-27',
-      end_date: '2021-05-28',
+      start_time: '',
+      end_time: '',
+      start_date: '',
+      end_date: '',
 
       phone: {
         number: '',
@@ -1027,29 +1027,27 @@ export default {
   },
 
   mounted() {
-    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
-      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
-    this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noc';
-    this.headerTooltipsConfig();
-    this.prices.push({
-      text: 'Cena za celú chatu (<6 osôb)',
-      p1: this.counter1 + this.counter2,
-      p2: this.priceCabinUnderSixPpl + '€',
-      p3: this.priceCabinUnderSixPpl + '€',
-      p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
-    }, {
-      text: 'Upratovanie',
-      p1: '',
-      p2: '',
-      p3: '',
-      p4: this.cleaningFee + '€',
-    }, {
-      text: 'Spolu',
-      p1: this.counter1 + this.counter2 + this.counter3,
-      p2: this.priceCabinUnderSixPpl + '€',
-      p3: this.priceCabinUnderSixPpl + '€',
-      p4: this.priceCabinUnderSixPpl + this.cleaningFee + '€',
-    });
+    // this.headerTooltipsConfig();
+    // this.prices.push({
+    //   text: 'Cena za celú chatu (<6 osôb)',
+    //   p1: this.counter1 + this.counter2,
+    //   p2: this.priceCabinUnderSixPpl + '€',
+    //   p3: this.priceCabinUnderSixPpl + '€',
+    //   p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
+    // }, {
+    //   text: 'Upratovanie',
+    //   p1: '',
+    //   p2: '',
+    //   p3: '',
+    //   p4: this.cleaningFee + '€',
+    // }, {
+    //   text: 'Spolu',
+    //   p1: this.counter1 + this.counter2 + this.counter3,
+    //   p2: this.priceCabinUnderSixPpl + '€',
+    //   p3: this.priceCabinUnderSixPpl + '€',
+    //   p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + this.cleaningFee + '€',
+    // });
+
     const api = `${process.env.VUE_APP_API_URL}/getContactForm`;
     const config = {
       headers: {
@@ -1093,7 +1091,19 @@ export default {
     },
 
     loadedEvents(events) {
+      console.log(events);
       this.overlay = events;
+    },
+
+    arrayDates(dates) {
+      this.start_date = moment(dates[0])
+        .format("YYYY-MM-DD");
+      this.end_date = moment(dates[1])
+        .format("YYYY-MM-DD");
+      this.start_time = moment(dates[0])
+        .format('HH:mm:ss');
+      this.end_time = moment(dates[1])
+        .format('HH:mm:ss');
     },
 
     onInput(formattedNumber, {
@@ -1126,6 +1136,7 @@ export default {
       this.step1 = this.$store.getters['successMakeReservation'].success
       if (this.step1) {
         this.e1 = 2;
+        this.countingPrices();
       } else {
         this.step1 = false;
         this.snackbar = true;
@@ -1159,7 +1170,7 @@ export default {
       this.contactFormDialogOut = param;
       this.contactFormDialog = false;
       if (param == 'yes') {
-        const api = `${process.env.VUE_APP_API_URL}/getContactForm`;
+        const api = `${process.env.VUE_APP_API_URL}/contactForm`;
         const config = {
           headers: {
             Accept: "application/json",
@@ -1233,7 +1244,6 @@ export default {
           this.counter1++;
           this.countingPrices();
         }
-
       } else {
         this.snackbar = true;
         this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
@@ -1375,6 +1385,7 @@ export default {
     },
 
     store() {
+      this.overlay = true;
       if (this.step1 && this.step2 && this.step3 && this.step4) {
         const api = `${process.env.VUE_APP_API_URL}/reservation/store`;
         const config = {
@@ -1417,6 +1428,7 @@ export default {
               }, config)
               .then(() => {})
             this.snackbarSuccess = true;
+            this.overlay = false;
             this.text = "Rezervácia bola úspešne vytvorená!";
             setTimeout(function() {
               this.$router.push("/Administration");
@@ -1485,7 +1497,6 @@ export default {
 
   updated() {
     //do something after updating vue instance
-
     // this.start_date = moment(this.$store.getters['successReservationData'].start_date)
     //   .format("YYYY-MM-DD");
     // this.end_date = moment(this.$store.getters['successReservationData'].end_date)
@@ -1494,6 +1505,13 @@ export default {
     // console.log(this.start_date);
     // this.start_time = this.$store.getters['successReservationData'].start_time;
     // this.end_time = this.$store.getters['successReservationData'].end_time;
+    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
+      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
+    if (this.countDaysBetweemTwoDates > 1) {
+      this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noci';
+    } else {
+      this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noc';
+    }
 
     //Difference in number of days
     // moment.duration(moment(this.start_date, 'YYYY-MM-DD')
@@ -1503,9 +1521,6 @@ export default {
     // //Difference in number of weeks
     // moment.duration(start.diff(end))
     //   .asWeeks();
-
-    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
-      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
     this.overallPriceForNight = this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates
   }
 }

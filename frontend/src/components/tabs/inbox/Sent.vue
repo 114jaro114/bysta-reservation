@@ -1,5 +1,5 @@
 <template>
-<div class="new w-100 h-100">
+<div class="sent w-100 h-100">
   <!-- <v-lazy :options="{
             threshold: .8
           }" transition="fade-transition"> -->
@@ -7,22 +7,12 @@
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
   <v-row justify="center" class="ml-0 mr-0">
-    <!-- <v-col class="pl-3 pr-3">
-        <v-text-field v-model="form.recipient" label="meno">meno</v-text-field>
-        <v-text-field v-model="form.title" label="text">text</v-text-field>
-        <v-text-field v-model="form.subtitle" label="text">text</v-text-field>
-        <v-text-field v-model="form.text" label="text">text</v-text-field>
-        <v-text-field v-model="form.date" label="text">text</v-text-field>
-        <v-text-field v-model="form.status" label="status">status</v-text-field>
-        <v-btn @click="methodName">odoslat</v-btn>
-      </v-col> -->
-
     <v-col class="pl-3 pr-3">
       <v-card class="rounded" elevation="0">
         <v-toolbar class="notiftoolbar rounded-top" extended extension-height="4" color="primary" flat dark>
           <div class="w-75" v-if="selected.length == '0'">
             <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="myloadingvariable || notif.length == 0"></v-text-field>
-            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable &&  notif.length != 0"></v-text-field>
+            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!myloadingvariable && notif.length != 0"></v-text-field>
           </div>
 
           <div v-else>
@@ -48,10 +38,9 @@
 
           <span style="font-size:12px">Označiť všetko</span>
           <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="myloadingvariable || notif.length == 0"></v-checkbox>
-          <v-checkbox class=" mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable && notif.length != 0"></v-checkbox>
+          <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!myloadingvariable && notif.length != 0"></v-checkbox>
 
-          <!-- <v-progress-linear v-if=" myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true">
-          </v-progress-linear> -->
+          <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
         </v-toolbar>
 
         <v-list class="pb-0" three-line>
@@ -69,10 +58,10 @@
             <v-list-item class="justify-center" v-else-if="notif.length == 0 && !myloadingvariable" disabled>
               <v-btn color="primary" icon width="50px" height="50px">
                 <v-icon style="font-size: 50px">mdi-bell-cancel</v-icon>
-                <span class="ml-3">Žiadne nové notifikácie</span>
+                <span class="ml-3">Žiadne notifikácie</span>
               </v-btn>
             </v-list-item>
-            <template v-else v-for="(item, index) in notif">
+            <template v-else v-for="(item, index) in filteredItems">
               <!-- card notif -->
               <!-- <v-list-item class="p-0" :key="item.title" v-if="!myloadingvariable">
                   <template v-slot:default="{ active }">
@@ -116,6 +105,23 @@
 
                   <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
                     <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
+                    <v-dialog v-model="dialogNotifDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                      <template v-slot:activator="{ on: menu, attrs }">
+                        <v-btn class="mb-2 m-right" icon large color="primary" v-bind="attrs" v-on="{ ...menu }" @click="getNotifDetail(item, active)">
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <v-toolbar dark color="primary" class="rounded-0">
+                          <!-- extended extension-height="4"  -->
+                          <v-btn icon dark @click="dialogNotifDetail = false">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                          <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                          <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                        </v-toolbar>
+                      </v-card>
+                    </v-dialog>
 
                     <v-checkbox value v-if="!active"></v-checkbox>
 
@@ -125,7 +131,7 @@
               </v-list-item>
               <v-divider class="m-0" v-if="index < notif.length - 1 && !myloadingvariable" :key="index"></v-divider>
             </template>
-            <!-- snackbar deleteNotif-->
+            <!-- snackbard -->
             <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="24">
               Naozaj chcete vymazať túto notifikáciu?
               <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="deleteNotif = false; deleteNotification(item)">
@@ -135,7 +141,7 @@
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-snackbar>
-            <!-- snackbar addToRelevant-->
+
             <v-snackbar :timeout="-1" :value="addToRelevant" absolute centered color="primary" elevation="24">
               Naozaj chcete Uložiťit notifikáciu/e do dôležitých?
               <v-btn class="ml-2 mt-3" color="secondary error--text" fab x-small @click="addToRelevant = false; addNotificationsToRelevant(item)">
@@ -160,6 +166,41 @@
         </v-list>
       </v-card>
     </v-col>
+    <!-- <v-col v-for="(item, i) in items" :key="i" cols="12">
+        <v-card color="primary" dark>
+          <div class="d-flex flex-no-wrap justify-space-between">
+            <div>
+              <v-card-title class="headline" v-text="item.title"></v-card-title>
+
+              <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+
+              <v-card-actions v-if="item.artist === 'Ellie Goulding'">
+                <v-btn class="ml-2 mt-3" fab icon small>
+                  <v-icon>mdi-star-box-multiple-outline</v-icon>
+                </v-btn>
+
+                <v-btn class="ml-2 mt-3" outlined rounded medium>
+                  Označiť ako videné <v-icon>mdi-eye-check-outline</v-icon>
+                </v-btn>
+              </v-card-actions>
+
+              <v-card-actions v-else>
+                <v-btn class="ml-2 mt-3" fab icon small>
+                  <v-icon>mdi-star-box-multiple-outline</v-icon>
+                </v-btn>
+
+                <v-btn class="ml-2 mt-3" outlined rounded medium>
+                  <v-icon>mdi-eye-check</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </div>
+
+            <v-avatar class="ma-3" size="125" tile>
+              <v-img :src="item.src"></v-img>
+            </v-avatar>
+          </div>
+        </v-card>
+      </v-col> -->
   </v-row>
   <!-- </v-lazy> -->
 </div>
@@ -169,21 +210,15 @@
 import axios from 'axios'
 import _ from 'lodash';
 export default {
-  name: "New",
+  name: "Sent",
   components: {},
   data() {
     return {
-      form: {
-        recipient: 1,
-        title: 'hmm',
-        subtitle: 'hmm',
-        text: 'hmm',
-        date: '2021-03-27 16:00',
-        status: 'new',
-      },
       search: '',
       selected: [],
       selectedAll: [],
+      notif: [],
+      dialogNotifDetail: false,
       myloadingvariable: true,
       checkbox: true,
       item_1: {
@@ -191,8 +226,6 @@ export default {
         checked: false,
         indeterminate: false
       },
-      notif: [],
-      notifCount: 0,
       // notif snackbars
       deleteNotif: false,
       addToRelevant: false,
@@ -205,43 +238,6 @@ export default {
   },
 
   methods: {
-    methodName() {
-      const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authToken"),
-        },
-      };
-      axios.post(api, {
-          recipient: this.form.recipient,
-          title: this.form.title,
-          subtitle: this.form.subtitle,
-          text: this.form.text,
-          date: this.form.date,
-          status: this.form.status
-        }, config)
-        .then(() => {
-
-          // const api = `http://127.0.0.1:8000/api/getNotification/${localStorage.getItem('user_id')}`;
-          // const config = {
-          //   headers: {
-          //     Accept: "application/json",
-          //     Authorization: "Bearer " + localStorage.getItem("authToken"),
-          //   },
-          // };
-          // axios.get(api, config)
-          //   .then(res => {
-          //     console.log(res)
-          //     this.notif = res.data;
-          //     this.notifCount = res.data.length;
-          //     this.$store.dispatch('notificationCounter', {
-          //       notifCounter: this.notifCount
-          //     });
-          //   });
-        })
-    },
-
     checkUncheck(item, active) {
       if (active) {
         for (var i = 0; i < this.selectedAll.length; i++) {
@@ -270,6 +266,11 @@ export default {
           this.item_1.checked = true;
         }
       }
+    },
+
+    getNotifDetail(item, active) {
+      console.log(item);
+      console.log(active);
     },
 
     checkUncheckAll(event) {
@@ -307,7 +308,7 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
-          const api = `${process.env.VUE_APP_API_URL}/getNotificationNew/${localStorage.getItem('user_id')}`;
+          const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -317,10 +318,6 @@ export default {
           axios.get(api, config)
             .then(res => {
               this.notif = res.data;
-              this.notifCount = res.data.length;
-              this.$store.dispatch('notificationCounter', {
-                notifCounter: this.notifCount
-              });
             });
         })
     },
@@ -340,7 +337,7 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
-          const api = `${process.env.VUE_APP_API_URL}/getNotificationNew/${localStorage.getItem('user_id')}`;
+          const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -357,7 +354,8 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-    const api = `${process.env.VUE_APP_API_URL}/getNotificationNew/${localStorage.getItem('user_id')}`;
+    //do something after mounting vue instance
+    const api = `${process.env.VUE_APP_API_URL}/getNotificationAll/${localStorage.getItem('user_id')}`;
     const config = {
       headers: {
         Accept: "application/json",
@@ -369,16 +367,6 @@ export default {
         this.myloadingvariable = false;
         this.notif = res.data;
         this.overlay = false;
-        this.notifCount = 0;
-        this.$store.dispatch('notificationCounter', {
-          notifCounter: this.notifCount
-        });
-        axios.post(`${process.env.VUE_APP_API_URL}/markAsRead`)
-          .then(() => {
-            this.$store.dispatch('notificationCounter', {
-              notifCounter: 0
-            });
-          })
       });
   },
 
@@ -397,38 +385,21 @@ export default {
       }), 'headline');
     }
   },
-
-  created() {
-    //do something after creating vue instance
-    //presence channel
-    window.Echo.join('notif-channel.' + localStorage.getItem("user_id"))
-      .listen('Notifi', (e) => {
-        if (e.notification.status == 'new') {
-          this.notif.push(e.notification);
-          this.notifCount += 1;
-          this.$store.dispatch('notificationCounter', {
-            notifCounter: this.notifCount
-          });
-        }
-      })
-  },
-
-  updated() {
-    //do something after updating vue instance
-    // console.log(this.$store.getters['notificationCounter']);
-  }
 }
 </script>
 
 <style type="scss">
-/* .md-empty-state {
-    margin-top: 5rem !important;
-  } */
-/* @media only screen and (max-width: 550px) {
-  .md-empty-state {
-    width: 250px !important;
-    height: 250px !important;
-    padding: 0 !important;
-  }
-} */
+.v-toolbar__extension {
+  padding: 0px !important;
+}
+
+.notiftoolbar .v-toolbar__content,
+.v-toolbar__extension {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.v-sheet.v-card--active {
+  color: black;
+}
 </style>
