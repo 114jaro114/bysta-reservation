@@ -115,7 +115,6 @@ export default {
           }
         })
     }
-    console.log("App compoennt created");
   },
   computed: {
     isDark() {
@@ -181,7 +180,6 @@ export default {
   },
   updated() {
     //do something after updating vue instance
-    console.log("update app.vue");
     this.notifCount = this.$store.getters['notificationCounter'];
 
     // const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';

@@ -88,18 +88,19 @@ const token = localStorage.getItem('authToken');
 
 window.Echo = new Echo({
   broadcaster: 'pusher',
-  key: "websocketkey",
-  // cluster: 'mt1',
+  key: '160dba10c55ff9dd1696',
+  cluster: 'eu', //changed
   authEndpoint: `${process.env.VUE_APP_API_URL}/broadcast`,
   // authHost: "http://localhost",
   // authEndpoint: "/broadcasting/auth",
   // authEndpoint: 'http://127.0.0.1/public/broadcasting/auth',
-  encrypted: true,
+  encrypted: false, //changed from true
   forceTLS: false,
   wsHost: window.location.hostname,
+  //wsHost: "websockets",
   wsPort: 6001,
   // wssPort: 6001,
-  disableStats: true,
+  disableStats: false, //from true
   enabledTransports: ['ws', 'wss'],
   auth: {
     headers: {

@@ -127,7 +127,7 @@ export default {
         .then((res) => {
           this.$emit('new', res.data);
         })
-      // console.log(text);
+      console.log(text);
     },
 
     removeSelectedContact() {

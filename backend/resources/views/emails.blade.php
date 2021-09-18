@@ -8,7 +8,5 @@
 </head>
 <body>
     <h1>Test Mail</h1>
-    <p>Hello {{ $name }}, How are you!!!</p>
-    <p>Thanks for reading this tutorial.</p>
 </body>
 </html>
