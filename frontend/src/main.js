@@ -36,7 +36,7 @@ import * as VueGoogleMaps from "vue2-google-maps"
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyDa7tHiX8MPsxI62U4g_7wXD4WaMigSGmo",
+    key: "****",
     libraries: "places" // necessary for places input
   }
 });
@@ -47,7 +47,7 @@ Vue.use(VueGoogleMaps, {
 //
 // // For more options see below
 // Vue.use(VueReCaptcha, {
-//   siteKey: '6LfbpgIcAAAAAFMpeCHNKMRnodKzrVXwja7QmU9i',
+//   siteKey: '*****',
 //   loaderOptions: {
 //     useRecaptchaNet: true,
 //     autoHideBadge: false
