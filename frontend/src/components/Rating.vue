@@ -1,176 +1,180 @@
 <template>
-<!-- <div v-if="this.$store.getters['ratingState']">
-  <v-card elevation="0">
-    <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
-      <v-spacer />
-      <v-toolbar-title>
-        Pridať hodnotenie
-      </v-toolbar-title>
-      <v-spacer />
-    </v-toolbar>
-    <form @submit.prevent class="mt-3">
-      <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
-      <div class="p-3">
-        <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
-        <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
+<div>
+  <div class="rates">
+    <v-row no-gutters>
+      <v-col cols="12" xl="4" lg="5" md="6" sm="12" xs="12">
+        <v-container>
+          <!--overall rating-->
+          <v-row no-gutters>
+            <v-col cols="12" md="12">
+              <h5 class="font-weight-bold"><b :style="{color: $vuetify.theme.themes[isDark].primary}">{{this.totalValueOfRate}}</b> na základe {{this.totalRates}} recenzií</h5>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="12" md="12" @click="cardHide = !cardHide">
+              <v-rating v-model="this.totalValueOfRate" color="primary" readonly size="50"></v-rating>
+            </v-col>
+          </v-row>
+          <v-spacer></v-spacer>
+          <v-divider horizontal></v-divider>
+          <!--your rating -->
+          <v-row no-gutters>
+            <v-col cols="12" md="12">
+              <h6 class="font-weight-bold">Tvoje hodnotenie</h6>
+            </v-col>
+          </v-row>
+          <v-row no-gutters @click="cardHide2 = !cardHide2">
+            <v-col cols="12" md="12">
+              <v-rating v-model="newEvent2.rate" color="primary" readonly size="30"></v-rating>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+      <v-col xl="8" lg="7" md="6" sm="12" xs="12">
+        <v-container>
+          <v-row no-gutters>
+            <v-col cols="1" md="1" class="m-auto">
+              <span class="ratingNumber">5</span>
+              <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
+            </v-col>
+            <v-col cols="10" md="10" class="m-auto">
+              <div class="bar-container">
+                <div class="bar-4" :style="{ width: this.widthFiveStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
+              </div>
+            </v-col>
+            <v-col cols="1" md="1" class="m-auto">
+              <div class="font-weight-bold text-lowercase">{{this.countFiveStar}}x</div>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="1" md="1" class="m-auto">
+              <span class="ratingNumber">4</span>
+              <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
+            </v-col>
+            <v-col cols="10" md="10" class="m-auto">
+              <div class="bar-container">
+                <div class="bar-4" :style="{ width: this.widthFourStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
+              </div>
+            </v-col>
+            <v-col cols="1" md="1" class="m-auto">
+              <div class="font-weight-bold text-lowercase">{{this.countFourStar}}x</div>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="1" md="1" class="m-auto">
+              <span class="ratingNumber">3</span>
+              <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
+            </v-col>
+            <v-col cols="10" md="10" class="m-auto">
+              <div class="bar-container">
+                <div class="bar-4" :style="{ width: this.widthThreeStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
+              </div>
+            </v-col>
+            <v-col cols="1" md="1" class="m-auto">
+              <div class="font-weight-bold text-lowercase">{{this.countThreeStar}}x</div>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="1" md="1" class="m-auto">
+              <span class="ratingNumber">2</span>
+              <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
+            </v-col>
+            <v-col cols="10" md="10" class="m-auto">
+              <div class="bar-container">
+                <div class="bar-4" :style="{ width: this.widthTwoStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
+              </div>
+            </v-col>
+            <v-col cols="1" md="1" class="m-auto">
+              <div class="font-weight-bold text-lowercase">{{this.countTwoStar}}x</div>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="1" md="1" class="m-auto">
+              <span class="ratingNumber">1</span>
+              <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
+            </v-col>
+            <v-col cols="10" md="10" class="m-auto">
+              <div class="bar-container">
+                <div class="bar-4" :style="{ width: this.widthOneStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
+              </div>
+            </v-col>
+            <v-col cols="1" md="1" class="m-auto">
+              <div class="font-weight-bold text-lowercase">{{this.countOneStar}}x</div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+    <!--show all ratings-->
+    <div class="col" v-if="!cardHide">
+      <v-lazy :options="{
+          threshold: .2
+        }" min-height="200" transition="scale-transition">
+        <v-card elevation="2" class="mt-3">
+          <v-toolbar class="rounded-top" color="primary" flat dark>
+            <span>Hodnotenia</span>
+            <v-spacer></v-spacer>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details clearable filled dense></v-text-field>
+            <v-spacer></v-spacer>
+            <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
+          </v-toolbar>
+
+          <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0"
+            :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
+        </v-card>
+      </v-lazy>
+    </div>
+    <!--change rating-->
+    <div class="col" v-if="!cardHide2">
+      <div v-if="this.$store.getters['ratingState']">
+        <v-card elevation="0">
+          <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
+            <v-spacer />
+            <v-toolbar-title>
+              Pridať hodnotenie
+            </v-toolbar-title>
+            <v-spacer />
+          </v-toolbar>
+          <form @submit.prevent class="mt-3">
+            <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
+            <div class="p-3">
+              <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
+              <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
+            </div>
+          </form>
+        </v-card>
       </div>
-    </form>
-  </v-card>
-</div> -->
-<div class="rates">
-  <v-row no-gutters>
-    <v-col cols="12" xl="4" lg="5" md="6" sm="12" xs="12">
-      <v-container>
-        <!--overall rating-->
-        <v-row no-gutters>
-          <v-col cols="12" md="12">
-            <h5 class="font-weight-bold"><b :style="{color: $vuetify.theme.themes[isDark].primary}">{{this.totalValueOfRate}}</b> na základe {{this.totalRates}} recenzií</h5>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col cols="12" md="12" @click="cardHide = !cardHide">
-            <v-rating v-model="this.totalValueOfRate" color="primary" readonly size="50"></v-rating>
-          </v-col>
-        </v-row>
-        <v-spacer></v-spacer>
-        <v-divider horizontal></v-divider>
-        <!--your rating -->
-        <v-row no-gutters>
-          <v-col cols="12" md="12">
-            <h6 class="font-weight-bold">Tvoje hodnotenie</h6>
-          </v-col>
-        </v-row>
-        <v-row no-gutters @click="cardHide2 = !cardHide2">
-          <v-col cols="12" md="12">
-            <v-rating v-model="newEvent2.rate" color="primary" readonly size="30"></v-rating>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-col>
-    <v-col xl="8" lg="7" md="6" sm="12" xs="12">
-      <v-container>
-        <v-row no-gutters>
-          <v-col cols="1" md="1" class="m-auto">
-            <span class="ratingNumber">5</span>
-            <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
-          </v-col>
-          <v-col cols="10" md="10" class="m-auto">
-            <div class="bar-container">
-              <div class="bar-4" :style="{ width: this.widthFiveStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
-            </div>
-          </v-col>
-          <v-col cols="1" md="1" class="m-auto">
-            <div class="font-weight-bold text-lowercase">{{this.countFiveStar}}x</div>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col cols="1" md="1" class="m-auto">
-            <span class="ratingNumber">4</span>
-            <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
-          </v-col>
-          <v-col cols="10" md="10" class="m-auto">
-            <div class="bar-container">
-              <div class="bar-4" :style="{ width: this.widthFourStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
-            </div>
-          </v-col>
-          <v-col cols="1" md="1" class="m-auto">
-            <div class="font-weight-bold text-lowercase">{{this.countFourStar}}x</div>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col cols="1" md="1" class="m-auto">
-            <span class="ratingNumber">3</span>
-            <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
-          </v-col>
-          <v-col cols="10" md="10" class="m-auto">
-            <div class="bar-container">
-              <div class="bar-4" :style="{ width: this.widthThreeStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
-            </div>
-          </v-col>
-          <v-col cols="1" md="1" class="m-auto">
-            <div class="font-weight-bold text-lowercase">{{this.countThreeStar}}x</div>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col cols="1" md="1" class="m-auto">
-            <span class="ratingNumber">2</span>
-            <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
-          </v-col>
-          <v-col cols="10" md="10" class="m-auto">
-            <div class="bar-container">
-              <div class="bar-4" :style="{ width: this.widthTwoStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
-            </div>
-          </v-col>
-          <v-col cols="1" md="1" class="m-auto">
-            <div class="font-weight-bold text-lowercase">{{this.countTwoStar}}x</div>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col cols="1" md="1" class="m-auto">
-            <span class="ratingNumber">1</span>
-            <v-rating :value="1" :length="1" color="primary" readonly small></v-rating>
-          </v-col>
-          <v-col cols="10" md="10" class="m-auto">
-            <div class="bar-container">
-              <div class="bar-4" :style="{ width: this.widthOneStar + '%', background: $vuetify.theme.themes[isDark].primary }"></div>
-            </div>
-          </v-col>
-          <v-col cols="1" md="1" class="m-auto">
-            <div class="font-weight-bold text-lowercase">{{this.countOneStar}}x</div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-col>
-  </v-row>
-  <!--show all ratings-->
-  <div class="col" v-if="!cardHide">
-    <v-lazy :options="{
-          threshold: .2
-        }" min-height="200" transition="scale-transition">
-      <v-card elevation="2" class="mt-3">
-        <v-toolbar class="rounded-top" color="primary" flat dark>
-          <span>Hodnotenia</span>
-          <v-spacer></v-spacer>
-          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details clearable filled dense></v-text-field>
-          <v-spacer></v-spacer>
-          <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
-        </v-toolbar>
+      <div v-else>
+        <v-lazy :options="{
+            threshold: .2
+          }" min-height="200" transition="scale-transition">
+          <v-card elevation="2" class="mt-3">
+            <v-toolbar class="rounded-top" color="primary" flat dark>
+              <span>Zmeniť hodnotenie</span>
+              <v-spacer></v-spacer>
+              <v-icon v-on:click="cardHide2 = !cardHide2">mdi-close</v-icon>
+            </v-toolbar>
 
-        <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0"
-          :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
-      </v-card>
-    </v-lazy>
+            <form @submit.prevent class="p-3">
+              <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
+              <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea>
+              <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
+            </form>
+          </v-card>
+        </v-lazy>
+      </div>
+    </div>
+
+    <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
+      <v-icon>mdi-check-circle</v-icon>
+      {{ textUpdateReview }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbarUpdateReview = false">
+          Zrušiť
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
-  <!--change rating-->
-  <div class="col" v-if="!cardHide2">
-    <v-lazy :options="{
-          threshold: .2
-        }" min-height="200" transition="scale-transition">
-      <v-card elevation="2" class="mt-3">
-        <v-toolbar class="rounded-top" color="primary" flat dark>
-          <span>Zmeniť hodnotenie</span>
-          <v-spacer></v-spacer>
-          <v-icon v-on:click="cardHide2 = !cardHide2">mdi-close</v-icon>
-        </v-toolbar>
-
-        <form @submit.prevent class="p-3">
-          <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
-          <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea>
-          <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
-        </form>
-      </v-card>
-    </v-lazy>
-  </div>
-
-  <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
-    <v-icon>mdi-check-circle</v-icon>
-    {{ textUpdateReview }}
-    <template v-slot:action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="snackbarUpdateReview = false">
-        Zrušiť
-      </v-btn>
-    </template>
-  </v-snackbar>
 </div>
 </template>
 <script>

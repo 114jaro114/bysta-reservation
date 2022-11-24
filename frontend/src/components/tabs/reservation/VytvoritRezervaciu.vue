@@ -1379,7 +1379,7 @@ export default {
           p1: this.counter1 + this.counter2 + this.counter3,
           p2: this.priceCabinUnderSixPpl + '€',
           p3: this.priceCabinUnderSixPpl + '€',
-          p4: this.priceCabinUnderSixPpl + this.cleaningFee + '€',
+          p4: (this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates) + this.cleaningFee + '€',
         });
       }
     },

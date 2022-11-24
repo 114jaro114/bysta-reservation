@@ -147,7 +147,7 @@ export default {
       snackbar_timeout: '',
       text: '',
 
-      recaptchaVerified: false,
+      // recaptchaVerified: false,
     }
   },
 
@@ -164,44 +164,44 @@ export default {
     //   this.$refs.form.resetValidation()
     // },
 
-    recaptcha() {
-      this.$recaptcha('login').then((token) => {
-        console.log(token) // Will print the token
-        axios.post(
-            `https://www.google.com/recaptcha/api/siteverify?secret=6LfbpgIcAAAAAFMpeCHNKMRnodKzrVXwja7QmU9i&response=${token}`, {}, {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-              },
-            })
-          .then(resp => {
-            console.log(resp);
-          })
-      })
-    },
+    // recaptcha() {
+    //   this.$recaptcha('login').then((token) => {
+    //     console.log(token) // Will print the token
+    //     axios.post(
+    //         `https://www.google.com/recaptcha/api/siteverify?secret=6LfbpgIcAAAAAFMpeCHNKMRnodKzrVXwja7QmU9i&response=${token}`, {}, {
+    //           headers: {
+    //             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    //           },
+    //         })
+    //       .then(resp => {
+    //         console.log(resp);
+    //       })
+    //   })
+    // },
 
-    onCaptchaVerified() {
-      this.$recaptcha('login').then((token) => {
-        const secretkey = '6LeaSgQcAAAAAEU_BHXN5pJyUWBglQsZqxwox_Ri';
-        this.$refs.recaptcha.reset();
-        console.log(token);
-        axios.post(
-            `https://www.google.com/recaptcha/api/siteverify?secret=${secretkey}&response=${token}`, {}, {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-              },
-            })
-          .then(resp => {
-            console.log(resp);
-          })
-      })
-    },
+    // onCaptchaVerified() {
+    //   this.$recaptcha('login').then((token) => {
+    //     const secretkey = '6LeaSgQcAAAAAEU_BHXN5pJyUWBglQsZqxwox_Ri';
+    //     this.$refs.recaptcha.reset();
+    //     console.log(token);
+    //     axios.post(
+    //         `https://www.google.com/recaptcha/api/siteverify?secret=${secretkey}&response=${token}`, {}, {
+    //           headers: {
+    //             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    //           },
+    //         })
+    //       .then(resp => {
+    //         console.log(resp);
+    //       })
+    //   })
+    // },
 
-    onCaptchaExpired: function() {
-      this.$refs.recaptcha.reset();
-    },
+    // onCaptchaExpired: function() {
+    //   this.$refs.recaptcha.reset();
+    // },
 
     login() {
-      this.onCaptchaVerified();
+      // this.onCaptchaVerified();
       if (this.validate()) {
         this.myloadingvariable = true;
         this.error = '';
@@ -234,6 +234,7 @@ export default {
             }
           })
           .catch(e => {
+            console.log(e);
             this.myloadingvariable = false;
             this.snackbar = true;
             if (e.response.status == 500) {

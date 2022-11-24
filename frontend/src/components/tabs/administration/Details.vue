@@ -474,6 +474,9 @@ export default {
 
     }
   },
+  mounted() {
+    this.overlay = false;
+  },
 
   methods: {},
   watch: {

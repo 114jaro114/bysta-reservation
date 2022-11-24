@@ -56,7 +56,13 @@
     <v-card-text class="justify-center" justify="center">
       <v-icon color="primary">mdi-copyright</v-icon> {{ new Date().getFullYear() }} — <strong>CHATA BYŠTA</strong>
       <v-spacer></v-spacer>
-      <span>Made by — <strong>Jaroslav Balent</strong></span>
+      <span>Made with
+        <strong>
+          <v-icon color="primary" small>mdi-heart-outline</v-icon>
+        </strong>
+        <span> by </span>
+        <strong class="primary--text">WeBa</strong>
+      </span>
     </v-card-text>
   </v-card>
 </v-footer>
