@@ -8,7 +8,7 @@ import {
 
 Vue.use(Vuetify, {
   directives: {
-    Ripple
+    Ripple,
   }
 });
 // import colors from 'vuetify/lib/util/colors'
@@ -20,7 +20,7 @@ export default new Vuetify({
         // primary: '#21CFF3',
         primary: '#0D47A1',
         accent: '#E0E0E0',
-        secondary: '#EEEEEE',
+        secondary: '#555',
         success: '#4CAF50',
         info: '#2196F3',
         warning: '#FB8C00',
@@ -31,7 +31,7 @@ export default new Vuetify({
       light: {
         primary: '#0D47A1',
         accent: '#212121',
-        secondary: '#ffffff',
+        secondary: '#555',
         success: '#4CAF50',
         info: '#2196F3',
         warning: '#FB8C00',

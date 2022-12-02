@@ -13,22 +13,25 @@
             </v-row>
           </v-card-title>
           <hr class="mt-0 mb-0 custom-hr">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="form" v-model="valid" @keyup.native.enter="register" lazy-validation>
             <v-card-text class="p-3">
 
-              <v-text-field prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" filled clearable @click:clear="callItBackUsername()" clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field tabindex="1" prepend-icon="mdi-account" v-model="name" :rules="nameRules" :error-messages="errorUsername" label="Meno" filled clearable @click:clear="callItBackUsername()" clear-icon="mdi-close" counter></v-text-field>
 
-              <v-text-field ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" filled clearable @click:clear="callItBackEMail()" clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field tabindex="1" ref="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules" :error-messages="errorEmail" label="Email" filled clearable @click:clear="callItBackEMail()" clear-icon="mdi-close" counter>
+              </v-text-field>
 
-              <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter
-                @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
-              <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
-                :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova" hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
+              <v-text-field tabindex="1" prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" autocomplete="off" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo"
+                hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
+              <v-text-field tabindex="1" prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                :type="togglePasswordConfirm ? 'text' : 'password'" label="Heslo znova" hint="Minimálne 4 znaky" autocomplete="off" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close">
+              </v-text-field>
 
               <div class="row">
                 <div class="col text-center">
+                  Už máš účet?
                   <router-link :to="{ name: 'Login' }">
-                    <span class="forgot-pass accent--text">Už máš účet? <span class="primary--text font-weight-bold">Prihlás sa</span></span>
+                    <span class="primary--text font-weight-bold">Prihlás sa</span>
                   </router-link>
                 </div>
               </div>
@@ -80,7 +83,7 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
 export default {
   name: "RegisterForm",
   props: {},
@@ -115,12 +118,12 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Heslo je povinné',
-        v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
+        v => (v && v.length >= 4) || 'Heslo musí obsahovať minimálne 4 znaky',
       ],
       confirmPassword: '',
       confirmPasswordRules: [
         v => !!v || 'Potvrdenie hesla je povinné',
-        v => v.length >= 4 || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
+        v => (v && v.length >= 4) || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
         v => v === this.password || 'Zadané hesla sa nezhodujú',
       ],
       remember: true,
@@ -136,7 +139,6 @@ export default {
   },
   watch: {
     name() {
-      console.log("hmm");
       if (this.name) {
         axios.post(`${process.env.VUE_APP_API_URL}/checkIfUsernameExist`, {
             name: this.name
@@ -181,6 +183,7 @@ export default {
     },
 
     register() {
+      this.$vuetify.goTo(0);
       //call API
       // console.log(this.$refs.form);
       if (this.validate() && this.errorUsername.length == 0 && this.errorEmail.length == 0) {
@@ -199,10 +202,11 @@ export default {
               },
             };
             axios.post(api, {
+                from: 1,
                 recipient: res.data.user.id,
                 title: "Chata Byšta",
-                subtitle: "Vítame Vás na stránke chaty Byšta",
-                text: "Pre akékoľvek informácie nás neváhajte kontaktovať cez messenger alebo email.",
+                subtitle: "Vítame Vás na stránke chaty Byšta.",
+                text: "Pre akékoľvek informácie nás neváhajte kontaktovať.",
                 date: moment(new Date())
                   .format('YYYY-MM-DD HH:mm'),
                 status: "new",
@@ -245,6 +249,9 @@ export default {
   created() {
     // console.log('Component Register created')
   },
+  updated() {
+    console.log(this.password);
+  }
 };
 </script>
 <style lang="css" scoped>

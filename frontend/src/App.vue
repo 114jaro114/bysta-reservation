@@ -1,17 +1,41 @@
 <template>
 <v-app id="app" :style="{background: $vuetify.theme.themes[isDark].background}">
+  <Toolbar @navigationDrawer="openNavigationDrawer"
+    v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'ForgotPassword' && this.$route.name != 'ResetPassword' && this.$route.name != 'VerificationAccount'" />
+
+  <NavigationDrawer :drawer="drawer" />
+
   <router-view />
   <v-fab-transition>
     <v-btn class="goToTop" v-scroll="onScroll" v-show="fab" fab small dark fixed bottom right color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
   </v-fab-transition>
-  <v-snackbar v-model="snackbarUnreadMessages" :multi-line="multiLine" color="orange" :right="true" :bottom="true">
-    <!-- <v-chip class="ma-2" color="white" outlined>
-      NEW
-    </v-chip> -->
-    <v-icon>mdi-message-text-clock</v-icon>
-    {{ textUnreadMessages }}
+
+  <v-snackbar class="snackbar_message" v-model="snackbarUnreadMessages" :multi-line="multiLine" color="orange" :right="true" :bottom="true" rounded>
+    <v-list class="p-2" two-line maxWidth="310" color="orange" dense rounded>
+      <template v-for="(item, index) in notifMSG">
+        <v-list-item :key="index" @click="selectDataAboutUser(item)">
+          <v-badge bottom dot :color="getColor(item.from_contact.status)" offset-x="10" offset-y="10" class="mr-2">
+            <v-avatar color="primary" size="40" v-if="item.from_contact.avatar == null">
+              <span class="text-uppercase white--text">{{ item.from_contact.name.charAt(0) }}</span>
+            </v-avatar>
+            <v-avatar size="40" v-else>
+              <img :src="`${$root.envUrlNoApi}/storage/user-avatar/${item.from_contact.avatar}`">
+            </v-avatar>
+          </v-badge>
+          <v-list-item-content>
+            <v-list-item-title class="d-flex justify-start text-subtitle-2 font-weight-bold p-0 pl-1">
+              <v-chip small color="white primary--text">
+                <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.from_contact.name}}
+              </v-chip>
+            </v-list-item-title>
+
+            <v-list-item-subtitle class="text-left white--text font-weight-bold p-0 pl-1 pt-1" v-text="item.text"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </v-list>
     <template v-slot:action="{ attrs }">
       <v-btn color="white" v-bind="attrs" @click="snackbarUnreadMessages = false" fab text small>
         <v-icon>mdi-close-circle</v-icon>
@@ -28,9 +52,11 @@
       </v-btn>
     </template>
   </v-snackbar>
+
+
   <div v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'ForgotPassword' && this.$route.name != 'ResetPassword' && this.$route.name != 'VerificationAccount'">
     <SpeedDial />
-    <Footer />
+    <Footer v-if="$route.name != 'Messenger' && $route.name != 'Reservation'" />
     <BottomNavigation />
   </div>
 </v-app>
@@ -39,16 +65,21 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 import axios from 'axios';
+import Toolbar from "@/components/Toolbar.vue";
 import Footer from "@/components/Footer.vue";
 import SpeedDial from "@/components/SpeedDial.vue";
 import BottomNavigation from "@/components/BottomNavigation.vue";
+import NavigationDrawer from "@/components/NavigationDrawer.vue";
 
 export default {
   name: 'App',
+  props: ['drawerNew'],
   components: {
+    Toolbar,
     Footer,
     SpeedDial,
-    BottomNavigation
+    BottomNavigation,
+    NavigationDrawer
   },
 
   data() {
@@ -60,46 +91,138 @@ export default {
       textUnreadMessages: '',
       textNotifications: '',
       fab: false,
+      notifMSG: [],
+
+      snackbar: false,
+      snackbar_text: '',
+      snackbar_color: '',
+      drawer: false,
     }
   },
 
   created() {
-    // window.Echo.private('testchannel')
-    //   .listen('Test', (e) => {
-    //     console.log('test successful ' + e)
-    //   })
     //presence channel
-    if (localStorage.getItem('user_id') != null) {
+    if (localStorage.getItem('authToken') != null) {
       //for unread messages
       window.Echo.join('messages.' + localStorage.getItem("user_id"))
         .listen('NewMessage', (e) => {
           if (e.message.to == localStorage.getItem("user_id")) {
-            this.$store.dispatch('msgUnreadCounter', {
-              unreadCounter: e.message.totalUnreadMsgTo
-            });
-            const api = `${process.env.VUE_APP_API_URL}/user/${e.message.from}`;
-            const config = {
-              headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + localStorage.getItem("authToken"),
-              },
-            };
-            axios.get(api, config)
-              .then(res => {
-                if (e.message.totalUnreadMsgTo == 1) {
-                  // this.textUnreadMessages = `${e.message.totalUnreadMsgTo} neprečítaná správa`;
-                  this.textUnreadMessages = `Nová správa od používateľa ${res.data[0].name}`;
-                } else {
-                  // this.textUnreadMessages = `Máte ${e.message.totalUnreadMsgTo} neprečítaných správ`;
-                  this.textUnreadMessages = `Nová správa od používateľa ${res.data[0].name}`;
-                }
-                this.snackbarUnreadMessages = true;
+            if (this.$route.fullPath != `/messenger?name=${e.message.from_contact.name}`) {
+              this.$store.dispatch('msgUnreadCounter', {
+                unreadCounter: e.message.totalUnreadMsgTo
               });
+              this.notifMSG = [];
+              this.notifMSG.push(e.message);
+              this.snackbarUnreadMessages = true;
+            } else {
+              const api = `${process.env.VUE_APP_API_URL}/conversation/${e.message.from}`;
+              const config = {
+                headers: {
+                  Accept: "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("authToken"),
+                },
+              };
+              axios.get(api, config)
+                .then(() => {
+                  //unread messages
+                  const api = `${process.env.VUE_APP_API_URL}/getAllUnreadMessages`;
+                  axios.get(api, config)
+                    .then((res) => {
+                      this.$store.dispatch('msgUnreadCounter', {
+                        unreadCounter: res.data
+                      });
+                    });
+                });
+            }
           }
         })
+
+      window.Echo.join('friendship.' + localStorage.getItem("user_id"))
+        .listen('Friendships', (e) => {
+          let newFriendRequest = {
+            avatar: e.friendship.from_user.avatar,
+            created_at: e.friendship.from_user.created_at,
+            email: e.friendship.from_user.email,
+            id: e.friendship.from_user.id,
+            name: e.friendship.from_user.name,
+            status: e.friendship.from_user.status,
+            friendship_status: e.friendship.friendship_status,
+            requester: e.friendship.requester,
+            updated_at: null,
+            user_requested: e.friendship.user_requested
+          };
+          this.$root.toolbar.friendRequests.friendRequests.push(newFriendRequest);
+          // remove this request from array in $root and add data to friendship array
+          let position = this.$root.toolbar.allPossibleFriends.users.reduce((acc, request, index) => {
+            if (request.name == e.friendship.from_user.name) {
+              acc.push(index);
+            }
+            return acc;
+          }, []);
+          this.$root.toolbar.allPossibleFriends.users.splice(position[0], 1);
+          // plus 1 request from counter of requests
+          this.$root.navigationDrawerRight.countMyFriendshipRequests += 1;
+        })
+
+      // remove friendship request
+      window.Echo.join('friendship-remove.' + localStorage.getItem("user_id"))
+        .listen('Friendship_remove', (e) => {
+          // remove this request from array in $root and add data to friendship array
+          let position = this.$root.toolbar.friendRequests.friendRequests.reduce((acc, request, index) => {
+            if (request.id == e.friendship.requester) {
+              acc.push(index);
+            }
+            return acc;
+          }, []);
+          this.$root.toolbar.allPossibleFriends.users.push(this.$root.toolbar.friendRequests.friendRequests[position[0]]);
+          this.$root.toolbar.friendRequests.friendRequests.splice(position[0], 1);
+          this.$root.navigationDrawerRight.countMyFriendshipRequests -= 1;
+        })
+
       //for notifications
       window.Echo.join('notif-channel.' + localStorage.getItem("user_id"))
-        .listen('Notifi', (e) => {
+        .listen('Notifications', (e) => {
+          console.log(e);
+          if (e.notification.subtitle.substring(0, e.notification.subtitle.indexOf(' ')) == 'Prijatie') {
+            let position = this.$root.toolbar.friendRequests.friendRequests.reduce((acc, request, index) => {
+              if (request.id == e.notification.from_user.id) {
+                acc.push(index);
+              }
+              return acc;
+            }, []);
+            this.$root.friendships.friends.push(this.$root.toolbar.friendRequests.friendRequests[position[0]]);
+            this.$root.toolbar.friendRequests.friendRequests.splice(position[0], 1);
+          } else if (e.notification.subtitle.substring(0, e.notification.subtitle.indexOf(' ')) == 'Odmietnutie') {
+            // remove this request from array in $root and add data to friendship array
+            let position = this.$root.toolbar.friendRequests.friendRequests.reduce((acc, request, index) => {
+              if (request.id == e.notification.from_user.id) {
+                acc.push(index);
+              }
+              return acc;
+            }, []);
+            this.$root.toolbar.allPossibleFriends.users.push(this.$root.toolbar.friendRequests.friendRequests[position[0]]);
+            this.$root.toolbar.friendRequests.friendRequests.splice(position[0], 1);
+          }
+
+          let notif = {
+            avatar: e.notification.from_user.avatar,
+            created_at: e.notification.created_at.toLocaleString(),
+            date: e.notification.date,
+            email: e.notification.from_user.email,
+            from: e.notification.from,
+            id: e.notification.id,
+            name: e.notification.from_user.name,
+            status: e.notification.from_user.status,
+            status_notif: e.notification.status,
+            subtitle: e.notification.subtitle,
+            text: e.notification.text,
+            title: e.notification.title,
+            to: e.notification.to,
+            updated_at: e.notification.updated_at.toLocaleString()
+          }
+
+          this.$root.toolbar.fewNewestNotifications.fewNewestNotifications.push(notif);
+
           // this.notifCount = this.$store.getters['notificationCounter'];
           if (e.notification.status == 'new') {
             this.notifCount += 1;
@@ -123,6 +246,8 @@ export default {
   },
 
   mounted() {
+    //do something after mounting vue instance
+
     localStorage.setItem('language', 'Slovenský jazyk');
 
     const theme = localStorage.getItem("dark_theme");
@@ -179,6 +304,7 @@ export default {
     this.initDarkMode();
   },
   updated() {
+    this.drawer = this.drawerNew;
     //do something after updating vue instance
     this.notifCount = this.$store.getters['notificationCounter'];
 
@@ -229,14 +355,52 @@ export default {
     //   });
     this.notifCount = this.$store.getters['notificationCounter'];
     this.initDarkMode();
+
+    if (localStorage.getItem('authToken') != null) {
+      if (this.$store.getters['friendshipRequestAction'].status == 'accept') {
+        this.snackbar = true;
+        this.snackbar_text = this.$store.getters['friendshipRequestAction'].text;
+        this.snackbar_color = 'green';
+        this.$store.dispatch('friendshipRequestAction', {
+          status: null,
+          text: null
+        });
+      } else if (this.$store.getters['friendshipRequestAction'].status == 'refuse') {
+        this.snackbar = true;
+        this.snackbar_text = this.$store.getters['friendshipRequestAction'].text;
+        this.snackbar_color = 'red';
+        this.$store.dispatch('friendshipRequestAction', {
+          status: null,
+          text: null
+        });
+      } else {
+        this.snackbar = true;
+        this.snackbar_text = this.$store.getters['friendshipRequestAction'].text;
+        this.snackbar_color = 'red';
+        this.$store.dispatch('friendshipRequestAction', {
+          status: null,
+          text: null
+        });
+      }
+    }
   },
 
   methods: {
+    openNavigationDrawer(state) {
+      this.drawer = state;
+    },
+
+    getColor(e) {
+      if (e == 'offline') return 'red'
+      else return 'green'
+    },
+
     onScroll(e) {
       if (typeof window === 'undefined') return
       const top = window.pageYOffset || e.target.scrollTop || 0
       this.fab = top > 20
     },
+
     toTop() {
       this.$vuetify.goTo(0)
     },
@@ -264,6 +428,12 @@ export default {
           })
       }
     },
+
+    selectDataAboutUser(item) {
+      console.log(item);
+      this.snackbarUnreadMessages = false;
+      this.$router.push(`/messenger?name=${item.from_contact.name}`);
+    },
   }
 }
 </script>
@@ -275,7 +445,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 .theme--light .v-application--wrap {

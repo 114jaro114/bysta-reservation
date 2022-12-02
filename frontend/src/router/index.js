@@ -2,9 +2,14 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import goTo from 'vuetify/es5/services/goto'
-// import {
-//   isLoggedIn
-// } from '../utils/auth'
+
+import {
+  isLoggedIn
+} from '../utils/auth'
+
+import {
+  clearAuthToken
+} from '../utils/auth'
 
 //auth
 import Login from '../views/Login.vue'
@@ -19,7 +24,6 @@ import Welcome from '../views/Welcome.vue'
 import Home from '../views/Home.vue'
 import Profile from '../views/Profile.vue'
 import Notifications from '../views/Notifications.vue'
-import Inbox from '../views/Inbox.vue'
 import Settings from '../views/Settings.vue'
 import Reservation from '../views/Reservation.vue'
 import Administration from '../views/Administration.vue'
@@ -34,49 +38,49 @@ const routes = [{
     path: '/',
     name: 'Welcome',
     component: Welcome,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/register',
     name: 'Register',
     component: Register,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/forgot-password',
     name: 'ForgotPassword',
     component: ForgotPassword,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/reset-password/:token',
     name: 'ResetPassword',
     component: ResetPassword,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/activation-account/:token',
     name: 'VerificationAccount',
     component: VerificationAccount,
-    // meta: {
-    //   allowAnonymous: true
-    // },
+    meta: {
+      allowAnonymous: true
+    },
   },
   {
     path: '/home',
@@ -109,41 +113,60 @@ const routes = [{
     ],
   },
   {
-    path: '/profile',
+    path: '/profile/:user_id',
     name: 'Profile',
     component: Profile,
     children: [{
-        path: '/profile',
+        path: '/profile/:user_id',
         name: 'Profile',
         component: require('../components/tabs/profile/Profile.vue')
           .default
       },
-      // {
-      //   path: '/profile/my_profile',
-      //   name: 'MyProfile',
-      //   component: require('../components/tabs/profile/MyProfile.vue')
-      //     .default
-      // },
       {
-        path: '/profile/add_friends',
-        name: 'AddFriends',
-        component: require('../components/tabs/profile/AddFriends.vue')
+        path: '/profile/:user_id/about',
+        name: 'About',
+        component: require('../components/tabs/profile/About.vue')
           .default
       }, {
-        path: '/profile/user_profile',
-        name: 'ShowProfile',
-        component: require('../components/tabs/profile/ShowProfile.vue')
+        path: '/profile/:user_id/friends',
+        name: 'Friends',
+        component: require('../components/tabs/profile/Friends.vue')
           .default,
         props: true
       },
-      {
-        path: '/profile/friend_list',
-        name: 'FriendList',
-        component: require('../components/tabs/profile/FriendList.vue')
-          .default
-      }
     ],
   },
+  //old profile
+  // {
+  //   path: '/profile',
+  //   name: 'Profile',
+  //   component: Profile,
+  //   children: [{
+  //       path: '/profile',
+  //       name: 'Profile',
+  //       component: require('../components/tabs/profile/Profile.vue')
+  //         .default
+  //     },
+  //     {
+  //       path: '/profile/add_friends',
+  //       name: 'AddFriends',
+  //       component: require('../components/tabs/profile/AddFriends.vue')
+  //         .default
+  //     }, {
+  //       path: '/profile/user_profile',
+  //       name: 'ShowProfile',
+  //       component: require('../components/tabs/profile/ShowProfile.vue')
+  //         .default,
+  //       props: true
+  //     },
+  //     {
+  //       path: '/profile/friend_list',
+  //       name: 'FriendList',
+  //       component: require('../components/tabs/profile/FriendList.vue')
+  //         .default
+  //     }
+  //   ],
+  // },
   {
     path: '/notifications',
     name: 'Notifications',
@@ -161,38 +184,13 @@ const routes = [{
           .default
       },
       {
-        path: '/notifications/relevant',
+        path: '/notifications/saved',
         name: 'Relevant',
-        component: require('../components/tabs/notifications/Relevant.vue')
+        component: require('../components/tabs/notifications/Saved.vue')
           .default
       }
     ],
-  },
-  {
-    path: '/inbox',
-    name: 'Inbox',
-    component: Inbox,
-    children: [{
-        path: '/inbox',
-        name: 'Sent',
-        component: require('../components/tabs/inbox/Sent.vue')
-          .default
-      },
-      {
-        path: '/inbox/delivered',
-        name: 'Delivered',
-        component: require('../components/tabs/inbox/Delivered.vue')
-          .default
-      },
-      {
-        path: '/inbox/relevant',
-        name: 'Relevant',
-        component: require('../components/tabs/inbox/Relevant.vue')
-          .default
-      }
-    ],
-  },
-  {
+  }, {
     path: '/settings',
     name: 'Settings',
     component: Settings,
@@ -232,17 +230,15 @@ const routes = [{
           .default
       },
     ],
-  }, {
+  },
+
+  {
     path: '/reservation',
     name: 'Reservation',
     component: Reservation,
-    children: [{
-      path: '/reservation',
-      name: 'VytvoritRezervaciu',
-      component: require('../components/tabs/reservation/VytvoritRezervaciu.vue')
-        .default
-    }, ],
-  }, {
+  },
+
+  {
     path: '/messenger',
     name: 'Messenger',
     component: Messenger
@@ -298,30 +294,19 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeResolve((to, from, next) => {
-//
-//   if (to.matched.some(record => record.meta.middlewareAuth)) {
-//         if (!AuthData.check()) {
-//             next('/login');
-//
-//             return;
-//         }
-//     }
-//  }
-// })
+router.beforeEach((to, from, next) => {
+  if (((to.name == 'Login') || (to.name == 'Register') || (to.name == 'Welcome')) && isLoggedIn()) {
+    next({
+      path: '/home'
+    })
+  } else if (!to.meta.allowAnonymous && !isLoggedIn()) {
+    clearAuthToken();
+    next({
+      path: '/login',
+    })
+  } else {
+    next()
+  }
+})
 
-
-// router.beforeEach((to, from, next) => {
-//   if (((to.name == 'Login') || (to.name == 'Register') || (to.name == 'Welcome')) && isLoggedIn()) {
-//     next({
-//       path: '/home'
-//     })
-//   } else if (!to.meta.allowAnonymous && !isLoggedIn()) {
-//     next({
-//       path: '/login',
-//     })
-//   } else {
-//     next()
-//   }
-// })
 export default router

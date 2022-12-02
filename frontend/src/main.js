@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
+
 import router from './router'
 import store from './store'
-
-//vuetify import
 import vuetify from './plugins/vuetify'
+import i18n from './i18n'
 
 //vuetify import
-import social_auth from './social_auth/index'
+// import social_auth from './social_auth/index'
 
 //vuelidate
 import Vuelidate from 'vuelidate'
@@ -36,7 +36,7 @@ import * as VueGoogleMaps from "vue2-google-maps"
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "****",
+    key: "AIzaSyDa7tHiX8MPsxI62U4g_7wXD4WaMigSGmo",
     libraries: "places" // necessary for places input
   }
 });
@@ -88,8 +88,8 @@ const token = localStorage.getItem('authToken');
 
 window.Echo = new Echo({
   broadcaster: 'pusher',
-  key: '160dba10c55ff9dd1696',
-  cluster: 'eu', //changed
+  key: process.env.VUE_APP_PUSHER_APP_KEY,
+  cluster: process.env.VUE_APP_PUSHER_CLUSTER,
   authEndpoint: `${process.env.VUE_APP_API_URL}/broadcast`,
   // authHost: "http://localhost",
   // authEndpoint: "/broadcasting/auth",
@@ -110,20 +110,259 @@ window.Echo = new Echo({
   }
 })
 
-//vue materialize
-// import VueMaterial from 'vue-material';
-// Vue.use(VueMaterial);
-
 // import scss file
 require('@/assets/styles/main.scss');
 
 Vue.config.productionTip = false
 
+import axios from 'axios';
+
+import {
+  isLoggedIn
+} from './utils/auth'
+
 new Vue({
     router,
     vuetify,
     store,
-    social_auth,
+    i18n,
+    data: {
+      language: {
+        countries: [{
+            name: "sk",
+            flag: "sk"
+          },
+          {
+            name: "en",
+            flag: "gb"
+          }
+        ],
+
+        selectedLang: 0,
+      },
+
+      envUrlNoApi: undefined,
+
+      friendships: {
+        friends: undefined,
+        friends_overlay: true,
+        friendsLoading: true,
+      },
+
+      me: {
+        id: undefined,
+        name: undefined,
+        email: undefined,
+        avatar: undefined,
+        status: undefined,
+        created_at: undefined,
+        overlayAvatar: true,
+      },
+
+      navigationDrawerLeft: {
+        numberOfFriends: undefined,
+      },
+
+      navigationDrawerRight: {
+        countMyFriendshipRequests: 0,
+      },
+
+      profile: {
+        data: {
+          returnVariable: undefined,
+          userData: undefined
+        },
+        friendships: {
+          friends: undefined,
+          numberOfFriends: 0,
+          friends_overlay: true,
+        }
+      },
+
+      toolbar: {
+        allPossibleFriends: {
+          users: undefined,
+          usersLoading: true
+        },
+        friendRequests: {
+          friendRequests: undefined,
+          friendRequests_overlay: true,
+        },
+        fewNewestMessages: {
+          overlayNewestMessages: true,
+          fewNewestMessages: undefined,
+        },
+        fewNewestNotifications: {
+          overlayNewestNotifications: true,
+          fewNewestNotifications: undefined,
+        },
+        fewOldNotifications: {
+          overlayOldNotifications: true,
+          fewOldNotifications: undefined,
+        },
+      },
+    },
+
+    methods: {
+      getDataOfMe() {
+        const api = `${process.env.VUE_APP_API_URL}/auth/user`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.me.id = res.data.id;
+            this.me.name = res.data.name;
+            this.me.email = res.data.email;
+            this.me.avatar = res.data.avatar;
+            this.me.status = res.data.status;
+            this.me.created_at = res.data.created_at;
+            this.me.overlayAvatar = false;
+          });
+      },
+
+      getAllFriends() {
+        const api = `${process.env.VUE_APP_API_URL}/friendships`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.friendships.friendsLoading = false;
+            this.friendships.friends_overlay = false;
+            this.friendships.friends = res.data;
+          });
+      },
+      // NavigationDrawerLeft
+      getNumberOfFriends() {
+        const api = `${process.env.VUE_APP_API_URL}/getNumberOfFriends`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.navigationDrawerLeft.numberOfFriends = res.data;
+          });
+      },
+      // Toolbar
+      getAllPossibleFriends() {
+        const api = `${process.env.VUE_APP_API_URL}/getAllPossibleFriends`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.toolbar.allPossibleFriends.usersLoading = false;
+            this.toolbar.allPossibleFriends.users = res.data;
+          });
+      },
+
+      getFriendRequests() {
+        const api = `${process.env.VUE_APP_API_URL}/getAllFriendshipRequests`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.toolbar.friendRequests.friendRequests = res.data;
+            this.toolbar.friendRequests.friendRequests_overlay = false;
+          });
+      },
+
+      getFewNewestMessages() {
+        const api = `${process.env.VUE_APP_API_URL}/getFewNewestMessages`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.toolbar.fewNewestMessages.overlayNewestMessages = false;
+            this.toolbar.fewNewestMessages.fewNewestMessages = res.data;
+          });
+      },
+
+      getFewNewestNotifications() {
+        const api = `${process.env.VUE_APP_API_URL}/getFewNewestNotifications`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.toolbar.fewNewestNotifications.overlayNewestNotifications = false;
+            this.toolbar.fewNewestNotifications.fewNewestNotifications = res.data;
+          });
+      },
+
+      getFewOldNotifications() {
+        const api = `${process.env.VUE_APP_API_URL}/getFewOldNotifications`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.toolbar.fewOldNotifications.overlayOldNotifications = false;
+            this.toolbar.fewOldNotifications.fewOldNotifications = res.data;
+          });
+      },
+
+      getCountMyFriendshipRequests() {
+        const api = `${process.env.VUE_APP_API_URL}/getCountMyFriendshipRequests`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.navigationDrawerRight.countMyFriendshipRequests = res.data;
+          });
+      },
+    },
+
+    async created() {
+      this.envUrlNoApi = process.env.VUE_APP_API_URL2;
+      if (isLoggedIn()) {
+        this.getDataOfMe();
+        this.getAllFriends();
+        // NavigationDrawerLeft
+        this.getNumberOfFriends();
+        // Toolbar
+        this.getAllPossibleFriends();
+        this.getFriendRequests();
+
+        this.getFewNewestMessages();
+        this.getFewOldNotifications();
+        this.getFewNewestNotifications();
+        //navigationDrawerCenter
+        this.getCountMyFriendshipRequests();
+      }
+    },
+    // social_auth,
     // i18n,
     render: h => h(App),
   })

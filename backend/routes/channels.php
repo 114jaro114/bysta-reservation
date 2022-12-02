@@ -18,7 +18,15 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
+Broadcast::channel('dataAboutMe.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
 Broadcast::channel('messages.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
+Broadcast::channel('messagesstatusread.{id}', function ($user, $id) {
     return $user->id === (int) $id;
 });
 
@@ -27,10 +35,26 @@ Broadcast::channel('allUnreadMessages.{id}', function ($user, $id) {
     return $user->id === (int) $id;
 });
 
+Broadcast::channel('messagereaction', function ($allDataMessage) {
+    return $allDataMessage;
+});
+
+Broadcast::channel('friendship.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
+Broadcast::channel('friendship-remove.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
 //channel for Notifications
 Broadcast::channel('notif-channel.{id}', function ($user, Notification $notifications) {
     return $user->id === $notifications->to;
     // return $user->id === (int) $id;
+});
+
+Broadcast::channel('reservation.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
 });
 
 // This is only for testing purposes

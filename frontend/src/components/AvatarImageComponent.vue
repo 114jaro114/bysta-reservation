@@ -215,6 +215,6 @@ input[type="file"] {
 
 .v-card-logout .theme--dark.v-btn--active,
 .theme--light.v-btn--active {
-  color: #0D47A1;
+  color: #0d47a1;
 }
 </style>

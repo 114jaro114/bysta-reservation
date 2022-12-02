@@ -1,62 +1,256 @@
-<template lang="html">
-  <div class="contacts-list">
-    <v-row justify="center" class="ml-0 mr-0">
-      <v-col class="pl-0 pr-0">
-        <v-card elevation="0">
-          <v-card-text class="p-0">
-            <v-data-table hide-default-header  no-data-text="Nenašli sa žiadny priatelia" no-results-text="Nenašli sa žiadny priatelia" item-key="name" sort-by="name" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="contacts" :search="search" loading-text="Načítavanie... Prosím počkajte" elevation="0">
-              <template v-slot:top>
-                <v-toolbar extended extension-height="4" class="rounded-top" color="primary" flat dark>
-                  <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled dense clearable></v-text-field>
-                  <v-spacer class="mr-1 ml-1"></v-spacer>
-                  <v-btn color="secondary primary--text" to="/profile/add_friends" text small ><v-icon>mdi-account-plus</v-icon></v-btn>
+<template id="contacts-list" class="contacts-list">
+<v-navigation-drawer style="top:64px; z-index:1!important" width="600px" :floating="floating" left clipped app :permanent="$vuetify.breakpoint.mdAndUp">
+  <v-app-bar class="fixed-bar" flat>
+    <!-- <v-toolbar class="notiftoolbar" flat> -->
+    <v-tabs grow rounded="false">
+      <v-tab @click="btnConversation = true">Konverzácie</v-tab>
+      <v-tab @click="btnConversation = false">Priatelia</v-tab>
+    </v-tabs>
+  </v-app-bar>
 
-                  <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
-                </v-toolbar>
-              </template>
-              <template v-slot:item="{ item }" >
-                <div class="p-3" >
-                  <v-badge bottom dot bordered :color="getColor(item.status)" offset-x="10" offset-y="10" class="mr-2">
-                    <v-avatar color="primary" size="48" v-if="item.avatar == null">
-                      <span class="text-uppercase secondary--text">{{ item.name.charAt(0) }}</span>
-                    </v-avatar>
-                    <v-avatar color="primary" size="48" v-else>
-                      <img :src="`http://127.0.0.1:8000/storage/user-avatar/${item.avatar}`">
-                    </v-avatar>
-                  </v-badge>
+  <!-- <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" /> -->
 
-                  <v-badge :content="item.unread" :value="item.unread" color="orange">
-                    {{ item.name }}
-                  </v-badge>
+  <v-container class="pt-1 friend-list">
+    <v-card class="" elevation="0" v-if="btnConversation">
+      <v-list-item class="p-0" v-if="conversations.length == 0">
+        <v-text-field class="mt-6" v-model="search" label="Vyhľadať" filled rounded dense append-icon="mdi-magnify" clearable disabled></v-text-field>
+      </v-list-item>
+      <v-list-item class="p-0" v-else>
+        <v-text-field class="mt-6" v-model="search" label="Vyhľadať" filled rounded dense append-icon="mdi-magnify" clearable></v-text-field>
+      </v-list-item>
+      <v-divider class="mt-0 mb-0"></v-divider>
 
-                  <v-btn class="ml-5" color="accent" :key="item.id" @click="selectContact(item)" :class="{ 'selected': item == selected }" text icon large>
-                    <v-icon >
-                      mdi-message-outline
-                    </v-icon>
-                  </v-btn>
-                </div>
-                <!-- <v-chip :color="getColor(item.status)">
-                  {{ item.status }}
-                </v-chip> -->
-              </template>
-            </v-data-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
+      <v-list class="p-0" dense>
+        <v-list-item v-if="overlayConversations != false" inactive disabled>
+          <v-overlay :value="overlayConversations" :absolute="true" :opacity="0">
+            <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+          </v-overlay>
+        </v-list-item>
+        <v-list-item class="justify-center pl-0 pr-0" v-if="filteredConversations.length == 0 && conversations.length != 0" disabled>
+          <v-list-item-content class="p-2 pr-0 pl-0">
+            <v-card class="rounded-lg card-statement" elevation="0">
+              <span>Žiadne výsledky</span>
+            </v-card>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item class="justify-center pl-0 pr-0" v-if="conversations.length == 0 && overlay == false" disabled>
+          <v-list-item-content class="p-2 pr-0 pl-0">
+            <v-card class="rounded-lg card-statement" elevation="0">
+              <span>Žiadne Konverzácie</span>
+            </v-card>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item-group color="primary" v-model="selectedConversation">
+          <template v-for="(item, index) in filteredConversations">
+            <v-list-item class="p-0" :key="index" @click="selectContact(item)">
+              <v-badge bottom dot bordered :color="getColor(item.status)" offset-x="10" offset-y="10" class="mr-2">
+                <v-avatar color="primary" size="40" v-if="item.avatar == null">
+                  <span class="text-uppercase white--text">{{ item.name.charAt(0) }}</span>
+                </v-avatar>
+                <v-avatar color="primary" size="40" v-else>
+                  <img :src="`${$root.envUrlNoApi}/storage/user-avatar/${item.avatar}`">
+                </v-avatar>
+              </v-badge>
+
+              <v-list-item-content>
+                <v-card class="p-2 rounded-lg card-comments" elevation="0">
+                  <v-list-item-title class="d-flex justify-start text-subtitle-2 font-weight-bold p-0 pl-1">
+                    <v-chip small @click="getFriendProfileData(item)">
+                      <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.name}}
+                    </v-chip>
+                    <v-badge v-if="item.unread != null" :content="item.unread" :value="item.unread" color="orange" bordered offset-x="-5" offset-y="5"></v-badge>
+                  </v-list-item-title>
+                  <v-list-item-subtitle class="text-left grey--text font-weight-bold p-0 pl-1" v-text="item.text" v-if="item.unread == 0"></v-list-item-subtitle>
+                  <v-list-item-subtitle class="text-left primary--text font-weight-bold p-0 pl-1" v-text="item.text" v-else></v-list-item-subtitle>
+                  <v-list-item-subtitle class="pl-1 text-left">
+                    <span>
+                      <!-- minutes -->
+                      <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                            <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
+                              Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                            </span>
+                            <span v-else>
+                              Pred 1 minútou
+                            </span>
+                          </v-btn>
+                        </template>
+                        <span>
+                          <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                        </span>
+                      </v-tooltip>
+
+                      <!-- hours -->
+                      <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                            <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
+                              Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                            </span>
+                            <span v-else>
+                              Pred 1 hodinou
+                            </span>
+                          </v-btn>
+                        </template>
+                        <span>
+                          <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                        </span>
+                      </v-tooltip>
+
+                      <!-- days -->
+                      <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                            <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
+                              Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                            </span>
+                            <span v-else>
+                              Pred 1 dňom
+                            </span>
+                          </v-btn>
+                        </template>
+                        <span>
+                          <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                        </span>
+                      </v-tooltip>
+
+                      <!-- months -->
+                      <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                            <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
+                              Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                            </span>
+                            <span v-else>
+                              Pred 1 mesiacom
+                            </span>
+                          </v-btn>
+                        </template>
+                        <span>
+                          <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                        </span>
+                      </v-tooltip>
+
+                      <!-- years -->
+                      <v-tooltip bottom v-else>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                            <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
+                              Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                            </span>
+                            <span v-else>
+                              Pred 1 rokom
+                            </span>
+                          </v-btn>
+                        </template>
+                        <span>
+                          <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                        </span>
+                      </v-tooltip>
+                    </span>
+                  </v-list-item-subtitle>
+                </v-card>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+    <v-card rounded elevation="0" v-else>
+      <v-list-item class="p-0" v-if="friends.length == 0">
+        <v-text-field class="mt-6" v-model="search" label="Vyhľadať" filled rounded dense append-icon="mdi-magnify" clearable disabled></v-text-field>
+      </v-list-item>
+      <v-list-item class="p-0" v-else>
+        <v-text-field class="mt-6" v-model="search" label="Vyhľadať" filled rounded dense append-icon="mdi-magnify" clearable></v-text-field>
+      </v-list-item>
+      <v-divider class="mt-0 mb-0"></v-divider>
+
+      <v-list class="p-0" dense>
+        <v-list-item v-if="overlay != false" inactive disabled>
+          <v-overlay :value="overlay" :absolute="true" :opacity="0">
+            <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+          </v-overlay>
+        </v-list-item>
+        <v-list-item class="justify-center pl-0 pr-0" v-if="filteredFriends.length == 0 && friends.length != 0" disabled>
+          <v-list-item-content class="p-2 pr-0 pl-0">
+            <v-card class="rounded-lg card-statement" elevation="0">
+              <span>Žiadne výsledky</span>
+            </v-card>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item class="justify-center pl-0 pr-0" v-if="friends.length == 0 && overlay == false" disabled>
+          <v-list-item-content class="p-2 pr-0 pl-0">
+            <v-card class="rounded-lg card-statement" elevation="0">
+              <span>Žiadny priatelia</span>
+            </v-card>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item-group color="primary" v-model="selectedFriend">
+          <template v-for="(item, index) in filteredFriends">
+            <v-list-item class="p-0" :key="index" @click="selectContact(item)">
+              <v-badge bottom dot bordered :color="getColor(item.status)" offset-x="10" offset-y="10" class="mr-2">
+                <v-avatar color="primary" size="40" v-if="item.avatar == null">
+                  <span class="text-uppercase white--text">{{ item.name.charAt(0) }}</span>
+                </v-avatar>
+                <v-avatar color="primary" size="40" v-else>
+                  <img :src="`${$root.envUrlNoApi}/storage/user-avatar/${item.avatar}`">
+                </v-avatar>
+              </v-badge>
+
+              <v-list-item-content>
+                <v-card class="p-2 rounded-lg card-comments" elevation="0">
+                  <v-list-item-title class="d-flex justify-start text-subtitle-2 font-weight-bold p-0 pl-1">
+                    <v-chip style="height:28px" @click="getFriendProfileData(item)">
+                      <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.name}}
+                    </v-chip>
+                    <v-badge v-if="item.unread != null" :content="item.unread" :value="item.unread" color="orange" bordered offset-x="-5" offset-y="7"></v-badge>
+                    <v-spacer />
+                    <!-- <v-tooltip bottom>
+                      <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" icon small @click="getFriendProfileData(item)">
+                          <v-icon small>mdi-information</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Zobraziť profil</span>
+                    </v-tooltip> -->
+                    <!-- <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-btn v-on="on" icon small @click="selectDataAboutUser(item)">
+                            <v-icon small>mdi-forum</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Otvoriť chat</span>
+                      </v-tooltip> -->
+                  </v-list-item-title>
+                </v-card>
+              </v-list-item-content>
+            </v-list-item>
+            <!-- <v-divider class="m-0" v-if="i < filteredFriends.length - 1" :key="i"></v-divider> -->
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+  </v-container>
+  <!-- <template v-slot:append>
+  </template> -->
+</v-navigation-drawer>
 </template>
 <script>
-// import {
-//   Picker
-// } from 'emoji-mart-vue'
-// import axios from 'axios';
+import axios from 'axios';
 import _ from 'lodash';
 export default {
   props: {
     contacts: {
       type: Array,
       default: () => []
+    },
+    closeChat: {
+      type: String,
+      default: null
     }
   },
 
@@ -64,10 +258,11 @@ export default {
     return {
       show2: false,
       // selected: 0
-      selected: this.contacts.length ? this.contacts[0] : null,
-      myloadingvariable: true,
+      selected: null,
       // chatInput
       show: false,
+      overlay: true,
+      overlayConversations: true,
       marker: true,
       iconIndex: 0,
       icons: [
@@ -117,6 +312,13 @@ export default {
         // },
       ],
       search: '',
+      selectedFriend: null,
+      selectedConversation: null,
+      friends: [],
+      conversations: [],
+      btnConversation: true,
+
+      floating: false,
     }
   },
 
@@ -126,83 +328,212 @@ export default {
       else return 'green'
     },
     selectContact(item) {
-      this.selected = item;
-      this.$emit('selected', item);
-      this.$store.dispatch('selectedUser', {
-        id: item.id,
-        name: item.name,
-        email: item.email,
-        status: item.status,
-        avatar: item.avatar,
-        created_at: item.created_at,
-        unread: item.unread,
-      });
-    },
-
-    // newEvent
-    selectEmoji(emoji) {
-      if (this.message != null) {
-        this.message += emoji.native;
+      if (item.from == undefined) {
+        this.updateUnreadCount(item.name, true);
+        if (this.$route.fullPath != `/messenger?name=${item.name}`) {
+          this.$router.push(`/messenger?name=${item.name}`);
+          this.selected = item
+          this.$emit('selected', this.selected);
+          this.$store.dispatch('selectedUser', {
+            id: this.selected.id,
+            name: this.selected.name,
+            email: this.selected.email,
+            status: this.selected.status,
+            avatar: this.selected.avatar,
+            created_at: this.selected.created_at,
+            unread: this.selected.unread,
+          });
+        }
       } else {
-        this.message = emoji.native;
-        // console.log(emoji.native);
+        this.updateUnreadCount(item.name, true);
+        if (this.$route.fullPath != `/messenger?name=${item.name}`) {
+          this.$router.push(`/messenger?name=${item.name}`);
+          item.id = item.from;
+          this.selected = item
+          this.$emit('selected', this.selected);
+          this.$store.dispatch('selectedUser', {
+            id: this.selected.from,
+            name: this.selected.name,
+            email: this.selected.email,
+            status: this.selected.status,
+            avatar: this.selected.avatar,
+            created_at: this.selected.created_at,
+            unread: this.selected.unread,
+          });
+        }
       }
-    },
-    // chatInput
-    toggleMarker() {
-      this.marker = !this.marker
     },
 
-    sendMessage(message) {
-      message.preventDefault();
-      if (this.message == '') {
-        return;
+    changeChatByUrl() {
+      if (this.$route.query.name != null) {
+        for (var i = 0; i < this.friends.length; i++) {
+          if (this.$route.query.name == this.friends[i].name) {
+            this.selectedFriend = i;
+            this.selected = this.friends[i];
+            this.$emit('selected', this.selected);
+            this.$store.dispatch('selectedUser', {
+              id: this.selected.id,
+              name: this.selected.name,
+              email: this.selected.email,
+              status: this.selected.status,
+              avatar: this.selected.avatar,
+              created_at: this.selected.created_at,
+              unread: this.selected.unread,
+            });
+          }
+        }
       }
-      this.$emit('send', this.message);
-      this.resetIcon()
-      this.clearMessage()
     },
-    clearMessage() {
-      this.message = ''
+
+    changeChatByUrlConversation() {
+      if (this.$route.query.name != null) {
+        for (var i = 0; i < this.conversations.length; i++) {
+          if (this.$route.query.name == this.conversations[i].name) {
+            this.selectedConversation = i;
+          }
+        }
+      }
     },
-    resetIcon() {
-      this.iconIndex = 0
+
+    getAllFriends() {
+      const api = `${process.env.VUE_APP_API_URL}/friendships`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        .then(res => {
+          this.overlay = false;
+          this.friends = res.data;
+          this.changeChatByUrl();
+        });
     },
-    changeIcon() {
-      this.autoselectMenu = !this.autoselectMenu;
-      this.iconIndex === this.icons.length - 1 ?
-        this.iconIndex = 0 :
-        this.iconIndex++
+
+    getConversation() {
+      const api = `${process.env.VUE_APP_API_URL}/contacts`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        .then(res => {
+          this.conversations = res.data;
+          this.selected = this.conversations.length ? this.conversations[0] : null;
+          this.overlayConversations = false;
+          this.changeChatByUrlConversation();
+          if (this.$route.fullPath != '/messenger') {
+            this.updateUnreadCount(this.$route.fullPath.match("=(.*)$")[1], true);
+          }
+        });
+    },
+
+    updateUnreadCount(contact, reset) {
+      this.conversations = this.conversations.map((single) => {
+        if (single.name !== contact) {
+          return single;
+        }
+
+        if (reset)
+          single.unread = 0;
+        else
+          single.unread += 1;
+        return single;
+      })
+    },
+
+    addFloatingToNavigationDrawer() {
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth < 960) {
+          this.floating = true;
+        } else {
+          this.floating = false;
+        }
+      });
     },
   },
   updated() {
     //do something after updating vue instance
-    this.myloadingvariable = this.$store.getters['contactListLoader'];
     this.selected = this.$store.getters['selectedUser'];
+    this.selected = this.friends[this.selectedFriend];
+    // this.changeChatByUrl();
+    // this.changeChatByUrlConversation();
   },
 
   mounted() {
     //do something after mounting vue instance
-    this.myloadingvariable = true;
-    this.$store.dispatch('contactListLoader', {
-      cancelLoader: true
-    });
+    this.getConversation();
+    this.getAllFriends();
+
+    if (window.innerWidth < 960) {
+      this.floating = true;
+    } else {
+      this.floating = false;
+    }
   },
 
   created() {
-    this.myloadingvariable = this.$store.getters['contactListLoader'];
+    // this.myloadingvariable = this.$store.getters['contactListLoader'];
     this.selected = this.$store.getters['selectedUser'];
-    // window.Echo.private('statusUpdate')
-    //   .listen('statusUpdate', (e) => {
-    //     console.log("test " + e.message);
-    //   })
-    // window.Echo.join('allUnreadMessages.' + localStorage.getItem("user_id"))
-    //   .listen('UnreadMessages', (e) => {
-    //     console.log(e);
-    //   })
+    //presence channel
+    window.Echo.join('messages.' + localStorage.getItem("user_id"))
+      .listen('NewMessage', (e) => {
+        let position = this.conversations.reduce((acc, request, index) => {
+          if (request.from == e.message.from) {
+            acc.push(index);
+          }
+          return acc;
+        }, []);
+        if (position[0] != null) {
+          if (this.$route.fullPath != `/messenger?name=${e.message.from_contact.name}`) {
+            this.conversations[position[0]].id = e.message.id;
+            this.conversations[position[0]].read = e.message.read;
+            this.conversations[position[0]].text = e.message.text;
+            this.conversations[position[0]].created_at = e.message.created_at;
+            this.conversations[position[0]].totalUnreadMsgTo = e.message.totalUnreadMsgTo;
+            this.conversations[position[0]].unread += 1;
+          } else {
+            this.conversations[position[0]].id = e.message.id;
+            this.conversations[position[0]].read = e.message.read;
+            this.conversations[position[0]].text = e.message.text;
+            this.conversations[position[0]].created_at = e.message.created_at;
+            this.conversations[position[0]].totalUnreadMsgTo = e.message.totalUnreadMsgTo;
+          }
+        }
+      })
+  },
+
+  watch: {
+    closeChat() {
+      if (this.closeChat == "cau") {
+        this.selectedFriend = null;
+        this.selectedConversation = null;
+        this.$emit('refreshCloseChat', 'refresh');
+      }
+    },
   },
 
   computed: {
+    filteredConversations() {
+      return _.orderBy(this.conversations.filter(item => {
+        if (!this.search) return this.conversations;
+        return (item.name.toLowerCase()
+          .includes(this.search.toLowerCase()));
+      }), 'headline');
+    },
+
+    filteredFriends() {
+      return _.orderBy(this.friends.filter(item => {
+        if (!this.search) return this.friends;
+        return (item.name.toLowerCase()
+          .includes(this.search.toLowerCase()));
+      }), 'headline');
+    },
+
     sortedContacts() {
       return _.sortBy(this.contacts, [(contact) => {
           if (contact == this.selected) {

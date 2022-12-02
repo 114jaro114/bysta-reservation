@@ -23,13 +23,15 @@
               </v-row>
             </v-card-title>
             <hr class="mt-0 mb-0 custom-hr">
-            <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+            <v-form ref="form" v-model="valid" @keyup.native.enter="requestResetPassword" lazy-validation>
+              <!-- @submit.prevent -->
               <v-card-text class="p-3">
-                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field tabindex="1" prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
                 <div class="row">
                   <div class="col text-center">
+                    Ešte nemáš účet?
                     <router-link :to="{ name: 'Register' }">
-                      <span class="forgot-pass accent--text">Ešte nemáš účet? <span class="primary--text font-weight-bold">Zaregistruj sa</span></span>
+                      <span class="primary--text font-weight-bold">Zaregistruj sa</span>
                     </router-link>
                   </div>
                 </div>
@@ -77,6 +79,7 @@ export default {
     },
 
     requestResetPassword() {
+      this.$vuetify.goTo(0);
       if (this.validate()) {
         this.myloadingvariable = true;
         // call API

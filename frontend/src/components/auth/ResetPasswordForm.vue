@@ -23,12 +23,12 @@
               </v-row>
             </v-card-title>
             <hr class="mt-0 mb-0 custom-hr">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-form ref="form" v-model="valid" @keyup.native.enter="resetPassword" lazy-validation>
               <v-card-text class="p-3">
-                <v-text-field prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
-                <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Nové heslo" hint="Minimálne 4 znaky" counter
-                  @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
-                <v-text-field prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                <v-text-field tabindex="1" prepend-icon="mdi-email" v-model="email" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field tabindex="1" prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Nové heslo"
+                  hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
+                <v-text-field tabindex="1" prepend-icon="mdi-lock" v-model="confirmPassword" :append-icon="togglePasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'" :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
                   :type="togglePasswordConfirm ? 'text' : 'password'" label="Nové heslo znova" hint="Minimálne 4 znaky" counter @click:append="togglePasswordConfirm = !togglePasswordConfirm" filled clearable clear-icon="mdi-close"></v-text-field>
               </v-card-text>
               <hr class="mt-0 mb-0 custom-hr">
@@ -67,12 +67,12 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Heslo je povinné',
-        v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
+        v => (v && v.length >= 4) || 'Heslo musí obsahovať minimálne 4 znaky',
       ],
       confirmPassword: '',
       confirmPasswordRules: [
         v => !!v || 'Potvrdenie hesla je povinné',
-        v => v.length >= 4 || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
+        v => (v && v.length >= 4) || 'Potvrdenie hesla musí obsahovať minimálne 4 znaky',
         v => v === this.password || 'Zadané hesla sa nezhodujú',
       ],
       token: null,

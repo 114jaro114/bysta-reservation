@@ -13,4 +13,9 @@ class Notification extends Model
     //     'test',
     //     'status',
     // ];
+
+    public function fromUser()
+    {
+        return $this->hasOne(User::class, 'id', 'from')->select('id', 'name', 'email', 'status', 'avatar', 'created_at');;
+    }
 }

@@ -40,7 +40,8 @@ return [
               'useTLS' => false,
               'encrypted' => false,
               //bolo tu true
-              'host' => '127.0.0.1',
+              // 'host' => '127.0.0.1',
+              'host' => '192.168.1.118',
               // websockets
               'port' => 6001,
               'scheme' => 'http',

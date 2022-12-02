@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddReadToMessages extends Migration
+class CreateMessagesReactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddReadToMessages extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->boolean('read')->after('to')->default(false);
+        Schema::create('messages_reactions', function (Blueprint $table) {
+          $table->id();
+          $table->integer('message_id');
+          $table->integer('user_id');
+          $table->string('reaction_type');
+          $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddReadToMessages extends Migration
      */
     public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('read');
-        });
+        Schema::dropIfExists('messages_reactions');
     }
 }

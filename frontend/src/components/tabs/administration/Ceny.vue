@@ -327,7 +327,6 @@ export default {
 
   mounted() {
     this.getDataDashed();
-    console.log('mounted');
   },
 
   computed: {
@@ -396,11 +395,10 @@ export default {
           price: this.price,
           pricesFor: array2
         })
-        .then((resp) => {
-          console.log(resp);
+        .then(() => {
           this.overlay = false;
           // this.loading = false
-          this.text = 'Ceny boli úspešne zmenené';
+          this.text = 'Ceny boli úspešne zmenené.';
           this.snackbarSuccess = true;
           this.search = '';
           this.selected = [];
@@ -420,39 +418,48 @@ export default {
       this.overlay = true;
       axios.get(`${process.env.VUE_APP_API_URL}/prices/getPricesForGraph`)
         .then(res => {
-          this.lastUpdate = moment(res.data[0].created_at.created_at)
-            .format('YYYY-MM-DD HH:mm:ss');
-          localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
-            .format('YYYY-MM-DD HH:mm:ss'));
-          this.seriesDashed[0].data.splice(0, 12);
-          this.seriesDashed[1].data.splice(0, 12);
-          this.seriesDashed[2].data.splice(0, 12);
-          this.seriesDashed[3].data.splice(0, 12);
-          for (var i = 0; i < 12; i++) {
-            this.seriesDashed[0].data.push(res.data[0].adults[i].price);
-            this.seriesDashed[1].data.push(res.data[0].child_from_2_to_12[i].price);
-            this.seriesDashed[2].data.push(res.data[0].child_to_2[i].price);
-            this.seriesDashed[3].data.push(res.data[0].cleaningFee[i].price);
-          }
-
-          this.seriesDashed = [{
-              name: "Dospelí:",
-              data: this.seriesDashed[0].data
-            },
-            {
-              name: "Deti od 2 do 12 rokov:",
-              data: this.seriesDashed[1].data
-            },
-            {
-              name: 'Deti do 2 rokov:',
-              data: this.seriesDashed[2].data
-            },
-            {
-              name: 'Poplatok za upratovanie:',
-              data: this.seriesDashed[3].data
+          if (res.data[0].created_at != null) {
+            this.lastUpdate = moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss');
+            localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss'));
+            this.seriesDashed[0].data.splice(0, 12);
+            this.seriesDashed[1].data.splice(0, 12);
+            this.seriesDashed[2].data.splice(0, 12);
+            this.seriesDashed[3].data.splice(0, 12);
+            for (var i = 0; i < 12; i++) {
+              if (res.data[0].adults.length != 0) {
+                this.seriesDashed[0].data.push(res.data[0].adults[i].price);
+              }
+              if (res.data[0].child_from_2_to_12.length != 0) {
+                this.seriesDashed[1].data.push(res.data[0].child_from_2_to_12[i].price);
+              }
+              if (res.data[0].child_to_2.length != 0) {
+                this.seriesDashed[2].data.push(res.data[0].child_to_2[i].price);
+              }
+              if (res.data[0].cleaningFee.length != 0) {
+                this.seriesDashed[3].data.push(res.data[0].cleaningFee[i].price);
+              }
             }
-          ];
 
+            this.seriesDashed = [{
+                name: "Dospelí:",
+                data: this.seriesDashed[0].data
+              },
+              {
+                name: "Deti od 2 do 12 rokov:",
+                data: this.seriesDashed[1].data
+              },
+              {
+                name: 'Deti do 2 rokov:',
+                data: this.seriesDashed[2].data
+              },
+              {
+                name: 'Poplatok za upratovanie:',
+                data: this.seriesDashed[3].data
+              }
+            ];
+          }
           this.overlay = false;
         })
     },

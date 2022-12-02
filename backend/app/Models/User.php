@@ -9,13 +9,15 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Message;
 use App\Models\Notification;
-use App\Traits\Friendable;
+use App\Models\CommentReaction;
+use App\Models\Post;
+// use App\Traits\Friendable;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
     use Notifiable;
-    use Friendable;
+    // use Friendable;
 
     /**
      * The attributes that are mass assignable.
@@ -74,4 +76,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Notification::class);
     }
+    //
+    // public function post()
+    // {
+    //     return $this->hasMany(Post::class);
+    // }
 }

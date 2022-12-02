@@ -5,33 +5,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    userInfo: {
-      avatar: '',
-      created_at: '',
-      email: '',
-      id: '',
-      name: '',
-      status: '',
-      friendship_status: '',
-      user_requested: '',
-      requester: '',
-    },
-
     successRegisterAlert: {
       success: false
     },
 
-    successMakeReservation: {
-      success: false
-    },
-
-    successReservationData: {
-      event_name: '',
-      start_date: '',
-      end_date: '',
-      start_time: '',
-      end_time: '',
+    isLoggedOut: {
       username: '',
+      logout: false
     },
 
     speedDialState: {
@@ -46,14 +26,40 @@ export default new Vuex.Store({
       state: false,
     },
 
-    isLoggedOut: {
-      username: '',
-      logout: false
+    userInfo: {
+      avatar: '',
+      created_at: '',
+      email: '',
+      id: '',
+      name: '',
+      status: '',
+      friendship_status: '',
+      user_requested: '',
+      requester: '',
     },
+
+    notificationCounter: null,
 
     updatedPassword: false,
 
+    msgUnreadCounter: 0,
+
+    activatedAccount: false,
+
     contactListLoader: true,
+
+    successMakeReservation: {
+      success: false
+    },
+
+    successReservationData: {
+      event_name: '',
+      start_date: '',
+      end_date: '',
+      start_time: '',
+      end_time: '',
+      username: '',
+    },
 
     selectedUser: {
       id: null,
@@ -65,27 +71,31 @@ export default new Vuex.Store({
       unread: null,
     },
 
-    notificationCounter: null,
-    msgUnreadCounter: 0,
-    ratingState: true,
-    pendingReservation: 0,
-    activatedAccount: false,
-  },
-  getters: {
-    Data: state => {
-      return state.userInformations;
+    me: {
+      id: null,
+      name: null,
+      email: null,
+      status: null,
+      avatar: null,
+      created_at: null,
     },
 
+    friendshipRequestAction: {
+      status: null,
+      text: null
+    },
+
+    ratingState: true,
+
+    pendingReservation: 0,
+  },
+  getters: {
     successRegisterAlert: state => {
       return state.successRegisterAlert;
     },
 
-    successMakeReservation: state => {
-      return state.successMakeReservation;
-    },
-
-    successReservationData: state => {
-      return state.successReservationData;
+    isLoggedOut: state => {
+      return state.isLoggedOut
     },
 
     speedDialState: state => {
@@ -100,28 +110,48 @@ export default new Vuex.Store({
       return state.autoDarkLightModeState
     },
 
-    isLoggedOut: state => {
-      return state.isLoggedOut
-    },
-
-    updatedPassword: state => {
-      return state.updatedPassword
-    },
-
-    contactListLoader: state => {
-      return state.contactListLoader
-    },
-
-    selectedUser: state => {
-      return state.selectedUser
+    Data: state => {
+      return state.userInformations;
     },
 
     notificationCounter: state => {
       return state.notificationCounter
     },
 
+    updatedPassword: state => {
+      return state.updatedPassword
+    },
+
     msgUnreadCounter: state => {
       return state.msgUnreadCounter
+    },
+
+    activatedAccount: state => {
+      return state.activatedAccount
+    },
+
+    contactListLoader: state => {
+      return state.contactListLoader
+    },
+
+    successMakeReservation: state => {
+      return state.successMakeReservation;
+    },
+
+    successReservationData: state => {
+      return state.successReservationData;
+    },
+
+    selectedUser: state => {
+      return state.selectedUser
+    },
+
+    me: state => {
+      return state.me
+    },
+
+    friendshipRequestAction: state => {
+      return state.friendshipRequestAction
     },
 
     ratingState: state => {
@@ -132,11 +162,30 @@ export default new Vuex.Store({
       return state.pendingReservation
     },
 
-    activatedAccount: state => {
-      return state.activatedAccount
-    },
+
   },
   mutations: {
+    mutationSuccessRegister: (state, payload) => {
+      Vue.set(state.successRegisterAlert, 'success', payload.success);
+    },
+
+    mutationLogout: (state, payload) => {
+      Vue.set(state.isLoggedOut, 'username', payload.username);
+      Vue.set(state.isLoggedOut, 'logout', payload.logout);
+    },
+
+    mutationSpeedDialState: (state, payload) => {
+      Vue.set(state.speedDialState, 'state', payload.status);
+    },
+
+    mutationBottomNavigationState: (state, payload) => {
+      Vue.set(state.bottomNavigationState, 'state', payload.status);
+    },
+
+    mutationAutoDarkLightModeState: (state, payload) => {
+      Vue.set(state.autoDarkLightModeState, 'state', payload.status);
+    },
+
     mutationShowProfile: (state, payload) => {
       if (payload.id) {
         Vue.set(state.userInfo, 'avatar', payload.avatar);
@@ -153,8 +202,24 @@ export default new Vuex.Store({
       }
     },
 
-    mutationSuccessRegister: (state, payload) => {
-      Vue.set(state.successRegisterAlert, 'success', payload.success);
+    mutationNotificationCounter: (state, payload) => {
+      state.notificationCounter = payload.notifCounter
+    },
+
+    mutationUpdatedPassword: (state, payload) => {
+      state.updatedPassword = payload.state;
+    },
+
+    mutationMsgUnreadCounter: (state, payload) => {
+      state.msgUnreadCounter = payload.unreadCounter
+    },
+
+    mutationActivatedAccount: (state, payload) => {
+      state.activatedAccount = payload.state
+    },
+
+    mutationContactListLoader: (state, payload) => {
+      state.contactListLoader = payload.cancelLoader;
     },
 
     mutationSuccessReservation: (state, payload) => {
@@ -170,31 +235,6 @@ export default new Vuex.Store({
       Vue.set(state.successReservationData, 'username', payload.username);
     },
 
-    mutationSpeedDialState: (state, payload) => {
-      Vue.set(state.speedDialState, 'state', payload.status);
-    },
-
-    mutationBottomNavigationState: (state, payload) => {
-      Vue.set(state.bottomNavigationState, 'state', payload.status);
-    },
-
-    mutationAutoDarkLightModeState: (state, payload) => {
-      Vue.set(state.autoDarkLightModeState, 'state', payload.status);
-    },
-
-    mutationLogout: (state, payload) => {
-      Vue.set(state.isLoggedOut, 'username', payload.username);
-      Vue.set(state.isLoggedOut, 'logout', payload.logout);
-    },
-
-    mutationUpdatedPassword: (state, payload) => {
-      state.updatedPassword = payload.state;
-    },
-
-    mutationContactListLoader: (state, payload) => {
-      state.contactListLoader = payload.cancelLoader;
-    },
-
     mutationSelectedUser: (state, payload) => {
       Vue.set(state.selectedUser, 'id', payload.id);
       Vue.set(state.selectedUser, 'name', payload.name);
@@ -205,12 +245,18 @@ export default new Vuex.Store({
       Vue.set(state.selectedUser, 'unread', payload.unread);
     },
 
-    mutationNotificationCounter: (state, payload) => {
-      state.notificationCounter = payload.notifCounter
+    mutationMe: (state, payload) => {
+      Vue.set(state.me, 'id', payload.id);
+      Vue.set(state.me, 'name', payload.name);
+      Vue.set(state.me, 'email', payload.email);
+      Vue.set(state.me, 'status', payload.status);
+      Vue.set(state.me, 'avatar', payload.avatar);
+      Vue.set(state.me, 'created_at', payload.created_at);
     },
 
-    mutationMsgUnreadCounter: (state, payload) => {
-      state.msgUnreadCounter = payload.unreadCounter
+    mutationFriendshipRequestAction: (state, payload) => {
+      Vue.set(state.friendshipRequestAction, 'status', payload.status);
+      Vue.set(state.friendshipRequestAction, 'text', payload.text);
     },
 
     mutationRatingState: (state, payload) => {
@@ -220,26 +266,15 @@ export default new Vuex.Store({
     mutationPendingReservation: (state, payload) => {
       state.pendingReservation = payload.count
     },
-
-    mutationActivatedAccount: (state, payload) => {
-      state.activatedAccount = payload.state
-    },
   },
-  actions: {
-    showProfile: (context, payload) => {
-      context.commit('mutationShowProfile', payload)
-    },
 
+  actions: {
     successRegister: (context, payload) => {
       context.commit('mutationSuccessRegister', payload)
     },
 
-    successReservation: (context, payload) => {
-      context.commit('mutationSuccessReservation', payload)
-    },
-
-    reservationData: (context, payload) => {
-      context.commit('mutationReservationData', payload)
+    isLoggedOut: (context, payload) => {
+      context.commit('mutationLogout', payload)
     },
 
     speedDialState: (context, payload) => {
@@ -254,28 +289,48 @@ export default new Vuex.Store({
       context.commit('mutationAutoDarkLightModeState', payload)
     },
 
-    isLoggedOut: (context, payload) => {
-      context.commit('mutationLogout', payload)
-    },
-
-    updatedPassword: (context, payload) => {
-      context.commit('mutationUpdatedPassword', payload)
-    },
-
-    contactListLoader: (context, payload) => {
-      context.commit('mutationContactListLoader', payload)
-    },
-
-    selectedUser: (context, payload) => {
-      context.commit('mutationSelectedUser', payload)
+    showProfile: (context, payload) => {
+      context.commit('mutationShowProfile', payload)
     },
 
     notificationCounter: (context, payload) => {
       context.commit('mutationNotificationCounter', payload)
     },
 
+    updatedPassword: (context, payload) => {
+      context.commit('mutationUpdatedPassword', payload)
+    },
+
     msgUnreadCounter: (context, payload) => {
       context.commit('mutationMsgUnreadCounter', payload)
+    },
+
+    activatedAccount: (context, payload) => {
+      context.commit('mutationActivatedAccount', payload)
+    },
+
+    contactListLoader: (context, payload) => {
+      context.commit('mutationContactListLoader', payload)
+    },
+
+    successReservation: (context, payload) => {
+      context.commit('mutationSuccessReservation', payload)
+    },
+
+    reservationData: (context, payload) => {
+      context.commit('mutationReservationData', payload)
+    },
+
+    selectedUser: (context, payload) => {
+      context.commit('mutationSelectedUser', payload)
+    },
+
+    me: (context, payload) => {
+      context.commit('mutationMe', payload)
+    },
+
+    friendshipRequestAction: (context, payload) => {
+      context.commit('mutationFriendshipRequestAction', payload)
     },
 
     ratingState: (context, payload) => {
@@ -284,10 +339,6 @@ export default new Vuex.Store({
 
     pendingReservation: (context, payload) => {
       context.commit('mutationPendingReservation', payload)
-    },
-
-    activatedAccount: (context, payload) => {
-      context.commit('mutationActivatedAccount', payload)
     },
   }
 });

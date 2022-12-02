@@ -1,17 +1,17 @@
 <template>
 <div class="phone-viewport w-100" :style="test">
   <v-bottom-navigation color="secondary" :input-value="this.$store.getters['bottomNavigationState'].state" background-color="primary" app shift grow>
-    <v-btn to="/home" value="home">
-      <span>Domov</span>
-      <v-icon color="secondary">mdi-home</v-icon>
+    <v-btn class="text-white" to="/home" value="home">
+      <span class="text--white">Domov</span>
+      <v-icon color="white">mdi-home</v-icon>
     </v-btn>
-    <v-btn to="/administration" value="administration">
+    <v-btn class="text-white" to="/administration" value="administration">
       <span>Administrácia</span>
-      <v-icon color="secondary">mdi-clipboard-text</v-icon>
+      <v-icon color="white">mdi-clipboard-text</v-icon>
     </v-btn>
-    <v-btn to="/reservation" value="reservation">
+    <v-btn class="text-white" to="/reservation" value="reservation">
       <span>Rezervácia</span>
-      <v-icon color="secondary">mdi-calendar-month</v-icon>
+      <v-icon color="white">mdi-calendar-month</v-icon>
     </v-btn>
     <!-- <v-btn to="/messenger" value="messenger">
       <span>Messenger</span> -->
@@ -20,9 +20,9 @@
       </v-badge> -->
     <!-- <v-icon color="secondary">mdi-facebook-messenger</v-icon>
     </v-btn> -->
-    <v-btn to="/settings" value="settings">
+    <v-btn class="text-white" to="/settings" value="settings">
       <span>Nastavenia</span>
-      <v-icon color="secondary">mdi-cog</v-icon>
+      <v-icon color="white">mdi-cog</v-icon>
     </v-btn>
   </v-bottom-navigation>
 

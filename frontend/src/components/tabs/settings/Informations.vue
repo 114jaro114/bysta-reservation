@@ -1,76 +1,77 @@
 <template>
 <div class="informations w-100 h-100">
-  <v-lazy :options="{
+  <v-container>
+    <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
-    <v-row justify="center" class="ml-0 mr-0">
-      <v-col class="pl-3 pr-3">
-        <v-expansion-panels class="elevation-0" accordion focusable>
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Krajina/región</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>krajina</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>O aktuálnej verzií</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>O aktuálnej verzií</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Podmienky používania</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>Podmienky používania</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Zásady ochrany osobných údajov</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>Zásady ochrany osobných údajov</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Časté otázky</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>Časté otázky</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Kontakt</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>Kontakt</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-divider class="m-0" />
-          <v-expansion-panel>
-            <v-expansion-panel-header>
-              <span>Poďakovanie</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <span>Poďakovanie</span>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+      <v-row justify="center" class="ml-0 mr-0">
+        <v-col class="pl-3 pr-3">
+          <v-expansion-panels class="elevation-0" accordion focusable>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Krajina/región</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>krajina</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>O aktuálnej verzií</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>O aktuálnej verzií</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Podmienky používania</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>Podmienky používania</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Zásady ochrany osobných údajov</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>Zásady ochrany osobných údajov</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Časté otázky</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>Časté otázky</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Kontakt</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>Kontakt</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-divider class="m-0" />
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <span>Poďakovanie</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <span>Poďakovanie</span>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
 
-        <!-- <v-expansion-panels color="primary" accordion>
+          <!-- <v-expansion-panels color="primary" accordion>
         <v-expansion-panel v-for="(item,i) in items" :key="i" ripple>
           <v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -78,7 +79,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels> -->
-        <!-- <v-card color=" primary pt-3 pb-3" dark>
+          <!-- <v-card color=" primary pt-3 pb-3" dark>
         <span class="secondary--color">Krajina/region</span>
         <v-divider class="secondary" />
         <span class="secondary--color">O aktuálnej verzií</span>
@@ -93,9 +94,10 @@
         <v-divider class="secondary" />
         <span class="secondary--color">Poďakovanie</span>
       </v-card> -->
-      </v-col>
-    </v-row>
-  </v-lazy>
+        </v-col>
+      </v-row>
+    </v-lazy>
+  </v-container>
 </div>
 </template>
 

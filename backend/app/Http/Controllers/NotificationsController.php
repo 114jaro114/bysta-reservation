@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Notification;
-use App\Events\Notifi;
+use App\Events\Notifications;
 use Illuminate\Support\Facades\DB;
 
 class NotificationsController extends Controller
@@ -29,16 +29,17 @@ class NotificationsController extends Controller
         return response()->json($allNotif);
     }
 
-    public function getNotificationRelevant($id)
+    public function getNotificationSaved($id)
     {
         // get all notifications for user
-        $allNotif = Notification::where([['to', '=', auth()->user()->id], ['status', '=', 'relevant']])->get();
+        $allNotif = Notification::where([['to', '=', auth()->user()->id], ['status', '=', 'saved']])->get();
         return response()->json($allNotif);
     }
 
     public function sendNotification(Request $request)
     {
         $notification = Notification::create([
+            'from' => $request->from,
             'to' => $request->recipient,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
@@ -47,7 +48,7 @@ class NotificationsController extends Controller
             'status' => $request->status,
         ]);
 
-        broadcast(new Notifi($notification))->toOthers();
+        broadcast(new Notifications($notification->load('fromUser')))->toOthers();
 
         return response()->json($notification);
     }
@@ -60,12 +61,20 @@ class NotificationsController extends Controller
         return response()->json("successfully deleted notification");
     }
 
-    public function addToRelevant(Request $request)
+    public function addToSaved(Request $request)
     {
         foreach ($request->ids as $ids):
-          Notification::where('id', $ids)->update(['status' => 'relevant']);
+          Notification::where('id', $ids)->update(['status' => 'saved']);
         endforeach;
-        return response()->json("successfully move notification to relevant");
+        return response()->json("successfully move notification to saved notifications");
+    }
+
+    public function addToAll(Request $request)
+    {
+        foreach ($request->ids as $ids):
+          Notification::where('id', $ids)->update(['status' => 'all']);
+        endforeach;
+        return response()->json("successfully move notification from saved notifications to all");
     }
 
     public function markAsRead()
@@ -73,5 +82,27 @@ class NotificationsController extends Controller
         Notification::where('status', 'new')->update(['status' => 'all']);
         //"successfully deleted notification"
         return response()->json("successfully updated notifications status");
+    }
+
+    public function getFewNewestNotifications() {
+      $user_id = auth()->user()->id;
+      $fewNewestMNotifications = DB::select("select notifications.*, notifications.status as status_notif, users.name, users.email, users.status, users.avatar
+       FROM notifications
+       INNER JOIN users ON users.id = notifications.from
+       WHERE notifications.status = 'new' AND notifications.to = $user_id
+       ORDER BY notifications.created_at DESC
+       LIMIT 3");
+      return response()->json($fewNewestMNotifications);
+    }
+
+    public function getFewOldNotifications() {
+      $user_id = auth()->user()->id;
+      $fewOldMNotifications = DB::select("select notifications.*, users.name, users.email, users.status, users.avatar
+       FROM notifications
+       INNER JOIN users ON users.id = notifications.from
+       WHERE notifications.status = 'all' AND notifications.to = $user_id
+       ORDER BY notifications.created_at DESC
+       LIMIT 3");
+      return response()->json($fewOldMNotifications);
     }
 }

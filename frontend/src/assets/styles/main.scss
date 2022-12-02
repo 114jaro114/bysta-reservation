@@ -1,16 +1,16 @@
-@import url("https://fonts.googleapis.com/css?family=Nunito");
 @import 'libraries'; // @import 'datepicker2';
-@import 'chat.scss'; /* Hide scrollbar for Chrome, Safari and Opera */
+// @import 'chat.scss'; /* Hide scrollbar for Chrome, Safari and Opera */
 @import 'colorApp.scss';
+@import 'emojiPicker.scss';
 @import 'scrollbar.scss';
-
-#app {
-  margin: 0;
-}
+@import 'autofill.scss';
+@import 'language.scss';
 
 body::-webkit-scrollbar {
   display: none;
+  height: 100vh;
 }
+
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
   -ms-overflow-style: none;
@@ -19,38 +19,33 @@ body {
   /* Firefox */
 }
 
+a:hover {
+  text-decoration: none !important;
+}
+
+.theme--dark.v-navigation-drawer {
+  background: #1e1e1e;
+}
+
+.theme--light.v-application {
+  background: #f5f5f5;
+}
+
 .vue-tel-input-vuetify .v-text-field .v-select__selections .vti__flag {
   margin-left: 0;
 }
-//toolbar
-// .notiftoolbar .v-toolbar {
-//   height: 64px !important;
-// }
-//
-// .notiftoolbar .v-toolbar__content {
-//   height: 64px !important;
-// }
-//
-// .notiftoolbar .v-toolbar__extension {
-//   height: 4px !important;
-// }
-//
-// .reservationtoolbar .v-toolbar {
-//   height: 64px !important;
-// }
-//
-// .toptoolbar .v-toolbar {
-//   height: 56px !important;
-// }
-//
-// .toptoolbar .v-toolbar__content {
-//   height: 56px !important;
-// }
-//
-// .v-app-bar {
-//   height: 104px !important;
-// }
-//
+
+.v-app-bar.v-toolbar.v-sheet {
+  height: 64px !important;
+}
+
+.v-toolbar__content {
+  height: 64px !important;
+}
+
+.v-toolbar {
+  height: 64px !important;
+}
 
 button:focus {
   outline: unset !important;
@@ -68,34 +63,6 @@ button:focus {
 
 .theme--dark.v-badge .v-badge__badge::after {
   border-color: #363636;
-}
-// autofill light
-
-.theme--light input:-webkit-autofill,
-.theme--light input:-webkit-autofill:focus .theme--light input:-webkit-autofill,
-.theme--light input:-webkit-autofill:hover,
-.theme--light select:-webkit-autofill,
-.theme--light select:-webkit-autofill:focus,
-.theme--light select:-webkit-autofill:hover,
-.theme--light textarea:-webkit-autofill,
-.theme--light textarea:-webkit-autofill:hover .theme--light textarea:-webkit-autofill:focus {
-  border: none !important;
-  -webkit-text-fill-color: rgba(0, 0, 0, 0.87) !important;
-  transition: background-color 5000s ease-in-out 0s;
-}
-// autofill dark
-
-.theme--dark input:-webkit-autofill,
-.theme--dark input:-webkit-autofill:focus .theme--dark input:-webkit-autofill,
-.theme--dark input:-webkit-autofill:hover,
-.theme--dark select:-webkit-autofill,
-.theme--dark select:-webkit-autofill:focus,
-.theme--dark select:-webkit-autofill:hover,
-.theme--dark textarea:-webkit-autofill,
-.theme--dark textarea:-webkit-autofill:hover .theme--dark textarea:-webkit-autofill:focus {
-  border: none !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  transition: background-color 5000s ease-in-out 0s;
 }
 
 .v-tabs-slider-wrapper {

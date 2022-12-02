@@ -5,71 +5,61 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Friendship;
 use App\Models\User;
+use App\Events\Friendships;
+use App\Events\Friendship_remove;
 use Illuminate\Support\Facades\DB;
 
-use App\Traits\Friendable;
+// use App\Traits\Friendable;
 
 class FriendshipsController extends Controller
 {
     public function getFriendships()
     {
-        $friends = array();
-        $f1 = DB::table('friendships')->where('requester', auth()->user()->id)
-                    ->select('friendship_status', 'requester', 'user_requested')
-                    ->get();
-        // $f1 = Friendship::where('requester', auth()->user()->id)
-        //             ->get();
-        foreach ($f1 as $friendship):
-          $test = DB::table('users')
-                    // ->join('friendships', 'users.id', '=', 'friendships.user_requested')
-                    ->where("users.id", $friendship->user_requested)
-                    ->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
-                    ->get();
-        // , 'friendships.requester', 'friendships.friendship_status', 'friendships.user_requested'
-        $friends[] = array(
-            'id' => $test[0]->id,
-            'name' => $test[0]->name,
-            'email' => $test[0]->email,
-            'status' => $test[0]->status,
-            'avatar' => $test[0]->avatar,
-            'created_at' => $test[0]->created_at,
-            'friendship_status' => $friendship->friendship_status,
-            'requester' => $friendship->requester,
-            'user_requested' => $friendship->user_requested
-          );
-        // array_push($friends, User::find($friendship->user_requested));
-        endforeach;
+        $query = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.user_requested')
+                                         ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                         ->where('requester', '=', auth()->user()->id)
+                                         ->where('friendship_status', '1')
+                                         ->get();
+        $query2 = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.requester')
+                                         ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                         ->where('user_requested', '=', auth()->user()->id)
+                                         ->where('friendship_status', '1')
+                                         ->get();
 
-
-        $friends2 = array();
-        $f2 = DB::table('friendships')->where('user_requested', auth()->user()->id)
-                    ->select('friendship_status', 'requester', 'user_requested')
-                    ->get();
-        // $f1 = Friendship::where('user_requested', auth()->user()->id)
-        //             ->get();
-        foreach ($f2 as $friendship2):
-            $test2 = DB::table('users')
-                      // ->join('friendships', 'users.id', '=','friendships.')
-                      ->where("users.id", $friendship2->requester)
-                      ->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
-                      ->get();
-        // , 'friendships.requester', 'friendships.friendship_status', 'friendships.user_requested'
-        $friends2[] = array(
-              'id' => $test2[0]->id,
-              'name' => $test2[0]->name,
-              'email' => $test2[0]->email,
-              'status' => $test2[0]->status,
-              'avatar' => $test2[0]->avatar,
-              'created_at' => $test2[0]->created_at,
-              'friendship_status' => $friendship2->friendship_status,
-              'requester' => $friendship2->requester,
-              'user_requested' => $friendship2->user_requested
-            );
-        // // array_push($friends, User::find($friendship->requester));
-        endforeach;
-
-        $friendsAll = array_merge($friends, $friends2);
+        $friendsAll = $query->merge($query2)->all();
         return response()->json($friendsAll);
+    }
+
+    public function getFriendshipsProfile($id) {
+      $query = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.user_requested')
+                                       ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                       ->where('requester', '=', $id)
+                                       ->where('friendship_status', '1')
+                                       ->get();
+      $query2 = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.requester')
+                                       ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                       ->where('user_requested', '=', $id)
+                                       ->where('friendship_status', '1')
+                                       ->get();
+
+      $friendsAll = $query->merge($query2)->all();
+      return response()->json([$friendsAll, count($friendsAll)]);
+    }
+
+    public function getAllFriendshipRequests()
+    {
+       $query = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.user_requested')
+                                        ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                        ->where('friendships.requester', '=', auth()->user()->id)
+                                        ->where('friendship_status', '2')
+                                        ->get();
+       $query2 = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.requester')
+                                        ->select('friendships.*', 'users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                                        ->where('friendships.user_requested', '=', auth()->user()->id)
+                                        ->where('friendship_status', '2')
+                                        ->get();
+       $allFriendshipRequests = json_decode( json_encode($query->merge($query2)->all()), true);
+       return response()->json($allFriendshipRequests);
     }
 
     public function sendFriendshipRequest(Request $request)
@@ -80,23 +70,70 @@ class FriendshipsController extends Controller
         } elseif (Friendship::where('requester', '=', $request->user_requested)->where('user_requested', '=', auth()->user()->id)->exists()) {
             return response()->json('uz existuje2');
         } else {
-            $friendships = Friendship::create([
+            $friendship = Friendship::create([
               'requester' => auth()->user()->id,
               'user_requested' => $request->user_requested,
               'friendship_status' => $request->friendship_status
-          ]);
+            ]);
+
+            broadcast(new Friendships($friendship->load('fromUser')));
         }
-        return response()->json($friendships);
+
+        return response()->json($friendship);
+    }
+
+    public function checkIfUserIsMyFriend($id)
+    {
+        if ($id == auth()->user()->id) {
+          $userData = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                         ->where('id', '=', auth()->user()->id)
+                         ->get();
+          return response()->json([-1, $userData]);
+        } else {
+          $checkIfUserIsMyFriend = DB::table('friendships')->where([['requester', '=', $id],
+                                                                   ['user_requested', '=', auth()->user()->id],
+                                                                   ['friendship_status', '=', '1']])
+                                                          ->orWhere([['requester', '=', auth()->user()->id],
+                                                                     ['user_requested', '=', $id],
+                                                                     ['friendship_status', '=', '1']])
+                                                          ->get();
+
+          if (count($checkIfUserIsMyFriend) == 0) {
+           $userData = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                            ->where('id', '=', $id)
+                            ->get();
+          } else if ($checkIfUserIsMyFriend[0]->requester == auth()->user()->id) {
+            $userData = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                             ->where('id', '=', $checkIfUserIsMyFriend[0]->user_requested)
+                             ->get();
+          } else {
+            $userData = DB::table('users')->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
+                             ->where('id', '=', $checkIfUserIsMyFriend[0]->requester)
+                             ->get();
+          }
+          return response()->json([count($checkIfUserIsMyFriend), $userData, count($userData)]);
+        }
     }
 
     public function acceptFriendshipRequest(Request $request)
     {
-        $friendships = DB::table('friendships')
+        $friendship = DB::table('friendships')
                          ->where('requester', '=', $request->requester)
                          ->where('user_requested', '=', auth()->user()->id)
                          ->update(['friendship_status' => $request->friendship_status]);
-        return response()->json($friendships);
+        return response()->json($friendship);
     }
+
+    public function refuseFriendshipRequest(Request $request)
+    {
+        $friendship = DB::table('friendships')
+                        ->where([
+                                ['requester', '=', $request->requester],
+                                ['user_requested', '=', $request->user_requested]
+                        ])->delete();
+        return response()->json($friendship);
+    }
+
 
     public function removeFromFriendshipList(Request $request)
     {
@@ -106,86 +143,36 @@ class FriendshipsController extends Controller
                 ['user_requested', '=', $request->user_requested]
         ])
          ->delete();
-        return response()->json($request);
+         $friendship = (object) array('requester' => $request->requester, 'user_requested' => $request->user_requested);
+         broadcast(new Friendship_remove($friendship));
+        return response()->json($friendship);
     }
 
+    public function getCountMyFriendshipRequests()
+    {
+        $countMyFriendshipRequests = DB::table('friendships')
+                                        ->where([['user_requested', '=', auth()->user()->id], ['friendship_status', '=', '2']])
+                                        ->count();
+        return response()->json($countMyFriendshipRequests);
+    }
 
     public function getAllPossibleFriends()
     {
-        $array1 = array();
-        $alreadyFriends1 = DB::table('friendships')->where('requester', auth()->user()->id)
-                             // ->select('user_requested')
-                             ->select('friendship_status', 'requester', 'user_requested')
-                             ->get();
-        foreach ($alreadyFriends1 as $row1):
-         $test = DB::table('users')
-                   ->where("users.id", $row1->user_requested)
-                   ->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
-                   ->get();
-        $array1[] = array(
-           'id' => $test[0]->id,
-           // 'friendship_status' => $alreadyFriends1->friendship_status,
-           // 'requester' => $alreadyFriends1->requester,
-           // 'user_requested' => $alreadyFriends1->user_requested
-         );
-        endforeach;
+        $query = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.user_requested')
+                                         ->select('users.id')
+                                         ->where('friendships.requester', '=', auth()->user()->id)
+                                         ->get();
+        $query2 = DB::table('friendships')->join('users', 'users.id', '=', 'friendships.requester')
+                                         ->select('users.id')
+                                         ->where('friendships.user_requested', '=', auth()->user()->id)
+                                         ->get();
+        $friendsAll = json_decode( json_encode($query->merge($query2)->all()), true);
 
-        $array2 = array();
-        $alreadyFriends2 = DB::table('friendships')->where('user_requested', auth()->user()->id)
-                             // ->select('requester')
-                             ->select('friendship_status', 'requester', 'user_requested')
-                             ->get();
-        foreach ($alreadyFriends2 as $row2):
-            $test2 = DB::table('users')
-                      ->where("users.id", $row2->requester)
-                      ->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
-                      ->get();
-        $array2[] = array(
-          'id' => $test2[0]->id,
-          // 'friendship_status' => $alreadyFriends2->friendship_status,
-          // 'requester' => $alreadyFriends2->requester,
-          // 'user_requested' => $alreadyFriends2->user_requested
-        );
-        endforeach;
+        array_push($friendsAll, auth()->user()->id);
 
-        $friendsAll = array_merge($array1, $array2);
-        //no me
-        $friendsAll[] = array(
-          'id' => auth()->user()->id,
-        );
-        $allUsersWithoutFriends = DB::table('users')
-          ->whereNotIn('id', $friendsAll)
-          ->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')
-          ->get();
+        $allUsersWithoutFriendsAndMe =  User::whereNotIn('id', $friendsAll)->select('users.id', 'users.name', 'users.email', 'users.status', 'users.avatar', 'users.created_at')->get();
 
-
-        ///////////////////////////////////
-        // $array3 = array();
-        // foreach ($allUsersWithoutFriends as $row3):
-        //         $skuska = DB::table('friendships')
-        //                   ->where('requester', '=', $row3->id)
-        //                   ->orWhere('requester', '=', $row3->id)
-        //                    // ->select('user_requested')
-        //                   ->select('friendship_status', 'requester', 'user_requested')
-        //                   ->get();
-        // if ($skuska != null) {
-        //     $array3[] = array(
-        //     'id' => $row3->id,
-        //     'name' => $row3->name,
-        //     'email' => $row3->email,
-        //     'status' => $row3->status,
-        //     'avatar' => $row3->avatar,
-        //     'created_at' => $row3->created_at,
-        //     'friendship_status' => $skuska[0]->friendship_status,
-        //     'requester' => $skuska[0]->requester,
-        //     'user_requested' => $skuska[0]->user_requested
-        //     // 'friendship_status' => $alreadyFriends2->friendship_status,
-        //     // 'requester' => $alreadyFriends2->requester,
-        //     // 'user_requested' => $alreadyFriends2->user_requested
-        //   );
-        // }
-        // endforeach;
-        return response()->json($allUsersWithoutFriends);
+        return response()->json($allUsersWithoutFriendsAndMe);
     }
 
     public function contactForm(Request $request)
@@ -238,9 +225,40 @@ class FriendshipsController extends Controller
         }
     }
 
+    public function getNumberOfFriends() {
+      $numberOfFriends = DB::table('friendships')
+                           ->where([['requester', '=', auth()->user()->id],['friendship_status', '=', 1]])
+                           ->orWhere([['user_requested', '=', auth()->user()->id],['friendship_status', '=', 1]])
+                           ->count();
+      return response()->json($numberOfFriends);
+    }
+
     public function getContactForm()
     {
         $getData = DB::table('users_contact_info')->where('user_id', auth()->user()->id)->get();
         return response()->json($getData);
+    }
+
+    public function getapf(Request $request) {
+      $data = $request->text;
+      if ($data == '') {
+        $test = array();
+        return response($test);
+      } else {
+        $array1 = DB::table('friendships')
+                    ->join('users','users.id','=','friendships.user_requested')
+                    ->select('friendships.user_requested', 'users.name', 'users.email', 'users.status', 'users.avatar')
+                    ->where([['requester', '=', auth()->user()->id], ['friendship_status', '=', '1'], ['users.name', 'LIKE', '%'.$data.'%']])
+                    ->get();
+        $array2 = DB::table('friendships')
+                    ->join('users','users.id','=','friendships.requester')
+                    ->select('friendships.requester', 'users.name', 'users.email', 'users.status', 'users.avatar')
+                    ->where([['user_requested', '=', auth()->user()->id], ['friendship_status', '=', '1'], ['users.name', 'LIKE', '%'.$data.'%']])
+                    ->get();
+
+        $merged = $array2->merge($array1);
+        $result = $merged->all();
+        return response($result);
+      }
     }
 }

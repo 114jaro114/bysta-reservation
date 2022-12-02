@@ -1,74 +1,186 @@
 <template>
-<div class="messenger w-100 h-100">
-  <v-card elevation="0">
-    <v-app-bar fixed flat>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title class="position-absolute" style="right:14px">
-        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_dark.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_dark.png')"></v-img>
-        </span>
-        <span class="md-title font-weight-bold" v-else>
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_light.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_light.png')"></v-img>
-        </span>
-      </v-toolbar-title>
-
-      <template v-slot:extension>
-        <v-tabs grow>
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
-        </v-tabs>
-      </template>
-    </v-app-bar>
-
-    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" grow>
-      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-        <!-- messenger -->
-        <chat-app></chat-app>
-      </v-tab-item>
-      <NavigationDrawer :drawer="drawer" />
-    </v-tabs-items>
-  </v-card>
+<div class="messenger h-100">
+  <ContactsList @refreshCloseChat="refreshCloseChat" :closeChat="closeChat" :contacts="contacts" @selected="startConversationWith" />
+  <v-main class="mt-16 pt-0 pb-0 ml-lg-1 ml-md-1">
+    <Conversation @closeChat="onClickChild" :contact="selectedContact" :messages="messages" :overlayMessages="overlayMessages" @new="saveNewMessage" />
+  </v-main>
 </div>
 </template>
 
 <script>
-import ChatApp from "../components/messenger/ChatApp.vue";
-import NavigationDrawer from "@/components/NavigationDrawer.vue";
+import Conversation from "../components/messenger/Conversation.vue";
+import ContactsList from "../components/messenger/ContactsList.vue";
+import axios from 'axios';
 export default {
   name: "Messenger",
   components: {
-    ChatApp,
-    NavigationDrawer,
+    Conversation,
+    ContactsList,
   },
-  props: ['drawerNew'],
   data() {
     return {
-      username: localStorage.getItem("username"),
-      drawer: false,
-      tab: null,
-      activeTab: '/messenger',
-      tabs: [{
-        id: 1,
-        name: 'Messenger',
-        route: '/messenger'
-      }],
+      //messenger
+      selectedContact: null,
+      messages: [],
+      contacts: [],
+      autoselectMenu: false,
+      overlayMessages: true,
+      closeChat: null,
     }
   },
   updated() {
-    this.drawer = this.drawerNew;
+    this.selectedContact = this.$store.getters['selectedUser'];
   },
 
-  watch: {
-    group() {
-      this.drawer = false
+  methods: {
+    refreshCloseChat(value) {
+      if (value == 'refresh') {
+        this.closeChat = null;
+      }
+    },
+
+    onClickChild(value) {
+      this.closeChat = value;
+    },
+
+    friend_list() {
+      this.$store.dispatch('selectedUser', {
+        id: null,
+        name: null,
+        email: null,
+        status: null,
+        avatar: null,
+        created_at: null,
+        unread: null,
+      });
+    },
+
+    startConversationWith(contact) {
+      this.overlayMessages = true;
+      const api = `${process.env.VUE_APP_API_URL}/conversation/${contact.id}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        .then(res => {
+          this.$root.toolbar.fewNewestMessages.fewNewestMessages.forEach((elem, index) => {
+            if (elem.name == contact.name) {
+              this.$root.toolbar.fewNewestMessages.fewNewestMessages[index].read = 1;
+            }
+          })
+          this.messages = res.data;
+          this.selectedContact = contact;
+          this.overlayMessages = false;
+          //unread messages
+          const api = `${process.env.VUE_APP_API_URL}/getAllUnreadMessages`;
+          axios.get(api, config)
+            .then((res) => {
+              this.$store.dispatch('msgUnreadCounter', {
+                unreadCounter: res.data
+              });
+            });
+        });
+    },
+    saveNewMessage(message) {
+      this.messages.push(message);
+    },
+
+    handleIncoming(message) {
+      if (this.selectedContact && message.from == this.selectedContact.id) {
+        this.saveNewMessage(message);
+        return;
+      }
+    },
+
+    fetchMessages() {
+      if (this.selectedContact != null) {
+        const api = `${process.env.VUE_APP_API_URL}/conversation/${this.selectedContact.id}`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            console.log(res);
+            this.messages = res.data;
+          });
+      }
     },
   },
-  methods: {}
+
+  mounted() {
+    this.friend_list();
+  },
+
+  created() {
+    //presence channel
+    window.Echo.join('messages.' + localStorage.getItem("user_id"))
+      .listen('NewMessage', (e) => {
+        console.log(e.message);
+        this.handleIncoming(e.message);
+        if (this.$route.fullPath != `/messenger?name=${e.message.from_contact.name}`) {
+          this.$store.dispatch('msgUnreadCounter', {
+            unreadCounter: e.message.totalUnreadMsgTo
+          });
+        }
+        // if (e.message.to == localStorage.getItem("user_id")) {
+        //   this.$store.dispatch('msgUnreadCounter', {
+        //     unreadCounter: e.message.totalUnreadMsgTo
+        //   });
+        // }
+      })
+
+    window.Echo.join('messagesstatusread.' + localStorage.getItem("user_id"))
+      .listen('MessageStatusRead', (e) => {
+        this.messages.forEach((elem, index) => {
+          if (elem.from == e.id) {
+            this.messages[index].read = 1;
+          }
+        });
+      })
+
+
+    window.Echo.join('messagereaction')
+      .listen('MessageReactionData', (e) => {
+        // console.log(e);
+        this.messages.forEach((elem, index) => {
+          if (elem.id == e.allDataMessage[0].id) {
+            if (e.dataType == 'addUpdateMessageReaction' || e.dataType == 'deleteMessageReaction') {
+              this.messages[index].messagereactionmodel = e.allDataMessage[0].messagereactionmodel;
+              this.messages[index].count_reactions = e.allDataMessage[0].count_reactions;
+              this.messages[index].like = e.allDataMessage[0].like;
+              this.messages[index].heart = e.allDataMessage[0].heart;
+              this.messages[index].funny = e.allDataMessage[0].funny;
+              this.messages[index].surprise = e.allDataMessage[0].surprise;
+              this.messages[index].sad = e.allDataMessage[0].sad;
+              this.messages[index].angry = e.allDataMessage[0].angry;
+            }
+          }
+        })
+      });
+
+    this.selectedContact = this.$store.getters['selectedUser'];
+    // console.log(this.$store.getters['selectedUser']);
+    //private channel
+    // window.Echo.private(`messages.${localStorage.getItem("user_id")}`)
+    //   .listen('NewMessage', (e) => {
+    //     this.handleIncoming(e.message);
+    //   })
+  },
 }
 </script>
 
-<style type="scss">
-.md-toolbar.md-large.md-dense {
-  min-height: 64px !important;
+<style type="scss" scoped>
+.friend-list .theme--dark.v-badge .v-badge__badge:after {
+  border-color: #363636;
+}
+
+.friend-list .theme--light.v-badge .v-badge__badge:after {
+  border-color: #f5f5f5;
 }
 </style>

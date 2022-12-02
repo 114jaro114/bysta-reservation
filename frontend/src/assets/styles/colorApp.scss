@@ -1,28 +1,28 @@
 .theme--light.v-tabs-items {
   background-color: #f5f5f5;
-  margin-top: 104px;
+  // margin-top: 112px;
 }
 
 .theme--dark.v-tabs-items {
   background-color: #272727;
-  margin-top: 104px;
+  // margin-top: 112px;
 }
 
-.theme--light.v-application {
-  background-color: #f5f5f5 !important;
-}
-
-.theme--dark.v-application {
-  background-color: #272727 !important;
-}
+// .theme--light.v-application {
+//   background-color: #f5f5f5 !important;
+// }
+//
+// .theme--dark.v-application {
+//   background-color: #272727 !important;
+// }
 
 .v-window__container {
   padding-bottom: 12px;
   min-height: 86vh;
 }
-// .theme--light.v-application {
-//   background-color: #f5f5f5;
-// }
+.theme--light.v-application {
+  background-color: #f5f5f5;
+}
 //
 //toolbar
 

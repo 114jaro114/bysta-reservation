@@ -1,5 +1,5 @@
 <template>
-<div class="delivered w-100 h-100">
+<div class="all w-100 h-100">
   <!-- <v-lazy :options="{
             threshold: .8
           }" transition="fade-transition"> -->
@@ -210,7 +210,7 @@
 import axios from 'axios'
 import _ from 'lodash';
 export default {
-  name: "Delivered",
+  name: "All",
   components: {},
   data() {
     return {

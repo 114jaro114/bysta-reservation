@@ -1,164 +1,141 @@
 <template>
 <div class="price_list w-100 h-100">
-  <v-card elevation="0">
-    <v-app-bar fixed flat>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+  <v-container class="mt-16 mb-4">
+    <v-card class="pt-3 pt-lg-5 pt-md-5">
+      <v-card-text class="p-0 text-center">
+        <v-overlay :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
 
-      <v-toolbar-title class="position-absolute" style="right:14px">
-        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_dark.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_dark.png')"></v-img>
-        </span>
-        <span class="md-title font-weight-bold" v-else>
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_light.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_light.png')"></v-img>
-        </span>
-      </v-toolbar-title>
-
-      <template v-slot:extension>
-        <v-tabs grow>
-          <v-tab v-for="item in items" :key="item">
-            {{ item }}
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-app-bar>
-
-    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="tab" grow>
-      <v-overlay :value="overlay">
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-      </v-overlay>
-      <v-tab-item v-for="item in items" :key="item" disabled>
-      </v-tab-item>
-      <NavigationDrawer :drawer="drawer" />
-
-      <v-lazy :options="{
-                      threshold: .4
-                    }" transition="scale-transition">
-        <v-row justify="center" class="ml-0 mr-0">
-          <v-col cols="12" lg="6" md="6">
-            <v-card class="rounded" elevation="0">
-              <div class="pt-3" id="chart">
-                <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
-              </div>
-
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+        <v-lazy :options="{
+                          threshold: .4
+                        }" transition="scale-transition">
+          <v-row justify="center" class="ml-0 mr-0">
+            <v-col cols="12" lg="6" md="6">
+              <v-card class="rounded" elevation="0">
+                <div class="pt-3" id="chart">
+                  <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
                 </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                <span class="font-weight-bold">{{lastUpdate}}</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
 
-          <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-            <!-- :loading="loaderStateColumn" -->
-            <v-card class="rounded" elevation="0" loader-height="6">
-              <div class="pt-3" id="chart">
-                <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-              </div>
+                <v-card-text class="pt-0">
+                  <div class="title font-weight-light mb-2">
+                    <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <v-icon class="mr-2" small>
+                    mdi-clock
+                  </v-icon>
+                  <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                  <span class="font-weight-bold">{{lastUpdate}}</span>
+                </v-card-text>
+              </v-card>
+            </v-col>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+            <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
+              <!-- :loading="loaderStateColumn" -->
+              <v-card class="rounded" elevation="0" loader-height="6">
+                <div class="pt-3" id="chart">
+                  <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
                 </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                <span class="font-weight-bold">{{lastUpdate}}</span>
-              </v-card-text>
-            </v-card>
-          </v-col>
 
-          <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
-            <v-card class="rounded" elevation="0" loader-height="6">
-              <div class="pt-3" id="chart">
-                <apexchart type="area" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-              </div>
+                <v-card-text class="pt-0">
+                  <div class="title font-weight-light mb-2">
+                    <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <v-icon class="mr-2" small>
+                    mdi-clock
+                  </v-icon>
+                  <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                  <span class="font-weight-bold">{{lastUpdate}}</span>
+                </v-card-text>
+              </v-card>
+            </v-col>
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Cena za noc/osoba/obdobie
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                <span class="font-weight-bold">{{lastUpdate}}</span>
-              </v-card-text>
-            </v-card>
-          </v-col> -->
+            <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
+                <v-card class="rounded" elevation="0" loader-height="6">
+                  <div class="pt-3" id="chart">
+                    <apexchart type="area" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
+                  </div>
 
-          <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
-            <v-card class="rounded" elevation="0" loader-height="6">
-              <div class="pt-3" id="chart">
-                <apexchart type="bar" ref="column_chart" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-              </div>
+                  <v-card-text class="pt-0">
+                    <div class="title font-weight-light mb-2">
+                      Cena za noc/osoba/obdobie
+                    </div>
+                    <v-divider class="my-2"></v-divider>
+                    <v-icon class="mr-2" small>
+                      mdi-clock
+                    </v-icon>
+                    <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                    <span class="font-weight-bold">{{lastUpdate}}</span>
+                  </v-card-text>
+                </v-card>
+              </v-col> -->
 
-              <v-card-text class="pt-0">
-                <div class="title font-weight-light mb-2">
-                  Vlhkosť za jednotlivé mesiace v roku
-                </div>
-                <v-divider class="my-2"></v-divider>
-                <v-icon class="mr-2" small>
-                  mdi-clock
-                </v-icon>
-                <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                <span class="font-weight-bold">{{lastUpdate}}</span>
-              </v-card-text>
-            </v-card>
-          </v-col> -->
+            <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
+                <v-card class="rounded" elevation="0" loader-height="6">
+                  <div class="pt-3" id="chart">
+                    <apexchart type="bar" ref="column_chart" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+                  </div>
 
-          <v-col cols="12" lg="12" md="12" sm="12" class="pl-3 pr-3">
-            <v-card elevation="0">
-              <v-card-text>
-                <v-row>
-                  <!-- <v-col>
-                    <v-sheet class="p-4 mx-auto" rounded outlined>
-                      <v-row class="justify-center">
-                        <span>Upratovanie</span>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-icon large>mdi-broom</v-icon>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <span>Poplatok +100€ k cene rezervácie</span>
-                      </v-row>
+                  <v-card-text class="pt-0">
+                    <div class="title font-weight-light mb-2">
+                      Vlhkosť za jednotlivé mesiace v roku
+                    </div>
+                    <v-divider class="my-2"></v-divider>
+                    <v-icon class="mr-2" small>
+                      mdi-clock
+                    </v-icon>
+                    <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+                    <span class="font-weight-bold">{{lastUpdate}}</span>
+                  </v-card-text>
+                </v-card>
+              </v-col> -->
 
-                    </v-sheet>
-                  </v-col> -->
-                  <v-col>
-                    <v-sheet class="p-4 mx-auto" rounded outlined>
-                      <v-row class="justify-center">
-                        <span>Rezervácia do 5 dospelích osôb</span>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-icon large>mdi-account-group</v-icon>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
-                      </v-row>
-                    </v-sheet>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-lazy>
-    </v-tabs-items>
-  </v-card>
+            <v-col cols="12" lg="12" md="12" sm="12" class="pl-3 pr-3">
+              <v-card elevation="0">
+                <v-card-text>
+                  <v-row>
+                    <!-- <v-col>
+                        <v-sheet class="p-4 mx-auto" rounded outlined>
+                          <v-row class="justify-center">
+                            <span>Upratovanie</span>
+                          </v-row>
+                          <v-row class="justify-center">
+                            <v-icon large>mdi-broom</v-icon>
+                          </v-row>
+                          <v-row class="justify-center">
+                            <span>Poplatok +100€ k cene rezervácie</span>
+                          </v-row>
+
+                        </v-sheet>
+                      </v-col> -->
+                    <v-col>
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Rezervácia do 5 dospelích osôb</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-icon large>mdi-account-group</v-icon>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-lazy>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </div>
 </template>
 
 <script>
-import NavigationDrawer from "@/components/NavigationDrawer.vue";
 import VueApexCharts from 'vue-apexcharts'
 import axios from 'axios';
 import moment from 'moment';
@@ -171,17 +148,14 @@ Math.random = function() {
 export default {
   name: "PriceList",
   components: {
-    NavigationDrawer,
     apexchart: VueApexCharts,
   },
-  props: ['drawerNew'],
   data() {
     return {
       overlay: true,
       // loaderStateColumn: true,
       // loaderStateLine: true,
       username: localStorage.getItem("username"),
-      drawer: false,
       tab: null,
       items: ['Cenník'],
       show: false,
@@ -539,9 +513,7 @@ export default {
     //   });
   },
 
-  updated() {
-    this.drawer = this.drawerNew;
-  },
+  updated() {},
   methods: {
     updateRouter(tab) {
       this.$router.push(tab)
@@ -551,65 +523,74 @@ export default {
       this.overlay = true;
       axios.get(`${process.env.VUE_APP_API_URL}/prices/getPricesForGraph`)
         .then(res => {
-          this.lastUpdate = moment(res.data[0].created_at.created_at)
-            .format('YYYY-MM-DD HH:mm:ss');
-          localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
-            .format('YYYY-MM-DD HH:mm:ss'));
-          this.seriesDashed[0].data.splice(0, 12);
-          this.seriesDashed[1].data.splice(0, 12);
-          this.seriesDashed[2].data.splice(0, 12);
-          this.seriesDashed[3].data.splice(0, 12);
-          this.seriesColumn[0].data.splice(0, 12);
-          this.seriesColumn[1].data.splice(0, 12);
-          this.seriesColumn[2].data.splice(0, 12);
-          this.seriesColumn[3].data.splice(0, 12);
-          for (var i = 0; i < 12; i++) {
-            this.seriesDashed[0].data.push(res.data[0].adults[i].price);
-            this.seriesDashed[1].data.push(res.data[0].child_from_2_to_12[i].price);
-            this.seriesDashed[2].data.push(res.data[0].child_to_2[i].price);
-            this.seriesDashed[3].data.push(res.data[0].cleaningFee[i].price);
-            this.seriesColumn[0].data.push(res.data[0].adults[i].price);
-            this.seriesColumn[1].data.push(res.data[0].child_from_2_to_12[i].price);
-            this.seriesColumn[2].data.push(res.data[0].child_to_2[i].price);
-            this.seriesColumn[3].data.push(res.data[0].cleaningFee[i].price);
+          if (res.data[0].created_at != null) {
+            this.lastUpdate = moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss');
+            localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss'));
+            this.seriesDashed[0].data.splice(0, 12);
+            this.seriesDashed[1].data.splice(0, 12);
+            this.seriesDashed[2].data.splice(0, 12);
+            this.seriesDashed[3].data.splice(0, 12);
+            this.seriesColumn[0].data.splice(0, 12);
+            this.seriesColumn[1].data.splice(0, 12);
+            this.seriesColumn[2].data.splice(0, 12);
+            this.seriesColumn[3].data.splice(0, 12);
+            for (var i = 0; i < 12; i++) {
+              if (res.data[0].adults.length != 0) {
+                this.seriesDashed[0].data.push(res.data[0].adults[i].price);
+                this.seriesColumn[0].data.push(res.data[0].adults[i].price);
+              }
+              if (res.data[0].child_from_2_to_12.length != 0) {
+                this.seriesDashed[1].data.push(res.data[0].child_from_2_to_12[i].price);
+                this.seriesColumn[1].data.push(res.data[0].child_from_2_to_12[i].price);
+              }
+              if (res.data[0].child_to_2.length != 0) {
+                this.seriesDashed[2].data.push(res.data[0].child_to_2[i].price);
+                this.seriesColumn[2].data.push(res.data[0].child_to_2[i].price);
+              }
+              if (res.data[0].cleaningFee.length != 0) {
+                this.seriesDashed[3].data.push(res.data[0].cleaningFee[i].price);
+                this.seriesColumn[3].data.push(res.data[0].cleaningFee[i].price);
+              }
+            }
+
+            this.seriesDashed = [{
+                name: "Dospelí:",
+                data: this.seriesDashed[0].data
+              },
+              {
+                name: "Deti od 2 do 12 rokov:",
+                data: this.seriesDashed[1].data
+              },
+              {
+                name: 'Deti do 2 rokov:',
+                data: this.seriesDashed[2].data
+              },
+              {
+                name: 'Poplatok za upratovanie:',
+                data: this.seriesDashed[3].data
+              }
+            ];
+
+            this.seriesColumn = [{
+                name: "Dospelí:",
+                data: this.seriesColumn[0].data
+              },
+              {
+                name: "Deti od 2 do 12 rokov:",
+                data: this.seriesColumn[1].data
+              },
+              {
+                name: 'Deti do 2 rokov:',
+                data: this.seriesColumn[2].data
+              },
+              {
+                name: 'Poplatok za upratovanie:',
+                data: this.seriesColumn[3].data
+              }
+            ];
           }
-
-          this.seriesDashed = [{
-              name: "Dospelí:",
-              data: this.seriesDashed[0].data
-            },
-            {
-              name: "Deti od 2 do 12 rokov:",
-              data: this.seriesDashed[1].data
-            },
-            {
-              name: 'Deti do 2 rokov:',
-              data: this.seriesDashed[2].data
-            },
-            {
-              name: 'Poplatok za upratovanie:',
-              data: this.seriesDashed[3].data
-            }
-          ];
-
-          this.seriesColumn = [{
-              name: "Dospelí:",
-              data: this.seriesColumn[0].data
-            },
-            {
-              name: "Deti od 2 do 12 rokov:",
-              data: this.seriesColumn[1].data
-            },
-            {
-              name: 'Deti do 2 rokov:',
-              data: this.seriesColumn[2].data
-            },
-            {
-              name: 'Poplatok za upratovanie:',
-              data: this.seriesColumn[3].data
-            }
-          ];
-
           this.overlay = false;
         })
     },

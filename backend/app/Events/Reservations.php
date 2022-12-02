@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Notification;
+// use App\Models\Reservation;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,19 +11,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Notifi implements ShouldBroadcast
+class Reservations implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $notification;
+    public $reservation;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Notification $notification)
+    public function __construct($reservation)
     {
-        $this->notification = $notification;
+      $this->reservation = $reservation;
     }
 
     /**
@@ -33,6 +33,13 @@ class Notifi implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('notif-channel.' . $this->notification->to);
+        return new PresenceChannel('reservation.' . $this->reservation[0]->user_id);
     }
+
+    // public function broadcastWith()
+    // {
+    //     $this->friendship->load('fromUser');
+    //
+    //     return ["friendship" => $this->friendship];
+    // }
 }

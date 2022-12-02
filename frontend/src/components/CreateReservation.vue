@@ -1,11 +1,8 @@
 <template>
-<div class="vytvorit_rezervaciu w-100 h-100">
+<div class="create_reservation w-100 h-100">
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
-  <!-- <v-lazy :options="{
-            threshold: .1
-          }" transition="scale-transition"> -->
   <v-row justify="center" class="ml-0 mr-0">
     <div class="text-center">
       <v-dialog v-model="contactFormDialog" max-width="290">
@@ -58,86 +55,77 @@
         </template>
       </v-snackbar>
     </div>
-    <v-col class="pl-0 pr-0">
+    <v-col class="p-0">
       <!-- <v-lazy v-model="isActive" :options="{
           threshold: .8
         }" min-height="200" transition="fade-transition"> -->
-      <v-stepper v-model="e1">
-        <v-stepper-header elevation="5">
-          <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
-            Dátum a čas príchodu a odchodu
-            <small v-if="step1 == false">Chyba</small>
-          </v-stepper-step>
+      <v-container class="pt-0">
+        <v-stepper v-model="e1">
+          <v-stepper-header elevation="5">
+            <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
+              Dátum a čas príchodu a odchodu
+              <small v-if="step1 == false">Chyba</small>
+            </v-stepper-step>
 
-          <!-- <v-divider></v-divider>
+            <!-- <v-divider></v-divider>
 
             <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
               Čas príchodu a odchodu
               <small v-if="step2 == false">Chyba</small>
             </v-stepper-step> -->
 
-          <v-divider></v-divider>
+            <v-divider></v-divider>
 
-          <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
-            Počet osôb
-            <small v-if="step2 == false">Chyba</small>
-          </v-stepper-step>
+            <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
+              Počet osôb
+              <small v-if="step2 == false">Chyba</small>
+            </v-stepper-step>
 
-          <v-divider></v-divider>
+            <v-divider></v-divider>
 
-          <v-stepper-step color="primary" :complete="e1 > 3" :rules="[() => step3]" step="3" error-icon="mdi-alert-circle">
-            Kontaktné informácie
-            <small v-if="step3 == false">Chyba</small>
-          </v-stepper-step>
+            <v-stepper-step color="primary" :complete="e1 > 3" :rules="[() => step3]" step="3" error-icon="mdi-alert-circle">
+              Kontaktné informácie
+              <small v-if="step3 == false">Chyba</small>
+            </v-stepper-step>
 
-          <v-divider></v-divider>
+            <v-divider></v-divider>
 
-          <v-stepper-step color="primary" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
-            Rekapitulácia
-            <small v-if="step4 == false">Chyba</small>
-          </v-stepper-step>
-        </v-stepper-header>
-        <v-stepper-items class="h-100">
-          <v-stepper-content step="1">
-            <div v-if="this.$store.getters['pendingReservation'] != 0">
-              <span>
-                <v-icon color="orange">mdi-information</v-icon>Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
-              </span>
-            </div>
-            <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
-            <Calendar @loaded-events="loadedEvents" @array-dates="arrayDates" />
-            <!-- <v-row class="justify-center">
-                  <v-col cols="12" lg="6" md="12" sm="12">
-                    <v-icon color="orange">mdi-rectangle</v-icon>
-                    <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
-                  </v-col>
-                  <v-col cols="12" lg="6" md="12" sm="12">
-                    <v-icon color="red">mdi-rectangle</v-icon>
-                    <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
-                  </v-col>
-                </v-row> -->
-            <!-- </v-card> -->
-            <div class="pt-3" v-if="this.$store.getters['pendingReservation'] == 0">
-              <v-btn color="accent" disabled class="mr-2" outlined>
-                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
+            <v-stepper-step color="primary" :rules="[() => step4]" step="4" error-icon="mdi-alert-circle">
+              Rekapitulácia
+              <small v-if="step4 == false">Chyba</small>
+            </v-stepper-step>
+          </v-stepper-header>
 
-              <v-btn color="primary" @click="checkStatus(); toTop()">
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-              </v-btn>
-            </div>
-            <div class="pt-3" v-else>
-              <v-btn color="accent" disabled class="mr-2" outlined>
-                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
+          <v-stepper-items class="h-100">
+            <v-stepper-content step="1">
+              <div v-if="this.$store.getters['pendingReservation'] != 0">
+                <span>
+                  <v-icon color="orange">mdi-information</v-icon>Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
+                </span>
+              </div>
+              <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
+              <Calendar @loaded-events="loadedEvents" @array-dates="arrayDates" />
+              <div class="pt-3" v-if="this.$store.getters['pendingReservation'] == 0">
+                <v-btn color="accent" disabled class="mr-2" outlined>
+                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                </v-btn>
 
-              <v-btn color="primary" @click="checkStatus()" disabled>
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-              </v-btn>
-            </div>
-          </v-stepper-content>
+                <v-btn color="primary" @click="checkStatus(); toTop()">
+                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                </v-btn>
+              </div>
+              <div class="pt-3" v-else>
+                <v-btn color="accent" disabled class="mr-2" outlined>
+                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                </v-btn>
 
-          <!-- <v-stepper-content step="2">
+                <v-btn color="primary" @click="checkStatus()" disabled>
+                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                </v-btn>
+              </div>
+            </v-stepper-content>
+
+            <!-- <v-stepper-content step="2">
               <v-card class="m-3" tile>
                 <v-card-text>
                   <v-row justify="center" align="center">
@@ -151,7 +139,7 @@
                     </v-col>
                   </v-row>
                 </v-card-text> -->
-          <!-- <v-col cols="11" sm="5">
+            <!-- <v-col cols="11" sm="5">
                 <v-dialog ref="dialog_start_time" v-model="modal1" :return-value.sync="start_time" persistent width="290px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field v-model="start_time" label="Dátum začiatku" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" clearable clear-icon="mdi-close-circle"></v-text-field>
@@ -182,7 +170,7 @@
                   </v-time-picker>
                 </v-dialog>
               </v-col> -->
-          <!-- <v-row justify="space-around" align="center">
+            <!-- <v-row justify="space-around" align="center">
                 <v-col style="width: 350px; flex: 0 1 auto;">
                   <h2>Start:</h2>
                   <v-time-picker v-model="start" :max="end"></v-time-picker>
@@ -192,7 +180,7 @@
                   <v-time-picker v-model="end" :min="start"></v-time-picker>
                 </v-col>
               </v-row> -->
-          <!-- </v-card>
+            <!-- </v-card>
 
               <v-btn color="accent" @click="e1 = 1; backStep1()" class="mr-2" outlined>
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
@@ -203,94 +191,94 @@
               </v-btn>
             </v-stepper-content> -->
 
-          <v-stepper-content step="2">
-            <v-card class="m-3 rounded" elevation="0">
-              <v-card-text>
-                <v-row class="m-0">
-                  <span>Dospelí</span>
-                </v-row>
+            <v-stepper-content step="2">
+              <v-card class="rounded" elevation="0">
+                <v-card-text>
+                  <v-row class="m-0">
+                    <span>Dospelí</span>
+                  </v-row>
 
-                <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue1">
-                    <v-icon dark>
-                      mdi-minus
-                    </v-icon>
-                  </v-btn>
-                  <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue1">
-                    <v-icon dark>
-                      mdi-plus
-                    </v-icon>
-                  </v-btn>
-                  <v-btn depressed color="error" @click="resetValue1">
-                    Resetovať
-                  </v-btn>
-                </v-row>
+                  <v-row class="ml-3 mr-3">
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue1">
+                      <v-icon dark>
+                        mdi-minus
+                      </v-icon>
+                    </v-btn>
+                    <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue1">
+                      <v-icon dark>
+                        mdi-plus
+                      </v-icon>
+                    </v-btn>
+                    <v-btn depressed color="error" @click="resetValue1">
+                      Resetovať
+                    </v-btn>
+                  </v-row>
 
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
 
-                <v-row class="m-0">
-                  <span>Deti od 2 do 12 rokov</span>
-                </v-row>
+                  <v-row class="m-0">
+                    <span>Deti od 2 do 12 rokov</span>
+                  </v-row>
 
-                <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue2">
-                    <v-icon dark>
-                      mdi-minus
-                    </v-icon>
-                  </v-btn>
-                  <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue2">
-                    <v-icon dark>
-                      mdi-plus
-                    </v-icon>
-                  </v-btn>
-                  <v-btn depressed color="error" @click="resetValue2">
-                    Resetovať
-                  </v-btn>
-                </v-row>
+                  <v-row class="ml-3 mr-3">
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue2">
+                      <v-icon dark>
+                        mdi-minus
+                      </v-icon>
+                    </v-btn>
+                    <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue2">
+                      <v-icon dark>
+                        mdi-plus
+                      </v-icon>
+                    </v-btn>
+                    <v-btn depressed color="error" @click="resetValue2">
+                      Resetovať
+                    </v-btn>
+                  </v-row>
 
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
 
-                <v-row class="m-0">
-                  <span>Deti do 2 rokov</span>
-                </v-row>
+                  <v-row class="m-0">
+                    <span>Deti do 2 rokov</span>
+                  </v-row>
 
-                <v-row class="ml-3 mr-3">
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue3">
-                    <v-icon dark>
-                      mdi-minus
-                    </v-icon>
-                  </v-btn>
-                  <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
-                  <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue3">
-                    <v-icon dark>
-                      mdi-plus
-                    </v-icon>
-                  </v-btn>
-                  <v-btn depressed color="error" @click="resetValue3">
-                    Resetovať
-                  </v-btn>
-                </v-row>
-                <v-divider />
-                <v-row class="m-0 mt-3">
-                  <v-col class="pl-0 pr-0" align="left">
-                    <v-icon color="orange">mdi-information</v-icon>
-                    <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítavajú.</span>
-                  </v-col>
-                </v-row>
+                  <v-row class="ml-3 mr-3">
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="decrementValue3">
+                      <v-icon dark>
+                        mdi-minus
+                      </v-icon>
+                    </v-btn>
+                    <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
+                    <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue3">
+                      <v-icon dark>
+                        mdi-plus
+                      </v-icon>
+                    </v-btn>
+                    <v-btn depressed color="error" @click="resetValue3">
+                      Resetovať
+                    </v-btn>
+                  </v-row>
+                  <v-divider />
+                  <v-row class="m-0 mt-3">
+                    <v-col class="pl-0 pr-0" align="left">
+                      <v-icon color="orange">mdi-information</v-icon>
+                      <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítavajú.</span>
+                    </v-col>
+                  </v-row>
 
-                <v-row class="m-0 mt-1">
-                  <v-col class="pl-0 pr-0" align="left">
-                    <v-icon color="orange">mdi-information</v-icon>
-                    <span class="ml-1">Ak je počet osôb rezervácie menší ako 6, platí sa poplatok za celú chatu v cene 150€/noc. <span class="font-weight-bold">(Deti do 2 rokov sa do počtu nezapočítavajú!)</span> </span>
-                  </v-col>
-                </v-row>
+                  <v-row class="m-0 mt-1">
+                    <v-col class="pl-0 pr-0" align="left">
+                      <v-icon color="orange">mdi-information</v-icon>
+                      <span class="ml-1">Ak je počet osôb rezervácie menší ako 6, platí sa poplatok za celú chatu v cene 150€/noc. <span class="font-weight-bold">(Deti do 2 rokov sa do počtu nezapočítavajú!)</span> </span>
+                    </v-col>
+                  </v-row>
 
-                <v-divider />
+                  <v-divider />
 
-                <v-row class="m-0">
-                  <!-- <v-col></v-col>
+                  <v-row class="m-0">
+                    <!-- <v-col></v-col>
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -498,215 +486,215 @@
                       </v-tooltip>
                     </v-col>
                   </v-row> -->
-                  <!-- <v-row> -->
-                  <v-col class="pl-0 pr-0">
-                    <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
-                      <template v-slot:header="{ props: { headers } }">
-                        <thead>
-                          <tr>
-                            <th v-for="(h, i) in headers" :key="i">
-                              <v-tooltip bottom v-if="i != 3">
-                                <template v-slot:activator="{ on }">
-                                  <span v-on="on">{{h.text}}</span>
-                                </template>
-                                <span>{{headerTooltips[i - 1]}}</span>
-                              </v-tooltip>
-                              <span v-if="i == 3">{{h.text}}</span>
-                            </th>
-                          </tr>
-                        </thead>
-                      </template>
-                    </v-data-table>
-                  </v-col>
-                </v-row>
+                    <!-- <v-row> -->
+                    <v-col class="pl-0 pr-0">
+                      <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
+                        <template v-slot:header="{ props: { headers } }">
+                          <thead>
+                            <tr>
+                              <th v-for="(h, i) in headers" :key="i">
+                                <v-tooltip bottom v-if="i != 3">
+                                  <template v-slot:activator="{ on }">
+                                    <span v-on="on">{{h.text}}</span>
+                                  </template>
+                                  <span>{{headerTooltips[i - 1]}}</span>
+                                </v-tooltip>
+                                <span v-if="i == 3">{{h.text}}</span>
+                              </th>
+                            </tr>
+                          </thead>
+                        </template>
+                      </v-data-table>
+                    </v-col>
+                  </v-row>
 
-                <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
-                  <template v-slot:activator="{ on: menu, attrs }">
-                    <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
-                      <v-icon color="white" medium>mdi-information </v-icon>
-                      <span style="color:white" class="font-weight-bold">Detail</span>
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-toolbar dark color="primary" class="rounded-0">
-                      <!-- extended extension-height="4"  -->
-                      <v-btn icon dark @click="dialogOrderDetail = false">
-                        <v-icon>mdi-close</v-icon>
+                  <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                    <template v-slot:activator="{ on: menu, attrs }">
+                      <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
+                        <v-icon color="white" medium>mdi-information </v-icon>
+                        <span style="color:white" class="font-weight-bold">Detail</span>
                       </v-btn>
-                      <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
-                      <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
-                    </v-toolbar>
-                  </v-card>
-                </v-dialog>
-              </v-card-text>
-            </v-card>
+                    </template>
+                    <v-card>
+                      <v-toolbar dark color="primary" class="rounded-0">
+                        <!-- extended extension-height="4"  -->
+                        <v-btn icon dark @click="dialogOrderDetail = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                        <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                      </v-toolbar>
+                    </v-card>
+                  </v-dialog>
+                </v-card-text>
+              </v-card>
 
-            <v-btn color="accent" @click="e1 = 1; backStep2(); toTop()" class="mr-2" outlined>
-              <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-            </v-btn>
+              <v-btn color="accent" @click="e1 = 1; backStep2(); toTop()" class="mr-2" outlined>
+                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+              </v-btn>
 
-            <v-btn color="primary" @click="checkStatus3(); toTop()">
-              Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-            </v-btn>
-          </v-stepper-content>
+              <v-btn color="primary" @click="checkStatus3(); toTop()">
+                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+              </v-btn>
+            </v-stepper-content>
 
-          <v-stepper-content step="3">
-            <v-card class="m-3 rounded" elevation="0">
-              <!-- <v-row justify="center">
+            <v-stepper-content step="3">
+              <v-card class="rounded" elevation="0">
+                <!-- <v-row justify="center">
                 <v-col cols="12" sm="12" md="12" lg="6"> -->
-              <v-card-text>
-                <v-row justify="center" class="mt-3">
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled required></v-text-field>
-                  </v-col>
+                <v-card-text>
+                  <v-row justify="center" class="mt-3">
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled required></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled required></v-text-field>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled required></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable filled required></v-text-field>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable filled required></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable filled required></v-text-field>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable filled required></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable filled required></v-text-field>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable filled required></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable filled required>
-                    </v-autocomplete>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable filled required>
+                      </v-autocomplete>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled clearable></VueTelInputVuetify>
-                  </v-col>
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled clearable></VueTelInputVuetify>
+                    </v-col>
 
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled clearable>
-                    </v-textarea>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-
-            <v-btn color="accent" @click="e1 = 2; backStep3(); toTop()" class="mr-2" outlined>
-              <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-            </v-btn>
-
-            <v-btn color="primary" @click="checkStatus4(); toTop()">
-              Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-            </v-btn>
-          </v-stepper-content>
-
-          <v-stepper-content step="4">
-            <v-card class="m-3 rounded" elevation="0">
-              <v-card-title class="justify-center">Rekapitulácia</v-card-title>
-              <v-card-text>
-                <v-row align="center">
-                  <v-divider />
-                  <span class="font-weight-bold">Kontaktné údaje</span>
-                  <v-divider />
-                </v-row>
-                <v-row justify="center">
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="surname" v-model="surname" label="Meno" filled readonly></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" filled readonly></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <v-text-field ref="address" v-model="address" label="Adresa" filled readonly></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-text-field ref="city" v-model="city" label="Mesto" filled readonly></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                    <v-text-field ref="postcode" v-model="postcode" label="PSČ" filled readonly></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" filled readonly>
-                    </v-autocomplete>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                    <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" filled readonly></VueTelInputVuetify>
-                  </v-col>
-
-                  <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                    <div v-if="note == null">
-                      <v-textarea value="-" label=" Poznámka" rows="1" filled readonly>
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled clearable>
                       </v-textarea>
-                    </div>
-                    <div v-else>
-                      <v-textarea v-model="note" label=" Poznámka" rows="1" filled readonly>
-                      </v-textarea>
-                    </div>
-                  </v-col>
-                </v-row>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
 
-                <v-row align="center">
-                  <v-divider />
-                  <span class="font-weight-bold">Dátum a čas príchodu a odchodu</span>
-                  <v-divider />
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-sheet class="p-4 mx-auto" rounded outlined>
-                      <v-row class="justify-center">
-                        <span>Príchod</span>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-col>
-                          <v-icon>mdi-calendar-start</v-icon>
-                          <span>Dátum: {{start_date}}</span>
-                        </v-col>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-col>
-                          <v-icon>mdi-clock-start</v-icon>
-                          <span>Čas: {{start_time}}</span>
-                        </v-col>
-                      </v-row>
-                    </v-sheet>
-                  </v-col>
-                  <v-col>
-                    <v-sheet class="p-4 mx-auto" rounded outlined>
-                      <v-row class="justify-center">
-                        <span>Odchod</span>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-col>
-                          <v-icon>mdi-calendar-end</v-icon>
-                          <span>Dátum: {{end_date}}</span>
-                        </v-col>
-                      </v-row>
-                      <v-row class="justify-center">
-                        <v-col>
-                          <v-icon>mdi-clock-end</v-icon>
-                          <span>Čas: {{end_time}}</span>
-                        </v-col>
-                      </v-row>
-                    </v-sheet>
-                  </v-col>
-                </v-row>
+              <v-btn color="accent" @click="e1 = 2; backStep3(); toTop()" class="mr-2" outlined>
+                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+              </v-btn>
 
-                <v-row align="center">
-                  <v-divider />
-                  <span class="font-weight-bold">Počet osôb</span>
-                  <v-divider />
-                </v-row>
+              <v-btn color="primary" @click="checkStatus4(); toTop()">
+                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+              </v-btn>
+            </v-stepper-content>
 
-                <v-row class="m-0">
-                  <!-- <v-col></v-col>
+            <v-stepper-content step="4">
+              <v-card class="rounded" elevation="0">
+                <v-card-title class="justify-center">Rekapitulácia</v-card-title>
+                <v-card-text>
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Kontaktné údaje</span>
+                    <v-divider />
+                  </v-row>
+                  <v-row justify="center">
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="surname" v-model="surname" label="Meno" filled readonly></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" filled readonly></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <v-text-field ref="address" v-model="address" label="Adresa" filled readonly></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-text-field ref="city" v-model="city" label="Mesto" filled readonly></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
+                      <v-text-field ref="postcode" v-model="postcode" label="PSČ" filled readonly></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" filled readonly>
+                      </v-autocomplete>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                      <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" filled readonly></VueTelInputVuetify>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                      <div v-if="note == null">
+                        <v-textarea value="-" label=" Poznámka" rows="1" filled readonly>
+                        </v-textarea>
+                      </div>
+                      <div v-else>
+                        <v-textarea v-model="note" label=" Poznámka" rows="1" filled readonly>
+                        </v-textarea>
+                      </div>
+                    </v-col>
+                  </v-row>
+
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Dátum a čas príchodu a odchodu</span>
+                    <v-divider />
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Príchod</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-calendar-start</v-icon>
+                            <span>Dátum: {{start_date}}</span>
+                          </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-clock-start</v-icon>
+                            <span>Čas: {{start_time}}</span>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                    <v-col>
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Odchod</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-calendar-end</v-icon>
+                            <span>Dátum: {{end_date}}</span>
+                          </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-col>
+                            <v-icon>mdi-clock-end</v-icon>
+                            <span>Čas: {{end_time}}</span>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+
+                  <v-row align="center">
+                    <v-divider />
+                    <span class="font-weight-bold">Počet osôb</span>
+                    <v-divider />
+                  </v-row>
+
+                  <v-row class="m-0">
+                    <!-- <v-col></v-col>
                     <v-col class="font-weight-bold">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -818,57 +806,58 @@
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
                       </v-tooltip>
                     </v-col> -->
-                  <v-col class="pl-0 pr-0">
-                    <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
-                      <template v-slot:header="{ props: { headers } }">
-                        <thead>
-                          <tr>
-                            <th v-for="(h, i) in headers" :key="i">
-                              <v-tooltip bottom v-if="i != 3">
-                                <template v-slot:activator="{ on }">
-                                  <span v-on="on">{{h.text}}</span>
-                                </template>
-                                <span>{{headerTooltips[i - 1]}}</span>
-                              </v-tooltip>
-                              <span v-if="i == 3">{{h.text}}</span>
-                            </th>
-                          </tr>
-                        </thead>
-                      </template>
-                    </v-data-table>
-                  </v-col>
-                </v-row>
-                <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
-                  <template v-slot:activator="{ on: menu, attrs }">
-                    <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
-                      <v-icon color="white" medium>mdi-information </v-icon>
-                      <span style="color:white" class="font-weight-bold">Detail</span>
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-toolbar dark color="primary" class="rounded-0">
-                      <!-- extended extension-height="4"  -->
-                      <v-btn icon dark @click="dialogOrderDetail = false">
-                        <v-icon>mdi-close</v-icon>
+                    <v-col class="pl-0 pr-0">
+                      <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
+                        <template v-slot:header="{ props: { headers } }">
+                          <thead>
+                            <tr>
+                              <th v-for="(h, i) in headers" :key="i">
+                                <v-tooltip bottom v-if="i != 3">
+                                  <template v-slot:activator="{ on }">
+                                    <span v-on="on">{{h.text}}</span>
+                                  </template>
+                                  <span>{{headerTooltips[i - 1]}}</span>
+                                </v-tooltip>
+                                <span v-if="i == 3">{{h.text}}</span>
+                              </th>
+                            </tr>
+                          </thead>
+                        </template>
+                      </v-data-table>
+                    </v-col>
+                  </v-row>
+                  <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                    <template v-slot:activator="{ on: menu, attrs }">
+                      <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
+                        <v-icon color="white" medium>mdi-information </v-icon>
+                        <span style="color:white" class="font-weight-bold">Detail</span>
                       </v-btn>
-                      <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
-                      <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
-                    </v-toolbar>
-                  </v-card>
-                </v-dialog>
-              </v-card-text>
-            </v-card>
+                    </template>
+                    <v-card>
+                      <v-toolbar dark color="primary" class="rounded-0">
+                        <!-- extended extension-height="4"  -->
+                        <v-btn icon dark @click="dialogOrderDetail = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                        <!-- <v-progress-linear v-if="toolbarLoading" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+                      </v-toolbar>
+                    </v-card>
+                  </v-dialog>
+                </v-card-text>
+              </v-card>
 
-            <v-btn color="accent" @click="e1 = 3; backStep4(); toTop()" class="mr-2" outlined>
-              <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-            </v-btn>
+              <v-btn color="accent" @click="e1 = 3; backStep4(); toTop()" class="mr-2" outlined>
+                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+              </v-btn>
 
-            <v-btn color="primary" @click="store()">
-              Odoslať rezerváciu<v-icon>mdi-arrow-right-thick</v-icon>
-            </v-btn>
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+              <v-btn color="primary" @click="store()">
+                Odoslať rezerváciu<v-icon>mdi-arrow-right-thick</v-icon>
+              </v-btn>
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
+      </v-container>
       <!-- </v-lazy> -->
     </v-col>
   </v-row>
@@ -883,7 +872,7 @@ import Calendar from "@/components/Calendar.vue";
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
 
 export default {
-  name: "VytvoritRezervaciu",
+  name: "CreateReservation",
   components: {
     Calendar,
     VueTelInputVuetify
@@ -1396,7 +1385,8 @@ export default {
         };
         axios.post(api, {
             event_name: "rezervácia",
-            username: localStorage.getItem('username'),
+            user_id: this.$root.me.id,
+            username: this.$root.me.name,
             start_date: this.start_date,
             end_date: this.end_date,
             start_time: this.start_time,
@@ -1417,11 +1407,26 @@ export default {
                 Authorization: "Bearer " + localStorage.getItem("authToken"),
               },
             };
+            //notif to user that he successfully created his reservation
             axios.post(api, {
-                recipient: localStorage.getItem('user_id'),
+                from: 1,
+                recipient: this.$root.me.id,
                 title: "Chata Byšta",
                 subtitle: "Úspešne vytvorenie rezervácie",
                 text: `Vážený ${localStorage.getItem('username')}, rezervácia bola úspešne vytvorená a čaká sa na jej potvrdenie. Stav Vašej rezervácie môžete sledovať v časti 'Administrácia'. `,
+                date: moment(new Date())
+                  .format('YYYY-MM-DD HH:mm'),
+                status: "new",
+              }, config)
+              .then(() => {})
+
+            //notif to admin that any user made new reservation
+            axios.post(api, {
+                from: this.$root.me.id,
+                recipient: 1,
+                title: "Nová rezervácia",
+                subtitle: "Nová rezervácia",
+                text: `Používateľ ${this.newEvent.username} vytvoril rezerváciu.`,
                 date: moment(new Date())
                   .format('YYYY-MM-DD HH:mm'),
                 status: "new",
@@ -1537,6 +1542,10 @@ export default {
 .v-stepper {
     box-shadow: none !important;
     background-color: unset !important;
+}
+
+.v-stepper__step {
+    padding: 0 !important;
 }
 
 .v-stepper__wrapper {

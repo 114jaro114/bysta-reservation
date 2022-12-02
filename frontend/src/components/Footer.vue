@@ -1,7 +1,7 @@
 <template>
 <v-footer class="p-0" style="bottom: 0">
-  <v-card flat tile width="100%" class="text-center">
-
+  <v-card flat tile class="text-center w-100">
+    <!-- <v-divider class="mt-0" /> -->
     <v-card-text class="p-0 pt-3 mb-5">
       <v-row class="ml-5 mr-5">
         <v-col cols="12" lg="6" md="6" class="pl-0 pr-0 mt-5 d-flex">

@@ -29,14 +29,13 @@
             <v-card-actions class="p-3">
               <div class="row">
                 <div class="col text-center">
+                  Prejsť na stránku s
                   <router-link :to="{ name: 'Login' }">
-                    <span class="forgot-pass accent--text">Prejsť na stránku s <span class="primary--text font-weight-bold">prihlásením</span></span>
+                    <span class="primary--text font-weight-bold">prihlásením</span>
                   </router-link>
                 </div>
               </div>
             </v-card-actions>
-
-
           </v-card>
         </div>
       </div>

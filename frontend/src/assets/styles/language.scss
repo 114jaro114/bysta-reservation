@@ -1,0 +1,12 @@
+.toolbar .btn-lang .v-skeleton-loader__chip {
+  width: 84px !important;
+}
+
+.lang .v-btn:not(.v-btn--round).v-size--large {
+  width: 84px !important;
+}
+
+::v-deep .v-skeleton-loader__chip {
+  border-radius: 28px;
+  height: 36px;
+}

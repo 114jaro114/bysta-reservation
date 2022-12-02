@@ -1,80 +1,81 @@
 <template>
 <div class='calendar'>
-  <!-- :loading="events" -->
-  <v-card class="m-3 rounded" elevation="0">
-    <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
-      :timezone="timezone" is-expanded>
-      <!--=========DAY POPOVER HEADER SLOT=========-->
-      <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
-        {{ getPopoverHeaderLabel(day) }}
-      </div>
-      <!--===============TODO ROW SLOT==============-->
-      <div slot='todo-row' slot-scope='{ customData }' class='todo-row'>
-        <!--Todo content-->
-        <div class='todo-content'>
-          <!--Show textbox when editing todo-->
-          <input class='todo-input' v-if='customData.id === editId' v-model='customData.description' @keyup.enter='editId = 0' v-focus-select />
-          <!--Show status/description when not editing-->
-          <span v-else>
-            <!--Completed checkbox-->
-            <input type='checkbox' v-model='customData.isComplete' />
-            <!--Description-->
-            <span :class='[
+  <v-container class="p-0">
+    <!-- :loading="events" -->
+    <v-card class="rounded" elevation="0">
+      <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="this.$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :model-config="modelConfig" is-range :attributes='attrs' :min-date='new Date()' :disabled-dates="disabledDates"
+        :timezone="timezone" is-expanded>
+        <!--=========DAY POPOVER HEADER SLOT=========-->
+        <div slot='day-popover-header' slot-scope='{ day }' class='popover-header'>
+          {{ getPopoverHeaderLabel(day) }}
+        </div>
+        <!--===============TODO ROW SLOT==============-->
+        <div slot='todo-row' slot-scope='{ customData }' class='todo-row'>
+          <!--Todo content-->
+          <div class='todo-content'>
+            <!--Show textbox when editing todo-->
+            <input class='todo-input' v-if='customData.id === editId' v-model='customData.description' @keyup.enter='editId = 0' v-focus-select />
+            <!--Show status/description when not editing-->
+            <span v-else>
+              <!--Completed checkbox-->
+              <input type='checkbox' v-model='customData.isComplete' />
+              <!--Description-->
+              <span :class='[
                       "todo-description",
                       { "complete": customData.isComplete }]' @click='toggleTodoComplete(customData)'>
-              {{ customData.description }}
+                {{ customData.description }}
+              </span>
             </span>
-          </span>
+          </div>
+          <!--Edit/Done buttons-->
+          <a @click.prevent='toggleTodoEdit(customData)'>
+            <!--Edit button-->
+            <v-icon v-if='editId !== customData.id'>mdi-pencil</v-icon>
+            <!--Done button-->
+            <b-icon v-else icon='check' type='is-success' size='is-small'>
+            </b-icon>
+          </a>
+          <!--Delete button-->
+          <a @click.prevent='deleteTodo(customData)' v-if='!editId || editId !== customData.id' class='delete-todo'>
+            <b-icon icon='trash' type='is-danger' size='is-small'>
+            </b-icon>
+          </a>
         </div>
-        <!--Edit/Done buttons-->
-        <a @click.prevent='toggleTodoEdit(customData)'>
-          <!--Edit button-->
-          <v-icon v-if='editId !== customData.id'>mdi-pencil</v-icon>
-          <!--Done button-->
-          <b-icon v-else icon='check' type='is-success' size='is-small'>
-          </b-icon>
-        </a>
-        <!--Delete button-->
-        <a @click.prevent='deleteTodo(customData)' v-if='!editId || editId !== customData.id' class='delete-todo'>
-          <b-icon icon='trash' type='is-danger' size='is-small'>
-          </b-icon>
-        </a>
-      </div>
-      <!--================ADD TODO ROW SLOT===============-->
-      <div slot='add-todo' slot-scope='{ day }' class='add-todo'>
-        <a @click='addTodo(day)'>
-          + Add Todo
-        </a>
-      </div>
-      <!-- <template v-slot:header>
+        <!--================ADD TODO ROW SLOT===============-->
+        <div slot='add-todo' slot-scope='{ day }' class='add-todo'>
+          <a @click='addTodo(day)'>
+            + Add Todo
+          </a>
+        </div>
+        <!-- <template v-slot:header>
           <v-divider></v-divider>
         </template> -->
 
-
-      <template v-slot:footer>
-        <div class="bg-gray-100 text-center p-2 pt-0 border-t rounded-b-lg">
-          <v-divider class="mt-0"></v-divider>
-          <v-btn color="primary" @click="moveToToday" class="mr-3">
-            Dnes
-          </v-btn>
-          <v-btn color="primary" @click="resetDate" outlined>
-            Resetovať výber
-          </v-btn>
-          <v-divider></v-divider>
-        </div>
-      </template>
-    </DatePicker2>
-    <v-row class="justify-center">
-      <v-col cols="12" lg="6" md="12" sm="12">
-        <v-icon color="orange">mdi-rectangle</v-icon>
-        <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
-      </v-col>
-      <v-col cols="12" lg="6" md="12" sm="12">
-        <v-icon color="red">mdi-rectangle</v-icon>
-        <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
-      </v-col>
-    </v-row>
-  </v-card>
+        <template v-slot:footer>
+          <div class="text-center p-2 pt-0 border-t rounded-b-lg">
+            <v-divider class="mt-0"></v-divider>
+            <v-btn color="primary" @click="moveToToday" class="mr-3">
+              Dnes
+            </v-btn>
+            <v-btn color="primary" @click="resetDate" outlined>
+              Resetovať výber
+            </v-btn>
+            <v-divider></v-divider>
+          </div>
+        </template>
+      </DatePicker2>
+      <v-row class="justify-center m-0">
+        <v-col class="pt-0" cols="12" lg="6" md="12" sm="12">
+          <v-icon color="orange">mdi-rectangle</v-icon>
+          <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+        </v-col>
+        <v-col class="pt-0" cols="12" lg="6" md="12" sm="12">
+          <v-icon color="red">mdi-rectangle</v-icon>
+          <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-container>
 </div>
 </template>
 <script>

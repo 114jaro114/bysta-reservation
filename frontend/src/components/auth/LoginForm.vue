@@ -43,12 +43,12 @@
 
           </v-card-title>
           <hr class="mt-0 mb-0 custom-hr">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="form" v-model="valid" @keyup.native.enter="login" lazy-validation>
             <v-card-text class="p-3">
-              <v-text-field prepend-icon="mdi-email" v-model="email" :error-messages="error" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close" counter></v-text-field>
+              <v-text-field tabindex="1" prepend-icon="mdi-email" v-model="email" :error-messages="error" :rules="emailRules" label="Email" filled clearable clear-icon="mdi-close" counter></v-text-field>
 
-              <v-text-field prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="error" :rules="passwordRules" :type="togglePassword ? 'text' : 'password'" label="Heslo"
-                hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
+              <v-text-field tabindex="1" prepend-icon="mdi-lock" v-model="password" :append-icon="togglePassword ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="error" autocomplete="off" :rules="passwordRules"
+                :type="togglePassword ? 'text' : 'password'" label="Heslo" hint="Minimálne 4 znaky" counter @click:append="togglePassword = !togglePassword" filled clearable clear-icon="mdi-close"></v-text-field>
               <v-row justify="center">
                 <v-col class="text-center pb-0 pt-5">
                   <v-checkbox v-model="remember" name="remember" id="remember" label="Zapamätať"></v-checkbox>
@@ -66,8 +66,9 @@
               <v-divider class="mx-0"></v-divider>
               <div class="row">
                 <div class="col text-center">
+                  Ešte nemáš účet?
                   <router-link :to="{ name: 'Register' }">
-                    <span class="forgot-pass accent--text">Ešte nemáš účet? <span class="primary--text font-weight-bold">Zaregistruj sa</span></span>
+                    <span class="primary--text font-weight-bold">Zaregistruj sa</span>
                   </router-link>
                 </div>
               </div>
@@ -82,7 +83,7 @@
           <v-container align="center" class="p-4 pt-3">
             <v-row align="center">
               <v-divider />
-              Alebo
+              <span class="ml-3 mr-3">Alebo</span>
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
@@ -133,7 +134,7 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Heslo je povinné',
-        v => v.length >= 4 || 'Heslo musí obsahovať minimálne 4 znaky',
+        v => (v && v.length >= 4) || 'Heslo musí obsahovať minimálne 4 znaky',
       ],
       remember: true,
       error: '',
@@ -144,10 +145,10 @@ export default {
       snackbarActivateAcc: false,
       snackbar_color: '',
       snackbar_icon: '',
-      snackbar_timeout: '',
+      snackbar_timeout: '-1',
       text: '',
 
-      // recaptchaVerified: false,
+      recaptchaVerified: false,
     }
   },
 
@@ -168,7 +169,7 @@ export default {
     //   this.$recaptcha('login').then((token) => {
     //     console.log(token) // Will print the token
     //     axios.post(
-    //         `https://www.google.com/recaptcha/api/siteverify?secret=***********&response=${token}`, {}, {
+    //         `https://www.google.com/recaptcha/api/siteverify?secret=********&response=${token}`, {}, {
     //           headers: {
     //             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
     //           },
@@ -178,10 +179,10 @@ export default {
     //       })
     //   })
     // },
-
+    //
     // onCaptchaVerified() {
     //   this.$recaptcha('login').then((token) => {
-    //     const secretkey = '***********';
+    //     const secretkey = '=********&';
     //     this.$refs.recaptcha.reset();
     //     console.log(token);
     //     axios.post(
@@ -201,6 +202,7 @@ export default {
     // },
 
     login() {
+      this.$vuetify.goTo(0);
       // this.onCaptchaVerified();
       if (this.validate()) {
         this.myloadingvariable = true;
@@ -218,8 +220,8 @@ export default {
             localStorage.setItem('username', resp.data.user.name);
             localStorage.setItem('user_id', resp.data.user.id);
             localStorage.setItem('authToken', resp.data.token);
-            this.reset();
-            this.$router.push("/home");
+            // this.$router.push("/home");
+            window.location.href = "/home";
             if (localStorage.getItem('speed_dial') == undefined) {
               localStorage.setItem('speed_dial', true);
               this.$store.dispatch('speedDialState', {
@@ -232,13 +234,16 @@ export default {
                 status: true
               });
             }
+            // this.reset();
           })
           .catch(e => {
-            console.log(e);
             this.myloadingvariable = false;
             this.snackbar = true;
             if (e.response.status == 500) {
+              console.log(e.response.status);
               this.text = 'Pred prvotným prihlásením je potrebné aktivovať účet pomocou mailu.';
+            } else if (e.response.status == 403) {
+              this.text = 'Vyskytol sa nejaký problém. Skúste to prosím znova.';
             } else {
               this.text = 'Nesprávny email alebo heslo.';
             }
@@ -248,6 +253,8 @@ export default {
             this.error = ' ';
             this.errors.push(e)
           })
+      } else {
+        return;
       }
     },
     // VueSocialauth
@@ -290,7 +297,7 @@ export default {
       //   })
     },
   },
-  updated() {},
+
   mounted() {
     if (this.$store.getters['updatedPassword'] != false) {
       this.snackbar = true;
@@ -306,20 +313,30 @@ export default {
       this.snackbar = false;
     }
 
-    if (this.$store.getters['isLoggedOut'].logout != false) {
+    if (localStorage.getItem('logout') == "true") {
       this.snackbar = true;
-      this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený.`;
+      this.text = `${localStorage.getItem('username')}, bol si úspešne odhlásený.`;
       this.snackbar_color = 'green';
       this.snackbar_icon = 'mdi-check-circle';
       this.snackbar_timeout = '5000';
-
-      this.$store.dispatch('isLoggedOut', {
-        username: '',
-        logout: false
-      });
-    } else {
-      this.snackbar = false;
+      localStorage.removeItem("logout");
+      localStorage.removeItem("username");
     }
+
+    // if (this.$store.getters['isLoggedOut'].logout != false) {
+    //   this.snackbar = true;
+    //   this.text = `${this.$store.getters['isLoggedOut'].username}, bol si úspešne odhlásený.`;
+    //   this.snackbar_color = 'green';
+    //   this.snackbar_icon = 'mdi-check-circle';
+    //   this.snackbar_timeout = '5000';
+    //
+    //   this.$store.dispatch('isLoggedOut', {
+    //     username: '',
+    //     logout: false
+    //   });
+    // } else {
+    //   this.snackbar = false;
+    // }
 
     // console.log('Component login mounted.')
   },

@@ -1,63 +1,42 @@
 <template>
 <div class="administration w-100 h-100">
-  <v-card elevation="0">
-    <v-app-bar fixed flat>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+  <v-card>
+    <v-tabs grow class="mt-16">
+      <v-tab :to="tabs[0].route" exact>
+        {{tabs[0].name}}
+      </v-tab>
+      <v-tab :to="tabs[1].route">
+        {{tabs[1].name}}
+      </v-tab>
+      <v-tab :to="tabs[2].route" v-if="$root.me.name == 'admin'">
+        {{tabs[2].name}}
+      </v-tab>
+    </v-tabs>
 
-      <v-toolbar-title class="position-absolute" style="right:14px">
-        <span class="md-title font-weight-bold" v-if="this.$vuetify.theme.dark">
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_dark.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_dark.png')"></v-img>
-        </span>
-        <span class="md-title font-weight-bold" v-else>
-          <v-img class="ma-lg-0 ma-md-0 ma-auto" :lazy-src="require('../../public/img/logos/logo_home_theme_light.png')" max-height="100" max-width="200" :src="require('../../public/img/logos/logo_home_theme_light.png')"></v-img>
-        </span>
-      </v-toolbar-title>
+    <v-card-text class="p-0 text-center">
+      <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
+        <v-tab-item :key="tabs[0].id" :value="tabs[0].route">
+          <router-view />
+        </v-tab-item>
 
-      <!-- <template v-slot:extension>
-        <v-tabs grow>
-          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
-        </v-tabs>
-      </template> -->
-      <template v-slot:extension>
-        <v-tabs grow>
-          <v-tab :to="tabs[0].route" exact>
-            {{tabs[0].name}}
-          </v-tab>
-          <v-tab :to="tabs[1].route">
-            <v-badge :content="$store.getters['notificationCounter']" :value="$store.getters['notificationCounter']" color="orange">
-              {{tabs[1].name}}
-            </v-badge>
-          </v-tab>
-          <v-tab :to="tabs[2].route" v-if="username == 'admin'">
-            {{tabs[2].name}}
-          </v-tab>
-          <!-- <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab> -->
-        </v-tabs>
-      </template>
-    </v-app-bar>
+        <v-tab-item :key="tabs[1].id" :value="tabs[1].route">
+          <router-view />
+        </v-tab-item>
 
-    <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
-      <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-        <router-view />
-      </v-tab-item>
-      <NavigationDrawer :drawer="drawer" />
-    </v-tabs-items>
+        <v-tab-item :key="tabs[2].id" :value="tabs[2].route" v-if="$root.me.name == 'admin'">
+          <router-view />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card-text>
   </v-card>
-  <Footer />
 </div>
 </template>
 <script>
-import NavigationDrawer from "@/components/NavigationDrawer.vue";
 export default {
   name: "Administration",
-  components: {
-    NavigationDrawer,
-  },
-  props: ['drawerNew'],
+  components: {},
   data() {
     return {
-      username: localStorage.getItem("username"),
-      drawer: false,
       tab: null,
       activeTab: '/administration',
       tabs: [{
@@ -75,14 +54,10 @@ export default {
       }, ],
     }
   },
-  updated() {
-    this.drawer = this.drawerNew;
-  },
-  watch: {
-    group() {
-      this.drawer = false
-    },
-  },
+
+
+  updated() {},
+
   methods: {
     updateRouter(tab) {
       this.$router.push(tab)

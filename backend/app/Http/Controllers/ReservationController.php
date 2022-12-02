@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Events\Reservations;
 
 class ReservationController extends Controller
 {
@@ -45,6 +46,7 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::create([
           'event_name' => $request->event_name,
+          'user_id' =>$request->user_id,
           'username' => $request->username,
           'start_date' => $request->start_date,
           'end_date' => $request->end_date,
@@ -113,7 +115,12 @@ class ReservationController extends Controller
                      ->where('name', $username[0]->username)
                      ->select('id')
                      ->get();
-        return response()->json($user_id);
+
+        $reservation = DB::table('reservations')->where('id', $request->id)->get();
+
+        broadcast(new Reservations($reservation));
+
+        return response()->json($reservation);
     }
 
     /**

@@ -5,13 +5,8 @@
             threshold: .4
           }" transition="scale-transition">
       <v-row justify="center" class="ml-0 mr-0">
-        <v-col class="pl-3 pr-3">
+        <v-col class="p-0">
           <v-card class="rounded" elevation="0">
-            <!-- <v-toolbar class="rounded-top" color="primary" flat dark>
-            <v-row align="center">
-              <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
-            </v-row>
-          </v-toolbar> -->
             <v-card-text>
               <span>Chata sa nachadza v byvalej lokalite kupelov byšta obklopena prekrasnou prirodou. Navšteva tokajskych pivnic. Termalne kupalisko 30 min autom. Možnost turistiky, hubarčenia, cykloturistiky, jazero vhodne na rybolov.</span>
             </v-card-text>
@@ -20,30 +15,23 @@
 
             <v-card-text>
               <h1 class="primary--text">Galéria</h1>
-              <!-- <v-container> -->
-              <!-- <v-row v-if="isLoaded == false">
-              <v-col cols="6" class="pr-0 pt-0">
-                <v-skeleton-loader class="sl1" type="image" tile />
-              </v-col>
-
-              <v-col cols="6" class="pl-1 pt-0">
-                <v-skeleton-loader class="sl-2" type="image" height="175" tile />
-                <v-skeleton-loader class="sl-3 pt-1" type="image" height="175" tile />
-              </v-col>
-            </v-row> -->
-              <!-- </v-container> -->
-              <!-- <v-row> -->
-              <lightbox :cells="3" :items="images"></lightbox>
-              <!-- @load="onImgLoad" -->
-              <!-- </v-row> -->
-
-              <!-- <CoolLightBox :items="images" :index="index" :fullScreen="true" @close="index = null">
-              </CoolLightBox>
-
-              <div class="images-wrapper">
-                <div class="image" v-for="(image, imageIndex) in images" :key="imageIndex" @click="index = imageIndex" :style="{ backgroundImage: 'url(' + image + ')' }"></div>
-              </div> -->
-
+              <!-- <lightbox :cells="3" :items="images"></lightbox> -->
+              <v-container class="m-0">
+                <v-row>
+                  <v-col v-for="(image, index) in media" :key="'media4' + index" class="d-flex child-flex container_images p-1" cols="12" lg="4" md="4" sm="6" style="overflow: hidden">
+                    <v-card class="card_images" elevation="0" tile>
+                      <v-img style="cursor: pointer" class="zoom" :lazy-src="image.thumb" :src="image.thumb" aspect-ratio="1.5" @click="openGallery(index)">
+                        <template v-slot:placeholder>
+                          <v-row class="fill-height ma-0" align="center" justify="center">
+                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
+                    </v-card>
+                  </v-col>
+                  <LightBox ref="lightbox" :media="media" :show-caption="true" :show-light-box="false" closable />
+                </v-row>
+              </v-container>
             </v-card-text>
           </v-card>
         </v-col>
@@ -55,26 +43,55 @@
 <script>
 // import CoolLightBox from "vue-cool-lightbox";
 // import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
+import LightBox from 'vue-it-bigger'
+import('vue-it-bigger/dist/vue-it-bigger.min.css') // when using webpack
+
 export default {
   name: "Domov",
   components: {
-    // CoolLightBox
+    LightBox,
   },
   data() {
     return {
-      images: ["img/stiahnuť (1).png", "img/stiahnuť (2).png", "img/stiahnuť (3).png", "img/stiahnuť (4).png", "img/stiahnuť (1).png", "img/stiahnuť (2).png", "img/stiahnuť (3).png", "img/stiahnuť (4).png", "img/stiahnuť (1).png",
-        "img/stiahnuť (2).png",
-      ],
       index: null,
-
-      // isLoaded: false,
+      media: [{ // For an image
+        type: 'image', // Can be omitted for image
+        thumb: 'https://www.dropbox.com/s/rtsy3zfcloqipjx/1.png?raw=1',
+        src: 'https://www.dropbox.com/s/rtsy3zfcloqipjx/1.png?raw=1',
+        caption: '', // Optional
+        srcset: 'https://www.dropbox.com/s/rtsy3zfcloqipjx/1.png?raw=1' // Optional for displaying responsive images
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: 'https://www.dropbox.com/s/s5hmidluzqcypaq/2.png?raw=1',
+        src: 'https://www.dropbox.com/s/s5hmidluzqcypaq/2.png?raw=1',
+        caption: '', // Optional
+        srcset: 'https://www.dropbox.com/s/s5hmidluzqcypaq/2.png?raw=1' // Optional for displaying responsive images
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: 'https://www.dropbox.com/s/pz0qzpgat025abr/3.png?raw=1',
+        src: 'https://www.dropbox.com/s/pz0qzpgat025abr/3.png?raw=1',
+        caption: '', // Optional
+        srcset: 'https://www.dropbox.com/s/pz0qzpgat025abr/3.png?raw=1' // Optional for displaying responsive images
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: 'https://www.dropbox.com/s/w4w55ibyhb7jlzq/4.png?raw=1',
+        src: 'https://www.dropbox.com/s/w4w55ibyhb7jlzq/4.png?raw=1',
+        caption: '', // Optional
+        srcset: 'https://www.dropbox.com/s/w4w55ibyhb7jlzq/4.png?raw=1' // Optional for displaying responsive images
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: 'https://www.dropbox.com/s/vlpeiff2fg5vcg0/5.png?raw=1',
+        src: 'https://www.dropbox.com/s/vlpeiff2fg5vcg0/5.png?raw=1',
+        caption: '', // Optional
+        srcset: 'https://www.dropbox.com/s/vlpeiff2fg5vcg0/5.png?raw=1' // Optional for displaying responsive images
+      }, ],
     }
   },
 
   methods: {
-    // onImgLoad() {
-    //   this.isLoaded = true
-    // },
+    openGallery(index) {
+      this.$refs.lightbox.showImage(index)
+    },
   }
 }
 </script>

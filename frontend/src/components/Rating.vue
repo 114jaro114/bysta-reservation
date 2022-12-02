@@ -110,7 +110,7 @@
       <v-lazy :options="{
           threshold: .2
         }" min-height="200" transition="scale-transition">
-        <v-card elevation="2" class="mt-3">
+        <v-card elevation="0" class="mt-3">
           <v-toolbar class="rounded-top" color="primary" flat dark>
             <span>Hodnotenia</span>
             <v-spacer></v-spacer>
@@ -124,7 +124,8 @@
         </v-card>
       </v-lazy>
     </div>
-    <!--change rating-->
+
+    <!--add rating-->
     <div class="col" v-if="!cardHide2">
       <div v-if="this.$store.getters['ratingState']">
         <v-card elevation="0">
@@ -144,11 +145,13 @@
           </form>
         </v-card>
       </div>
+
+      <!--change rating -->
       <div v-else>
         <v-lazy :options="{
             threshold: .2
           }" min-height="200" transition="scale-transition">
-          <v-card elevation="2" class="mt-3">
+          <v-card elevation="0" class="mt-3">
             <v-toolbar class="rounded-top" color="primary" flat dark>
               <span>Zmeniť hodnotenie</span>
               <v-spacer></v-spacer>
@@ -157,7 +160,8 @@
 
             <form @submit.prevent class="p-3">
               <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
-              <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea>
+              <!-- <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea> -->
+              <v-textarea v-model="newEvent2.comment" :rules="messageRules" :counter="1000" label="Správa" tabindex="1" filled clearable no-resize style="overflow:hidden"></v-textarea>
               <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
             </form>
           </v-card>
@@ -186,8 +190,9 @@ export default {
       cardHide: true,
       cardHide2: true,
       myloadingvariable: true,
-      rules: [
-        v => (v && v.length <= 50) || 'Maximálna dĺžka je 50 znakov'
+      messageRules: [
+        v => !!v || 'Správa je povinná',
+        v => (v && v.length <= 1000) || 'Správa môže obsahovať maximálne 1000 znakov',
       ],
       footerProps: {
         itemsPerPageText: 'Počet riadkov',
