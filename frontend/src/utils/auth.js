@@ -12,6 +12,8 @@ export function getAuthToken() {
 export function clearAuthToken() {
   axios.defaults.headers.common['Authorization'] = ''
   localStorage.removeItem('authToken')
+  localStorage.removeItem('user_id')
+  localStorage.removeItem('username')
   // window.location.href = "/login"
 }
 
@@ -30,6 +32,8 @@ function getTokenExpirationDate(encodedToken) {
   let token = decode(encodedToken)
   if (!token.exp) {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
     return null
   }
 

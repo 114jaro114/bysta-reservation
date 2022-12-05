@@ -1,6 +1,6 @@
 <template>
-<div>
-  <div class="rates">
+<div class="rates">
+  <v-card elevation="0">
     <v-row no-gutters>
       <v-col cols="12" xl="4" lg="5" md="6" sm="12" xs="12">
         <v-container>
@@ -105,30 +105,35 @@
         </v-container>
       </v-col>
     </v-row>
+  </v-card>
+
+  <v-card class="mt-6" elevation="0">
     <!--show all ratings-->
-    <div class="col" v-if="!cardHide">
-      <v-lazy :options="{
-          threshold: .2
-        }" min-height="200" transition="scale-transition">
-        <v-card elevation="0" class="mt-3">
-          <v-toolbar class="rounded-top" color="primary" flat dark>
-            <span>Hodnotenia</span>
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details clearable filled dense></v-text-field>
-            <v-spacer></v-spacer>
-            <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
-          </v-toolbar>
+    <v-lazy :options="{
+            threshold: .4
+          }" transition="scale-transition">
+      <div v-if="!cardHide">
+        <v-toolbar class="rounded-top" color="primary" flat dark>
+          <span>Hodnotenia</span>
+          <v-spacer></v-spacer>
+          <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable></v-text-field>
+          <v-spacer></v-spacer>
+          <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
+        </v-toolbar>
 
-          <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0"
-            :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
-        </v-card>
-      </v-lazy>
-    </div>
+        <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0 p-3"
+          :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
+      </div>
+    </v-lazy>
+  </v-card>
 
+  <v-card class="mt-3" elevation="0">
     <!--add rating-->
-    <div class="col" v-if="!cardHide2">
-      <div v-if="this.$store.getters['ratingState']">
-        <v-card elevation="0">
+    <v-lazy :options="{
+            threshold: .4
+          }" transition="scale-transition">
+      <div v-if="!cardHide2">
+        <div v-if="this.$store.getters['ratingState']">
           <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
             <v-spacer />
             <v-toolbar-title>
@@ -136,49 +141,43 @@
             </v-toolbar-title>
             <v-spacer />
           </v-toolbar>
-          <form @submit.prevent class="mt-3">
+          <form @submit.prevent class="p-3">
             <v-rating v-model="newEvent.rate" background-color="grey lighten-2" color="primary" size="50"></v-rating>
             <div class="p-3">
-              <v-textarea :rules="rules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
+              <v-textarea :rules="messageRules" v-model="newEvent.comment" label="Komentár" rows="1" auto-grow prepend-icon="mdi-comment" counter="50" clearable filled clear-icon="mdi-close"></v-textarea>
               <v-btn class="mt-2" color="primary" @click="addNewEvent" dark block> Pridať hodnotenie </v-btn>
             </div>
           </form>
-        </v-card>
+        </div>
+
+        <!--change rating -->
+        <div v-else>
+          <v-toolbar class="rounded-top" color="primary" flat dark>
+            <span>Zmeniť hodnotenie</span>
+            <v-spacer></v-spacer>
+            <v-icon v-on:click="cardHide2 = !cardHide2">mdi-close</v-icon>
+          </v-toolbar>
+
+          <form @submit.prevent class="p-3">
+            <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
+            <!-- <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea> -->
+            <v-textarea v-model="newEvent2.comment" :rules="messageRules" :counter="1000" label="Správa" tabindex="1" filled clearable no-resize style="overflow:hidden"></v-textarea>
+            <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
+          </form>
+        </div>
       </div>
+    </v-lazy>
+  </v-card>
 
-      <!--change rating -->
-      <div v-else>
-        <v-lazy :options="{
-            threshold: .2
-          }" min-height="200" transition="scale-transition">
-          <v-card elevation="0" class="mt-3">
-            <v-toolbar class="rounded-top" color="primary" flat dark>
-              <span>Zmeniť hodnotenie</span>
-              <v-spacer></v-spacer>
-              <v-icon v-on:click="cardHide2 = !cardHide2">mdi-close</v-icon>
-            </v-toolbar>
-
-            <form @submit.prevent class="p-3">
-              <v-rating class="mb-4" v-model="newEvent2.rate" background-color="grey lighten-2" color="primary" large></v-rating>
-              <!-- <v-textarea class="mx-2" :rules="rules" v-model="newEvent2.comment" label="Komentár" rows="1" prepend-icon="mdi-comment" auto-grow counter filled clearable clear-icon="mdi-close"></v-textarea> -->
-              <v-textarea v-model="newEvent2.comment" :rules="messageRules" :counter="1000" label="Správa" tabindex="1" filled clearable no-resize style="overflow:hidden"></v-textarea>
-              <v-btn class="mt-2" color="primary" @click="updateEvent" dark block> Odoslať zmenu </v-btn>
-            </form>
-          </v-card>
-        </v-lazy>
-      </div>
-    </div>
-
-    <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
-      <v-icon>mdi-check-circle</v-icon>
-      {{ textUpdateReview }}
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbarUpdateReview = false">
-          Zrušiť
-        </v-btn>
-      </template>
-    </v-snackbar>
-  </div>
+  <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
+    <v-icon>mdi-check-circle</v-icon>
+    {{ textUpdateReview }}
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" text v-bind="attrs" @click="snackbarUpdateReview = false">
+        Zrušiť
+      </v-btn>
+    </template>
+  </v-snackbar>
 </div>
 </template>
 <script>

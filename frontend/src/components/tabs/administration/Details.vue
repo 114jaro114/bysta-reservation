@@ -1,154 +1,152 @@
 <template>
 <div class="details w-100 h-100">
-  <!-- <v-lazy :options="{
-            threshold: .4
-          }" transition="scale-transition"> -->
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-  <v-row justify="center" class="ml-0 mr-0">
-    <!-- circle chart -->
-    <v-col cols="12" lg="6" md="6" sm="12">
-      <!-- :loading="loaderStateCircle" -->
-      <v-card class="rounded" elevation="0" loader-height="6">
-        <div class="pt-3" id="chart">
-          <apexchart type="radialBar" height="365" :options="chartOptionsCircle" :series="seriesCircle"></apexchart>
-        </div>
-
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            Aktuálna cena osoba/noc
-          </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <span class="font-weight-bold">{{lastUpdate}}</span>
-        </v-card-text>
-      </v-card>
-    </v-col>
-
-    <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-      <!-- :loading="loaderStateLine" -->
-      <v-card class="rounded" elevation="0" loader-height="6">
-        <div class="pt-3" id="chart">
-          <apexchart type="line" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-        </div>
-
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            Cena za noc/osoba/obdobie
-          </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <!-- <span class="font-weight-bold">{{lastUpdate}}</span> -->
-        </v-card-text>
-      </v-card>
-    </v-col>
-
-    <v-col cols="12" lg="6" md="12" sm="12">
-      <!-- :loading="loaderStateCircle_multiple" -->
-      <v-card class="rounded" elevation="0" loader-height="6">
-        <div class="pt-3" id="chart">
-          <apexchart type="radialBar" height="365" ref="circleMultipleChart" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
-        </div>
-
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            Celkova suma za rezervácie
-          </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <span class="font-weight-bold">{{lastUpdate}}</span>
-        </v-card-text>
-      </v-card>
-    </v-col>
-
-    <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
-      <!-- :loading="loaderStateColumn" -->
-      <v-card class="rounded" elevation="0" loader-height="6">
-        <div class="pt-3" id="chart">
-          <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-        </div>
-
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            Cena osoba/noc S DPH/BEZ DPH/DPH
-          </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <span class="font-weight-bold">{{lastUpdate}}</span>
-        </v-card-text>
-      </v-card>
-    </v-col>
-
-    <!-- historical chart -->
-    <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
-      <!-- :loading="loaderStateSeries" -->
-      <v-card class="rounded" elevation="0" loader-height="6">
-        <div class="pt-3" id="chart">
-          <div class="toolbar pt-3">
-            <v-btn icon color="#0066ff" id="one_hour" @click="updateData('one_hour')" class="mr-2" :class="{active: selection==='one_hour'}">
-              1H
-            </v-btn>
-            <v-btn icon color="#0066ff" id="one_day" @click="updateData('one_day')" class="mr-2" :class="{active: selection==='one_day'}">
-              1D
-            </v-btn>
-            <v-btn icon color="#0066ff" id="one_month" @click="updateData('one_month')" class="mr-2" :class="{active: selection==='one_month'}">
-              1M
-            </v-btn>
-
-            <v-btn icon color="#0066ff" id="six_months" @click="updateData('six_months')" class="mr-2" :class="{active: selection==='six_months'}">
-              6M
-            </v-btn>
-
-            <v-btn icon color="#0066ff" id="one_year" @click="updateData('one_year')" class="mr-2" :class="{active: selection==='one_year'}">
-              1Y
-            </v-btn>
-
-            <v-btn icon color="#0066ff" id="ytd" @click="updateData('ytd')" class="mr-2" :class="{active: selection==='ytd'}">
-              YTD
-            </v-btn>
-
-            <v-btn icon color="#0066ff" id="all" @click="updateData('all')" :class="{active: selection==='all'}">
-              ALL
-            </v-btn>
+  <v-container>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <v-row justify="center" class="ml-0 mr-0">
+      <!-- circle chart -->
+      <v-col cols="12" lg="6" md="12" sm="12">
+        <!-- :loading="loaderStateCircle" -->
+        <v-card class="rounded" elevation="0" loader-height="6">
+          <div class="pt-3" id="chart">
+            <apexchart type="radialBar" height="365" ref="circleMultipleChart" :options="chartOptionsCircle_multiple" :series="seriesCircle_multiple"></apexchart>
           </div>
 
-          <div id="chart-timeline">
-            <apexchart type="area" height="350" ref="historicalChart" :options="chartOptions" :series="series"></apexchart>
-          </div>
-        </div>
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Aktuálna cena osoba/noc
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            Historický graf vývoja ceny
+      <v-col cols="12" lg="6" md="12" sm="12">
+        <!-- :loading="loaderStateCircle" -->
+        <v-card class="rounded" elevation="0" loader-height="6">
+          <div class="pt-3" id="chart">
+            <apexchart type="radialBar" height="365" :options="chartOptionsCircle" :series="seriesCircle"></apexchart>
           </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <span class="font-weight-bold">{{lastUpdate}}</span>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
-  <!-- </v-lazy> -->
+
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Celkové prostriedky uhradené za rezerváciu
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" lg="6" md="12" sm="12">
+        <v-card class="rounded" elevation="0">
+          <div class="pt-3" id="chart">
+            <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
+          </div>
+
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" lg="6" md="12" sm="12">
+        <!-- :loading="loaderStateColumn" -->
+        <v-card class="rounded" elevation="0" loader-height="6">
+          <div class="pt-3" id="chart">
+            <apexchart type="bar" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+          </div>
+
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- historical chart -->
+      <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
+        <!-- :loading="loaderStateSeries" -->
+        <v-card class="rounded" elevation="0" loader-height="6">
+          <div class="pt-3" id="chart">
+            <div class="toolbar pt-3">
+              <v-btn icon color="#0066ff" id="one_hour" @click="updateData('one_hour')" class="mr-2" :class="{active: selection==='one_hour'}">
+                1H
+              </v-btn>
+              <v-btn icon color="#0066ff" id="one_day" @click="updateData('one_day')" class="mr-2" :class="{active: selection==='one_day'}">
+                1D
+              </v-btn>
+              <v-btn icon color="#0066ff" id="one_month" @click="updateData('one_month')" class="mr-2" :class="{active: selection==='one_month'}">
+                1M
+              </v-btn>
+
+              <v-btn icon color="#0066ff" id="six_months" @click="updateData('six_months')" class="mr-2" :class="{active: selection==='six_months'}">
+                6M
+              </v-btn>
+
+              <v-btn icon color="#0066ff" id="one_year" @click="updateData('one_year')" class="mr-2" :class="{active: selection==='one_year'}">
+                1Y
+              </v-btn>
+
+              <v-btn icon color="#0066ff" id="ytd" @click="updateData('ytd')" class="mr-2" :class="{active: selection==='ytd'}">
+                YTD
+              </v-btn>
+
+              <v-btn icon color="#0066ff" id="all" @click="updateData('all')" :class="{active: selection==='all'}">
+                ALL
+              </v-btn>
+            </div>
+
+            <div id="chart-timeline">
+              <apexchart type="area" height="350" ref="historicalChart" :options="chartOptions" :series="series"></apexchart>
+            </div>
+          </div>
+
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              Historický graf vývoja ceny
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </div>
 </template>
 
 <script>
+import axios from 'axios';
 import VueApexCharts from 'vue-apexcharts'
 import moment from 'moment'
 export default {
@@ -164,7 +162,9 @@ export default {
       loaderStateCircle_multiple: true,
       loaderStateColumn: true,
       loaderStateSeries: true,
-      seriesCircle: [15],
+      lastUpdate: localStorage.getItem('lastUpdate'),
+
+      seriesCircle: [],
       chartOptionsCircle: {
         chart: {
           foreColor: localStorage.getItem('graph_text_color'),
@@ -219,8 +219,10 @@ export default {
         labels: ['€'],
         colors: ['#0066ff'],
       },
+
+
       // circle multiple chart
-      seriesCircle_multiple: [2650, 2200, 450],
+      seriesCircle_multiple: [],
       chartOptionsCircle_multiple: {
         chart: {
           foreColor: localStorage.getItem('graph_text_color'),
@@ -289,21 +291,33 @@ export default {
             return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
           },
         },
-        colors: ['#00b300', '#ff6600', '#ff0000'],
-        labels: ['Celková suma', 'Celková suma bez dph', 'DPH zo sumy'],
+        colors: ['#ff0000', '#ff6600', '#0066ff', '#99cc00'],
+        labels: ['Dospelí', 'Deti od 2 do 12 rokov', 'Deti do 2 rokov', 'Poplatok za upratovanie'],
       },
 
-      //line chart
-      lastUpdate: localStorage.getItem('lastUpdate'),
-      seriesLine: [{
-        name: "Cena za noc/osobu v €",
-        data: [18, 18, 18, 16, 16, 15, 15, 15, 15, 16, 18, 18]
-      }],
-      chartOptionsLine: {
+      //dashed chart for Prices
+      seriesDashed: [{
+          name: "Dospelí:",
+          data: []
+        },
+        {
+          name: "Deti od 2 do 12 rokov:",
+          data: []
+        },
+        {
+          name: 'Deti do 2 rokov:',
+          data: []
+        },
+        {
+          name: 'Poplatok za upratovanie:',
+          data: []
+        }
+      ],
+      chartOptionsDashed: {
         chart: {
           foreColor: localStorage.getItem('graph_text_color'),
           height: 350,
-          type: 'line',
+          type: 'area',
           zoom: {
             enabled: false
           },
@@ -312,56 +326,91 @@ export default {
               download: false,
             },
           },
-        },
-        toolbar: {
-          show: false
+          animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
         },
         dataLabels: {
           enabled: false
         },
-        grid: {
-          show: true,
-          strokeDashArray: 0,
-          yaxis: {
-            lines: {
-              show: true,
-            },
-          },
-          xaxis: {
-            lines: {
-              show: false,
-            },
-          },
-        },
         stroke: {
-          curve: 'smooth',
-          width: 5,
+          width: [5, 7, 5, 7],
+          curve: 'straight',
+          dashArray: [0, 8, 5, 3],
+          colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
+        },
+        colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
+        legend: {
+          tooltipHoverFormatter: function(val, opts) {
+            return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>'
+          }
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
           tooltip: {
             enabled: false,
           },
         },
         tooltip: {
           theme: localStorage.getItem('graph_theme'),
+
+          y: [{
+              title: {
+                formatter: function(val) {
+                  return val + ""
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function(val) {
+                  return val + ""
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function(val) {
+                  return val;
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function(val) {
+                  return val;
+                }
+              }
+            }
+          ]
         },
-        legend: {
-          show: false
-        },
-        colors: ['#0066ff'],
+        grid: {
+          borderColor: '#f1f1f1',
+        }
       },
+
       //column chart
       seriesColumn: [{
-        name: 'Suma s DPH',
-        data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 3, 7, 25]
-      }, {
-        name: 'Suma bez DPH',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 15, 65, 24]
-      }, {
-        name: 'DPH',
-        data: [35, 41, 36, 26, 45, 48, 52, 53, 41, 1, 8, 47]
-      }],
+          name: "Dospelí:",
+          data: []
+        },
+        {
+          name: "Deti od 2 do 12 rokov:",
+          data: []
+        },
+        {
+          name: 'Deti do 2 rokov:',
+          data: []
+        },
+        {
+          name: 'Poplatok za upratovanie:',
+          data: []
+        }
+      ],
       chartOptionsColumn: {
         chart: {
           foreColor: localStorage.getItem('graph_text_color'),
@@ -385,9 +434,11 @@ export default {
         },
         stroke: {
           show: true,
-          width: 2,
-          colors: ['transparent']
+          // width: 3,
+          curve: 'straight',
+          colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
         },
+        colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
         xaxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         },
@@ -403,6 +454,7 @@ export default {
           }
         }
       },
+
       //area historical
       series: [{
         name: 'cena (€)',
@@ -471,14 +523,135 @@ export default {
         colors: ['#0066ff'],
       },
       selection: '',
-
     }
   },
   mounted() {
-    this.overlay = false;
+    this.getDataDashed();
+    this.getSeriesCircle()
   },
 
-  methods: {},
+  methods: {
+    getSeriesCircle() {
+      const api = `${process.env.VUE_APP_API_URL}/prices/getValueSpentByUserForReservation`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        .then(res => {
+          this.seriesCircle.splice(0, 1);
+          this.seriesCircle.push(res.data)
+        })
+    },
+
+    getDataDashed() {
+      this.overlay = true;
+      axios.get(`${process.env.VUE_APP_API_URL}/prices/getPricesForGraph`)
+        .then(res => {
+          if (res.data[0].created_at != null) {
+            this.lastUpdate = moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss');
+
+            localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
+              .format('YYYY-MM-DD HH:mm:ss'));
+
+            this.seriesCircle_multiple.splice(0, 4);
+
+            this.seriesDashed[0].data.splice(0, 12);
+            this.seriesDashed[1].data.splice(0, 12);
+            this.seriesDashed[2].data.splice(0, 12);
+            this.seriesDashed[3].data.splice(0, 12);
+
+            this.seriesColumn[0].data.splice(0, 12);
+            this.seriesColumn[1].data.splice(0, 12);
+            this.seriesColumn[2].data.splice(0, 12);
+            this.seriesColumn[3].data.splice(0, 12);
+
+
+
+            if (res.data[0].adults.length != 0) {
+              this.seriesCircle_multiple.push(res.data[0].adults[new Date().getMonth()].price)
+            } else {
+              this.seriesCircle_multiple.push('0')
+            }
+            if (res.data[0].child_from_2_to_12.length != 0) {
+              this.seriesCircle_multiple.push(res.data[0].child_from_2_to_12[new Date().getMonth()].price)
+            } else {
+              this.seriesCircle_multiple.push('0')
+            }
+            if (res.data[0].child_to_2.length != 0) {
+              this.seriesCircle_multiple.push(res.data[0].child_to_2[new Date().getMonth()].price)
+            } else {
+              this.seriesCircle_multiple.push('0')
+            }
+            if (res.data[0].cleaningFee.length != 0) {
+              this.seriesCircle_multiple.push(res.data[0].cleaningFee[new Date().getMonth()].price)
+            } else {
+              this.seriesCircle_multiple.push('0')
+            }
+
+            for (var i = 0; i < 12; i++) {
+              if (res.data[0].adults.length != 0) {
+                this.seriesDashed[0].data.push(res.data[0].adults[i].price);
+                this.seriesColumn[0].data.push(res.data[0].adults[i].price);
+
+              }
+              if (res.data[0].child_from_2_to_12.length != 0) {
+                this.seriesDashed[1].data.push(res.data[0].child_from_2_to_12[i].price);
+                this.seriesColumn[1].data.push(res.data[0].child_from_2_to_12[i].price);
+              }
+              if (res.data[0].child_to_2.length != 0) {
+                this.seriesDashed[2].data.push(res.data[0].child_to_2[i].price);
+                this.seriesColumn[2].data.push(res.data[0].child_to_2[i].price);
+              }
+              if (res.data[0].cleaningFee.length != 0) {
+                this.seriesDashed[3].data.push(res.data[0].cleaningFee[i].price);
+                this.seriesColumn[3].data.push(res.data[0].cleaningFee[i].price);
+              }
+            }
+
+            this.seriesDashed = [{
+                name: "Dospelí:",
+                data: this.seriesDashed[0].data
+              },
+              {
+                name: "Deti od 2 do 12 rokov:",
+                data: this.seriesDashed[1].data
+              },
+              {
+                name: 'Deti do 2 rokov:',
+                data: this.seriesDashed[2].data
+              },
+              {
+                name: 'Poplatok za upratovanie:',
+                data: this.seriesDashed[3].data
+              }
+            ];
+
+            this.seriesColumn = [{
+                name: "Dospelí:",
+                data: this.seriesColumn[0].data
+              },
+              {
+                name: "Deti od 2 do 12 rokov:",
+                data: this.seriesColumn[1].data
+              },
+              {
+                name: 'Deti do 2 rokov:',
+                data: this.seriesColumn[2].data
+              },
+              {
+                name: 'Poplatok za upratovanie:',
+                data: this.seriesColumn[3].data
+              }
+            ];
+          }
+          this.overlay = false;
+        })
+    },
+  },
   watch: {
     // model(nxt, old) {
     //   let oldIdx = old.indexOf(true)

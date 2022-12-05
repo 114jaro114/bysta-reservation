@@ -3,7 +3,9 @@
   <v-card>
     <v-tabs grow class="mt-16">
       <v-tab :to="tabs[0].route" exact>
-        {{tabs[0].name}}
+        <v-badge :content="$store.getters['reservationCounter']" :value="$store.getters['reservationCounter']" color="orange">
+          {{tabs[0].name}}
+        </v-badge>
       </v-tab>
       <v-tab :to="tabs[1].route">
         {{tabs[1].name}}

@@ -3,7 +3,7 @@
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
-  <v-row justify="center" class="ml-0 mr-0">
+  <v-row justify="center" class="ml-0 mr-0" v-if="successCreatedReservation == false">
     <div class="text-center">
       <v-dialog v-model="contactFormDialog" max-width="290">
         <v-card class="rounded" elevation="0">
@@ -35,21 +35,6 @@
         <template v-slot:action="{ attrs }">
 
           <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
-            <v-icon>mdi-close-circle</v-icon>
-          </v-btn>
-        </template>
-      </v-snackbar>
-
-      <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
-        <v-icon>mdi-check-circle</v-icon>
-        {{ text }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn color="white" to="/administration" text small v-bind="attrs" @click="snackbarSuccess = false">
-            <v-icon>mdi-clipboard-arrow-up</v-icon>
-            <span>prejsť do administrácia</span>
-          </v-btn>
-          <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
             <v-icon>mdi-close-circle</v-icon>
           </v-btn>
         </template>
@@ -98,9 +83,10 @@
 
           <v-stepper-items class="h-100">
             <v-stepper-content step="1">
-              <div v-if="this.$store.getters['pendingReservation'] != 0">
+              <div class="mb-1" v-if="this.$store.getters['pendingReservation'] != 0">
+                <v-icon class="mb-1" color="orange">mdi-information</v-icon>
                 <span>
-                  <v-icon color="orange">mdi-information</v-icon>Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
+                  Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
                 </span>
               </div>
               <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
@@ -800,7 +786,7 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
-                            {{overallPriceForNight}} €</span>
+                            {{overallPrice}} €</span>
                         </template>
                         <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1}} {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
                         <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
@@ -858,10 +844,43 @@
           </v-stepper-items>
         </v-stepper>
       </v-container>
-      <!-- </v-lazy> -->
     </v-col>
   </v-row>
-  <!-- </v-lazy> -->
+
+  <v-container class="p-0" v-else>
+    <v-card class="rounded p-3 d-flex align-center w-100" elevation="0" min-height="88vh">
+      <v-row class="w-100">
+        <v-col cols="12">
+          <h1 class="font-weight-bold">Ďakujeme Vám za rezerváciu.</h1>
+        </v-col>
+        <v-col cols="12">
+          <span>Vašu rezerváciu sa budeme snažiť potvrdiť čo najrýchlejšie. Detail Vašej rezervácie je možné si pozrieť v časti Administrácia.</span>
+        </v-col>
+        <v-col cols="12">
+          <v-slide-y-transition>
+            <v-btn color="primary" class="anim" to="/administration">
+              <span>Do administrácie</span>
+              <v-icon class="arrow">mdi-arrow-right</v-icon>
+            </v-btn>
+          </v-slide-y-transition>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-container>
+
+  <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
+    <v-icon>mdi-check-circle</v-icon>
+    {{ text }}
+    <template v-slot:action="{ attrs }">
+      <!-- <v-btn color="white" to="/administration" text small v-bind="attrs" @click="snackbarSuccess = false">
+        <v-icon>mdi-clipboard-arrow-up</v-icon>
+        <span>prejsť do administrácie</span>
+      </v-btn> -->
+      <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
+        <v-icon>mdi-close-circle</v-icon>
+      </v-btn>
+    </template>
+  </v-snackbar>
 </div>
 </template>
 
@@ -898,7 +917,7 @@ export default {
       priceChildsto2: 0,
       priceChilds2to12: 18,
       countDaysBetweemTwoDates: null,
-      overallPriceForNight: 18,
+      overallPrice: 18,
       //cleaning cabin
       cleaningFee: 100,
       priceCabinUnderSixPpl: 150,
@@ -907,7 +926,7 @@ export default {
       //table prices
       headers: [{
           id: 1,
-          text: '           ',
+          text: '',
           sortable: false,
           value: 'text',
         },
@@ -1010,8 +1029,8 @@ export default {
       contactFormDialog: false,
       contactFormDialogOut: '',
       rowContactForm: '',
-
       overlay: true,
+      successCreatedReservation: false,
     }
   },
 
@@ -1080,7 +1099,6 @@ export default {
     },
 
     loadedEvents(events) {
-      console.log(events);
       this.overlay = events;
     },
 
@@ -1308,7 +1326,19 @@ export default {
     },
 
     countingPrices() {
-      this.headerTooltipsConfig();
+      // this.headerTooltipsConfig();
+      this.headerTooltips = [];
+      this.headerTooltips.push('Maximálny počet osôb je 20!');
+
+      if (this.counter1 + this.counter2 > 5) {
+        this.headerTooltips.push('Cena za osobu na noc');
+        this.headerTooltips.push('');
+      } else {
+        this.headerTooltips.push('Cena za celú chatu na 1 noc pri počte osôb <6');
+        this.headerTooltips.push('');
+      }
+      this.headerTooltips.push(`${'Od ' + this.start_date + ' do ' + this.end_date}`);
+
       this.prices = [];
       if (this.counter1 + this.counter2 > 5) {
         if (this.counter2 > 0) {
@@ -1346,7 +1376,7 @@ export default {
         }, {
           text: 'Spolu',
           p1: this.counter1 + this.counter2 + this.counter3,
-          p2: this.priceAdults + '€',
+          p2: ((this.counter1 * this.priceAdults) / this.counter1) + ((this.counter2 * this.priceChilds2to12) / this.counter2 || 0) + ((this.counter3 * this.priceChildsto2) / this.counter3 || 0) + '€',
           p3: this.counter1 * this.priceAdults + this.counter2 * this.priceChilds2to12 + this.counter3 * this.priceChildsto2 + '€',
           p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + this.cleaningFee + '€',
         });
@@ -1373,6 +1403,25 @@ export default {
       }
     },
 
+    getUncheckedReservations() {
+      const api = `${process.env.VUE_APP_API_URL}/reservation/getUncheckedReservationsUser`;
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+
+      //reservations counter
+      axios.get(api, config)
+        .then(res => {
+          this.$store.dispatch('reservationCounter', {
+            reservCounter: res.data
+          });
+        });
+    },
+
     store() {
       this.overlay = true;
       if (this.step1 && this.step2 && this.step3 && this.step4) {
@@ -1383,6 +1432,7 @@ export default {
             Authorization: "Bearer " + localStorage.getItem("authToken"),
           },
         };
+
         axios.post(api, {
             event_name: "rezervácia",
             user_id: this.$root.me.id,
@@ -1395,11 +1445,14 @@ export default {
             adults: this.counter1,
             childs2to12: this.counter2,
             childsto2: this.counter3,
+            cleaningFee: this.cleaningFee,
             priceForNight: this.priceAdults,
-            overallPriceForNight: this.overallPriceForNight,
+            totalPersons: this.counter1 + this.counter2 + this.counter3,
+            overallPrice: this.overallPrice,
             note: this.note
           }, config)
           .then(() => {
+            this.getUncheckedReservations();
             const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
             const config = {
               headers: {
@@ -1426,18 +1479,16 @@ export default {
                 recipient: 1,
                 title: "Nová rezervácia",
                 subtitle: "Nová rezervácia",
-                text: `Používateľ ${this.newEvent.username} vytvoril rezerváciu.`,
+                text: `Používateľ ${this.$root.me.name} vytvoril rezerváciu.`,
                 date: moment(new Date())
                   .format('YYYY-MM-DD HH:mm'),
                 status: "new",
               }, config)
               .then(() => {})
             this.snackbarSuccess = true;
+            this.successCreatedReservation = true;
             this.overlay = false;
             this.text = "Rezervácia bola úspešne vytvorená!";
-            setTimeout(function() {
-              this.$router.push("/Administration");
-            }, 3000);
 
           })
           .catch(err => console.log("nepodarilo sa pridat event", err));
@@ -1526,7 +1577,12 @@ export default {
     // //Difference in number of weeks
     // moment.duration(start.diff(end))
     //   .asWeeks();
-    this.overallPriceForNight = this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates
+    if (this.counter1 + this.counter2 > 5) {
+      this.overallPrice = this.cleaningFee + this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this
+        .countDaysBetweemTwoDates;
+    } else {
+      this.overallPrice = (this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates) + this.cleaningFee;
+    }
   }
 }
 </script>

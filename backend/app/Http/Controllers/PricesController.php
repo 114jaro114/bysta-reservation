@@ -89,7 +89,8 @@ class PricesController extends Controller
       return response()->json($array);
     }
 
-
-
-
+    public function  getValueSpentByUserForReservation() {
+      $test = DB::table('reservations')->where('user_id', '=', auth()->user()->id)->SUM('overall_price');
+      return response()->json($test);
+    }
 }

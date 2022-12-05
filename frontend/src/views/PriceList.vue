@@ -1,7 +1,7 @@
 <template>
 <div class="price_list w-100 h-100">
   <v-container class="mt-16 mb-4">
-    <v-card class="pt-3 pt-lg-5 pt-md-5">
+    <v-card class="pt-3 pt-lg-5 pt-md-5" elevation="0">
       <v-card-text class="p-0 text-center">
         <v-overlay :value="overlay">
           <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -31,11 +31,11 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" lg="6" md="6" sm="12" class="pl-3 pr-3">
+            <v-col cols="12" lg="6" md="6" sm="12">
               <!-- :loading="loaderStateColumn" -->
               <v-card class="rounded" elevation="0" loader-height="6">
                 <div class="pt-3" id="chart">
-                  <apexchart type="bar" height="332" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+                  <apexchart type="bar" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
                 </div>
 
                 <v-card-text class="pt-0">
@@ -52,65 +52,25 @@
               </v-card>
             </v-col>
 
-            <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
-                <v-card class="rounded" elevation="0" loader-height="6">
-                  <div class="pt-3" id="chart">
-                    <apexchart type="area" height="350" :options="chartOptionsLine" :series="seriesLine"></apexchart>
-                  </div>
-
-                  <v-card-text class="pt-0">
-                    <div class="title font-weight-light mb-2">
-                      Cena za noc/osoba/obdobie
-                    </div>
-                    <v-divider class="my-2"></v-divider>
-                    <v-icon class="mr-2" small>
-                      mdi-clock
-                    </v-icon>
-                    <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                    <span class="font-weight-bold">{{lastUpdate}}</span>
-                  </v-card-text>
-                </v-card>
-              </v-col> -->
-
-            <!-- <v-col cols="12" lg="6" md="12" sm="12" class="pl-3 pr-3">
-                <v-card class="rounded" elevation="0" loader-height="6">
-                  <div class="pt-3" id="chart">
-                    <apexchart type="bar" ref="column_chart" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-                  </div>
-
-                  <v-card-text class="pt-0">
-                    <div class="title font-weight-light mb-2">
-                      Vlhkosť za jednotlivé mesiace v roku
-                    </div>
-                    <v-divider class="my-2"></v-divider>
-                    <v-icon class="mr-2" small>
-                      mdi-clock
-                    </v-icon>
-                    <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                    <span class="font-weight-bold">{{lastUpdate}}</span>
-                  </v-card-text>
-                </v-card>
-              </v-col> -->
-
-            <v-col cols="12" lg="12" md="12" sm="12" class="pl-3 pr-3">
+            <v-col cols="12" lg="12" md="12" sm="12">
               <v-card elevation="0">
                 <v-card-text>
                   <v-row>
-                    <!-- <v-col>
-                        <v-sheet class="p-4 mx-auto" rounded outlined>
-                          <v-row class="justify-center">
-                            <span>Upratovanie</span>
-                          </v-row>
-                          <v-row class="justify-center">
-                            <v-icon large>mdi-broom</v-icon>
-                          </v-row>
-                          <v-row class="justify-center">
-                            <span>Poplatok +100€ k cene rezervácie</span>
-                          </v-row>
+                    <v-col cols="12" lg="6" md="12" sm="12">
+                      <v-sheet class="p-4 mx-auto" rounded outlined>
+                        <v-row class="justify-center">
+                          <span>Upratovanie</span>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <v-icon large>mdi-broom</v-icon>
+                        </v-row>
+                        <v-row class="justify-center">
+                          <span>Poplatok +100€ k cene rezervácie</span>
+                        </v-row>
 
-                        </v-sheet>
-                      </v-col> -->
-                    <v-col>
+                      </v-sheet>
+                    </v-col>
+                    <v-col cols="12" lg="6" md="12" sm="12">
                       <v-sheet class="p-4 mx-auto" rounded outlined>
                         <v-row class="justify-center">
                           <span>Rezervácia do 5 dospelích osôb</span>
@@ -259,67 +219,7 @@ export default {
         }
       },
 
-      // seriesLine: [{
-      //   name: "Cena za noc/osobu v €",
-      //   data: []
-      // }],
-      // chartOptionsLine: {
-      //   chart: {
-      //     foreColor: localStorage.getItem('graph_text_color'),
-      //     height: 350,
-      //     type: 'area',
-      //     zoom: {
-      //       enabled: false
-      //     },
-      //     toolbar: {
-      //       tools: {
-      //         download: false,
-      //       },
-      //     },
-      //     animations: {
-      //       enabled: false,
-      //     }
-      //   },
-      //   toolbar: {
-      //     show: false
-      //   },
-      //   dataLabels: {
-      //     enabled: false
-      //   },
-      //   grid: {
-      //     show: true,
-      //     strokeDashArray: 0,
-      //     yaxis: {
-      //       lines: {
-      //         show: true,
-      //       },
-      //     },
-      //     xaxis: {
-      //       lines: {
-      //         show: false,
-      //       },
-      //     },
-      //   },
-      //   stroke: {
-      //     width: [5, 7, 5, 7],
-      //     curve: 'straight',
-      //     dashArray: [0, 8, 5, 3],
-      //     colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
-      //   },
-      //   colors: ["#ff0000", "#ff6600", "#0066ff", "#99cc00"],
-      //   xaxis: {
-      //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      //     tooltip: {
-      //       enabled: false,
-      //     },
-      //   },
-      //   tooltip: {
-      //     theme: localStorage.getItem('graph_theme'),
-      //   },
-      //   legend: {
-      //     show: false
-      //   },
-      // },
+
       //column chart
       seriesColumn: [{
           name: "Dospelí:",
@@ -381,136 +281,11 @@ export default {
           }
         }
       },
-      //column chart
-      // seriesColumn: [{
-      //   name: 'cena osoba/noc (€)',
-      //   data: []
-      // }],
-      // chartOptionsColumn: {
-      //   chart: {
-      //     foreColor: localStorage.getItem('graph_text_color'),
-      //     type: 'bar',
-      //     toolbar: {
-      //       show: false,
-      //       tools: {
-      //         download: false,
-      //         selection: false,
-      //         zoom: false,
-      //         zoomin: false,
-      //         zoomout: false,
-      //         pan: false,
-      //         reset: false | '<img src="/static/icons/reset.png" width="20">',
-      //         //customIcons: []
-      //       }
-      //     },
-      //     animations: {
-      //       enabled: false,
-      //     }
-      //   },
-      //   plotOptions: {
-      //     bar: {
-      //       borderRadius: 10,
-      //       dataLabels: {
-      //         position: 'top', // top, center, bottom
-      //       },
-      //     }
-      //   },
-      //   dataLabels: {
-      //     enabled: false,
-      //     formatter: function(val) {
-      //       return val + "";
-      //     },
-      //     offsetY: -20,
-      //     style: {
-      //       fontSize: '12px',
-      //       colors: ["#0066ff"]
-      //     }
-      //   },
-      //
-      //   xaxis: {
-      //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
-      //     position: 'top',
-      //     axisBorder: {
-      //       show: false
-      //     },
-      //     axisTicks: {
-      //       show: false
-      //     },
-      //     tooltip: {
-      //       enabled: false,
-      //     }
-      //   },
-      //   yaxis: {
-      //     axisBorder: {
-      //       show: false
-      //     },
-      //     axisTicks: {
-      //       show: false,
-      //     },
-      //     labels: {
-      //       show: true,
-      //       formatter: function(val) {
-      //         return val + "";
-      //       }
-      //     }
-      //   },
-      //   title: {
-      //     //text: 'Mesačná priemerná vlhkosť',
-      //     floating: true,
-      //     offsetY: 330,
-      //     align: 'center',
-      //     style: {
-      //       color: '#444'
-      //     }
-      //   },
-      //   tooltip: {
-      //     theme: localStorage.getItem('graph_theme'),
-      //   },
-      //   colors: ['#0066ff'],
-      // },
     }
   },
 
   mounted() {
     this.getDataDashed();
-    // axios.get(`${process.env.VUE_APP_API_URL}/prices/getPricesForEachMonth`)
-    //   .then(res => {
-    //     this.lastUpdate = moment(res.data[0].created_at.created_at)
-    //       .format('YYYY-MM-DD HH:mm:ss');
-    //     localStorage.setItem("lastUpdate", moment(res.data[0].created_at.created_at)
-    //       .format('YYYY-MM-DD HH:mm:ss'));
-    //     this.seriesLine[0].data.splice(0, 12);
-    //     this.seriesLine[0].data.push(
-    //       res.data[0].price[0].price, res.data[0].price[1].price,
-    //       res.data[0].price[2].price, res.data[0].price[3].price,
-    //       res.data[0].price[4].price, res.data[0].price[5].price,
-    //       res.data[0].price[6].price, res.data[0].price[7].price,
-    //       res.data[0].price[8].price, res.data[0].price[9].price,
-    //       res.data[0].price[10].price, res.data[0].price[11].price,
-    //     );
-    //
-    //     this.seriesLine = [{
-    //       data: this.seriesLine[0].data
-    //     }];
-    //
-    //     this.seriesColumn[0].data.splice(0, 12);
-    //     this.seriesColumn[0].data.push(
-    //       res.data[0].price[0].price, res.data[0].price[1].price,
-    //       res.data[0].price[2].price, res.data[0].price[3].price,
-    //       res.data[0].price[4].price, res.data[0].price[5].price,
-    //       res.data[0].price[6].price, res.data[0].price[7].price,
-    //       res.data[0].price[8].price, res.data[0].price[9].price,
-    //       res.data[0].price[10].price, res.data[0].price[11].price,
-    //     );
-    //
-    //     this.seriesColumn = [{
-    //       data: this.seriesColumn[0].data
-    //     }];
-    //
-    //     // this.loaderStateColumn = false;
-    //     // this.loaderStateLine = false;
-    //     this.overlay = false;
-    //   });
   },
 
   updated() {},

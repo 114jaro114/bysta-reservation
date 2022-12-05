@@ -38,7 +38,8 @@ export default new Vuex.Store({
       requester: '',
     },
 
-    notificationCounter: null,
+    notificationCounter: 0,
+    reservationCounter: 0,
 
     updatedPassword: false,
 
@@ -116,6 +117,10 @@ export default new Vuex.Store({
 
     notificationCounter: state => {
       return state.notificationCounter
+    },
+
+    reservationCounter: state => {
+      return state.reservationCounter
     },
 
     updatedPassword: state => {
@@ -206,6 +211,12 @@ export default new Vuex.Store({
       state.notificationCounter = payload.notifCounter
     },
 
+    mutationReservationCounter: (state, payload) => {
+      state.reservationCounter = payload.reservCounter
+    },
+
+
+
     mutationUpdatedPassword: (state, payload) => {
       state.updatedPassword = payload.state;
     },
@@ -295,6 +306,10 @@ export default new Vuex.Store({
 
     notificationCounter: (context, payload) => {
       context.commit('mutationNotificationCounter', payload)
+    },
+
+    reservationCounter: (context, payload) => {
+      context.commit('mutationReservationCounter', payload)
     },
 
     updatedPassword: (context, payload) => {

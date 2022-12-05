@@ -21,7 +21,7 @@
     <!-- notifications menu skeleton -->
     <v-skeleton-loader class="hidden-sm-and-down" height="24" width="24" style="margin:12px" type="button" rouned></v-skeleton-loader>
     <!-- language menu skeleton -->
-    <v-skeleton-loader class="btn-lang" type="chip" min-height="36"></v-skeleton-loader>
+    <v-skeleton-loader class="hidden-sm-and-down btn-lang" type="chip" min-height="36"></v-skeleton-loader>
     <!-- settings menu skeleton -->
     <v-skeleton-loader class="hidden-sm-and-down" height="24" width="24" style="margin:12px" type="button" rouned></v-skeleton-loader>
 

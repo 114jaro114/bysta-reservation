@@ -1,0 +1,174 @@
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  opacity: 0;
+}
+
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* from left to right */
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-lr-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-fade-lr-leave-active {
+  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-lr-enter,
+.slide-fade-lr-leave-to
+
+/* .slide-fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* from right to left */
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-rl-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-fade-rl-leave-active {
+  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-rl-enter,
+.slide-fade-rl-leave-to
+
+/* .slide-fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* from bottom to top */
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-bt-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-fade-bt-leave-active {
+  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-bt-enter,
+.slide-fade-bt-leave-to
+
+/* .slide-fade-leave-active below version 2.1.8 */
+  {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+/* from bottom to top */
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-tb-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-fade-tb-leave-active {
+  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-tb-enter,
+.slide-fade-tb-leave-to
+
+/* .slide-fade-leave-active below version 2.1.8 */
+  {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.arrow {
+  &::after {
+    display: inline-block;
+    padding-left: 8px;
+    -webkit-transition: transform 0.3s ease-out;
+    -moz-transition: transform 0.3s ease-out;
+    -ms-transition: transform 0.3s ease-out;
+    -o-transition: transform 0.3s ease-out;
+    transition: transform 0.3s ease-out;
+  }
+
+  &:hover {
+    color: #0c5449;
+    // background-color: #f6f3ed;
+
+    &::after {
+      -webkit-transform: translateX(4px);
+      -moz-transform: translateX(4px);
+      -ms-transform: translateX(4px);
+      -o-transform: translateX(4px);
+      transform: translateX(4px);
+    }
+  }
+}
+
+.anim:hover .arrow {
+  animation: slide1 1s ease-in-out infinite;
+  margin-left: 9px;
+}
+
+.anim:hover .arrow2 {
+  animation: slide2 1s ease-in-out infinite;
+  margin-right: 9px;
+}
+
+@keyframes slide1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(10px, 0);
+  }
+}
+
+@keyframes slide2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(10px, 0);
+  }
+}

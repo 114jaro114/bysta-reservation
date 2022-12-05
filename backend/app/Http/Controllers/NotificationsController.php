@@ -97,7 +97,7 @@ class NotificationsController extends Controller
 
     public function getFewOldNotifications() {
       $user_id = auth()->user()->id;
-      $fewOldMNotifications = DB::select("select notifications.*, users.name, users.email, users.status, users.avatar
+      $fewOldMNotifications = DB::select("select notifications.*, notifications.status as status_notif, users.name, users.email, users.status, users.avatar
        FROM notifications
        INNER JOIN users ON users.id = notifications.from
        WHERE notifications.status = 'all' AND notifications.to = $user_id

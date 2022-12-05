@@ -24,10 +24,14 @@ class CreateReservationsTable extends Migration
             $table->string('end_time');
             $table->string('nights');
             $table->string('adults');
-            $table->string('childs2to12');
-            $table->string('childsto2');
-            $table->string('priceForNight');
-            $table->string('overallPriceForNight');
+            $table->string('childs_2_to_12');
+            $table->string('childs_to_2');
+            $table->string('cleaning_fee');
+            $table->string('price_for_night');
+            $table->string('total_persons');
+            $table->string('overall_price');
+            $table->string('seen_changes_admin')->default(false);
+            $table->string('seen_changes_user')->default(false);
             $table->string('note')->nullable();
             $table->timestamps();
         });

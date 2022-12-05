@@ -16,14 +16,18 @@ class Reservations implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $reservation;
+    public $user_id;
+    public $status;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($reservation)
+    public function __construct($reservation, $user_id, $status)
     {
       $this->reservation = $reservation;
+      $this->user_id = $user_id;
+      $this->status = $status;
     }
 
     /**
@@ -33,7 +37,7 @@ class Reservations implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('reservation.' . $this->reservation[0]->user_id);
+        return new PresenceChannel('reservation.' . $this->user_id);
     }
 
     // public function broadcastWith()

@@ -225,6 +225,59 @@ export default {
       })
   },
 
+  created() {
+    window.Echo.join('reservation.' + this.$root.me.id)
+      .listen('Reservations', (e) => {
+        if (this.$route.fullPath == '/reservation') {
+          if (e.status == 'deleted') {
+            this.test.map((d, i) => {
+              if (d.id == e.reservation[0].id) {
+                this.test.splice(i, 1)
+              }
+            })
+
+            var day1 = moment(e.reservation[0].end_date);
+            var day2 = moment(e.reservation[0].start_date);
+            var result = [moment({
+              ...day2
+            })];
+
+            while (day1.date() != day2.date()) {
+              day2.add(1, 'day');
+              result.push(moment({
+                ...day2
+              }));
+            }
+
+            var allDates = result.map(x => x.format("YYYY-MM-DD"));
+            for (var a = 0; a < allDates.length; a++) {
+              for (var i = 0; i < this.disabledDates.length; i++) {
+                if (this.disabledDates[i] == allDates[a]) {
+                  this.disabledDates.splice(i, 1)
+                }
+              }
+            }
+          } else {
+            if (e.reservation[0].event_name == 'rezervované') {
+              this.$store.dispatch('pendingReservation', {
+                count: 0
+              });
+            } else {
+              this.$store.dispatch('pendingReservation', {
+                count: 1
+              });
+            }
+
+            this.test.map((d, i) => {
+              if (d.id == e.reservation[0].id) {
+                this.test[i].event_name = e.reservation[0].event_name;
+              }
+            })
+          }
+        }
+      })
+  },
+
   methods: {
     color(e) {
       if (e == 'rezervácia') {
@@ -263,18 +316,21 @@ export default {
         },
       };
       axios.get(api, config)
-        // axios.get('http://127.0.0.1:8000/api/reservation')
         .then(resp => {
           //this code contains disabled dates in datepicker
           this.myloadingvariable = false;
           this.disabledDates = [];
           this.$emit('loaded-events', false);
+
           for (var i = 0; i < resp.data.length; i++) {
             var day1 = moment(resp.data[i].end_date);
             var day2 = moment(resp.data[i].start_date);
             var result = [moment({
               ...day2
             })];
+
+            console.log(result);
+
             while (day1.date() != day2.date()) {
               day2.add(1, 'day');
               result.push(moment({
@@ -286,8 +342,11 @@ export default {
               this.disabledDates.push(allDates[a])
             }
           }
+
+          console.log(this.disabledDates);
           // get data
           this.test = resp.data;
+          console.log(this.test);
           // this.incId = this.test.length;
           if (resp.data != undefined) {
             this.incId = resp.data[resp.data.length - 1].id;
@@ -342,9 +401,6 @@ export default {
         success: false
       });
     }
-
-
-
   },
 
   getPopoverHeaderLabel(day) {
@@ -356,8 +412,8 @@ export default {
     };
     return day.date.toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options);
   },
-  addTodo(day) {
 
+  addTodo(day) {
     this.editId = ++this.incId;
     this.test.push({
       id: this.editId,

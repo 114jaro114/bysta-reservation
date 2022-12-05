@@ -4,12 +4,12 @@
     <v-col class="pl-0 pr-0">
       <v-card elevation="0">
         <v-toolbar class="notiftoolbar" color="primary" flat dark elevation="0">
-          <div class="w-75" v-if="selected.length == '0'">
-            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable disabled v-if="overlay || notif.length == 0"></v-text-field>
-            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details clearable v-if="!overlay && notif.length != 0"></v-text-field>
+          <div class="w-75" v-if="selected.length == 0">
+            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable disabled v-if="overlay || notif.length == 0"></v-text-field>
+            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable v-if="!overlay && notif.length != 0"></v-text-field>
           </div>
 
-          <div v-else>
+          <div v-if="selected.length > 0 && deleteNotif == false && addToAll == false">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn fab icon small @click="addToAll = !addToAll; deleteNotif = false" v-bind="attrs" v-on="on">
@@ -28,11 +28,39 @@
             </v-tooltip>
           </div>
 
+          <!-- snackbar deleteNotif-->
+          <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="0" height="64">
+            <span v-if="selectedAll.length > 1">Naozaj chcete vymazať tieto notifikácie?</span>
+            <span v-else>Naozaj chcete vymazať túto notifikáciu?</span>
+            <v-btn color="error error--text" text small @click="deleteNotif = false; deleteNotification()">
+              Áno
+            </v-btn>
+            <v-btn color="white white--text" text small outlined @click="deleteNotif = false">
+              Nie
+            </v-btn>
+          </v-snackbar>
+
+          <!-- snackbar addNotificationsToAll-->
+          <v-snackbar :timeout="-1" :value="addToAll" absolute centered color="primary" elevation="0" height="64">
+            <span v-if="selectedAll.length > 1">Naozaj chcete premiestniť notifikácie do zoznamu všetkých?</span>
+            <span v-else>Naozaj chcete premiestniť notifikáciu do zoznamu všetkých?</span>
+            <div>
+              <v-btn color="error error--text" text small @click="addToAll = false; addNotificationsToAll()">
+                Áno
+              </v-btn>
+              <v-btn color="white white--text" text small outlined @click="addToAll = false">
+                Nie
+              </v-btn>
+            </div>
+          </v-snackbar>
+          <!-- ///////// -->
+
           <v-spacer></v-spacer>
 
-          <span style="font-size:12px">Označiť všetko</span>
-          <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" disabled v-if="overlay || notif.length == 0"></v-checkbox>
-          <v-checkbox class="mt-5 ml-3" color="secondary secondary--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate" v-if="!overlay && notif.length != 0"></v-checkbox>
+          <span style="font-size:12px" class="text-right" v-if="deleteNotif == false && addToAll == false">Označiť všetko</span>
+          <v-checkbox class="mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" disabled v-if="overlay || notif.length == 0 && deleteNotif == false && addToAll == false"></v-checkbox>
+          <v-checkbox class=" mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate"
+            v-if="!overlay && notif.length != 0 && deleteNotif == false && addToAll == false"></v-checkbox>
         </v-toolbar>
 
         <v-list class="pb-0 pt-0" three-line>
@@ -43,17 +71,19 @@
               </v-overlay>
             </v-list-item>
             <v-list-item class="justify-center" v-if="filteredItems.length == 0 && !overlay && notif.length != 0" disabled>
-              <v-btn color="primary" icon width="50px" height="50px">
-                <v-icon style="font-size: 50px">mdi-cancel</v-icon>
-                <span class="ml-3">Žiadne výsledky</span>
-              </v-btn>
+              <v-list-item-content class="p-2 pr-0 pl-0">
+                <v-card class="rounded-lg card-statement" elevation="0">
+                  <span>Žiadne výsledky</span>
+                </v-card>
+              </v-list-item-content>
             </v-list-item>
 
             <v-list-item class="justify-center" v-if="notif.length == 0 && !overlay" disabled>
-              <v-btn color="primary" icon width="50px" height="50px">
-                <v-icon style="font-size: 50px">mdi-bell-cancel</v-icon>
-                <span class="ml-3">Žiadne uložené notifikácie</span>
-              </v-btn>
+              <v-list-item-content class="p-2 pr-0 pl-0">
+                <v-card class="rounded-lg card-statement" elevation="0">
+                  <span>Žiadne uložené notifikácie</span>
+                </v-card>
+              </v-list-item-content>
             </v-list-item>
             <template v-else v-for="(item, index) in filteredItems">
               <!-- list notif -->
@@ -94,43 +124,18 @@
               </v-list-item>
               <v-divider class="m-0" v-if="index < notif.length - 1 && !overlay" :key="index"></v-divider>
             </template>
-            <!-- snackbard -->
-            <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="24">
-              Naozaj chcete vymazať túto notifikáciu?
-              <v-btn class="ml-2 mt-3" color="error error--text" text small @click="deleteNotif = false; deleteNotification(item)">
-                <!-- <v-icon>mdi-check</v-icon> -->
-                Áno
-              </v-btn>
-              <v-btn class="ml-2 mt-3" color="white white--text" text small outlined @click="deleteNotif = false">
-                <!-- <v-icon>mdi-close</v-icon> -->
-                Nie
-              </v-btn>
-            </v-snackbar>
-
-            <v-snackbar :timeout="-1" :value="addToAll" absolute centered color="primary" elevation="24">
-              Naozaj chcete presunúť notifikáciu/e do 'všetky'?
-              <v-btn class="ml-2 mt-3" color="error error--text" text small @click="addToAll = false; addNotificationsToAll(item)">
-                <!-- <v-icon>mdi-check</v-icon> -->
-                Áno
-              </v-btn>
-              <v-btn class="ml-2 mt-3" color="white white--text" text small outlined @click="addToAll = false">
-                <!-- <v-icon>mdi-close</v-icon> -->
-                Nie
-              </v-btn>
-            </v-snackbar>
-
-            <v-snackbar v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
-              <v-icon>mdi-check-circle</v-icon>
-              {{ text }}
-              <template v-slot:action="{ attrs }">
-                <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-                  <v-icon>mdi-close-circle</v-icon>
-                </v-btn>
-              </template>
-            </v-snackbar>
-            <!-- ///////// -->
           </v-list-item-group>
         </v-list>
+
+        <v-snackbar height="64" v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
+          <v-icon>mdi-check-circle</v-icon>
+          {{ text }}
+          <template v-slot:action="{ attrs }">
+            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-card>
     </v-col>
   </v-row>
@@ -220,7 +225,7 @@ export default {
 
     deleteNotification() {
       this.snackbar = true;
-      this.text = "Notifikácia bola úspešne vymazaná";
+
       const api = `${process.env.VUE_APP_API_URL}/deleteNotification`;
       const config = {
         headers: {
@@ -232,13 +237,20 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
+          if (this.selectedAll.length > 1) {
+            this.text = "Notifikácie boli úspešne vymazané.";
+          } else {
+            this.text = "Notifikácia bola úspešne vymazaná.";
+          }
           this.getNotifications();
+          this.selected = [];
+          this.selectedAll = [];
         })
     },
 
     addNotificationsToAll() {
       this.snackbar = true;
-      this.text = "Notifikácia/cie bola/i premiestnená/é do časti 'všetky'";
+
       const api = `${process.env.VUE_APP_API_URL}/addToAll`;
       const config = {
         headers: {
@@ -251,7 +263,14 @@ export default {
           ids: this.selectedAll,
         }, config)
         .then(() => {
+          if (this.selectedAll.length > 1) {
+            this.text = "Notifikácie boli premiestnené do zoznamu všetkých.";
+          } else {
+            this.text = "Notifikácia bola premiestnená do zoznamu všetkých.";
+          }
           this.getNotifications();
+          this.selected = [];
+          this.selectedAll = [];
         })
     },
 

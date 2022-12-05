@@ -10,98 +10,54 @@ use App\Events\Reservations;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //get reservations
     public function index()
     {
         $username = auth()->user()->name;
         if ($username == 'admin') {
             return DB::table('reservations')->get();
-        // return Reservation::all();
         } else {
-            // $checkIfReservationExist = DB::table('reservations')
-            //   ->where('username', '=', auth()->user()->name)
-            //   ->first();
-            // if ($checkIfReservationExist) {
             return DB::table('reservations')->where('username', '=', $username)->get();
-            // }
         }
     }
 
-    // public function getAuthReservation()
-    // {
-    //     return Reservation::where('user_id', auth()->user()->id)->get();
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //make reservation
     public function store(Request $request)
     {
-        $reservation = Reservation::create([
-          'event_name' => $request->event_name,
-          'user_id' =>$request->user_id,
-          'username' => $request->username,
-          'start_date' => $request->start_date,
-          'end_date' => $request->end_date,
-          'start_time' => $request->start_time,
-          'end_time' => $request->end_time,
-          'nights' => $request->nights,
-          'adults' => $request->adults,
-          'childs2to12' => $request->childs2to12,
-          'childsto2' => $request->childsto2,
-          'priceForNight' => $request->priceForNight,
-          'overallPriceForNight' => $request->overallPriceForNight,
-          'note' => $request->note
-      ]);
+        Reservation::create([
+            'event_name' => $request->event_name,
+            'user_id' =>$request->user_id,
+            'username' => $request->username,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'nights' => $request->nights,
+            'adults' => $request->adults,
+            'childs_2_to_12' => $request->childs2to12,
+            'childs_to_2' => $request->childsto2,
+            'cleaning_fee' => $request->cleaningFee,
+            'price_for_night' => $request->priceForNight,
+            'total_persons' => $request->totalPersons,
+            'overall_price' => $request->overallPrice,
+            'note' => $request->note
+        ]);
+
+        $reservation = DB::table('reservations')->where('start_date', $request->start_date)->get();
+
+        broadcast(new Reservations($reservation, '1', 'created'));
         // $new_calendar = Reservation::create($request->all());
         return response()->json($reservation);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Calendar  $calendar
-     * @return \Illuminate\Http\Response
-     */
+    //update reservation
     public function update(Request $request)
     {
-        // $event_name = $request->event_name;
-        // $start_date = $request->start_date;
-        // $end_date = $request->end_date;
-        // $start_time = $request->start_time;
-        // $end_time = $request->end_time;
-        //
-        // $nights = $request->nights;
-        // $adults = $request->adults;
-        // $childs2to12 = $request->childs2to12;
-        // $childsto2 = $request->childsto2;
-        // $priceForNight = $request->priceForNight;
-        // $overallPriceForNight = $request->overallPriceForNight;
-        // DB::update(
-        //     'update reservations set
-        //             event_name = ?, start_date = ?, end_date = ?,
-        //             start_time = ?, end_time = ?, nights = ?,
-        //             adults = ?, childs2to12 = ?, childsto2 = ?,
-        //             priceForNight = ?, overallPriceForNight = ?
-        //             where username = ?',
-        //     [$event_name, $start_date, $end_date,
-        //              $start_time, $end_time, $nights,
-        //              $adults, $childs2to12, $childsto2,
-        //              $priceForNight, $overallPriceForNight, $request->username]
-        // );
-
         $updateDetails = [
             'event_name' => $request->event_name,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
+            'seen_changes_user' => '0'
         ];
         $updateReservation = DB::table('reservations')
                                ->where('id', $request->id)
@@ -118,24 +74,53 @@ class ReservationController extends Controller
 
         $reservation = DB::table('reservations')->where('id', $request->id)->get();
 
-        broadcast(new Reservations($reservation));
+        broadcast(new Reservations($reservation, $user_id[0]->id, 'updated'));
 
         return response()->json($reservation);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
+    //delete reservation
+    public function delete(Request $request)
     {
+        $user_id = Reservation::where('id', $request->id)
+                     ->select('user_id')
+                     ->get();
+
+        $reservation = Reservation::where('id', $request->id)->get();
+
+        broadcast(new Reservations($reservation, $user_id[0]->user_id, 'deleted'));
+
         Reservation::where('id', $request->id)->delete();
-        // $calendar->delete();
-        return response('Event removed successfully!');
+
+        return response($reservation);
     }
 
     public function checkPendingReservation($username)
     {
         return Reservation::where([['username', '=', $username],['event_name', '=', 'rezervácia']])->count();
+    }
+
+    public function getUncheckedReservationsUser()
+    {
+        // get all reservations for user
+        if (auth()->user()->id == '1') {
+          $allUncheckedReservations = Reservation::where('seen_changes_admin', '=', '0')->count();
+        } else {
+          $allUncheckedReservations = Reservation::where([['user_id', '=', auth()->user()->id], ['seen_changes_user', '=', '0']])->count();
+        }
+
+        return response()->json($allUncheckedReservations);
+    }
+
+    public function markAsRead()
+    {
+        if (auth()->user()->id == '1') {
+          Reservation::where('seen_changes_admin', '0')->update(['seen_changes_admin' => '1']);
+
+          return response()->json("successfully updated reservations status admin");
+        } else {
+          Reservation::where('seen_changes_user', '0')->update(['seen_changes_user' => '1']);
+          return response()->json("successfully updated reservations status user");
+        }
     }
 }

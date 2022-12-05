@@ -105,7 +105,9 @@ Route::get('/reservation', [ReservationController::class, 'index']);
 Route::get('/checkPendingReservation/{username}', [ReservationController::class, 'checkPendingReservation']);
 Route::post('/reservation/store', [ReservationController::class, 'store']);
 Route::post('/reservation/update', [ReservationController::class, 'update']);
-Route::post('/reservation/delete', [ReservationController::class, 'destroy']);
+Route::post('/reservation/delete', [ReservationController::class, 'delete']);
+Route::post('/reservation/markAsRead', [ReservationController::class, 'markAsRead']);
+Route::get('/reservation/getUncheckedReservationsUser', [ReservationController::class, 'getUncheckedReservationsUser']);
 
 Route::get('/rating', [RatingController::class, 'index']);
 Route::post('/rating/store', [RatingController::class, 'store']);
@@ -174,6 +176,8 @@ Route::post('/prices/updatePrices', [PricesController::class, 'updatePrices']);
 Route::post('/prices/updatePricesForEachMonth', [PricesController::class, 'updatePricesForEachMonth']);
 Route::get('/prices/getPricesForEachMonth', [PricesController::class, 'getPricesForEachMonth']);
 Route::get('/prices/getPricesForGraph', [PricesController::class, 'getPricesForGraph']);
+Route::get('/prices/getValueSpentByUserForReservation', [PricesController::class, 'getValueSpentByUserForReservation']);
+
 
 //Traits
 Route::get('/check_relationship_status/{id}', [FriendshipsController::class, 'check']);

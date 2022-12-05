@@ -8,10 +8,10 @@
       <v-card class="rounded" elevation="0">
         <v-toolbar extended extension-height="4" class="reservationtoolbar rounded-top" color="primary" flat dark>
           <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense></v-text-field>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable></v-text-field>
           </v-col>
           <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
-            <v-btn text color="secondary" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
+            <v-btn text color="white" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
           </v-col>
           <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
         </v-toolbar>
@@ -98,9 +98,6 @@
               <!-- {{ item.title }} -->
             </v-chip>
           </template>
-          <template v-slot:item.adults="{ item }">
-            <span>{{parseInt(item.adults) + parseInt(item.childs2to12) + parseInt(item.childsto2)}}</span>
-          </template>
 
           <template v-slot:item.overallPriceForNight="{ item }">
             <span>{{item.overallPriceForNight}}€</span>
@@ -145,6 +142,7 @@
           <template v-slot:item.overallPriceForNight="{ item }">
             <span>{{item.overallPriceForNight}}€</span>
           </template>
+          <!-- reservation detail -->
           <template v-slot:item.actions="{ item }">
             <v-dialog v-model="diagolShowDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
               <template v-slot:activator="{ on: menu, attrs }">
@@ -284,7 +282,30 @@
 
                   <v-list three-line subheader>
                     <v-subheader class="p-0">Suma rezervácie</v-subheader>
-                    <v-list-item class="p-0">
+                    <v-row class="m-0 mt-3">
+                      <v-col class="pl-0 pr-0" align="left">
+                        <v-icon class="mb-1" color="orange">mdi-information</v-icon>
+                        <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítavajú.</span>
+                      </v-col>
+                    </v-row>
+                    <v-data-table :headers="headersDetail" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0">
+                      <template v-slot:header="{ props: { headers } }">
+                        <thead>
+                          <tr>
+                            <th v-for="(h, i) in headers" :key="i">
+                              <v-tooltip bottom v-if="i != 3">
+                                <template v-slot:activator="{ on }">
+                                  <span v-on="on">{{h.text}}</span>
+                                </template>
+                                <span>{{headerDetailTooltips[i - 1]}}</span>
+                              </v-tooltip>
+                              <span v-if="i == 3">{{h.text}}</span>
+                            </th>
+                          </tr>
+                        </thead>
+                      </template>
+                    </v-data-table>
+                    <!-- <v-list-item class="p-0">
                       <v-list-item-content>
                         <v-row class="m-0 w-100">
                           <v-col></v-col>
@@ -293,10 +314,20 @@
                               <template v-slot:activator="{ on, attrs }">
                                 <span v-bind="attrs" v-on="on">Počet osôb</span>
                               </template>
-                              <span>Maximálnyasa počet osôb je 20!</span>
+                              <span>Maximálny počet osôb je 20!</span>
                             </v-tooltip>
-
                           </v-col>
+
+                          <v-col class="font-weight-bold">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon class="mb-1" v-bind="attrs" v-on="on" small>mdi-information</v-icon>
+                                <span class="pl-1">Jednotková cena</span>
+                              </template>
+                              <span>Cena na jednu noc pre jednu osobu</span>
+                            </v-tooltip>
+                          </v-col>
+
                           <v-col class="font-weight-bold">
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
@@ -307,6 +338,7 @@
                               <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
                             </v-tooltip>
                           </v-col>
+
                           <v-col class="font-weight-bold">
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
@@ -327,6 +359,9 @@
                             <span>{{counter1}}</span>
                           </v-col>
                           <v-col>
+                            <span>{{priceAdults}} €</span>
+                          </v-col>
+                          <v-col>
                             <span>{{counter1*priceAdults}} €</span>
                           </v-col>
                           <v-col>
@@ -334,13 +369,17 @@
                           </v-col>
                         </v-row>
 
-                        <v-divider v-if="counter2 > 0" />
+                        <v-divider class="mb-0 mt-0" v-if="counter2 > 0" />
+
                         <v-row class="m-0 w-100" v-if="counter2 > 0">
                           <v-col>
                             <span>Deti od 2 do 12 rokov</span>
                           </v-col>
                           <v-col>
                             <span>{{counter2}}</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{priceChilds2to12}} €</span>
                           </v-col>
                           <v-col>
                             <span>{{counter2*priceChilds2to12}} €</span>
@@ -350,13 +389,16 @@
                           </v-col>
                         </v-row>
 
-                        <v-divider v-if="counter3 > 0" />
+                        <v-divider class="mb-0 mt-0" v-if="counter3 > 0" />
                         <v-row class="m-0 w-100" v-if="counter3 > 0">
                           <v-col>
                             <span>Deti do 2 rokov</span>
                           </v-col>
                           <v-col>
                             <span>{{counter3}}</span>
+                          </v-col>
+                          <v-col>
+                            <span>{{priceChildsto2}} €</span>
                           </v-col>
                           <v-col>
                             <span>{{counter3*priceChildsto2}} €</span>
@@ -366,7 +408,21 @@
                           </v-col>
                         </v-row>
 
-                        <v-divider />
+                        <v-divider class="mb-0 mt-0" />
+
+                        <v-row class="m-0 w-100">
+                          <v-col>
+                            <span>Upratovanie</span>
+                          </v-col>
+                          <v-col></v-col>
+                          <v-col></v-col>
+                          <v-col></v-col>
+                          <v-col>
+                            <span>{{item.cleaning_fee}} €</span>
+                          </v-col>
+                        </v-row>
+
+                        <v-divider class="mb-0 mt-0" />
 
                         <v-row class="m-0 w-100">
                           <v-col>
@@ -379,6 +435,9 @@
                               </template>
                               <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
                             </v-tooltip>
+                          </v-col>
+                          <v-col>
+                            <span class="font-weight-bold">{{((counter1 * priceAdults) / counter1) + ((counter2 * priceChilds2to12) / counter2 || 0) + ((counter3 * priceChildsto2) / counter3 || 0)}} €</span>
                           </v-col>
                           <v-col>
                             <v-tooltip bottom>
@@ -401,7 +460,7 @@
                           </v-col>
                         </v-row>
                       </v-list-item-content>
-                    </v-list-item>
+                    </v-list-item> -->
                   </v-list>
                 </v-container>
               </v-card>
@@ -456,51 +515,66 @@ export default {
         sortByText: "Zoradiť podľa"
       },
       headers: [{
-        text: 'ID',
-        align: 'id',
-        sortable: true,
-        value: 'id',
-      }, {
-        text: 'Status',
-        value: 'event_name',
-        sortable: false,
-      }, {
-        text: 'Dátum začiatku',
-        value: 'start_date',
-        sortable: true,
-      }, {
-        text: 'Dátum konca',
-        value: 'end_date',
-        sortable: true,
-      }, {
-        text: 'Používateľ',
-        value: 'username',
-        sortable: true,
-      }, {
-        text: 'Čas príchodu',
-        value: 'start_time',
-        sortable: true,
-      }, {
-        text: 'Čas odchodu',
-        value: 'end_time',
-        sortable: false,
-      }, {
-        text: 'Počet nocí',
-        value: 'nights',
-        sortable: false,
-      }, {
-        text: 'Počet osôb',
-        value: 'adults',
-        sortable: true,
-      }, {
-        text: 'Cena',
-        value: 'overallPriceForNight',
-        sortable: true,
-      }, {
-        text: 'Úkony',
-        value: 'actions',
-        sortable: false
-      }, ],
+          text: 'ID',
+          align: 'id',
+          sortable: true,
+          value: 'id',
+        }, {
+          text: 'Status',
+          value: 'event_name',
+          sortable: false,
+        }, {
+          text: 'Dátum začiatku',
+          value: 'start_date',
+          sortable: true,
+        }, {
+          text: 'Dátum konca',
+          value: 'end_date',
+          sortable: true,
+        }, {
+          text: 'Používateľ',
+          value: 'username',
+          sortable: true,
+        }, {
+          text: 'Čas príchodu',
+          value: 'start_time',
+          sortable: true,
+        }, {
+          text: 'Čas odchodu',
+          value: 'end_time',
+          sortable: false,
+        }, {
+          text: 'Počet nocí',
+          value: 'nights',
+          sortable: false,
+        }, {
+          text: 'Dospelí',
+          value: 'adults',
+          sortable: false,
+        },
+        {
+          text: 'Deti od 2 do 12 rokov',
+          value: 'childs_2_to_12',
+          sortable: false,
+        },
+        {
+          text: 'Deti do 2 rokov',
+          value: 'childs_to_2',
+          sortable: false,
+        }, {
+          text: 'Počet osôb',
+          value: 'total_persons',
+          sortable: true,
+        }, {
+          text: 'Cena',
+          value: 'overall_price',
+          sortable: true,
+        }, {
+          text: 'Úkony',
+          value: 'actions',
+          sortable: false
+        },
+      ],
       headers2: [{
           text: 'ID',
           align: 'center',
@@ -527,27 +601,6 @@ export default {
           value: 'end_date',
           sortable: true,
         },
-        // {
-        //   text: 'Čas príchodu',
-        //   value: 'start_time',
-        //   sortable: false,
-        // }, {
-        //   text: 'Čas odchodu',
-        //   value: 'end_time',
-        //   sortable: false,
-        // }, {
-        //   text: 'Počet nocí',
-        //   value: 'nights',
-        //   sortable: true,
-        // }, {
-        //   text: 'Počet osôb',
-        //   value: 'adults',
-        //   sortable: true,
-        // }, {
-        //   text: 'Cena',
-        //   value: 'overallPriceForNight',
-        //   sortable: true,
-        // },
         {
           text: 'Detail',
           align: 'center',
@@ -556,6 +609,7 @@ export default {
         }
       ],
       editedIndex: -1,
+      deletedReservationUserId: '',
       editedItem: {
         id: "",
         event_name: "",
@@ -602,6 +656,41 @@ export default {
         myPhone: "",
       },
 
+      headersDetail: [{
+          id: 1,
+          text: '',
+          sortable: false,
+          value: 'text',
+        },
+        {
+          id: 2,
+          text: 'Počet osôb',
+          value: 'p1',
+          sortable: false,
+        },
+        {
+          id: 3,
+          text: 'Jednotková cena',
+          value: 'p2',
+          sortable: false,
+        },
+        {
+          id: 4,
+          text: 'Cena/noc',
+          value: 'p3',
+          sortable: false,
+        },
+        {
+          id: 5,
+          text: '',
+          value: 'p4',
+          sortable: false,
+        },
+      ],
+      prices: [],
+      headerDetailTooltips: [],
+
+
       counter1: "",
       counter2: "",
       counter3: "",
@@ -614,30 +703,42 @@ export default {
       overlay: true,
     }
   },
-  async created() {
-    try {
-      const config = {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authToken"),
-        },
-      };
-      let response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation`, config)
-      this.currentEvents = response.data.data
-      this.searched = this.currentEvents
-    } catch (err) {
-      console.log(err)
-    }
+  //async
+  created() {
+    // try {
+    // let response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation`, config)
+    // this.currentEvents = response.data.data
+    // this.searched = this.currentEvents
+    // } catch (err) {
+    //   console.log(err)
+    // }
+
 
     window.Echo.join('reservation.' + this.$root.me.id)
       .listen('Reservations', (e) => {
-        this.currentEvents
-
-        this.currentEvents.map((event, index) => {
-          if (event.id == e.reservation[0].id) {
-            this.currentEvents.splice(index, 1, e.reservation[0]);
+        if (e.user_id == 1) {
+          this.markAsRead();
+          if (e.status == 'created') {
+            this.currentEvents.push(e.reservation[0])
           }
-        })
+        } else {
+          this.markAsRead();
+          if (e.status == 'updated') {
+            this.currentEvents.map((event, index) => {
+              if (event.id == e.reservation[0].id) {
+                this.currentEvents.splice(index, 1, e.reservation[0]);
+              }
+            })
+          }
+
+          if (e.status == 'deleted') {
+            this.currentEvents.map((event, index) => {
+              if (event.id == e.reservation[0].id) {
+                this.currentEvents.splice(index, 1);
+              }
+            })
+          }
+        }
       })
 
     this.initialize()
@@ -663,8 +764,9 @@ export default {
       val || this.closeDelete()
     },
   },
-  mounted: function mounted() {
+  mounted() {
     this.getEvents();
+    this.markAsRead();
   },
   methods: {
     formatDate(value) {
@@ -675,14 +777,11 @@ export default {
     formatCreated(value) {
       return moment(value)
         .format("YYYY-MM-DD HH:mm:ss")
-
     },
 
     showDetail(item) {
       this.overlay = true
-      console.log(item);
       this.dialogShowDetail = true;
-      console.log(this.dialogShowDetail)
       this.reservationDetails.id = item.id;
       this.reservationDetails.event_name = item.event_name;
       this.reservationDetails.created_at = moment(item.created_at)
@@ -692,17 +791,23 @@ export default {
       this.reservationDetails.start_time = item.start_time;
       this.reservationDetails.end_time = item.end_time;
       this.reservationDetails.adults = item.adults;
-      this.reservationDetails.childs2to12 = item.childs2to12;
-      this.reservationDetails.childsto2 = item.childsto2;
+      this.reservationDetails.childs2to12 = item.childs_2_to_12;
+      this.reservationDetails.childsto2 = item.childs_to_2;
       this.reservationDetails.nights = item.nights;
-      this.reservationDetails.overallPriceForNight = item.overallPriceForNight;
-      this.reservationDetails.priceForNight = item.priceForNight;
+      this.reservationDetails.overallPriceForNight = item.overall_price;
+      this.reservationDetails.priceForNight = item.price_for_night;
 
       this.counter1 = parseInt(item.adults);
-      this.counter2 = parseInt(item.childs2to12);
-      this.counter3 = parseInt(item.childsto2);
+      this.counter2 = parseInt(item.childs_2_to_12);
+      this.counter3 = parseInt(item.childs_to_2);
 
       this.reservationDetails.note = item.note;
+
+      if (item.nights > 1) {
+        this.headersDetail[4].text = 'Cena/' + item.nights + 'noci';
+      } else {
+        this.headersDetail[4].text = 'Cena/' + item.nights + 'noc';
+      }
 
       const api2 = `${process.env.VUE_APP_API_URL}/getContactForm`;
       const config = {
@@ -725,11 +830,107 @@ export default {
           this.toolbarLoading = false;
           this.overlay = false;
         });
+
+
+      this.headerDetailTooltips = [];
+      this.headerDetailTooltips.push('Maximálny počet osôb je 20!');
+
+      if (this.counter1 + this.counter2 > 5) {
+        this.headerDetailTooltips.push('Cena za osobu na noc');
+        this.headerDetailTooltips.push('');
+      } else {
+        this.headerDetailTooltips.push('Cena za celú chatu na 1 noc pri počte osôb <6');
+        this.headerDetailTooltips.push('');
+      }
+      this.headerDetailTooltips.push(`${'Od ' + item.start_date + ' do ' + item.end_date}`);
+
+      this.prices = [];
+      if (this.counter1 + this.counter2 > 5) {
+        if (this.counter2 > 0) {
+          this.prices.splice(1, 0, {
+            text: 'Deti od 2 do 12 rokov',
+            p1: this.counter2,
+            p2: this.priceChilds2to12 + '€',
+            p3: this.counter2 * this.priceChilds2to12 + '€',
+            p4: this.counter2 * this.priceChilds2to12 * item.nights + '€',
+          });
+        }
+        if (this.counter3 > 0) {
+          this.prices.splice(2, 0, {
+            text: 'Deti do 2 rokov',
+            p1: this.counter3,
+            p2: this.priceChildsto2 + '€',
+            p3: this.counter3 * this.priceChildsto2 + '€',
+            p4: this.counter3 * this.priceChildsto2 * item.nights + '€',
+          });
+        }
+        this.prices.splice(0, 0, {
+          text: 'Dospelí',
+          p1: this.counter1,
+          p2: this.priceAdults + '€',
+          p3: this.counter1 * this.priceAdults + '€',
+          p4: this.counter1 * this.priceAdults * item.nights + '€',
+        });
+
+        this.prices.push({
+          text: 'Upratovanie',
+          p1: '',
+          p2: '',
+          p3: '',
+          p4: item.cleaningFee + '€',
+        }, {
+          text: 'Spolu',
+          p1: this.counter1 + this.counter2 + this.counter3,
+          p2: ((this.counter1 * this.priceAdults) / this.counter1) + ((this.counter2 * this.priceChilds2to12) / this.counter2 || 0) + ((this.counter3 * this.priceChildsto2) / this.counter3 || 0) + '€',
+          p3: this.counter1 * this.priceAdults + this.counter2 * this.priceChilds2to12 + this.counter3 * this.priceChildsto2 + '€',
+          p4: item.overall_price + '€',
+        });
+      } else {
+        this.prices.push({
+          text: 'Dospelí',
+          p1: this.counter1,
+          p2: '-',
+          p3: '-',
+          p4: '-',
+        }, {
+          text: 'Deti od 2 do 12 rokov',
+          p1: this.counter2,
+          p2: '-',
+          p3: '-',
+          p4: '-',
+        }, {
+          text: 'Deti do 2 rokov',
+          p1: this.counter3,
+          p2: '-',
+          p3: '-',
+          p4: '-',
+        }, {
+          text: 'Cena za celú chatu (<6 osôb)',
+          p1: this.counter1 + this.counter2,
+          p2: (item.overall_price - item.cleaning_fee) / item.nights + '€',
+          p3: (item.overall_price - item.cleaning_fee) / item.nights + '€',
+          p4: ((item.overall_price - item.cleaning_fee) / item.nights) * item.nights + '€',
+        }, {
+          text: 'Upratovanie',
+          p1: '',
+          p2: '',
+          p3: '',
+          p4: item.cleaning_fee + '€',
+        }, {
+          text: 'Spolu',
+          p1: this.counter1 + this.counter2 + this.counter3,
+          p2: (item.overall_price - item.cleaning_fee) / item.nights + '€',
+          p3: (item.overall_price - item.cleaning_fee) / item.nights + '€',
+          p4: item.overall_price + '€',
+          text2: 'test'
+        });
+      }
     },
 
     addReservation() {
       this.$router.push("/administration/create_reservation");
     },
+
     getEvents() {
       const api = `${process.env.VUE_APP_API_URL}/reservation`;
       const config = {
@@ -739,19 +940,12 @@ export default {
         },
       };
       axios.get(api, config)
-        .then(resp => {
-          this.currentEvents = resp.data
+        .then(res => {
+          this.currentEvents = res.data
           this.searched = this.currentEvents
-          // for (var i = 0; i < resp.data.length; i++) {
-          //   if (resp.data[i].username == this.user) {
-          //     this.currentEventsForOneUser.push(resp.data[i]);
-          //   }
-          // }
-          // console.log(this.currentEventsForOneUser);
           this.myloadingvariable = false;
           this.overlay = false;
         })
-        .catch(err => console.log(err.resp.data));
     },
     resetForm() {
       Object.keys(this.newEvent)
@@ -759,14 +953,17 @@ export default {
           return (this.newEvent[key] = "");
         });
     },
+
     //vueify table
     getColor(title) {
       if (title == 'rezervácia') return 'orange'
       else if (title == 'rezervované') return 'green'
     },
+
     initialize() {
       this.currentEvents;
     },
+
     editItem(item) {
       this.editedIndex = this.currentEvents.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -779,22 +976,49 @@ export default {
       this.newEvent.user_id = item.user_id;
       this.dialog = true
     },
+
     deleteItem(item) {
       this.editedIndex = item.id
+      this.deletedReservationUserId = item.user_id;
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
+
     deleteItemConfirm() {
-      this.currentEvents.splice(this.editedIndex, 1)
       axios.post(`${process.env.VUE_APP_API_URL}/reservation/delete`, {
           id: this.editedIndex
         })
-        .then(() => {
-          this.getEvents();
+        .then(res => {
+          this.currentEvents.map((event, index) => {
+            if (event.id == res.data[0].id) {
+              this.currentEvents.splice(index, 1)
+              this.searched.splice(index, 1)
+            }
+          })
+
+          const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("authToken"),
+            },
+          };
+
+          axios.post(api, {
+              from: 1,
+              recipient: this.deletedReservationUserId,
+              title: "Chata Byšta",
+              subtitle: "Vymazanie rezervácie",
+              text: "Dobrý deň, Vaša rezervácia bola vymazaná. Pre bližšie informácie nás prosím kontaktujte",
+              date: moment(new Date())
+                .format('YYYY-MM-DD HH:mm'),
+              status: "new",
+            }, config)
+            .then(() => {})
         })
-        .catch(err => console.log("Unable to delete event!", err.response.data));
       this.closeDelete()
     },
+
     close() {
       this.dialog = false
       this.$nextTick(() => {
@@ -802,6 +1026,7 @@ export default {
         this.editedIndex = -1
       })
     },
+
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
@@ -809,6 +1034,7 @@ export default {
         this.editedIndex = -1
       })
     },
+
     save() {
       if (this.editedIndex > -1) {
         //update
@@ -818,8 +1044,7 @@ export default {
             start_date: this.newEvent.start_date,
             end_date: this.newEvent.end_date,
           })
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
             const config = {
               headers: {
@@ -834,7 +1059,7 @@ export default {
                   recipient: this.newEvent.user_id,
                   title: "Chata Byšta",
                   subtitle: "Zrušenie potvrdenia rezervácie",
-                  text: "Dobrý deň, Vaša rezervácia bola znova aktualizovan8 do stavu pred potvrdením. Čoskoro poskytneme ďalšie informácie",
+                  text: "Dobrý deň, Vaša rezervácia bola znova aktualizovaná do stavu pred potvrdením. Čoskoro poskytneme ďalšie informácie",
                   date: moment(new Date())
                     .format('YYYY-MM-DD HH:mm'),
                   status: "new",
@@ -855,7 +1080,6 @@ export default {
             }
             this.getEvents();
           })
-          .catch(err => console.log("Unable to update event!", err.response.data));
         Object.assign(this.currentEvents[this.editedIndex], this.editedItem)
       } else {
         //add
@@ -864,31 +1088,33 @@ export default {
         axios.post(`${process.env.VUE_APP_API_URL}/reservation/store`, {
             ...this.newEvent
           })
-          .then(() => {
+          .then((res) => {
+            console.log(res);
             this.getEvents();
             this.resetForm();
           })
-          .catch(err => console.log("nepodarilo sa pridat event", err.response.data));
         this.resetForm();
         // this.currentEvents.push(this.editedItem)
       }
       this.close()
     },
+
+    markAsRead() {
+      this.$store.dispatch('reservationCounter', {
+        reservCounter: 0
+      });
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      const api2 = `${process.env.VUE_APP_API_URL}/reservation/markAsRead`;
+
+      axios.post(api2, {}, config)
+        .then(() => {})
+    }
   },
-  //
-  // created() {
-  //   //presence channel
-  //   window.Echo.join('reservation.' + this.$root.me.id)
-  //     .listen('Reservations', (e) => {
-  //       this.currentEvents
-  //
-  //       this.currentEvents.map((event, index) => {
-  //         if (event.id == e.reservation[0].id) {
-  //           this.currentEvents.splice(index, 1, e.reservation[0]);
-  //         }
-  //       })
-  //     })
-  // },
 }
 </script>
 <style lang="scss">

@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       notifCount: 0,
+      reservCount: 0,
       snackbarUnreadMessages: false,
       snackbarNotifications: false,
       multiLine: true,
@@ -182,7 +183,6 @@ export default {
       //for notifications
       window.Echo.join('notif-channel.' + localStorage.getItem("user_id"))
         .listen('Notifications', (e) => {
-          console.log(e);
           if (e.notification.subtitle.substring(0, e.notification.subtitle.indexOf(' ')) == 'Prijatie') {
             let position = this.$root.toolbar.friendRequests.friendRequests.reduce((acc, request, index) => {
               if (request.id == e.notification.from_user.id) {
@@ -237,6 +237,27 @@ export default {
             this.snackbarNotifications = true;
           }
         })
+
+      // for reservations
+      window.Echo.join('reservation.' + this.$root.me.id)
+        .listen('Reservations', (e) => {
+          console.log(e);
+          if (this.$route.fullPath != '/administration') {
+
+            // this.reservCount += 1;
+            // this.$store.dispatch('reservationCounter', {
+            //   reservCounter: this.reservCount
+            // });
+            if (e.status == 'deleted') {
+              this.reservCount += 1;
+              this.$store.dispatch('reservationCounter', {
+                reservCounter: this.reservCount
+              });
+            } else {
+              this.getUncheckedReservations();
+            }
+          }
+        })
     }
   },
   computed: {
@@ -247,9 +268,8 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-
     localStorage.setItem('language', 'Slovenský jazyk');
-
+    this.getUncheckedReservations();
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
       if (theme === "true") {
@@ -265,6 +285,7 @@ export default {
     const api = `${process.env.VUE_APP_API_URL}/getAllUnreadMessages`;
     const api2 = `${process.env.VUE_APP_API_URL}/getNotificationNew/${localStorage.getItem('user_id')}`;
     const api3 = `${process.env.VUE_APP_API_URL}/rating`;
+
     const config = {
       headers: {
         Accept: "application/json",
@@ -287,16 +308,16 @@ export default {
             notifCounter: this.notifCount
           });
         });
-    }
-
-    if (localStorage.getItem('username') != null) {
+      //rating
       axios.get(api3, config)
-        .then(resp => {
-          for (var i = 0; i < resp.data.data.length; i++) {
-            if (localStorage.getItem("username") == resp.data.data[i].Meno) {
-              this.$store.dispatch('ratingState', {
-                state: true
-              });
+        .then(res => {
+          if (res.data.length != 0) {
+            for (var i = 0; i < res.data.data.length; i++) {
+              if (localStorage.getItem("username") == res.data.data[i].Meno) {
+                this.$store.dispatch('ratingState', {
+                  state: true
+                });
+              }
             }
           }
         })
@@ -307,6 +328,7 @@ export default {
     this.drawer = this.drawerNew;
     //do something after updating vue instance
     this.notifCount = this.$store.getters['notificationCounter'];
+    this.reservCount = this.$store.getters['reservationCounter'];
 
     // const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
     // const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
@@ -353,7 +375,7 @@ export default {
     //       count: res.data
     //     });
     //   });
-    this.notifCount = this.$store.getters['notificationCounter'];
+
     this.initDarkMode();
 
     if (localStorage.getItem('authToken') != null) {
@@ -386,6 +408,26 @@ export default {
   },
 
   methods: {
+    getUncheckedReservations() {
+      const api = `${process.env.VUE_APP_API_URL}/reservation/getUncheckedReservationsUser`;
+
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+
+      //reservations counter
+      axios.get(api, config)
+        .then(res => {
+          this.reservCount = res.data
+          this.$store.dispatch('reservationCounter', {
+            reservCounter: this.reservCount
+          });
+        });
+    },
+
     openNavigationDrawer(state) {
       this.drawer = state;
     },
