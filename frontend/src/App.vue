@@ -269,7 +269,7 @@ export default {
   mounted() {
     //do something after mounting vue instance
     localStorage.setItem('language', 'Slovenský jazyk');
-    this.getUncheckedReservations();
+
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
       if (theme === "true") {
@@ -321,6 +321,8 @@ export default {
             }
           }
         })
+
+      this.getUncheckedReservations();
     }
     this.initDarkMode();
   },

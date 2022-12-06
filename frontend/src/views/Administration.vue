@@ -16,7 +16,7 @@
     </v-tabs>
 
     <v-card-text class="p-0 text-center">
-      <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
+      <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow touchless>
         <v-tab-item :key="tabs[0].id" :value="tabs[0].route">
           <router-view />
         </v-tab-item>

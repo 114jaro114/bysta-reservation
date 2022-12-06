@@ -15,6 +15,7 @@ use App\Http\Controllers\ValidateRegisterLogin;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PricesController;
+use App\Http\Controllers\UserContactController;
 
 use App\Http\Controllers\UpdateAccountSettingsController;
 use App\Traits\Friendable;
@@ -108,6 +109,7 @@ Route::post('/reservation/update', [ReservationController::class, 'update']);
 Route::post('/reservation/delete', [ReservationController::class, 'delete']);
 Route::post('/reservation/markAsRead', [ReservationController::class, 'markAsRead']);
 Route::get('/reservation/getUncheckedReservationsUser', [ReservationController::class, 'getUncheckedReservationsUser']);
+Route::post('/reservation/reservationUserContactInfo', [ReservationController::class, 'reservationUserContactInfo']);
 
 Route::get('/rating', [RatingController::class, 'index']);
 Route::post('/rating/store', [RatingController::class, 'store']);
@@ -142,7 +144,6 @@ Route::get('/comments', [CommentController::class, 'fetchComments']);
 Route::post('/comments', [CommentController::class, 'store']);
 
 //Friendships
-Route::get('/checkContactForm', [FriendshipsController::class, 'checkIfContactFormExist']);
 Route::get('/friendships', [FriendshipsController::class, 'getFriendships']);
 Route::get('/getAllPossibleFriends', [FriendshipsController::class, 'getAllPossibleFriends']);
 Route::get('/getAllFriendshipRequests', [FriendshipsController::class, 'getAllFriendshipRequests']);
@@ -155,9 +156,11 @@ Route::get('/getNumberOfFriends', [FriendshipsController::class, 'getNumberOfFri
 //Friendships profile
 Route::get('/checkIfUserIsMyFriend/{id}', [FriendshipsController::class, 'checkIfUserIsMyFriend']);
 Route::get('/friendshipsProfile/{id}', [FriendshipsController::class, 'getFriendshipsProfile']);
+
 // contact form
-Route::post('/contactForm', [FriendshipsController::class, 'contactForm']);
-Route::get('/getContactForm', [FriendshipsController::class, 'getContactForm']);
+Route::get('/checkContactForm', [UserContactController::class, 'checkIfContactFormExist']);
+Route::post('/contactForm', [UserContactController::class, 'contactForm']);
+Route::get('/getContactForm', [UserContactController::class, 'getContactForm']);
 
 //notifications
 Route::post('/sendNotification', [NotificationsController::class, 'sendNotification']);

@@ -342,11 +342,8 @@ export default {
               this.disabledDates.push(allDates[a])
             }
           }
-
-          console.log(this.disabledDates);
           // get data
           this.test = resp.data;
-          console.log(this.test);
           // this.incId = this.test.length;
           if (resp.data != undefined) {
             this.incId = resp.data[resp.data.length - 1].id;

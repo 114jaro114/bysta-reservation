@@ -3,7 +3,7 @@
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
-  <v-row justify="center" class="ml-0 mr-0" v-if="successCreatedReservation == false">
+  <v-row justify="center" class="m-0" v-if="successCreatedReservation == false">
     <div class="text-center">
       <v-dialog v-model="contactFormDialog" max-width="290">
         <v-card class="rounded" elevation="0">
@@ -28,36 +28,16 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
-        <v-icon>mdi-alert-circle</v-icon>
-        {{ text }}
-
-        <template v-slot:action="{ attrs }">
-
-          <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
-            <v-icon>mdi-close-circle</v-icon>
-          </v-btn>
-        </template>
-      </v-snackbar>
     </div>
     <v-col class="p-0">
-      <!-- <v-lazy v-model="isActive" :options="{
-          threshold: .8
-        }" min-height="200" transition="fade-transition"> -->
-      <v-container class="pt-0">
+      <v-container class="p-0">
         <v-stepper v-model="e1">
-          <v-stepper-header elevation="5">
+          <!-- stepper header -->
+          <v-stepper-header elevation="0">
             <v-stepper-step color="primary" :complete="e1 > 1" :rules="[() => step1]" step="1" error-icon="mdi-alert-circle">
               Dátum a čas príchodu a odchodu
               <small v-if="step1 == false">Chyba</small>
             </v-stepper-step>
-
-            <!-- <v-divider></v-divider>
-
-            <v-stepper-step color="primary" :complete="e1 > 2" :rules="[() => step2]" step="2" error-icon="mdi-alert-circle">
-              Čas príchodu a odchodu
-              <small v-if="step2 == false">Chyba</small>
-            </v-stepper-step> -->
 
             <v-divider></v-divider>
 
@@ -80,6 +60,7 @@
               <small v-if="step4 == false">Chyba</small>
             </v-stepper-step>
           </v-stepper-header>
+          <!-- end stepper header -->
 
           <v-stepper-items class="h-100">
             <v-stepper-content step="1">
@@ -96,9 +77,12 @@
                   <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
                 </v-btn>
 
-                <v-btn color="primary" @click="checkStatus(); toTop()">
-                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-                </v-btn>
+                <v-slide-y-transition>
+                  <v-btn color="primary" class="anim" @click="checkStatus(); toTop()">
+                    Pokračovať
+                    <v-icon class="arrow">mdi-arrow-right</v-icon>
+                  </v-btn>
+                </v-slide-y-transition>
               </div>
               <div class="pt-3" v-else>
                 <v-btn color="accent" disabled class="mr-2" outlined>
@@ -181,6 +165,76 @@
               <v-card class="rounded" elevation="0">
                 <v-card-text>
                   <v-row class="m-0">
+                    <v-col class="p-0 pr-lg-4" cols="12" sm="12" md="12" lg="4">
+                      <v-row class="m-0">
+                        <span>Dospelí</span>
+                      </v-row>
+
+                      <v-row class="ml-0 mr-0">
+                        <v-btn class="mr-2 mt-1" fab dark x-small color="primary" @click="decrementValue1">
+                          <v-icon dark>
+                            mdi-minus
+                          </v-icon>
+                        </v-btn>
+                        <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
+                        <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue1">
+                          <v-icon dark>
+                            mdi-plus
+                          </v-icon>
+                        </v-btn>
+                        <v-btn style="margin-top: 6px" rounded small outlined color="error" @click="resetValue1">
+                          <span class="font-weight-bold text-uppercase">reset</span>
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-0 pl-lg-2 pr-lg-2" cols="12" sm="12" md="12" lg="4">
+                      <v-row class="m-0">
+                        <span>Deti od 2 do 12 rokov</span>
+                      </v-row>
+
+                      <v-row class="ml-0 mr-0">
+                        <v-btn class="mr-2 mt-1" fab dark x-small color="primary" @click="decrementValue2">
+                          <v-icon dark>
+                            mdi-minus
+                          </v-icon>
+                        </v-btn>
+                        <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
+                        <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue2">
+                          <v-icon dark>
+                            mdi-plus
+                          </v-icon>
+                        </v-btn>
+                        <v-btn style="margin-top: 6px" rounded small outlined color="error" @click="resetValue2">
+                          <span class="font-weight-bold text-uppercase">reset</span>
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+
+                    <v-col class="p-0 pl-lg-4" cols="12" sm="12" md="12" lg="4">
+                      <v-row class="m-0">
+                        <span>Deti do 2 rokov</span>
+                      </v-row>
+
+                      <v-row class="ml-0 mr-0">
+                        <v-btn class="mr-2 mt-1" fab dark x-small color="primary" @click="decrementValue3">
+                          <v-icon dark>
+                            mdi-minus
+                          </v-icon>
+                        </v-btn>
+                        <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
+                        <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue3">
+                          <v-icon dark>
+                            mdi-plus
+                          </v-icon>
+                        </v-btn>
+                        <v-btn style="margin-top: 6px" rounded small outlined color="error" @click="resetValue3">
+                          <span class="font-weight-bold text-uppercase">reset</span>
+                        </v-btn>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                  <!-- <v-row class="m-0">
                     <span>Dospelí</span>
                   </v-row>
 
@@ -245,8 +299,10 @@
                     <v-btn depressed color="error" @click="resetValue3">
                       Resetovať
                     </v-btn>
-                  </v-row>
+                  </v-row> -->
+
                   <v-divider />
+
                   <v-row class="m-0 mt-3">
                     <v-col class="pl-0 pr-0" align="left">
                       <v-icon color="orange">mdi-information</v-icon>
@@ -264,215 +320,6 @@
                   <v-divider />
 
                   <v-row class="m-0">
-                    <!-- <v-col></v-col>
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span v-bind="attrs" v-on="on">Počet osôb</span>
-                        </template>
-                        <span>Maximálny počet osôb je 20!</span>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
-                          <span>Jednotková cena</span>
-                        </template>
-                        <span v-if="counter1 + counter2 > 5">Cena za osobu na noc</span>
-                        <span v-else>Cena za celú chatu na 1 noc pri počte osôb &lt;6</span>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
-                          <span>Cena/noc</span>
-                        </template>
-                        <div v-if="counter1 + counter2 > 5">
-                          <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
-                          <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
-                        </div>
-                        <div v-else>
-                          <span>Cena za celú chatu na 1 noc pri počte osôb &lt;6</span>
-                        </div>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
-                        </template>
-                        <span>Od {{start_date}} do {{end_date}}</span>
-                      </v-tooltip>
-                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}}noci</span>
-                      <span v-else>Cena/{{countDaysBetweemTwoDates}}noc</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-row class="m-0" v-if="counter1 + counter2 < 6">
-                    <v-col>
-                      <span>Cena za celú chatu <span class="font-weight-bold"> (&lt;6 osôb)</span></span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1 + counter2}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceCabinUnderSixPpl}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceCabinUnderSixPpl}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceCabinUnderSixPpl*countDaysBetweemTwoDates}}€</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-row class="m-0" v-if="counter1 + counter2 > 5">
-                    <v-col>
-                      <span>Dospelí</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceAdults}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1*priceAdults}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}}€</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider v-if="counter2 > 0 && counter1 + counter2 > 5" />
-                  <v-row class="m-0" v-if="counter2 > 0 && counter1 + counter2 > 5">
-
-                    <v-col>
-                      <span>Deti od 2 do 12 rokov</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceChilds2to12}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2*priceChilds2to12}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}}€</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider v-if="counter3 > 0" />
-                  <v-row class="m-0" v-if="counter3 > 0">
-                    <v-col>
-                      <span>Deti do 2 rokov</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{priceChildsto2}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3*priceChildsto2}}€</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}}€</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider />
-                  <v-row class="m-0">
-                    <v-col>
-                      <span>Upratovanie</span>
-                    </v-col>
-                    <v-col>
-                      <span>-</span>
-                    </v-col>
-                    <v-col>
-                      <span>-</span>
-                    </v-col>
-                    <v-col>
-                      <span>-</span>
-                    </v-col>
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{cleaningFee}}€</span>
-                        </template>
-                        <span>Poplatok za upratovaie</span>
-                      </v-tooltip>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider />
-                  <v-row class="m-0">
-                    <v-col>
-                      <span class="font-weight-bold">Spolu</span>
-                    </v-col>
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1+counter2+counter3}}</span>
-                        </template>
-                        <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">{{priceAdults}}€</span>
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
-                            {{priceCabinUnderSixPpl}}€
-                          </span>
-                        </template>
-                        <span v-if="counter1+counter2 > 5">Jednotková cena za osobu na jednu noc</span>
-                        <span v-else>Cena je za celú chatu pri počte osob &lt;6 <span class="font-weight-bold">(Deti do 2 rokov sa do počtu osôb nezaratávajú!)</span> </span>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}}€</span>
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
-                            {{priceCabinUnderSixPpl}}€
-                          </span>
-                        </template>
-                        <div v-if="counter1 + counter2 > 5">
-                          <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
-                          <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
-                        </div>
-                        <div v-else>
-                          <span>Cena je za celú chatu pri počte osob &lt;6 <span class="font-weight-bold">(Deti do 2 rokov sa do počtu osôb nezaratávajú!)</span> </span>
-                        </div>
-                      </v-tooltip>
-                    </v-col>
-
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-if="counter1 + counter2 > 5">
-                            {{counter1*priceAdults*countDaysBetweemTwoDates + counter2*priceChilds2to12*countDaysBetweemTwoDates + counter3*priceChildsto2*countDaysBetweemTwoDates + cleaningFee}} €
-                          </span>
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on" v-else>
-                            {{priceCabinUnderSixPpl + cleaningFee}}€
-                          </span>
-                        </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci (vrátane poplatku za upratovanie)</span>
-                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noc (vrátane poplatku za upratovanie)</span>
-                      </v-tooltip>
-                    </v-col>
-                  </v-row> -->
-                    <!-- <v-row> -->
                     <v-col class="pl-0 pr-0">
                       <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
                         <template v-slot:header="{ props: { headers } }">
@@ -515,13 +362,23 @@
                 </v-card-text>
               </v-card>
 
-              <v-btn color="accent" @click="e1 = 1; backStep2(); toTop()" class="mr-2" outlined>
+              <!-- <v-btn color="accent" @click="e1 = 1; backStep2(); toTop()" class="mr-2" >
                 <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
+              </v-btn> -->
 
-              <v-btn color="primary" @click="checkStatus3(); toTop()">
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-              </v-btn>
+              <v-slide-y-transition>
+                <v-btn color="accent" class="anim mr-2" @click="e1 = 1; backStep2(); toTop()" outlined>
+                  <v-icon class="arrow2">mdi-arrow-left</v-icon>
+                  Krok späť
+                </v-btn>
+              </v-slide-y-transition>
+
+              <v-slide-y-transition>
+                <v-btn color="primary" class="anim" @click="checkStatus3(); toTop()">
+                  Pokračovať
+                  <v-icon class="arrow">mdi-arrow-right</v-icon>
+                </v-btn>
+              </v-slide-y-transition>
             </v-stepper-content>
 
             <v-stepper-content step="3">
@@ -567,13 +424,20 @@
                 </v-card-text>
               </v-card>
 
-              <v-btn color="accent" @click="e1 = 2; backStep3(); toTop()" class="mr-2" outlined>
-                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
 
-              <v-btn color="primary" @click="checkStatus4(); toTop()">
-                Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-              </v-btn>
+              <v-slide-y-transition>
+                <v-btn color="accent" class="anim mr-2" @click="e1 = 2; backStep3(); toTop()" outlined>
+                  <v-icon class="arrow2">mdi-arrow-left</v-icon>
+                  Krok späť
+                </v-btn>
+              </v-slide-y-transition>
+
+              <v-slide-y-transition>
+                <v-btn color="primary" class="anim" @click="checkStatus4(); toTop()">
+                  Pokračovať
+                  <v-icon class="arrow">mdi-arrow-right</v-icon>
+                </v-btn>
+              </v-slide-y-transition>
             </v-stepper-content>
 
             <v-stepper-content step="4">
@@ -680,118 +544,6 @@
                   </v-row>
 
                   <v-row class="m-0">
-                    <!-- <v-col></v-col>
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span v-bind="attrs" v-on="on">Počet osôb</span>
-                        </template>
-                        <span>Maximálny počet osôb je 20!</span>
-                      </v-tooltip>
-
-                    </v-col>
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
-                          <span>Cena/noc</span>
-                        </template>
-                        <span v-if="counter1 > 1">Cena na jednu noc za {{counter1}} osoby</span>
-                        <span v-else>Cena za 1 noc pre {{counter1}} osobu</span>
-                      </v-tooltip>
-
-                    </v-col>
-                    <v-col class="font-weight-bold">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon v-bind="attrs" v-on="on">mdi-information</v-icon>
-                        </template>
-                        <span>Od {{start_date}} do {{end_date}}</span>
-                      </v-tooltip>
-                      <span v-if="countDaysBetweemTwoDates > 1">Cena/{{countDaysBetweemTwoDates}} noci</span>
-                      <span v-else>Cena/{{countDaysBetweemTwoDates}} noc</span>
-                    </v-col>
-                  </v-row>
-                  <v-row class="m-0">
-                    <v-col>
-                      <span>Dospelí</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1*priceAdults}} €</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter1*priceAdults*countDaysBetweemTwoDates}} €</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider v-if="counter2 > 0" />
-                  <v-row class="m-0" v-if="counter2 > 0">
-
-                    <v-col>
-                      <span>Deti od 2 do 12 rokov</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2*priceChilds2to12}} €</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter2*priceChilds2to12*countDaysBetweemTwoDates}} €</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider v-if="counter3 > 0" />
-                  <v-row class="m-0" v-if="counter3 > 0">
-                    <v-col>
-                      <span>Deti do 2 rokov</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3}}</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3*priceChildsto2}} €</span>
-                    </v-col>
-                    <v-col>
-                      <span>{{counter3*priceChildsto2*countDaysBetweemTwoDates}} €</span>
-                    </v-col>
-                  </v-row>
-
-                  <v-divider />
-                  <v-row class="m-0">
-                    <v-col>
-                      <span class="font-weight-bold">Spolu</span>
-                    </v-col>
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1+counter2+counter3}}</span>
-                        </template>
-                        <span>Celkový počet osôb: {{counter1+counter2+counter3}}</span>
-                      </v-tooltip>
-                    </v-col>
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="font-weight-bold" v-bind="attrs" v-on="on">{{counter1*priceAdults + counter2*priceChilds2to12 + counter3*priceChildsto2}} €</span>
-                        </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Cena je za {{counter1+counter2+counter3}} osoby na 1 noc</span>
-                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na 1 noc</span>
-                      </v-tooltip>
-                    </v-col>
-                    <v-col>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span class="text-decoration-underline font-weight-bold" v-bind="attrs" v-on="on">
-                            {{overallPrice}} €</span>
-                        </template>
-                        <span v-if="counter1+counter2+counter3 > 1">Celková cena za {{counter1}} {{counter1+counter2+counter3}} osoby na {{countDaysBetweemTwoDates}} noci</span>
-                        <span v-else>Celková cena za {{counter1+counter2+counter3}} osobu na {{countDaysBetweemTwoDates}} noci</span>
-                      </v-tooltip>
-                    </v-col> -->
                     <v-col class="pl-0 pr-0">
                       <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
                         <template v-slot:header="{ props: { headers } }">
@@ -833,9 +585,12 @@
                 </v-card-text>
               </v-card>
 
-              <v-btn color="accent" @click="e1 = 3; backStep4(); toTop()" class="mr-2" outlined>
-                <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-              </v-btn>
+              <v-slide-y-transition>
+                <v-btn color="accent" class="anim mr-2" @click="e1 = 3; backStep4(); toTop()" outlined>
+                  <v-icon class="arrow2">mdi-arrow-left</v-icon>
+                  Krok späť
+                </v-btn>
+              </v-slide-y-transition>
 
               <v-btn color="primary" @click="store()">
                 Odoslať rezerváciu<v-icon>mdi-arrow-right-thick</v-icon>
@@ -844,43 +599,53 @@
           </v-stepper-items>
         </v-stepper>
       </v-container>
+      <!-- snackbar error in reservation -->
+      <v-snackbar v-model="snackbar" :multi-line="multiLine" color="error" bottom left class="m-3">
+        <v-icon>mdi-alert-circle</v-icon>
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-col>
   </v-row>
 
-  <v-container class="p-0" v-else>
-    <v-card class="rounded p-3 d-flex align-center w-100" elevation="0" min-height="88vh">
-      <v-row class="w-100">
-        <v-col cols="12">
-          <h1 class="font-weight-bold">Ďakujeme Vám za rezerváciu.</h1>
-        </v-col>
-        <v-col cols="12">
-          <span>Vašu rezerváciu sa budeme snažiť potvrdiť čo najrýchlejšie. Detail Vašej rezervácie je možné si pozrieť v časti Administrácia.</span>
-        </v-col>
-        <v-col cols="12">
-          <v-slide-y-transition>
-            <v-btn color="primary" class="anim" to="/administration">
-              <span>Do administrácie</span>
-              <v-icon class="arrow">mdi-arrow-right</v-icon>
-            </v-btn>
-          </v-slide-y-transition>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-container>
-
-  <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
-    <v-icon>mdi-check-circle</v-icon>
-    {{ text }}
-    <template v-slot:action="{ attrs }">
-      <!-- <v-btn color="white" to="/administration" text small v-bind="attrs" @click="snackbarSuccess = false">
-        <v-icon>mdi-clipboard-arrow-up</v-icon>
-        <span>prejsť do administrácie</span>
-      </v-btn> -->
-      <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
-        <v-icon>mdi-close-circle</v-icon>
-      </v-btn>
-    </template>
-  </v-snackbar>
+  <v-row justify="center" class="m-0" v-else>
+    <v-col class="p-0">
+      <v-container class="p-0">
+        <v-card class="rounded p-3 d-flex align-center w-100" elevation="0" min-height="88vh">
+          <v-row class="w-100">
+            <v-col cols="12">
+              <h1 class="font-weight-bold">Ďakujeme Vám za rezerváciu.</h1>
+            </v-col>
+            <v-col cols="12">
+              <span>Vašu rezerváciu sa budeme snažiť potvrdiť čo najrýchlejšie. Detail Vašej rezervácie je možné si pozrieť v časti Administrácia.</span>
+            </v-col>
+            <v-col cols="12">
+              <v-slide-y-transition>
+                <v-btn color="primary" class="anim" to="/administration">
+                  <span>Do administrácie</span>
+                  <v-icon class="arrow">mdi-arrow-right</v-icon>
+                </v-btn>
+              </v-slide-y-transition>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-container>
+      <!-- snackbar after successfully created reservation -->
+      <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3" timeout="-1">
+        <v-icon>mdi-check-circle</v-icon>
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </v-col>
+  </v-row>
 </div>
 </template>
 
@@ -1195,11 +960,7 @@ export default {
             },
             config
           )
-          .then(res => {
-            console.log(res);
-          })
-      } else {
-        console.log('no');
+          .then(() => {})
       }
       this.step3 = true;
       this.e1 = 4;
@@ -1451,17 +1212,36 @@ export default {
             overallPrice: this.overallPrice,
             note: this.note
           }, config)
-          .then(() => {
+          .then(res => {
+            console.log(res.data);
             this.getUncheckedReservations();
-            const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
+
+            const api = `${process.env.VUE_APP_API_URL}/reservation/reservationUserContactInfo`;
+            const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
             const config = {
               headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + localStorage.getItem("authToken"),
               },
             };
-            //notif to user that he successfully created his reservation
+
             axios.post(api, {
+                  reservation_id: res.data[0].id,
+                  user_id: res.data[0].user_id,
+                  surname: this.surname,
+                  lastname: this.lastname,
+                  address: this.address,
+                  city: this.city,
+                  postcode: this.postcode,
+                  country: this.country,
+                  phone: this.myPhone,
+                },
+                config
+              )
+              .then(() => {})
+
+            //notif to user that he successfully created his reservation
+            axios.post(api2, {
                 from: 1,
                 recipient: this.$root.me.id,
                 title: "Chata Byšta",
@@ -1474,7 +1254,7 @@ export default {
               .then(() => {})
 
             //notif to admin that any user made new reservation
-            axios.post(api, {
+            axios.post(api2, {
                 from: this.$root.me.id,
                 recipient: 1,
                 title: "Nová rezervácia",
@@ -1595,14 +1375,17 @@ export default {
 .v-stepper__content {
     padding: 0 !important;
 }
+
+.theme--dark.v-stepper {
+    background-color: #1E1E1E !important;
+}
 .v-stepper {
     box-shadow: none !important;
-    background-color: unset !important;
 }
 
-.v-stepper__step {
-    padding: 0 !important;
-}
+// .v-stepper__step {
+//     padding: 0 !important;
+// }
 
 .v-stepper__wrapper {
     padding-bottom: 10px;

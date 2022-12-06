@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\ReservationUserContactInfo;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -15,9 +16,13 @@ class ReservationController extends Controller
     {
         $username = auth()->user()->name;
         if ($username == 'admin') {
-            return DB::table('reservations')->get();
+          // return DB::table('reservations')->get();
+          $reserv = Reservation::with('usermodel', 'usercontactmodel')->get();
+          return response()->json($reserv);
         } else {
-            return DB::table('reservations')->where('username', '=', $username)->get();
+          $reserv = Reservation::with('usermodel', 'usercontactmodel')->where('username', '=', $username)->get();
+          return response()->json($reserv);
+          // return DB::table('reservations')->where('username', '=', $username)->get();
         }
     }
 
@@ -122,5 +127,26 @@ class ReservationController extends Controller
           Reservation::where('seen_changes_user', '0')->update(['seen_changes_user' => '1']);
           return response()->json("successfully updated reservations status user");
         }
+    }
+
+
+
+
+    // reservation user contanct informácie
+
+    public function reservationUserContactInfo(Request $request) {
+      $reservation = ReservationUserContactInfo::create([
+        'reservation_id' => $request->reservation_id,
+        'user_id' => $request->user_id,
+        'surname' => $request->surname,
+        'lastname' => $request->lastname,
+        'address' => $request->address,
+        'city' => $request->city,
+        'postcode' => $request->postcode,
+        'country' => $request->country,
+        'phone' => $request->phone,
+      ]);
+
+      return response()->json($reservation);
     }
 }
