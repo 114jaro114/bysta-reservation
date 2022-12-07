@@ -1,145 +1,149 @@
 <template>
-<v-container class="saved pt-0">
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col class="pl-0 pr-0">
-      <v-card elevation="0">
-        <v-toolbar class="notiftoolbar" color="primary" flat dark elevation="0">
-          <div class="w-75" v-if="selected.length == 0">
-            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable disabled v-if="overlay || notif.length == 0"></v-text-field>
-            <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable v-if="!overlay && notif.length != 0"></v-text-field>
-          </div>
+<div class="saved">
 
-          <div v-if="selected.length > 0 && deleteNotif == false && addToAll == false">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn fab icon small @click="addToAll = !addToAll; deleteNotif = false" v-bind="attrs" v-on="on">
-                  <v-icon>mdi-order-alphabetical-ascending</v-icon>
-                </v-btn>
-              </template>
-              <span>Presunúť do 'všetky'</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn fab icon small @click="deleteNotif = !deleteNotif; addToAll = false" v-bind="attrs" v-on="on">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </template>
-              <span>Vymazať</span>
-            </v-tooltip>
-          </div>
 
-          <!-- snackbar deleteNotif-->
-          <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="0" height="64">
-            <span v-if="selectedAll.length > 1">Naozaj chcete vymazať tieto notifikácie?</span>
-            <span v-else>Naozaj chcete vymazať túto notifikáciu?</span>
-            <v-btn color="error error--text" text small @click="deleteNotif = false; deleteNotification()">
-              Áno
-            </v-btn>
-            <v-btn color="white white--text" text small outlined @click="deleteNotif = false">
-              Nie
-            </v-btn>
-          </v-snackbar>
+  <v-container>
+    <v-row justify="center" class="ml-0 mr-0">
+      <v-col class="pl-0 pr-0">
+        <v-card elevation="0">
+          <v-toolbar class="notiftoolbar" color="primary" flat dark elevation="0">
+            <div class="w-75" v-if="selected.length == 0">
+              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable disabled v-if="overlay || notif.length == 0"></v-text-field>
+              <v-text-field color="white white--color" v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable v-if="!overlay && notif.length != 0"></v-text-field>
+            </div>
 
-          <!-- snackbar addNotificationsToAll-->
-          <v-snackbar :timeout="-1" :value="addToAll" absolute centered color="primary" elevation="0" height="64">
-            <span v-if="selectedAll.length > 1">Naozaj chcete premiestniť notifikácie do zoznamu všetkých?</span>
-            <span v-else>Naozaj chcete premiestniť notifikáciu do zoznamu všetkých?</span>
-            <div>
-              <v-btn color="error error--text" text small @click="addToAll = false; addNotificationsToAll()">
+            <div v-if="selected.length > 0 && deleteNotif == false && addToAll == false">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn fab icon small @click="addToAll = !addToAll; deleteNotif = false" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-order-alphabetical-ascending</v-icon>
+                  </v-btn>
+                </template>
+                <span>Presunúť do 'všetky'</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn fab icon small @click="deleteNotif = !deleteNotif; addToAll = false" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+                <span>Vymazať</span>
+              </v-tooltip>
+            </div>
+
+            <!-- snackbar deleteNotif-->
+            <v-snackbar :timeout="-1" :value="deleteNotif" absolute centered color="primary" elevation="0" height="64">
+              <span v-if="selectedAll.length > 1">Naozaj chcete vymazať tieto notifikácie?</span>
+              <span v-else>Naozaj chcete vymazať túto notifikáciu?</span>
+              <v-btn color="error error--text" text small @click="deleteNotif = false; deleteNotification()">
                 Áno
               </v-btn>
-              <v-btn color="white white--text" text small outlined @click="addToAll = false">
+              <v-btn color="white white--text" text small outlined @click="deleteNotif = false">
                 Nie
               </v-btn>
-            </div>
-          </v-snackbar>
-          <!-- ///////// -->
+            </v-snackbar>
 
-          <v-spacer></v-spacer>
+            <!-- snackbar addNotificationsToAll-->
+            <v-snackbar :timeout="-1" :value="addToAll" absolute centered color="primary" elevation="0" height="64">
+              <span v-if="selectedAll.length > 1">Naozaj chcete premiestniť notifikácie do zoznamu všetkých?</span>
+              <span v-else>Naozaj chcete premiestniť notifikáciu do zoznamu všetkých?</span>
+              <div>
+                <v-btn color="error error--text" text small @click="addToAll = false; addNotificationsToAll()">
+                  Áno
+                </v-btn>
+                <v-btn color="white white--text" text small outlined @click="addToAll = false">
+                  Nie
+                </v-btn>
+              </div>
+            </v-snackbar>
+            <!-- ///////// -->
 
-          <span style="font-size:12px" class="text-right" v-if="deleteNotif == false && addToAll == false">Označiť všetko</span>
-          <v-checkbox class="mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" disabled v-if="overlay || notif.length == 0 && deleteNotif == false && addToAll == false"></v-checkbox>
-          <v-checkbox class=" mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate"
-            v-if="!overlay && notif.length != 0 && deleteNotif == false && addToAll == false"></v-checkbox>
-        </v-toolbar>
+            <v-spacer></v-spacer>
 
-        <v-list class="pb-0 pt-0" three-line>
-          <v-list-item-group v-model="selected" active-class="primary--text" multiple>
-            <v-list-item v-if="overlay != false" inactive disabled>
-              <v-overlay :value="overlay" :absolute="true" :opacity="0">
-                <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
-              </v-overlay>
-            </v-list-item>
-            <v-list-item class="justify-center" v-if="filteredItems.length == 0 && !overlay && notif.length != 0" disabled>
-              <v-list-item-content class="p-2 pr-0 pl-0">
-                <v-card class="rounded-lg card-statement" elevation="0">
-                  <span>Žiadne výsledky</span>
-                </v-card>
-              </v-list-item-content>
-            </v-list-item>
+            <span style="font-size:12px" class="text-right" v-if="deleteNotif == false && addToAll == false">Označiť všetko</span>
+            <v-checkbox class="mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" disabled v-if="overlay || notif.length == 0 && deleteNotif == false && addToAll == false"></v-checkbox>
+            <v-checkbox class=" mt-5 ml-3" color="white white--text" @change="checkUncheckAll($event);" v-model=" item_1.checked" :indeterminate="item_1.indeterminate"
+              v-if="!overlay && notif.length != 0 && deleteNotif == false && addToAll == false"></v-checkbox>
+          </v-toolbar>
 
-            <v-list-item class="justify-center" v-if="notif.length == 0 && !overlay" disabled>
-              <v-list-item-content class="p-2 pr-0 pl-0">
-                <v-card class="rounded-lg card-statement" elevation="0">
-                  <span>Žiadne uložené notifikácie</span>
-                </v-card>
-              </v-list-item-content>
-            </v-list-item>
-            <template v-else v-for="(item, index) in filteredItems">
-              <!-- list notif -->
-              <v-list-item class="p-0" :key="item.name" v-if="!overlay">
-                <template v-slot:default="{ active }">
-                  <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
-
-                    <v-list-item-subtitle class="text--primary" v-text="item.subtitle"></v-list-item-subtitle>
-
-                    <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
-                  </v-list-item-content>
-
-                  <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
-                    <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
-
-                    <v-dialog v-model="dialogNotifDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
-                      <template v-slot:activator="{ on: menu, attrs }">
-                        <v-btn class="p-absolute" style="left:10px" icon large color="primary" v-bind="attrs" v-on="{ ...menu }" @click="getNotifDetail(item, active)">
-                          <v-icon size="24">mdi-eye</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-card>
-                        <v-toolbar dark color="primary" class="rounded-0" elevation="0">
-                          <v-btn icon dark @click="dialogNotifDetail = false">
-                            <v-icon>mdi-close</v-icon>
-                          </v-btn>
-                          <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
-                        </v-toolbar>
-                      </v-card>
-                    </v-dialog>
-
-                    <v-checkbox value v-if="!active"></v-checkbox>
-
-                    <v-checkbox input-value="true" value v-else></v-checkbox>
-                  </v-list-item-action>
-                </template>
+          <v-list class="pb-0 pt-0" three-line>
+            <v-list-item-group v-model="selected" active-class="primary--text" multiple>
+              <v-list-item v-if="overlay != false" inactive disabled>
+                <v-overlay :value="overlay" :absolute="true" :opacity="0">
+                  <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+                </v-overlay>
               </v-list-item>
-              <v-divider class="m-0" v-if="index < notif.length - 1 && !overlay" :key="index"></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+              <v-list-item class="justify-center" v-if="filteredItems.length == 0 && !overlay && notif.length != 0" disabled>
+                <v-list-item-content class="p-2 pr-0 pl-0">
+                  <v-card class="rounded-lg card-statement" elevation="0">
+                    <span>Žiadne výsledky</span>
+                  </v-card>
+                </v-list-item-content>
+              </v-list-item>
 
-        <v-snackbar height="64" v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
-          <v-icon>mdi-check-circle</v-icon>
-          {{ text }}
-          <template v-slot:action="{ attrs }">
-            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-              <v-icon>mdi-close-circle</v-icon>
-            </v-btn>
-          </template>
-        </v-snackbar>
-      </v-card>
-    </v-col>
-  </v-row>
-</v-container>
+              <v-list-item class="justify-center" v-if="notif.length == 0 && !overlay" disabled>
+                <v-list-item-content class="p-2 pr-0 pl-0">
+                  <v-card class="rounded-lg card-statement" elevation="0">
+                    <span>Žiadne uložené notifikácie</span>
+                  </v-card>
+                </v-list-item-content>
+              </v-list-item>
+              <template v-else v-for="(item, index) in filteredItems">
+                <!-- list notif -->
+                <v-list-item class="p-0" :key="item.name" v-if="!overlay">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-content class="pt-5 pb-5 pl-3" @click="checkUncheck(item, active)">
+                      <v-list-item-title v-text="item.title"></v-list-item-title>
+
+                      <v-list-item-subtitle class="text--primary" v-text="item.subtitle"></v-list-item-subtitle>
+
+                      <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
+                    </v-list-item-content>
+
+                    <v-list-item-action class="m-0 p-3" @click="checkUncheck(item, active)">
+                      <v-list-item-action-text class="pb-3" v-text="item.date"></v-list-item-action-text>
+
+                      <v-dialog v-model="dialogNotifDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                        <template v-slot:activator="{ on: menu, attrs }">
+                          <v-btn class="p-absolute" style="left:10px" icon large color="primary" v-bind="attrs" v-on="{ ...menu }" @click="getNotifDetail(item, active)">
+                            <v-icon size="24">mdi-eye</v-icon>
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-toolbar dark color="primary" class="rounded-0" elevation="0">
+                            <v-btn icon dark @click="dialogNotifDetail = false">
+                              <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                            <v-toolbar-title class="justify-center">Detail</v-toolbar-title>
+                          </v-toolbar>
+                        </v-card>
+                      </v-dialog>
+
+                      <v-checkbox value v-if="!active"></v-checkbox>
+
+                      <v-checkbox input-value="true" value v-else></v-checkbox>
+                    </v-list-item-action>
+                  </template>
+                </v-list-item>
+                <v-divider class="m-0" v-if="index < notif.length - 1 && !overlay" :key="index"></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+
+          <v-snackbar height="64" v-model="snackbar" :multi-line="multiLine" color="success" :left="true">
+            <v-icon>mdi-check-circle</v-icon>
+            {{ text }}
+            <template v-slot:action="{ attrs }">
+              <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+                <v-icon>mdi-close-circle</v-icon>
+              </v-btn>
+            </template>
+          </v-snackbar>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</div>
 </template>
 
 <script>

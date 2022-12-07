@@ -1,128 +1,126 @@
 <template>
-<div class="ceny w-100 h-100">
+<div class="ceny">
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col class="pl-3 pr-3" cols="12" lg="6" md="6">
-      <v-card class="mx-auto" elevation="0">
-        <!-- <v-alert class="" v-model="alert" dismissible color="success" border="left" elevation="1" prominent colored-border icon="mdi-check-circle" transition="fade-transition">
+  <v-container>
+    <v-row class="m-0">
+      <v-col class="p-0 pr-lg-2 pr-md-2" cols="12" lg="6" md="6">
+        <v-card flat>
+          <!-- <v-alert class="" v-model="alert" dismissible color="success" border="left" elevation="1" prominent colored-border icon="mdi-check-circle" transition="fade-transition">
           Ceny boli <strong>úspešne</strong> zmenené.
         </v-alert> -->
-        <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
-          <v-icon>mdi-check-circle</v-icon>
-          {{ text }}
+          <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3">
+            <v-icon>mdi-check-circle</v-icon>
+            {{ text }}
+            <template v-slot:action="{ attrs }">
+              <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
+                <v-icon>mdi-close-circle</v-icon>
+              </v-btn>
+            </template>
+          </v-snackbar>
 
-          <template v-slot:action="{ attrs }">
-            <v-btn color="white" fab text small v-bind="attrs" @click="snackbarSuccess = false">
-              <v-icon>mdi-close-circle</v-icon>
-            </v-btn>
-          </template>
-        </v-snackbar>
-
-        <v-row justify="space-around" class="m-0">
-          <v-col cols=" 12">
-            <v-sheet elevation="0">
-              <v-chip-group v-model="pricesFor" multiple active-class="primary--text">
-                <v-chip v-for="tag in tags" :key="tag" filter class="m-auto">
-                  {{ tag }}
-                </v-chip>
-              </v-chip-group>
-            </v-sheet>
-          </v-col>
-        </v-row>
-
-        <v-divider class="mt-0"></v-divider>
-
-        <v-container class="py-0">
-          <v-row align="center" justify="start">
-            <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-              <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)">
-                <!-- <v-icon left v-text="selection.icon"></v-icon> -->
-                <v-avatar class="primary white--text" left v-text="selection.text.slice(0, 1).toUpperCase()"></v-avatar>
-                {{ selection.text }}
-              </v-chip>
-            </v-col>
-
-            <v-col v-if="!allSelected" cols="12">
-              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense @click:clear="callItBack()" :disabled="!pricesFor.length"></v-text-field>
+          <v-row justify="space-around" class="m-0">
+            <v-col cols="12">
+              <v-sheet elevation="0">
+                <v-chip-group v-model="pricesFor" multiple active-class="primary--text">
+                  <v-chip v-for="tag in tags" :key="tag" filter class="m-auto">
+                    {{ tag }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
             </v-col>
           </v-row>
-        </v-container>
 
-        <v-divider v-if="!allSelected"></v-divider>
+          <v-divider class="mt-0"></v-divider>
 
-        <v-list>
-          <v-row class="m-0">
-            <v-col>
-              <template v-for="item in categories">
+          <v-container class="py-0">
+            <v-row>
+              <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
+                <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)">
+                  <v-avatar class="primary white--text" left v-text="selection.text.slice(0, 1).toUpperCase()"></v-avatar>
+                  {{ selection.text }}
+                </v-chip>
+              </v-col>
 
-                <v-list-item v-if="!selected.includes(item) && item.id <= 6" :key="item.text" :disabled="loading || !pricesFor.length" @click="selected.push(item)">
-                  <v-list-item-title v-text="item.text"></v-list-item-title>
-                </v-list-item>
-              </template>
-            </v-col>
-            <v-col>
-              <template v-for="item in categories">
+              <v-col v-if="!allSelected" cols="12">
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" hide-details filled clearable dense @click:clear="callItBack()" :disabled="!pricesFor.length"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
 
-                <v-list-item v-if="!selected.includes(item) && item.id > 6" :key="item.text" :disabled="loading || !pricesFor.length" @click="selected.push(item)">
-                  <!-- <v-list-item-avatar>
+          <v-divider v-if="!allSelected"></v-divider>
+
+          <v-list>
+            <v-row class="m-0">
+              <v-col>
+                <template v-for="item in categories">
+                  <v-list-item v-if="!selected.includes(item) && item.id <= 6" :key="item.text" :disabled="loading || !pricesFor.length" @click="selected.push(item)">
+                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                  </v-list-item>
+                </template>
+              </v-col>
+              <v-col>
+                <template v-for="item in categories">
+                  <v-list-item v-if="!selected.includes(item) && item.id > 6" :key="item.text" :disabled="loading || !pricesFor.length" @click="selected.push(item)">
+                    <!-- <v-list-item-avatar>
                     <v-icon :disabled="loading" v-text="item.icon"></v-icon>
                   </v-list-item-avatar> -->
-                  <v-list-item-title v-text="item.text"></v-list-item-title>
-                </v-list-item>
-              </template>
-            </v-col>
-          </v-row>
+                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                  </v-list-item>
+                </template>
+              </v-col>
+            </v-row>
 
-        </v-list>
+          </v-list>
 
-        <v-divider></v-divider>
+          <v-divider></v-divider>
 
-        <v-slider class="mt-12 ml-5 mr-5" v-model="price" :color="color" track-color="grey" thumb-label="always" min="0" max="200" :disabled="!selected.length">
-          <template v-slot:prepend>
-            <v-icon :color="color" @click="decrement" :disabled="!selected.length">
-              mdi-minus
-            </v-icon>
-          </template>
+          <v-slider class="ml-3 mr-3" v-model="price" :color="color" track-color="grey" thumb-label="always" min="0" max="200" :disabled="!selected.length">
+            <template v-slot:prepend>
+              <v-icon :color="color" @click="decrement" :disabled="!selected.length">
+                mdi-minus
+              </v-icon>
+            </template>
 
-          <template v-slot:append>
-            <v-icon :color="color" @click="increment" :disabled="!selected.length">
-              mdi-plus
-            </v-icon>
-          </template>
-        </v-slider>
+            <template v-slot:append>
+              <v-icon :color="color" @click="increment" :disabled="!selected.length">
+                mdi-plus
+              </v-icon>
+            </template>
+          </v-slider>
 
-        <v-divider></v-divider>
+          <v-divider class="mt-0 mb-0"></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn :disabled="!selected.length" :loading="loading" :color="color" @click="next" outlined>
-            Aktualizovať
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-    <v-col cols="12" lg="6" md="6">
-      <v-card class="rounded" elevation="0">
-        <div class="pt-3" id="chart">
-          <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
-        </div>
+          <v-card-actions class="pl-3 pr-3">
+            <v-btn :disabled="!selected.length" :loading="loading" :color="color" @click="next" outlined block>
+              Aktualizovať
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
 
-        <v-card-text class="pt-0">
-          <div class="title font-weight-light mb-2">
-            <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+      <v-col class="p-0 pl-lg-2 pl-md-2 pt-3 pt-lg-0 pl-md-0" cols="12" lg="6" md="6">
+        <v-card flat>
+          <div id="chart">
+            <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
           </div>
-          <v-divider class="my-2"></v-divider>
-          <v-icon class="mr-2" small>
-            mdi-clock
-          </v-icon>
-          <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-          <span class="font-weight-bold">{{lastUpdate}}</span>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+
+          <v-card-text class="pt-0">
+            <div class="title font-weight-light mb-2">
+              <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <v-icon class="mr-2" small>
+              mdi-clock
+            </v-icon>
+            <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+            <span class="font-weight-bold">{{lastUpdate}}</span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </div>
 </template>
 <script>

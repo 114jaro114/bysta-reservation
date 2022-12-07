@@ -1,18 +1,15 @@
 <template>
-<div class="settings w-100 h-100">
-  <v-card>
-    <v-tabs grow class="mt-16">
-      <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
-    </v-tabs>
+<div class="settings w-100 h-100 mt-16">
 
-    <v-card-text class="p-0 text-center">
-      <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow>
-        <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
-          <router-view />
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card-text>
-  </v-card>
+  <v-tabs grow>
+    <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
+  </v-tabs>
+
+  <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>
+    <v-tab-item v-for="tab in tabs" :key="tab.id" :value="tab.route">
+      <router-view />
+    </v-tab-item>
+  </v-tabs-items>
 </div>
 </template>
 

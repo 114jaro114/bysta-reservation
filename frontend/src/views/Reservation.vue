@@ -1,8 +1,6 @@
 <template>
 <div class="reservation w-100 h-100 mt-16">
-  <div class="pt-3 pt-lg-5 pt-md-5">
-    <CreateReservation />
-  </div>
+  <CreateReservation />
 </div>
 </template>
 

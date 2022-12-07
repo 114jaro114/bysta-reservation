@@ -1,13 +1,14 @@
 <template>
-<div class="contact w-100 h-100">
-  <v-container class="mt-16 mb-4">
-    <v-overlay :value="$root.me.overlayAvatar">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+<div class="contact w-100 h-100 mt-16">
+  <v-overlay :value="$root.me.overlayAvatar">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+
+  <v-container>
     <v-lazy :options="{
-                      threshold: .4
-                    }" transition="scale-transition">
-      <v-card class="rounded" elevation="0">
+        threshold: .4
+      }" transition="scale-transition">
+      <v-card flat>
         <v-toolbar class="rounded-top d-flex justify-center" color="primary" flat dark>
           <span>
             <v-icon class="pr-1">mdi-information</v-icon>

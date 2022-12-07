@@ -1,5 +1,5 @@
 <template>
-<div class="create_reservation w-100 h-100">
+<div class="create_reservation">
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
@@ -30,7 +30,7 @@
       </v-dialog>
     </div>
     <v-col class="p-0">
-      <v-container class="p-0">
+      <v-container>
         <v-stepper v-model="e1">
           <!-- stepper header -->
           <v-stepper-header elevation="0">
@@ -176,7 +176,7 @@
                             mdi-minus
                           </v-icon>
                         </v-btn>
-                        <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
+                        <v-text-field style="width: 70px" class="counter" v-model="reservation.counter1" placeholder="" filled rounded dense></v-text-field>
                         <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue1">
                           <v-icon dark>
                             mdi-plus
@@ -199,7 +199,7 @@
                             mdi-minus
                           </v-icon>
                         </v-btn>
-                        <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
+                        <v-text-field style="width: 70px" v-model="reservation.counter2" placeholder="" filled rounded dense></v-text-field>
                         <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue2">
                           <v-icon dark>
                             mdi-plus
@@ -222,7 +222,7 @@
                             mdi-minus
                           </v-icon>
                         </v-btn>
-                        <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
+                        <v-text-field style="width: 70px" class="counter" v-model="reservation.counter3" placeholder="" filled rounded dense></v-text-field>
                         <v-btn class="mx-2 mt-1" fab dark x-small color="primary" @click="incrementValue3">
                           <v-icon dark>
                             mdi-plus
@@ -244,7 +244,7 @@
                         mdi-minus
                       </v-icon>
                     </v-btn>
-                    <v-text-field style="width: 70px" class="counter" v-model="counter1" placeholder="" filled rounded dense></v-text-field>
+                    <v-text-field style="width: 70px" class="counter" v-model="reservation.counter1" placeholder="" filled rounded dense></v-text-field>
                     <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue1">
                       <v-icon dark>
                         mdi-plus
@@ -267,7 +267,7 @@
                         mdi-minus
                       </v-icon>
                     </v-btn>
-                    <v-text-field style="width: 70px" v-model="counter2" placeholder="" filled rounded dense></v-text-field>
+                    <v-text-field style="width: 70px" v-model="reservation.counter2" placeholder="" filled rounded dense></v-text-field>
                     <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue2">
                       <v-icon dark>
                         mdi-plus
@@ -290,7 +290,7 @@
                         mdi-minus
                       </v-icon>
                     </v-btn>
-                    <v-text-field style="width: 70px" class="counter" v-model="counter3" placeholder="" filled rounded dense></v-text-field>
+                    <v-text-field style="width: 70px" class="counter" v-model="reservation.counter3" placeholder="" filled rounded dense></v-text-field>
                     <v-btn class="mx-2" fab dark x-small color="primary" @click="incrementValue3">
                       <v-icon dark>
                         mdi-plus
@@ -388,36 +388,37 @@
                 <v-card-text>
                   <v-row justify="center" class="mt-3">
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="surname" v-model="surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled required></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="lastname" v-model="lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled required></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="address" v-model="address" :rules="addressRules" label="Adresa" counter="25" clearable filled required></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" :rules="addressRules" label="Adresa" counter="25" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="city" v-model="city" :rules="cityRules" label="Mesto" clearable filled required></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" :rules="cityRules" label="Mesto" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="postcode" v-model="postcode" :rules="postcodeRules" label="PSČ" clearable filled required></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" :rules="postcodeRules" label="PSČ" clearable filled required></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="country" v-model="country" :rules="countryRules" :items="countries" label="Krajina" clearable filled required>
+                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :rules="countryRules" :items="countries" label="Krajina" clearable filled required>
                       </v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <VueTelInputVuetify v-model="myPhone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled clearable></VueTelInputVuetify>
+                      <VueTelInputVuetify v-model="reservation.details.phone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled clearable>
+                      </VueTelInputVuetify>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-textarea v-model="note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled clearable>
+                      <v-textarea v-model="reservation.details.note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled clearable>
                       </v-textarea>
                     </v-col>
                   </v-row>
@@ -451,41 +452,41 @@
                   </v-row>
                   <v-row justify="center">
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="surname" v-model="surname" label="Meno" filled readonly></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" label="Meno" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="lastname" v-model="lastname" label="Priezvisko" filled readonly></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" label="Priezvisko" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="address" v-model="address" label="Adresa" filled readonly></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" label="Adresa" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="city" v-model="city" label="Mesto" filled readonly></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" label="Mesto" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                      <v-text-field ref="postcode" v-model="postcode" label="PSČ" filled readonly></v-text-field>
+                      <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" label="PSČ" filled readonly></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-autocomplete ref="country" v-model="country" :items="countries" label="Krajina" filled readonly>
+                      <v-autocomplete ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :items="countries" label="Krajina" filled readonly>
                       </v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <VueTelInputVuetify v-model="myPhone" label="Mobilné číslo" placeholder="" filled readonly></VueTelInputVuetify>
+                      <VueTelInputVuetify v-model="reservation.details.phone" label="Mobilné číslo" placeholder="" filled readonly></VueTelInputVuetify>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <div v-if="note == null">
+                      <div v-if="reservation.details.note == null">
                         <v-textarea value="-" label=" Poznámka" rows="1" filled readonly>
                         </v-textarea>
                       </div>
                       <div v-else>
-                        <v-textarea v-model="note" label=" Poznámka" rows="1" filled readonly>
+                        <v-textarea v-model="reservation.details.note" label=" Poznámka" rows="1" filled readonly>
                         </v-textarea>
                       </div>
                     </v-col>
@@ -505,13 +506,13 @@
                         <v-row class="justify-center">
                           <v-col>
                             <v-icon>mdi-calendar-start</v-icon>
-                            <span>Dátum: {{start_date}}</span>
+                            <span>Dátum: {{reservation.details.start_date}}</span>
                           </v-col>
                         </v-row>
                         <v-row class="justify-center">
                           <v-col>
                             <v-icon>mdi-clock-start</v-icon>
-                            <span>Čas: {{start_time}}</span>
+                            <span>Čas: {{reservation.details.start_time}}</span>
                           </v-col>
                         </v-row>
                       </v-sheet>
@@ -524,13 +525,13 @@
                         <v-row class="justify-center">
                           <v-col>
                             <v-icon>mdi-calendar-end</v-icon>
-                            <span>Dátum: {{end_date}}</span>
+                            <span>Dátum: {{reservation.details.end_date}}</span>
                           </v-col>
                         </v-row>
                         <v-row class="justify-center">
                           <v-col>
                             <v-icon>mdi-clock-end</v-icon>
-                            <span>Čas: {{end_time}}</span>
+                            <span>Čas: {{reservation.details.end_time}}</span>
                           </v-col>
                         </v-row>
                       </v-sheet>
@@ -635,7 +636,7 @@
         </v-card>
       </v-container>
       <!-- snackbar after successfully created reservation -->
-      <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left class="m-3" timeout="-1">
+      <v-snackbar v-model="snackbarSuccess" :multi-line="multiLine" color="success" bottom left>
         <v-icon>mdi-check-circle</v-icon>
         {{ text }}
         <template v-slot:action="{ attrs }">
@@ -673,19 +674,17 @@ export default {
       step3: true,
       step4: true,
       step5: true,
-      counter1: 1,
-      counter2: 0,
-      counter3: 0,
+
       modal1: false,
       modal2: false,
+
       priceAdults: 18,
       priceChildsto2: 0,
       priceChilds2to12: 18,
-      countDaysBetweemTwoDates: null,
       overallPrice: 18,
-      //cleaning cabin
       cleaningFee: 100,
       priceCabinUnderSixPpl: 150,
+      countDaysBetweemTwoDates: null,
 
       dialogOrderDetail: false,
       //table prices
@@ -740,10 +739,40 @@ export default {
       ],
       errorMessages: '',
 
-      start_time: '',
-      end_time: '',
-      start_date: '',
-      end_date: '',
+      reservation: {
+        counter1: 1,
+        counter2: 0,
+        counter3: 0,
+        details: {
+          event_name: "rezervácia",
+          user_id: this.$root.me.id,
+          username: this.$root.me.name,
+          start_date: '',
+          end_date: '',
+          start_time: '',
+          end_time: '',
+          nights: this.countDaysBetweemTwoDates,
+          adults: '',
+          childs2to12: '',
+          childsto2: '',
+          cleaningFee: this.cleaningFee,
+          priceForNight: this.priceAdults,
+          totalPersons: '',
+          overallPrice: this.overallPrice,
+          note: '',
+        },
+        contactInfos: {
+          reservation_id: '',
+          user_id: '',
+          surname: '',
+          lastname: '',
+          address: '',
+          city: '',
+          postcode: '',
+          country: '',
+          phone: '',
+        },
+      },
 
       phone: {
         number: '',
@@ -752,36 +781,35 @@ export default {
       },
       formHasErrors: false,
 
-      surname: null,
       surnameRules: [
         v => !!v || 'Meno je povinné',
         v => (v && v.length <= 10) || 'Meno musí obsahovať max 10 znakov',
       ],
-      lastname: null,
+
       lastnameRules: [
         v => !!v || 'Priezvisko je povinné',
       ],
-      address: null,
+
       addressRules: [
         v => !!v || 'Adresa je povinná',
       ],
-      city: null,
+
       cityRules: [
         v => !!v || 'Mesto je povinné',
       ],
-      postcode: null,
+
       postcodeRules: [
         v => !!v || 'PSČ je povinné',
       ],
-      country: null,
+
       countryRules: [
         v => !!v || 'Krajina je povinná',
       ],
-      myPhone: null,
+
       myPhoneRules: [
         v => !!v || 'Mobilné číslo je povinné',
       ],
-      note: null,
+
       noteRules: [
         v => (v && v.length <= 50) || 'Poznámka musí obsahovať max 50 znakov',
       ],
@@ -800,27 +828,6 @@ export default {
   },
 
   mounted() {
-    // this.headerTooltipsConfig();
-    // this.prices.push({
-    //   text: 'Cena za celú chatu (<6 osôb)',
-    //   p1: this.counter1 + this.counter2,
-    //   p2: this.priceCabinUnderSixPpl + '€',
-    //   p3: this.priceCabinUnderSixPpl + '€',
-    //   p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
-    // }, {
-    //   text: 'Upratovanie',
-    //   p1: '',
-    //   p2: '',
-    //   p3: '',
-    //   p4: this.cleaningFee + '€',
-    // }, {
-    //   text: 'Spolu',
-    //   p1: this.counter1 + this.counter2 + this.counter3,
-    //   p2: this.priceCabinUnderSixPpl + '€',
-    //   p3: this.priceCabinUnderSixPpl + '€',
-    //   p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + this.cleaningFee + '€',
-    // });
-
     const api = `${process.env.VUE_APP_API_URL}/getContactForm`;
     const config = {
       headers: {
@@ -831,15 +838,14 @@ export default {
     };
     axios.get(api, config)
       .then(res => {
-        // console.log(res);
         if (res.data.length != 0) {
-          this.surname = res.data[0].surname;
-          this.lastname = res.data[0].lastname;
-          this.address = res.data[0].address;
-          this.city = res.data[0].city;
-          this.postcode = res.data[0].postcode;
-          this.country = res.data[0].country;
-          this.myPhone = res.data[0].phone;
+          this.reservation.contactInfos.surname = res.data[0].surname;
+          this.reservation.contactInfos.lastname = res.data[0].lastname;
+          this.reservation.contactInfos.address = res.data[0].address;
+          this.reservation.contactInfos.city = res.data[0].city;
+          this.reservation.contactInfos.postcode = res.data[0].postcode;
+          this.reservation.contactInfos.country = res.data[0].country;
+          this.reservation.details.phone = res.data[0].phone;
         }
       });
 
@@ -868,13 +874,13 @@ export default {
     },
 
     arrayDates(dates) {
-      this.start_date = moment(dates[0])
+      this.reservation.details.start_date = moment(dates[0])
         .format("YYYY-MM-DD");
-      this.end_date = moment(dates[1])
+      this.reservation.details.end_date = moment(dates[1])
         .format("YYYY-MM-DD");
-      this.start_time = moment(dates[0])
+      this.reservation.details.start_time = moment(dates[0])
         .format('HH:mm:ss');
-      this.end_time = moment(dates[1])
+      this.reservation.details.end_time = moment(dates[1])
         .format('HH:mm:ss');
     },
 
@@ -928,7 +934,7 @@ export default {
     // },
 
     checkStatus3() {
-      if (this.counter1 == 0 && this.counter2 == 0 && this.counter3 == 0) {
+      if (this.reservation.counter1 == 0 && this.reservation.counter2 == 0 && this.reservation.counter3 == 0) {
         this.step2 = false;
         this.snackbar = true;
         this.text = "Je potrebné zadať počet osôb!";
@@ -950,12 +956,12 @@ export default {
           },
         };
         axios.post(api, {
-              surname: this.surname,
-              lastname: this.lastname,
-              address: this.address,
-              city: this.city,
-              postcode: this.postcode,
-              country: this.country,
+              surname: this.reservation.contactInfos.surname,
+              lastname: this.reservation.contactInfos.lastname,
+              address: this.reservation.contactInfos.address,
+              city: this.reservation.contactInfos.city,
+              postcode: this.reservation.contactInfos.postcode,
+              country: this.reservation.contactInfos.country,
               phone: this.phone.number,
             },
             config
@@ -968,13 +974,13 @@ export default {
 
     checkStatus4() {
       if (
-        this.surname == null ||
-        this.lastname == null ||
-        this.address == null ||
-        this.city == null ||
-        this.postcode == null ||
-        this.country == null ||
-        this.myPhone == null
+        this.reservation.contactInfos.surname == null ||
+        this.reservation.contactInfos.lastname == null ||
+        this.reservation.contactInfos.address == null ||
+        this.reservation.contactInfos.city == null ||
+        this.reservation.contactInfos.postcode == null ||
+        this.reservation.contactInfos.country == null ||
+        this.reservation.details.phone == null
       ) {
         this.step3 = false;
         this.snackbar = true;
@@ -1007,63 +1013,63 @@ export default {
     },
 
     incrementValue1() {
-      if (this.counter1 + this.counter2 < 20) {
-        if (this.counter1 < 20) {
-          this.counter1++;
+      if (this.reservation.counter1 + this.reservation.counter2 < 20) {
+        if (this.reservation.counter1 < 20) {
+          this.reservation.counter1++;
           this.countingPrices();
         }
       } else {
         this.snackbar = true;
-        this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
+        this.text = `Je zvolený maximálny počet osôb (${this.reservation.counter1+this.reservation.counter2})`;
       }
     },
     decrementValue1() {
-      if (this.counter1 > 1) {
-        this.counter1--;
+      if (this.reservation.counter1 > 1) {
+        this.reservation.counter1--;
         this.countingPrices();
       }
     },
     resetValue1() {
-      this.counter1 = 1;
+      this.reservation.counter1 = 1;
       this.countingPrices();
     },
 
     incrementValue2() {
-      if (this.counter1 + this.counter2 < 20) {
-        if (this.counter2 < 20) {
-          this.counter2++;
+      if (this.reservation.counter1 + this.reservation.counter2 < 20) {
+        if (this.reservation.counter2 < 20) {
+          this.reservation.counter2++;
           this.countingPrices();
         }
       } else {
         this.snackbar = true;
-        this.text = `Je zvolený maximálny počet osôb (${this.counter1+this.counter2})`;
+        this.text = `Je zvolený maximálny počet osôb (${this.reservation.counter1+this.reservation.counter2})`;
       }
     },
     decrementValue2() {
-      if (this.counter2 > 0) {
-        this.counter2--;
+      if (this.reservation.counter2 > 0) {
+        this.reservation.counter2--;
         this.countingPrices();
       }
     },
     resetValue2() {
-      this.counter2 = 0;
+      this.reservation.counter2 = 0;
       this.countingPrices();
     },
 
     incrementValue3() {
-      if (this.counter3 < 20) {
-        this.counter3++;
+      if (this.reservation.counter3 < 20) {
+        this.reservation.counter3++;
         this.countingPrices();
       }
     },
     decrementValue3() {
-      if (this.counter3 > 0) {
-        this.counter3--;
+      if (this.reservation.counter3 > 0) {
+        this.reservation.counter3--;
         this.countingPrices();
       }
     },
     resetValue3() {
-      this.counter3 = 0;
+      this.reservation.counter3 = 0;
       this.countingPrices();
     },
 
@@ -1076,14 +1082,14 @@ export default {
       this.headerTooltips = [];
       this.headerTooltips.push('Maximálny počet osôb je 20!');
 
-      if (this.counter1 + this.counter2 > 5) {
+      if (this.reservation.counter1 + this.reservation.counter2 > 5) {
         this.headerTooltips.push('Cena za osobu na noc');
         this.headerTooltips.push('');
       } else {
         this.headerTooltips.push('Cena za celú chatu na 1 noc pri počte osôb <6');
         this.headerTooltips.push('');
       }
-      this.headerTooltips.push(`${'Od ' + this.start_date + ' do ' + this.end_date}`);
+      this.headerTooltips.push(`${'Od ' + this.reservation.details.start_date + ' do ' + this.reservation.details.end_date}`);
     },
 
     countingPrices() {
@@ -1091,41 +1097,41 @@ export default {
       this.headerTooltips = [];
       this.headerTooltips.push('Maximálny počet osôb je 20!');
 
-      if (this.counter1 + this.counter2 > 5) {
+      if (this.reservation.counter1 + this.reservation.counter2 > 5) {
         this.headerTooltips.push('Cena za osobu na noc');
         this.headerTooltips.push('');
       } else {
         this.headerTooltips.push('Cena za celú chatu na 1 noc pri počte osôb <6');
         this.headerTooltips.push('');
       }
-      this.headerTooltips.push(`${'Od ' + this.start_date + ' do ' + this.end_date}`);
+      this.headerTooltips.push(`${'Od ' + this.reservation.details.start_date + ' do ' + this.reservation.details.end_date}`);
 
       this.prices = [];
-      if (this.counter1 + this.counter2 > 5) {
-        if (this.counter2 > 0) {
+      if (this.reservation.counter1 + this.reservation.counter2 > 5) {
+        if (this.reservation.counter2 > 0) {
           this.prices.splice(1, 0, {
             text: 'Deti od 2 do 12 rokov',
-            p1: this.counter2,
+            p1: this.reservation.counter2,
             p2: this.priceChilds2to12 + '€',
-            p3: this.counter2 * this.priceChilds2to12 + '€',
-            p4: this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + '€',
+            p3: this.reservation.counter2 * this.priceChilds2to12 + '€',
+            p4: this.reservation.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + '€',
           });
         }
-        if (this.counter3 > 0) {
+        if (this.reservation.counter3 > 0) {
           this.prices.splice(2, 0, {
             text: 'Deti do 2 rokov',
-            p1: this.counter3,
+            p1: this.reservation.counter3,
             p2: this.priceChildsto2 + '€',
-            p3: this.counter3 * this.priceChildsto2 + '€',
-            p4: this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + '€',
+            p3: this.reservation.counter3 * this.priceChildsto2 + '€',
+            p4: this.reservation.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + '€',
           });
         }
         this.prices.splice(0, 0, {
           text: 'Dospelí',
-          p1: this.counter1,
+          p1: this.reservation.counter1,
           p2: this.priceAdults + '€',
-          p3: this.counter1 * this.priceAdults + '€',
-          p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + '€',
+          p3: this.reservation.counter1 * this.priceAdults + '€',
+          p4: this.reservation.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + '€',
         });
 
         this.prices.push({
@@ -1136,15 +1142,17 @@ export default {
           p4: this.cleaningFee + '€',
         }, {
           text: 'Spolu',
-          p1: this.counter1 + this.counter2 + this.counter3,
-          p2: ((this.counter1 * this.priceAdults) / this.counter1) + ((this.counter2 * this.priceChilds2to12) / this.counter2 || 0) + ((this.counter3 * this.priceChildsto2) / this.counter3 || 0) + '€',
-          p3: this.counter1 * this.priceAdults + this.counter2 * this.priceChilds2to12 + this.counter3 * this.priceChildsto2 + '€',
-          p4: this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this.countDaysBetweemTwoDates + this.cleaningFee + '€',
+          p1: this.reservation.counter1 + this.reservation.counter2 + this.reservation.counter3,
+          p2: ((this.reservation.counter1 * this.priceAdults) / this.reservation.counter1) + ((this.reservation.counter2 * this.priceChilds2to12) / this.reservation.counter2 || 0) + ((this.reservation.counter3 * this.priceChildsto2) / this
+            .reservation.counter3 || 0) + '€',
+          p3: this.reservation.counter1 * this.priceAdults + this.reservation.counter2 * this.priceChilds2to12 + this.reservation.counter3 * this.priceChildsto2 + '€',
+          p4: this.reservation.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.reservation.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.reservation.counter3 * this.priceChildsto2 * this
+            .countDaysBetweemTwoDates + this.cleaningFee + '€',
         });
       } else {
         this.prices.push({
           text: 'Cena za celú chatu (<6 osôb)',
-          p1: this.counter1 + this.counter2,
+          p1: this.reservation.counter1 + this.reservation.counter2,
           p2: this.priceCabinUnderSixPpl + '€',
           p3: this.priceCabinUnderSixPpl + '€',
           p4: this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates + '€',
@@ -1156,7 +1164,7 @@ export default {
           p4: this.cleaningFee + '€',
         }, {
           text: 'Spolu',
-          p1: this.counter1 + this.counter2 + this.counter3,
+          p1: this.reservation.counter1 + this.reservation.counter2 + this.reservation.counter3,
           p2: this.priceCabinUnderSixPpl + '€',
           p3: this.priceCabinUnderSixPpl + '€',
           p4: (this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates) + this.cleaningFee + '€',
@@ -1198,19 +1206,19 @@ export default {
             event_name: "rezervácia",
             user_id: this.$root.me.id,
             username: this.$root.me.name,
-            start_date: this.start_date,
-            end_date: this.end_date,
-            start_time: this.start_time,
-            end_time: this.end_time,
+            start_date: this.reservation.details.start_date,
+            end_date: this.reservation.details.end_date,
+            start_time: this.reservation.details.start_time,
+            end_time: this.reservation.details.end_time,
             nights: this.countDaysBetweemTwoDates,
-            adults: this.counter1,
-            childs2to12: this.counter2,
-            childsto2: this.counter3,
+            adults: this.reservation.counter1,
+            childs2to12: this.reservation.counter2,
+            childsto2: this.reservation.counter3,
             cleaningFee: this.cleaningFee,
             priceForNight: this.priceAdults,
-            totalPersons: this.counter1 + this.counter2 + this.counter3,
+            totalPersons: this.reservation.counter1 + this.reservation.counter2 + this.reservation.counter3,
             overallPrice: this.overallPrice,
-            note: this.note
+            note: this.reservation.details.note
           }, config)
           .then(res => {
             console.log(res.data);
@@ -1228,13 +1236,13 @@ export default {
             axios.post(api, {
                   reservation_id: res.data[0].id,
                   user_id: res.data[0].user_id,
-                  surname: this.surname,
-                  lastname: this.lastname,
-                  address: this.address,
-                  city: this.city,
-                  postcode: this.postcode,
-                  country: this.country,
-                  phone: this.myPhone,
+                  surname: this.reservation.contactInfos.surname,
+                  lastname: this.reservation.contactInfos.lastname,
+                  address: this.reservation.contactInfos.address,
+                  city: this.reservation.contactInfos.city,
+                  postcode: this.reservation.contactInfos.postcode,
+                  country: this.reservation.contactInfos.country,
+                  phone: this.reservation.details.phone,
                 },
                 config
               )
@@ -1310,11 +1318,11 @@ export default {
     form() {
       return {
         name: this.name,
-        address: this.address,
-        city: this.city,
+        address: this.reservation.contactInfos.address,
+        city: this.reservation.contactInfos.city,
         state: this.state,
         zip: this.zip,
-        country: this.country,
+        country: this.reservation.contactInfos.country,
       }
     },
   },
@@ -1322,6 +1330,12 @@ export default {
   watch: {
     name() {
       this.errorMessages = ''
+    },
+    reservation: {
+      handler: function() {
+        console.log("change");
+      },
+      deep: true
     },
   },
 
@@ -1333,32 +1347,17 @@ export default {
 
   updated() {
     //do something after updating vue instance
-    // this.start_date = moment(this.$store.getters['successReservationData'].start_date)
-    //   .format("YYYY-MM-DD");
-    // this.end_date = moment(this.$store.getters['successReservationData'].end_date)
-    //   .format("YYYY-MM-DD");
-    //
-    // console.log(this.start_date);
-    // this.start_time = this.$store.getters['successReservationData'].start_time;
-    // this.end_time = this.$store.getters['successReservationData'].end_time;
-    this.countDaysBetweemTwoDates = moment(this.end_date, 'YYYY-MM-DD')
-      .diff(moment(this.start_date, 'YYYY-MM-DD'), 'days');
+    this.countDaysBetweemTwoDates = moment(this.reservation.details.end_date, 'YYYY-MM-DD')
+      .diff(moment(this.reservation.details.start_date, 'YYYY-MM-DD'), 'days');
     if (this.countDaysBetweemTwoDates > 1) {
       this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noci';
     } else {
       this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noc';
     }
 
-    //Difference in number of days
-    // moment.duration(moment(this.start_date, 'YYYY-MM-DD')
-    //     .diff(moment(this.end_date, 'YYYY-MM-DD')))
-    //   .asDays();
-    //
-    // //Difference in number of weeks
-    // moment.duration(start.diff(end))
-    //   .asWeeks();
-    if (this.counter1 + this.counter2 > 5) {
-      this.overallPrice = this.cleaningFee + this.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.counter3 * this.priceChildsto2 * this
+    if (this.reservation.counter1 + this.reservation.counter2 > 5) {
+      this.overallPrice = this.cleaningFee + this.reservation.counter1 * this.priceAdults * this.countDaysBetweemTwoDates + this.reservation.counter2 * this.priceChilds2to12 * this.countDaysBetweemTwoDates + this.reservation.counter3 * this
+        .priceChildsto2 * this
         .countDaysBetweemTwoDates;
     } else {
       this.overallPrice = (this.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates) + this.cleaningFee;

@@ -1,49 +1,50 @@
 <template>
-<div class="moje_rezervacie w-100 h-100">
+<div class="moje_rezervacie">
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
-  <v-row justify="center" class="ml-0 mr-0">
-    <v-col class="pl-3 pr-3">
-      <v-card class="rounded" elevation="0">
-        <v-toolbar extended extension-height="4" class="reservationtoolbar rounded-top" color="primary" flat dark tile>
-          <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable></v-text-field>
-          </v-col>
-          <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
-            <v-btn text color="white" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
-          </v-col>
-          <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
-        </v-toolbar>
 
-        <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents" :search="search"
-          v-if="user == 'admin'" item-key="title" loading-text="Načítavanie... Prosím počkajte">
-          <!-- admin edit reservation -->
-          <template v-slot:top>
-            <v-row justify="center">
-              <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
-                <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-                  <v-card>
-                    <v-toolbar class="rounded-top" color="primary" flat tile dark>
-                      <v-btn icon dark @click="dialog = false">
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                      <v-toolbar-title class="justify-center">Editácia rezervácie</v-toolbar-title>
-                      <v-spacer />
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on: tooltip }">
-                          <v-btn v-on="tooltip" icon dark @click="save" :loading="adminEditReservationLoader">
-                            <v-icon>mdi-content-save-all</v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Uložiť zmeny</span>
-                      </v-tooltip>
-                    </v-toolbar>
-                    <!-- start admin edit reservation -->
-                    <v-card-text v-if="adminEditReservation != null">
-                      <v-container>
-                        <!-- {{adminEditReservation}} -->
-                        <v-list class="pt-0 pb-0" three-line subheader>
+  <v-container>
+    <v-row justify="center" class="m-0">
+      <v-col class="p-0">
+        <v-card class="rounded" elevation="0">
+          <v-toolbar class="reservationtoolbar rounded-top" color="primary" flat dark>
+            <!-- extended extension-height="4"  -->
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0">
+              <v-text-field v-model="search" append-icon="mdi-magnify" label="Vyhľadať" single-line hide-details filled rounded dense clearable></v-text-field>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6" class="pl-0 pr-0" v-if="user == 'admin'">
+              <v-btn text color="white" dark @click="dialog = !dialog"> Nová rezervácia </v-btn>
+            </v-col>
+            <!-- <v-progress-linear v-if="myloadingvariable" color="white" style="height:4px" slot="extension" :indeterminate="true"></v-progress-linear> -->
+          </v-toolbar>
+
+          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers" :items="currentEvents"
+            :search="search" v-if="user == 'admin'" item-key="title" loading-text="Načítavanie... Prosím počkajte">
+            <!-- admin edit reservation -->
+            <template v-slot:top>
+              <v-row justify="center">
+                <v-col cols="12" xs="12" sm="12" md="4" lg="6" xl="6">
+                  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+                    <v-card>
+                      <v-toolbar class="rounded-top" color="primary" flat tile dark>
+                        <v-btn icon dark @click="dialog = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="justify-center">Editácia rezervácie</v-toolbar-title>
+                        <v-spacer />
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on: tooltip }">
+                            <v-btn v-on="tooltip" icon dark @click="save" :loading="adminEditReservationLoader">
+                              <v-icon>mdi-content-save-all</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Uložiť zmeny</span>
+                        </v-tooltip>
+                      </v-toolbar>
+                      <!-- start admin edit reservation -->
+                      <v-container v-if="adminEditReservation != null">
+                        <v-list class="p-0" three-line subheader>
                           <v-subheader class="p-0">Status Rezervácie</v-subheader>
                           <v-list-item class="p-0">
                             <v-list-item-content class="pt-0 pb-0">
@@ -342,271 +343,279 @@
                           </v-data-table>
                         </v-list>
                       </v-container>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-                <!-- end admin update reservation -->
+                    </v-card>
+                  </v-dialog>
+                  <!-- end admin update reservation -->
 
-                <!-- start admin delete reservation -->
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                  <v-card>
-                    <v-toolbar class="rounded-top" color="primary" flat dark tile justify="center">
-                      <v-toolbar-title>Naozaj chcete zmazať rezerváciu?</v-toolbar-title>
-                    </v-toolbar>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="primary" text @click="dialogDelete = false">Zatvoriť</v-btn>
-                      <v-btn color="error" outlined @click="deleteItemConfirm(adminEditReservation)">Áno</v-btn>
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <!-- end admin delete reservation -->
-              </v-col>
-            </v-row>
-          </template>
+                  <!-- start admin delete reservation -->
+                  <v-dialog v-model="dialogDelete" max-width="500px">
+                    <v-card>
+                      <v-toolbar class="rounded-top" color="primary" flat dark tile justify="center">
+                        <v-toolbar-title>Naozaj chcete zmazať rezerváciu?</v-toolbar-title>
+                      </v-toolbar>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" text @click="dialogDelete = false">Zatvoriť</v-btn>
+                        <v-btn color="error" outlined @click="deleteItemConfirm(adminEditReservation)">Áno</v-btn>
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <!-- end admin delete reservation -->
+                </v-col>
+              </v-row>
+            </template>
 
-          <template v-slot:item.start_date="{ item }">
-            <span>{{ formatDate(item.start_date) }}</span>
-          </template>
+            <template v-slot:item.start_date="{ item }">
+              <span>{{ formatDate(item.start_date) }}</span>
+            </template>
 
-          <template v-slot:item.end_date="{ item }">
-            <span>{{ formatDate(item.end_date) }}</span>
-          </template>
+            <template v-slot:item.end_date="{ item }">
+              <span>{{ formatDate(item.end_date) }}</span>
+            </template>
 
-          <template v-slot:item.event_name="{ item }">
-            <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
-              <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
-            </v-chip>
-            <v-chip :color="getColor(item.event_name)" dark v-else small>
-              <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
-            </v-chip>
-          </template>
+            <template v-slot:item.event_name="{ item }">
+              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
+                <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
+              </v-chip>
+              <v-chip :color="getColor(item.event_name)" dark v-else small>
+                <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
+              </v-chip>
+            </template>
 
-          <template v-slot:item.username="{ item }">
-            <v-chip dark small>
-              <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.username}}
-            </v-chip>
-          </template>
+            <template v-slot:item.username="{ item }">
+              <v-chip dark small>
+                <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.username}}
+              </v-chip>
+            </template>
 
-          <template v-slot:item.overall_price="{ item }">
-            <span>{{item.overall_price}} €</span>
-          </template>
+            <template v-slot:item.overall_price="{ item }">
+              <span>{{item.overall_price}} €</span>
+            </template>
 
-          <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-          </template>
-        </v-data-table>
-        <!-- end table for admin -->
+            <template v-slot:item.actions="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+          </v-data-table>
+          <!-- end table for admin -->
 
-        <!-- start table for users -->
-        <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents"
-          :search="search" item-key="name" loading-text="Načítavanie... Prosím počkajte" v-else>
+          <!-- start table for users -->
+          <v-data-table :mobile-breakpoint="0" no-data-text="Nenašli sa žiadne rezervácie" no-results-text="Nenašli sa žiadne rezervácie" :header-props="headerProps" :footer-props="footerProps" :headers="headers2" :items="currentEvents"
+            :search="search" item-key="name" loading-text="Načítavanie... Prosím počkajte" v-else>
+            <!-- reservation detail for users only-->
+            <template v-slot:top>
+              <v-dialog v-model="dialogShowDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
+                <v-card>
+                  <v-toolbar extended extension-height="4" color="primary" class="rounded-0" flat dark>
+                    <v-btn icon dark @click="dialogShowDetail = false">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title class="justify-center">Detail rezervácie</v-toolbar-title>
+                  </v-toolbar>
+                  <v-container v-if="userDetailReservation != null">
+                    <v-list class="pt-0 pb-0" three-line subheader>
+                      <v-subheader class="p-0">Kontaktné údaje</v-subheader>
+                      <v-list-item class="p-0">
+                        <v-list-item-content class="pt-0 pb-0">
+                          <v-row justify="center">
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                              <v-text-field ref="surname" v-model="userDetailReservation.usercontactmodel.surname" label="Meno" readonly filled></v-text-field>
+                            </v-col>
 
-          <template v-slot:item.id="{ item }">
-            <span>{{ currentEvents.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
-          </template>
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                              <v-text-field ref="lastname" v-model="userDetailReservation.usercontactmodel.lastname" label="Priezvisko" readonly filled></v-text-field>
+                            </v-col>
 
-          <template v-slot:item.created_at="{ item }">
-            <span>{{ formatCreated(item.created_at) }}</span>
-          </template>
+                            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                              <v-text-field ref="address" v-model="userDetailReservation.usercontactmodel.address" label="Adresa" readonly filled></v-text-field>
+                            </v-col>
 
-          <template v-slot:item.event_name="{ item }">
-            <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
-              <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
-            </v-chip>
-            <v-chip :color="getColor(item.event_name)" dark v-else small>
-              <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
-            </v-chip>
-          </template>
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                              <v-text-field ref="city" v-model="userDetailReservation.usercontactmodel.city" label="Mesto" readonly filled></v-text-field>
+                            </v-col>
 
-          <template v-slot:item.start_date="{ item }">
-            <span>{{ formatDate(item.start_date) }}</span>
-          </template>
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
+                              <v-text-field ref="postcode" v-model="userDetailReservation.usercontactmodel.postcode" label="PSČ" readonly filled></v-text-field>
+                            </v-col>
 
-          <template v-slot:item.end_date="{ item }">
-            <span>{{ formatDate(item.end_date) }}</span>
-          </template>
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                              <v-text-field ref="country" v-model="userDetailReservation.usercontactmodel.country" label="Krajina" readonly filled>
+                              </v-text-field>
+                            </v-col>
 
-          <template v-slot:item.overall_price="{ item }">
-            <span>{{item.overall_price}} €</span>
-          </template>
+                            <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                              <VueTelInputVuetify v-model="userDetailReservation.usercontactmodel.phone" label="Mobilné číslo" placeholder="" disabled readonly filled></VueTelInputVuetify>
+                            </v-col>
 
-          <template v-slot:item.actions="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-bind="attrs" v-on="on" small @click="showDetail(item)">mdi-information</v-icon>
-              </template>
-              <span>Detail rezervácie</span>
-            </v-tooltip>
-          </template>
+                            <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                              <div v-if="userDetailReservation.note  == null">
+                                <v-textarea value="-" label=" Poznámka" rows="1" readonly filled>
+                                </v-textarea>
+                              </div>
+                              <div v-else>
+                                <v-textarea v-model="userDetailReservation.note " label=" Poznámka" rows="1" readonly filled>
+                                </v-textarea>
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
 
-          <!-- reservation detail for users only-->
-          <template v-slot:top>
-            <v-dialog v-model="dialogShowDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar extended extension-height="4" color="primary" class="rounded-0" flat dark>
-                  <v-btn icon dark @click="dialogShowDetail = false">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title class="justify-center">Detail rezervácie</v-toolbar-title>
-                </v-toolbar>
-                <v-container v-if="userDetailReservation != null">
-                  <v-list class="pt-0 pb-0" three-line subheader>
-                    <v-subheader class="p-0">Kontaktné údaje</v-subheader>
-                    <v-list-item class="p-0">
-                      <v-list-item-content class="pt-0 pb-0">
-                        <v-row justify="center">
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="surname" v-model="userDetailReservation.usercontactmodel.surname" label="Meno" readonly filled></v-text-field>
-                          </v-col>
+                    <v-divider></v-divider>
 
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="lastname" v-model="userDetailReservation.usercontactmodel.lastname" label="Priezvisko" readonly filled></v-text-field>
-                          </v-col>
+                    <v-list three-line subheader>
+                      <v-subheader class="p-0">Dátum a čas vytvorenia rezervácie</v-subheader>
+                      <v-list-item class="p-0">
+                        <v-list-item-content>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-sheet class="p-4 mx-auto" rounded outlined>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <v-icon>mdi-calendar-clock</v-icon>
+                                    <span class="pl-1">{{formatCreated(userDetailReservation.created_at)}}</span>
+                                  </v-col>
+                                </v-row>
+                              </v-sheet>
+                            </v-col>
+                          </v-row>
+                        </v-list-item-content>
+                      </v-list-item>
 
-                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                            <v-text-field ref="address" v-model="userDetailReservation.usercontactmodel.address" label="Adresa" readonly filled></v-text-field>
-                          </v-col>
+                      <v-subheader class="p-0">Dátum a čas príchodu a odchodu</v-subheader>
+                      <v-list-item class="p-0">
+                        <v-list-item-content>
+                          <v-row>
+                            <v-col>
+                              <v-sheet class="p-4 mx-auto" rounded outlined>
+                                <v-row class="justify-center">
+                                  <span>Príchod</span>
+                                </v-row>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <v-icon>mdi-calendar-start</v-icon>
+                                    <span class="pl-1">{{formatDate(userDetailReservation.start_date)}}</span>
+                                  </v-col>
+                                </v-row>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <v-icon>mdi-clock-start</v-icon>
+                                    <span class="pl-1">{{userDetailReservation.start_time}}</span>
+                                  </v-col>
+                                </v-row>
+                              </v-sheet>
+                            </v-col>
+                            <v-col>
+                              <v-sheet class="p-4 mx-auto" rounded outlined>
+                                <v-row class="justify-center">
+                                  <span>Odchod</span>
+                                </v-row>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <v-icon>mdi-calendar-end</v-icon>
+                                    <span class="pl-1">{{formatDate(userDetailReservation.end_date)}}</span>
+                                  </v-col>
+                                </v-row>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <v-icon>mdi-clock-end</v-icon>
+                                    <span class="pl-1">{{userDetailReservation.end_time}}</span>
+                                  </v-col>
+                                </v-row>
+                              </v-sheet>
+                            </v-col>
+                          </v-row>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
 
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="city" v-model="userDetailReservation.usercontactmodel.city" label="Mesto" readonly filled></v-text-field>
-                          </v-col>
+                    <v-divider></v-divider>
 
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                            <v-text-field ref="postcode" v-model="userDetailReservation.usercontactmodel.postcode" label="PSČ" readonly filled></v-text-field>
-                          </v-col>
+                    <v-list three-line subheader>
+                      <v-subheader class="p-0">Suma rezervácie</v-subheader>
+                      <v-row class="m-0 mt-3">
+                        <v-col class="pl-0 pr-0" align="left">
+                          <v-icon class="mb-1" color="orange">mdi-information</v-icon>
+                          <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítavajú.</span>
+                        </v-col>
+                      </v-row>
+                      <v-data-table :headers="headersDetail" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0">
+                        <template v-slot:header="{ props: { headers } }">
+                          <thead>
+                            <tr>
+                              <th v-for="(h, i) in headers" :key="i">
+                                <v-tooltip bottom v-if="i != 3">
+                                  <template v-slot:activator="{ on }">
+                                    <span v-on="on">{{h.text}}</span>
+                                  </template>
+                                  <span>{{headerDetailTooltips[i - 1]}}</span>
+                                </v-tooltip>
+                                <span v-if="i == 3">{{h.text}}</span>
+                              </th>
+                            </tr>
+                          </thead>
+                        </template>
+                      </v-data-table>
+                    </v-list>
+                  </v-container>
+                </v-card>
+              </v-dialog>
+            </template>
 
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <v-text-field ref="country" v-model="userDetailReservation.usercontactmodel.country" label="Krajina" readonly filled>
-                            </v-text-field>
-                          </v-col>
+            <template v-slot:item.id="{ item }">
+              <span>{{ currentEvents.map(function(x) {return x.id; }).indexOf(item.id) + 1 }}</span>
+            </template>
 
-                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                            <VueTelInputVuetify v-model="userDetailReservation.usercontactmodel.phone" label="Mobilné číslo" placeholder="" disabled readonly filled></VueTelInputVuetify>
-                          </v-col>
+            <template v-slot:item.created_at="{ item }">
+              <span>{{ formatCreated(item.created_at) }}</span>
+            </template>
 
-                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                            <div v-if="userDetailReservation.note  == null">
-                              <v-textarea value="-" label=" Poznámka" rows="1" readonly filled>
-                              </v-textarea>
-                            </div>
-                            <div v-else>
-                              <v-textarea v-model="userDetailReservation.note " label=" Poznámka" rows="1" readonly filled>
-                              </v-textarea>
-                            </div>
-                          </v-col>
-                        </v-row>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
+            <template v-slot:item.event_name="{ item }">
+              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
+                <i class="fas fa-clock pr-1" style="color: white"></i> <span>Čaká sa</span>
+              </v-chip>
+              <v-chip :color="getColor(item.event_name)" dark v-else small>
+                <i class="fas fa-check-circle pr-1" style="color: white"></i> <span>Akceptované</span>
+              </v-chip>
+            </template>
 
-                  <v-divider></v-divider>
+            <template v-slot:item.start_date="{ item }">
+              <span>{{ formatDate(item.start_date) }}</span>
+            </template>
 
-                  <v-list three-line subheader>
-                    <v-subheader class="p-0">Dátum a čas vytvorenia rezervácie</v-subheader>
-                    <v-list-item class="p-0">
-                      <v-list-item-content>
-                        <v-row>
-                          <v-col cols="12">
-                            <v-sheet class="p-4 mx-auto" rounded outlined>
-                              <v-row class="justify-center">
-                                <v-col>
-                                  <v-icon>mdi-calendar-clock</v-icon>
-                                  <span class="pl-1">{{formatCreated(userDetailReservation.created_at)}}</span>
-                                </v-col>
-                              </v-row>
-                            </v-sheet>
-                          </v-col>
-                        </v-row>
-                      </v-list-item-content>
-                    </v-list-item>
+            <template v-slot:item.end_date="{ item }">
+              <span>{{ formatDate(item.end_date) }}</span>
+            </template>
 
-                    <v-subheader class="p-0">Dátum a čas príchodu a odchodu</v-subheader>
-                    <v-list-item class="p-0">
-                      <v-list-item-content>
-                        <v-row>
-                          <v-col>
-                            <v-sheet class="p-4 mx-auto" rounded outlined>
-                              <v-row class="justify-center">
-                                <span>Príchod</span>
-                              </v-row>
-                              <v-row class="justify-center">
-                                <v-col>
-                                  <v-icon>mdi-calendar-start</v-icon>
-                                  <span class="pl-1">{{formatDate(userDetailReservation.start_date)}}</span>
-                                </v-col>
-                              </v-row>
-                              <v-row class="justify-center">
-                                <v-col>
-                                  <v-icon>mdi-clock-start</v-icon>
-                                  <span class="pl-1">{{userDetailReservation.start_time}}</span>
-                                </v-col>
-                              </v-row>
-                            </v-sheet>
-                          </v-col>
-                          <v-col>
-                            <v-sheet class="p-4 mx-auto" rounded outlined>
-                              <v-row class="justify-center">
-                                <span>Odchod</span>
-                              </v-row>
-                              <v-row class="justify-center">
-                                <v-col>
-                                  <v-icon>mdi-calendar-end</v-icon>
-                                  <span class="pl-1">{{formatDate(userDetailReservation.end_date)}}</span>
-                                </v-col>
-                              </v-row>
-                              <v-row class="justify-center">
-                                <v-col>
-                                  <v-icon>mdi-clock-end</v-icon>
-                                  <span class="pl-1">{{userDetailReservation.end_time}}</span>
-                                </v-col>
-                              </v-row>
-                            </v-sheet>
-                          </v-col>
-                        </v-row>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
+            <template v-slot:item.overall_price="{ item }">
+              <span>{{item.overall_price}} €</span>
+            </template>
 
-                  <v-divider></v-divider>
-
-                  <v-list three-line subheader>
-                    <v-subheader class="p-0">Suma rezervácie</v-subheader>
-                    <v-row class="m-0 mt-3">
-                      <v-col class="pl-0 pr-0" align="left">
-                        <v-icon class="mb-1" color="orange">mdi-information</v-icon>
-                        <span class="ml-1">Deti do 2 rokov sa do počtu hostí nezapočítavajú.</span>
-                      </v-col>
-                    </v-row>
-                    <v-data-table :headers="headersDetail" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0">
-                      <template v-slot:header="{ props: { headers } }">
-                        <thead>
-                          <tr>
-                            <th v-for="(h, i) in headers" :key="i">
-                              <v-tooltip bottom v-if="i != 3">
-                                <template v-slot:activator="{ on }">
-                                  <span v-on="on">{{h.text}}</span>
-                                </template>
-                                <span>{{headerDetailTooltips[i - 1]}}</span>
-                              </v-tooltip>
-                              <span v-if="i == 3">{{h.text}}</span>
-                            </th>
-                          </tr>
-                        </thead>
-                      </template>
-                    </v-data-table>
-                  </v-list>
-                </v-container>
-              </v-card>
-            </v-dialog>
-          </template>
-        </v-data-table>
-      </v-card>
-    </v-col>
-  </v-row>
-  <!-- </v-lazy> -->
+            <template v-slot:item.actions="{ item }">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon v-bind="attrs" v-on="on" small @click="showDetail(item)">mdi-information</v-icon>
+                </template>
+                <span>Detail rezervácie</span>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <!-- snackbar after successfully created reservation -->
+  <v-snackbar v-model="snackbarEdit" :multi-line="multiLine" :color="snackbarEditColor" bottom left class="m-3">
+    <v-icon>mdi-check-circle</v-icon>
+    <span class="pl-1">{{snackbarEditText}}</span>
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" fab text small v-bind="attrs" @click="snackbarEdit = false">
+        <v-icon>mdi-close-circle</v-icon>
+      </v-btn>
+    </template>
+  </v-snackbar>
 </div>
 </template>
 <script>
@@ -621,7 +630,14 @@ export default {
   },
   data() {
     return {
+      // Snackbar
+      multiLine: true,
+      snackbarEdit: false,
+      snackbarEditText: '',
+      snackbarEditColor: '',
+
       currentEvents: [],
+      saveOriginalCurrentEvents: [],
       indexToUpdate: "",
       newEvent: {
         id: "",
@@ -759,6 +775,7 @@ export default {
       }],
       adminEditReservation: null,
       adminEditReservationOriginal: [],
+      testovaciaPremenna: null,
       adminEditReservationLoader: false,
       userDetailReservation: null,
       editedItem: {
@@ -932,45 +949,46 @@ export default {
   },
 
   created() {
-    window.Echo.join('reservation.' + this.$root.me.id)
+    window.Echo.join('reservation.' + localStorage.getItem("user_id"))
       .listen('Reservations', (e) => {
-        if (e.user_id == 1) {
-          this.markAsRead();
-          if (e.status == 'created') {
-            this.currentEvents.push(e.reservation[0])
-          }
-        } else {
-          this.markAsRead();
-          if (e.status == 'updated') {
-            this.currentEvents.map((event, index) => {
-              if (event.id == e.reservation[0].id) {
-                this.currentEvents.splice(index, 1, e.reservation[0]);
-              }
-            })
-          }
+        if (this.$route.fullPath == '/administration') {
+          if (e.user_id == 1) {
+            this.markAsRead();
+            if (e.status == 'created') {
+              this.currentEvents.push(e.reservation[0])
+            }
+          } else {
+            this.markAsRead();
+            if (e.status == 'updated') {
+              this.currentEvents.map((event, index) => {
+                if (event.id == e.reservation[0].id) {
+                  this.currentEvents.splice(index, 1, e.reservation[0]);
+                }
+              })
+            }
 
-          if (e.status == 'deleted') {
-            this.currentEvents.map((event, index) => {
-              if (event.id == e.reservation[0].id) {
-                this.currentEvents.splice(index, 1);
-              }
-            })
+            if (e.status == 'deleted') {
+              this.currentEvents.map((event, index) => {
+                if (event.id == e.reservation[0].id) {
+                  this.currentEvents.splice(index, 1);
+                }
+              })
+            }
           }
         }
       })
   },
 
   computed: {},
+
   watch: {
     adminEditReservation: {
-      handler: function(val, oldVal) {
+      handler: function() {
+        this.updateTable(this.adminEditReservation);
         this.adminEditReservationLoader = true;
         setTimeout(() => {
           this.adminEditReservationLoader = false;
         }, 300)
-
-        //
-        console.log(val, oldVal);
       },
       deep: true
     },
@@ -980,6 +998,8 @@ export default {
     this.getEvents();
     this.markAsRead();
   },
+
+  updated() {},
 
   methods: {
     autocompleteMenuProps() {
@@ -1025,8 +1045,9 @@ export default {
       };
       axios.get(api, config)
         .then(res => {
-          this.currentEvents = res.data
-          this.searched = this.currentEvents
+          this.saveOriginalCurrentEvents = res.data;
+          this.currentEvents = res.data;
+          this.searched = this.currentEvents;
           this.myloadingvariable = false;
           this.overlay = false;
         })
@@ -1085,26 +1106,42 @@ export default {
 
     reset(param) {
       if (param == 'adults') {
-        this.adminEditReservation.adults = this.adminEditReservationOriginal[0]
+        this.adminEditReservation.adults = this.adminEditReservationOriginal[0];
       } else if (param == 'childs_2_to_12') {
-        this.adminEditReservation.childs_2_to_12 = this.adminEditReservationOriginal[1]
+        this.adminEditReservation.childs_2_to_12 = this.adminEditReservationOriginal[1];
       } else {
-        this.adminEditReservation.childs_to_2 = this.adminEditReservationOriginal[2]
+        this.adminEditReservation.childs_to_2 = this.adminEditReservationOriginal[2];
       }
       this.updateTable(this.adminEditReservation);
     },
 
     updateTable(item) {
+      this.adminEditReservation.nights = moment(this.adminEditReservation.end_date, 'YYYY-MM-DD')
+        .diff(moment(this.adminEditReservation.start_date, 'YYYY-MM-DD'), 'days');
+
+      var nights = this.adminEditReservation.nights;
       var counter1 = parseInt(item.adults);
       var counter2 = parseInt(item.childs_2_to_12)
       var counter3 = parseInt(item.childs_to_2);
       var cleaning_fee = parseInt(item.cleaning_fee);
-      this.adminEditReservationOriginal.push(counter1, counter2, counter3);
 
-      if (item.nights > 1) {
-        this.headersDetail[4].text = 'Cena/' + item.nights + 'noci';
+      this.adminEditReservationOriginal.push(counter1, counter2, counter3)
+
+      this.adminEditReservation.total_persons = counter1 + counter2 + counter3;
+
+      if (counter1 + counter2 > 5) {
+        this.adminEditReservation.overall_price = cleaning_fee +
+          (counter1 * this.priceAdults * nights) +
+          (counter2 * this.priceChilds2to12 * nights) +
+          (counter3 * this.priceChildsto2 * nights);
       } else {
-        this.headersDetail[4].text = 'Cena/' + item.nights + 'noc';
+        this.adminEditReservation.overall_price = this.priceCabinUnderSixPpl * nights + cleaning_fee;
+      }
+
+      if (nights > 1) {
+        this.headersDetail[4].text = 'Cena/' + nights + 'noci';
+      } else {
+        this.headersDetail[4].text = 'Cena/' + nights + 'noc';
       }
 
       this.headerDetailTooltips = [];
@@ -1128,7 +1165,7 @@ export default {
             p1: counter2,
             p2: this.priceChilds2to12 + '€',
             p3: counter2 * this.priceChilds2to12 + '€',
-            p4: counter2 * this.priceChilds2to12 * item.nights + '€',
+            p4: counter2 * this.priceChilds2to12 * nights + '€',
           });
         }
         if (counter3 > 0) {
@@ -1137,7 +1174,7 @@ export default {
             p1: counter3,
             p2: this.priceChildsto2 + '€',
             p3: counter3 * this.priceChildsto2 + '€',
-            p4: counter3 * this.priceChildsto2 * item.nights + '€',
+            p4: counter3 * this.priceChildsto2 * nights + '€',
           });
         }
         this.prices.splice(0, 0, {
@@ -1145,7 +1182,7 @@ export default {
           p1: counter1,
           p2: this.priceAdults + '€',
           p3: counter1 * this.priceAdults + '€',
-          p4: counter1 * this.priceAdults * item.nights + '€',
+          p4: counter1 * this.priceAdults * nights + '€',
         });
 
         this.prices.push({
@@ -1159,7 +1196,8 @@ export default {
           p1: counter1 + counter2 + counter3,
           p2: ((counter1 * this.priceAdults) / counter1) + ((counter2 * this.priceChilds2to12) / counter2 || 0) + ((counter3 * this.priceChildsto2) / counter3 || 0) + '€',
           p3: counter1 * this.priceAdults + counter2 * this.priceChilds2to12 + counter3 * this.priceChildsto2 + '€',
-          p4: ((counter1 * this.priceAdults) * item.nights) + ((counter2 * this.priceChilds2to12) * item.nights || 0) + ((counter3 * this.priceChildsto2) * item.nights || 0) + cleaning_fee + '€',
+          p4: ((counter1 * this.priceAdults) * nights) + ((counter2 * this.priceChilds2to12) * nights || 0) + ((counter3 * this.priceChildsto2) * nights || 0) + cleaning_fee +
+            '€',
         });
       } else {
         this.prices.push({
@@ -1183,9 +1221,9 @@ export default {
         }, {
           text: 'Cena za celú chatu (<6 osôb)',
           p1: counter1 + counter2,
-          p2: (item.overall_price - cleaning_fee) / item.nights + '€',
-          p3: (item.overall_price - cleaning_fee) / item.nights + '€',
-          p4: ((item.overall_price - cleaning_fee) / item.nights) * item.nights + '€',
+          p2: (item.overall_price - cleaning_fee) / nights + '€',
+          p3: (item.overall_price - cleaning_fee) / nights + '€',
+          p4: ((item.overall_price - cleaning_fee) / nights) * nights + '€',
         }, {
           text: 'Upratovanie',
           p1: '',
@@ -1195,27 +1233,18 @@ export default {
         }, {
           text: 'Spolu',
           p1: counter1 + counter2 + counter3,
-          p2: (item.overall_price - cleaning_fee) / item.nights + '€',
-          p3: (item.overall_price - cleaning_fee) / item.nights + '€',
-          p4: item.overall_price + '€',
+          p2: (item.overall_price - cleaning_fee) / nights + '€',
+          p3: (item.overall_price - cleaning_fee) / nights + '€',
+          p4: (this.priceCabinUnderSixPpl * nights) + cleaning_fee + '€',
         });
       }
     },
 
     editItem(item) {
+      this.testovaciaPremenna = item;
       this.adminEditReservation = item;
       this.updateTable(item);
-
-      // this.editedIndex = this.currentEvents.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      // this.newEvent.id = item.id;
-      // this.newEvent.event_name = item.event_name;
-      // this.newEvent.start_date = item.start_date;
-      // this.newEvent.end_date = item.end_date;
-      // // this.newEvent.color = item.color;
-      // this.newEvent.username = item.username;
-      // this.newEvent.user_id = item.user_id;
-      this.dialog = true
+      this.dialog = true;
     },
 
     deleteItem(item) {
@@ -1260,48 +1289,60 @@ export default {
 
     save() {
       //update
-      axios.post(`${process.env.VUE_APP_API_URL}/reservation/update`, {
-          id: this.newEvent.id,
-          event_name: this.newEvent.event_name,
-          start_date: this.newEvent.start_date,
-          end_date: this.newEvent.end_date,
-        })
-        .then(() => {
-          const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-              Authorization: "Bearer " + localStorage.getItem("authToken"),
-            },
-          };
+      console.log(this.testovaciaPremenna.event_name);
+      if (this.adminEditReservation != this.adminEditReservationOriginal) {
+        axios.post(`${process.env.VUE_APP_API_URL}/reservation/update`, {
+            data: this.adminEditReservation
+          })
+          .then(res => {
+            this.currentEvents.map((data, index) => {
+              if (data.id == res.data[0].id) {
+                this.currentEvents.splice(index, 1, res.data[0]);
+              }
+            })
+            this.snackbarEdit = true;
+            this.snackbarEditText = 'Dáta boli úspešne aktualizované';
+            this.snackbarEditColor = 'success';
+            // this.currentEvents = res.data
+            const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
 
-          if (this.newEvent.event_name == "rezervácia") {
-            axios.post(api, {
-                from: 1,
-                recipient: this.newEvent.user_id,
-                title: "Chata Byšta",
-                subtitle: "Zrušenie potvrdenia rezervácie",
-                text: "Dobrý deň, Vaša rezervácia bola znova aktualizovaná do stavu pred potvrdením. Čoskoro poskytneme ďalšie informácie",
-                date: moment(new Date())
-                  .format('YYYY-MM-DD HH:mm'),
-                status: "new",
-              }, config)
-              .then(() => {})
-          } else {
-            axios.post(api, {
-                from: 1,
-                recipient: this.newEvent.user_id,
-                title: "Chata Byšta",
-                subtitle: "Potvrdenie rezervácie",
-                text: "Dobrý deň, Vaša rezervácia bola potvrdená. Tešíme sa na Vašu návštevu.",
-                date: moment(new Date())
-                  .format('YYYY-MM-DD HH:mm'),
-                status: "new",
-              }, config)
-              .then(() => {})
-          }
-          this.getEvents();
-        })
+            if (res.data[0].event_name == "rezervácia") {
+              axios.post(api, {
+                  from: 1,
+                  recipient: res.data[0].user_id,
+                  title: "Chata Byšta",
+                  subtitle: "Zrušenie potvrdenia rezervácie",
+                  text: "Dobrý deň, Vaša rezervácia bola znova aktualizovaná do stavu pred potvrdením. Čoskoro poskytneme ďalšie informácie",
+                  date: moment(new Date())
+                    .format('YYYY-MM-DD HH:mm'),
+                  status: "new",
+                }, config)
+                .then(() => {})
+            } else {
+              axios.post(api, {
+                  from: 1,
+                  recipient: res.data[0].user_id,
+                  title: "Chata Byšta",
+                  subtitle: "Potvrdenie rezervácie",
+                  text: "Dobrý deň, Vaša rezervácia bola potvrdená. Tešíme sa na Vašu návštevu.",
+                  date: moment(new Date())
+                    .format('YYYY-MM-DD HH:mm'),
+                  status: "new",
+                }, config)
+                .then(() => {})
+            }
+          })
+      } else {
+        this.snackbarEdit = true;
+        this.snackbarEditText = 'Nie je zaevidovaná žiadna zmena.';
+        this.snackbarEditColor = 'orange';
+      }
     },
 
     markAsRead() {

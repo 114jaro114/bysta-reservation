@@ -1,5 +1,5 @@
 <template>
-<div class="hodnotenie w-100 h-100">
+<div class="hodnotenie">
   <v-container>
     <v-lazy :options="{
             threshold: .4

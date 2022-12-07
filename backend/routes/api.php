@@ -101,8 +101,8 @@ Route::post('/calendar/store', [CalendarController::class, 'store']);
 Route::post('/calendar/update', [CalendarController::class, 'update']);
 Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
 
+//reservations
 Route::get('/reservation', [ReservationController::class, 'index']);
-// Route::get('/getReservationsForCurrentUser', [ReservationController::class, 'getAuthReservation']);
 Route::get('/checkPendingReservation/{username}', [ReservationController::class, 'checkPendingReservation']);
 Route::post('/reservation/store', [ReservationController::class, 'store']);
 Route::post('/reservation/update', [ReservationController::class, 'update']);
@@ -110,6 +110,15 @@ Route::post('/reservation/delete', [ReservationController::class, 'delete']);
 Route::post('/reservation/markAsRead', [ReservationController::class, 'markAsRead']);
 Route::get('/reservation/getUncheckedReservationsUser', [ReservationController::class, 'getUncheckedReservationsUser']);
 Route::post('/reservation/reservationUserContactInfo', [ReservationController::class, 'reservationUserContactInfo']);
+
+// saved reservation
+Route::get('/savedReservation', [SavedReservationController::class, 'index']);
+Route::get('/checkPendingSavedReservation/{username}', [SavedReservationController::class, 'checkPendingSavedReservation']);
+Route::post('/savedReservation/store', [SavedReservationController::class, 'store']);
+Route::post('/savedReservation/delete', [SavedReservationController::class, 'delete']);
+Route::post('/savedReservation/markAsRead', [SavedReservationController::class, 'markAsRead']);
+Route::get('/savedReservation/getUncheckedSavedReservationsUser', [SavedReservationController::class, 'getUncheckedSavedReservationsUser']);
+Route::post('/savedReservation/savedReservationSavedUserContactInfo', [SavedReservationController::class, 'savedReservationSavedUserContactInfo']);
 
 Route::get('/rating', [RatingController::class, 'index']);
 Route::post('/rating/store', [RatingController::class, 'store']);

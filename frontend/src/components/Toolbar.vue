@@ -535,26 +535,36 @@
           </v-btn>
         </template>
         <v-card class="v-card-logout">
-          <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center">
-              <v-avatar color="primary" size="48" v-if="$root.me.overlayAvatar == true">
+          <v-list-item disabled>
+            <v-list-item-avatar width="48" height="48" class="ml-0 mr-0" size="48" v-if="$root.me.overlayAvatar == true">
+              <v-avatar color="primary" size="40">
                 <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
-                  <v-progress-circular indeterminate size="24" color="white"></v-progress-circular>
+                  <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
                 </v-overlay>
               </v-avatar>
+            </v-list-item-avatar>
 
-              <v-avatar color="primary" size="48" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
+            <v-list-item-avatar width="48" height="48" size="48" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
+              <v-avatar color="primary" size="40">
                 <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
               </v-avatar>
-              <v-avatar color="primary" size="48" v-else>
+            </v-list-item-avatar>
+
+            <v-list-item-avatar width="48" height="48" size="48" v-else>
+              <v-avatar color="white" size="40">
                 <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
               </v-avatar>
-              <!-- </v-avatar> -->
-              <h4>{{ $root.me.name }}</h4>
-              <p class="caption">
-                {{ $root.me.email }}
-              </p>
-              <v-divider class="my-3"></v-divider>
+            </v-list-item-avatar>
+
+            <v-list-item-content class="text-left">
+              <v-list-item-subtitle>{{ $root.me.name }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ $root.me.email }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item-content class="justify-center pt-0">
+            <div class="mx-auto text-center">
+              <v-divider class="mt-0"></v-divider>
               <v-btn depressed rounded text :to="'/profile/'+this.$root.me.id">
                 <v-icon class="mr-1">mdi-clipboard-edit</v-icon> Môj profil
               </v-btn>
@@ -1187,60 +1197,56 @@
             <v-icon>mdi-tune</v-icon>
           </v-btn>
         </template>
-        <v-card class="" elevation="2">
+        <v-card elevation="2">
           <v-list dense class="pt-0 pb-0">
             <v-list-item-group fullscreen v-model="menuSmDown" color="primary">
-              <v-dialog max-width="250px" v-model="dialogUserProfileLogout">
-                <!-- <v-menu bottom min-width="200px" rounded offset-y :disabled="$root.me.overlayAvatar"> -->
-                <template v-slot:activator="{ on }">
-                  <v-btn icon x-large v-on="on">
-                    <v-avatar color="primary" size="40" v-if="$root.me.overlayAvatar == true">
-                      <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
-                        <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
-                      </v-overlay>
-                    </v-avatar>
+              <v-expansion-panels accordion focusable>
+                <v-expansion-panel>
+                  <v-expansion-panel-header class=" pt-0 pb-0 pl-4 pr-4">
+                    <v-list-item disabled class="p-0">
+                      <v-list-item-avatar class="ml-0 mr-0" size="48" v-if="$root.me.overlayAvatar == true">
+                        <v-avatar color="primary" size="40">
+                          <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
+                            <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+                          </v-overlay>
+                        </v-avatar>
+                      </v-list-item-avatar>
 
-                    <v-avatar color="primary" size="40" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
-                      <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
-                    </v-avatar>
-                    <v-avatar color="white" size="40" v-else>
-                      <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
-                    </v-avatar>
-                  </v-btn>
-                </template>
-                <v-card class="v-card-logout">
-                  <v-list-item-content class="justify-center">
-                    <div class="mx-auto text-center">
-                      <v-avatar color="primary" size="48" v-if="$root.me.overlayAvatar == true">
-                        <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
-                          <v-progress-circular indeterminate size="24" color="white"></v-progress-circular>
-                        </v-overlay>
-                      </v-avatar>
+                      <v-list-item-avatar size="48" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
+                        <v-avatar color="primary" size="40">
+                          <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
+                        </v-avatar>
+                      </v-list-item-avatar>
 
-                      <v-avatar color="primary" size="48" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
-                        <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
-                      </v-avatar>
-                      <v-avatar color="primary" size="48" v-else>
-                        <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
-                      </v-avatar>
-                      <!-- </v-avatar> -->
-                      <h4>{{ $root.me.name }}</h4>
-                      <p class="caption">
-                        {{ $root.me.email }}
-                      </p>
-                      <v-divider class="my-3"></v-divider>
-                      <v-btn depressed rounded text :to="'/profile/'+this.$root.me.id" @click="dialogUserProfileLogout = false; smDevicesMenu = false">
-                        <v-icon class="mr-1">mdi-clipboard-edit</v-icon> Môj profil
-                      </v-btn>
-                      <v-divider class="my-3"></v-divider>
-                      <v-btn depressed rounded text @click="logout">
-                        <v-icon class="mr-1">mdi-logout</v-icon>Odhlásiť sa
-                      </v-btn>
-                    </div>
-                  </v-list-item-content>
-                </v-card>
-                <!-- </v-menu> -->
-              </v-dialog>
+                      <v-list-item-avatar size="48" v-else>
+                        <v-avatar color="white" size="40">
+                          <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
+                        </v-avatar>
+                      </v-list-item-avatar>
+
+                      <v-list-item-content>
+                        <v-list-item-subtitle>{{ $root.me.name }}</v-list-item-subtitle>
+                        <v-list-item-subtitle>{{ $root.me.email }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-expansion-panel-header>
+
+                  <v-expansion-panel-content class="dialogUserProfileLogoutExpansionPanelContent p-0">
+                    <v-btn depressed rounded text :to="'/profile/'+this.$root.me.id" @click="dialogUserProfileLogout = false; smDevicesMenu = false">
+                      <v-icon class="mr-1">mdi-clipboard-edit</v-icon> Môj profil
+                    </v-btn>
+
+                    <v-divider class="my-3"></v-divider>
+
+                    <v-btn depressed rounded text @click="logout">
+                      <v-icon class="mr-1">mdi-logout</v-icon>Odhlásiť sa
+                    </v-btn>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+
+              <v-divider class="m-0" />
+
               <!-- make new post ........ -->
               <v-list-item @click="dialog = true; smDevicesMenu = false">
                 <v-list-item-avatar class="ml-0" size="36">
@@ -1249,7 +1255,7 @@
                 <v-list-item-content>
                   <v-card class="p-2 rounded-lg card-comments" elevation="0">
                     <v-card-title class="d-flex justify-start text-subtitle-2 font-weight-bold p-0 pb-3 pl-1">
-                      Zoznam priateľov a žiadostí
+                      Priatelia a žiadosti
                     </v-card-title>
                     <v-card-subtitle class="d-flex text-left caption grey--text p-0 pl-1">Zobrazenie zoznamu priateľov a žiadostí o priateľstvo</v-card-subtitle>
                   </v-card>
@@ -1346,7 +1352,7 @@
             <v-btn icon dark @click="dialog = false, menuSmDown = null">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>Zoznam priateľov a žiadostí o priateľstvo</v-toolbar-title>
+            <v-toolbar-title>Zoznam priateľov a žiadostí</v-toolbar-title>
           </v-toolbar>
           <FriendsFriendshipRequests />
         </v-card>
@@ -2379,5 +2385,9 @@ export default {
 
 .v-application--is-ltr .v-toolbar__content>.v-btn.v-btn--icon:first-child {
   margin-left: 0px !important;
+}
+
+.dialogUserProfileLogoutExpansionPanelContent .v-expansion-panel-content__wrap {
+  padding: 12px 0;
 }
 </style>

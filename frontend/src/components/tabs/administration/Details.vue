@@ -1,12 +1,13 @@
 <template>
-<div class="details w-100 h-100">
+<div class="details">
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
   <v-container>
-    <v-overlay :value="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
-    <v-row justify="center" class="ml-0 mr-0">
+
+    <v-row class="m-0">
       <!-- circle chart -->
-      <v-col cols="12" lg="6" md="12" sm="12">
+      <v-col class="p-0 pr-lg-2" cols="12" lg="6">
         <!-- :loading="loaderStateCircle" -->
         <v-card class="rounded" elevation="0" loader-height="6">
           <div class="pt-3" id="chart">
@@ -27,7 +28,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" lg="6" md="12" sm="12">
+      <v-col class="p-0 pt-3 pt-lg-0 pl-lg-2" cols="12" lg="6">
         <!-- :loading="loaderStateCircle" -->
         <v-card class="rounded" elevation="0" loader-height="6">
           <div class="pt-3" id="chart">
@@ -48,7 +49,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" lg="6" md="12" sm="12">
+      <v-col class="p-0 pt-3 pr-lg-2" cols="12" lg="6">
         <v-card class="rounded" elevation="0">
           <div class="pt-3" id="chart">
             <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
@@ -68,7 +69,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" lg="6" md="12" sm="12">
+      <v-col class="p-0 pt-3 pl-lg-2" cols="12" lg="6">
         <!-- :loading="loaderStateColumn" -->
         <v-card class="rounded" elevation="0" loader-height="6">
           <div class="pt-3" id="chart">
@@ -90,7 +91,7 @@
       </v-col>
 
       <!-- historical chart -->
-      <v-col class="mb-5" cols="12" lg="12" md="12" sm="12">
+      <v-col class="p-0 pt-3" cols="12">
         <!-- :loading="loaderStateSeries" -->
         <v-card class="rounded" elevation="0" loader-height="6">
           <div class="pt-3" id="chart">

@@ -1,12 +1,11 @@
 <template>
-<div class="app_settings w-100 h-100">
+<div class="app_settings">
   <v-container>
     <v-lazy :options="{
             threshold: .4
-          }" min-height="100vh" transition-group="scale-transition">
-      <v-row justify="center" class="ml-0 mr-0">
-        <v-col class="pl-3 pr-3">
-          <!-- <v-card> -->
+          }" transition="scale-transition">
+      <v-row justify="center" class="m-0">
+        <v-col class="p-0">
           <v-list class="rounded" flat subheader three-line>
             <v-list-item-group v-model="ntf" multiple active-class="">
               <v-subheader>Notifikácie</v-subheader>
@@ -43,7 +42,6 @@
 
             <v-list-item-group v-model="dlm" multiple active-class="">
               <v-subheader>Nastavenie režimu</v-subheader>
-              <!-- <v-list-item-title>Tmavý/Svetlý režim</v-list-item-title> -->
               <v-row class="pl-3 pr-3 pb-3" justify="center">
                 <v-col class="d-flex" cols="12" sm="6">
                   <v-tooltip v-if="!$vuetify.theme.dark" bottom>
@@ -155,8 +153,6 @@
                 </v-menu>
               </v-col>
             </v-row>
-
-
           </v-list>
         </v-col>
       </v-row>

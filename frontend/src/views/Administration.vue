@@ -1,36 +1,32 @@
 <template>
-<div class="administration w-100 h-100">
-  <v-card>
-    <v-tabs grow class="mt-16">
-      <v-tab :to="tabs[0].route" exact>
-        <v-badge :content="$store.getters['reservationCounter']" :value="$store.getters['reservationCounter']" color="orange">
-          {{tabs[0].name}}
-        </v-badge>
-      </v-tab>
-      <v-tab :to="tabs[1].route">
-        {{tabs[1].name}}
-      </v-tab>
-      <v-tab :to="tabs[2].route" v-if="$root.me.name == 'admin'">
-        {{tabs[2].name}}
-      </v-tab>
-    </v-tabs>
+<div class="administration w-100 h-100 mt-16">
+  <v-tabs grow>
+    <v-tab :to="tabs[0].route" exact>
+      <v-badge :content="$store.getters['reservationCounter']" :value="$store.getters['reservationCounter']" color="orange">
+        {{tabs[0].name}}
+      </v-badge>
+    </v-tab>
+    <v-tab :to="tabs[1].route">
+      {{tabs[1].name}}
+    </v-tab>
+    <v-tab :to="tabs[2].route" v-if="$root.me.name == 'admin'">
+      {{tabs[2].name}}
+    </v-tab>
+  </v-tabs>
 
-    <v-card-text class="p-0 text-center">
-      <v-tabs-items class="pt-3 pt-lg-5 pt-md-5" v-model="activeTab" @change="updateRouter($event)" grow touchless>
-        <v-tab-item :key="tabs[0].id" :value="tabs[0].route">
-          <router-view />
-        </v-tab-item>
+  <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow touchless>
+    <v-tab-item :key="tabs[0].id" :value="tabs[0].route">
+      <router-view />
+    </v-tab-item>
 
-        <v-tab-item :key="tabs[1].id" :value="tabs[1].route">
-          <router-view />
-        </v-tab-item>
+    <v-tab-item :key="tabs[1].id" :value="tabs[1].route">
+      <router-view />
+    </v-tab-item>
 
-        <v-tab-item :key="tabs[2].id" :value="tabs[2].route" v-if="$root.me.name == 'admin'">
-          <router-view />
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card-text>
-  </v-card>
+    <v-tab-item :key="tabs[2].id" :value="tabs[2].route" v-if="$root.me.name == 'admin'">
+      <router-view />
+    </v-tab-item>
+  </v-tabs-items>
 </div>
 </template>
 <script>

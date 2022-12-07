@@ -1,8 +1,8 @@
 <template>
 <div class="rates">
-  <v-card elevation="0">
+  <v-card flat>
     <v-row no-gutters>
-      <v-col cols="12" xl="4" lg="5" md="6" sm="12" xs="12">
+      <v-col class="p-0" cols="12" xl="4" lg="5" md="6">
         <v-container>
           <!--overall rating-->
           <v-row no-gutters>
@@ -30,7 +30,8 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col xl="8" lg="7" md="6" sm="12" xs="12">
+
+      <v-col class="p-0" xl="8" lg="7" md="6" sm="12" xs="12">
         <v-container>
           <v-row no-gutters>
             <v-col cols="1" md="1" class="m-auto">
@@ -107,11 +108,13 @@
     </v-row>
   </v-card>
 
-  <v-card class="mt-6" elevation="0">
-    <!--show all ratings-->
-    <v-lazy :options="{
-            threshold: .4
-          }" transition="scale-transition">
+  <!--show all ratings-->
+
+  <v-lazy :options="{
+      threshold: .4
+    }" transition="scale-transition">
+    <v-card class="mt-3" flat>
+
       <div v-if="!cardHide">
         <v-toolbar class="rounded-top" color="primary" flat dark>
           <span>Hodnotenia</span>
@@ -120,18 +123,17 @@
           <v-spacer></v-spacer>
           <v-icon v-on:click="cardHide = !cardHide">mdi-close</v-icon>
         </v-toolbar>
-
         <v-data-table no-data-text="Nenašli sa žiadne hodnotenia" no-results-text="Nenašli sa žiadne hodnotenia" :headers="headers" :items="items" :search="search" :footer-props="footerProps" item-key="name" class="elevation-0 p-3"
           :loading="myloadingvariable" loading-text="Načítavanie... Prosím počkajte"></v-data-table>
       </div>
-    </v-lazy>
-  </v-card>
+    </v-card>
+  </v-lazy>
 
-  <v-card class="mt-3" elevation="0">
-    <!--add rating-->
-    <v-lazy :options="{
-            threshold: .4
-          }" transition="scale-transition">
+  <v-lazy :options="{
+      threshold: .4
+    }" transition="scale-transition">
+    <v-card class="mt-3" flat>
+      <!--add rating-->
       <div v-if="!cardHide2">
         <div v-if="this.$store.getters['ratingState']">
           <v-toolbar class="rounded-top" color="primary" flat dark justify="center">
@@ -149,7 +151,6 @@
             </div>
           </form>
         </div>
-
         <!--change rating -->
         <div v-else>
           <v-toolbar class="rounded-top" color="primary" flat dark>
@@ -166,8 +167,8 @@
           </form>
         </div>
       </div>
-    </v-lazy>
-  </v-card>
+    </v-card>
+  </v-lazy>
 
   <v-snackbar v-model="snackbarUpdateReview" :multi-line="multiLine" color="success" bottom left class="m-3">
     <v-icon>mdi-check-circle</v-icon>

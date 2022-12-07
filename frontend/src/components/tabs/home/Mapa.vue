@@ -1,10 +1,10 @@
 <template>
-<div class="mapa w-100 h-100">
+<div class="mapa">
   <v-container>
     <v-lazy :options="{
             threshold: .4
           }" transition="scale-transition">
-      <v-row justify="center" class="ml-0 mr-0">
+      <v-row justify="center" class="m-0">
         <v-col class="p-0">
           <v-card class="rounded" elevation="0">
             <v-toolbar class="rounded-top" color="primary" flat dark>

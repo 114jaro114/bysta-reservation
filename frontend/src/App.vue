@@ -239,15 +239,9 @@ export default {
         })
 
       // for reservations
-      window.Echo.join('reservation.' + this.$root.me.id)
+      window.Echo.join('reservation.' + localStorage.getItem("user_id"))
         .listen('Reservations', (e) => {
-          console.log(e);
           if (this.$route.fullPath != '/administration') {
-
-            // this.reservCount += 1;
-            // this.$store.dispatch('reservationCounter', {
-            //   reservCounter: this.reservCount
-            // });
             if (e.status == 'deleted') {
               this.reservCount += 1;
               this.$store.dispatch('reservationCounter', {

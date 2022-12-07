@@ -1,10 +1,11 @@
 <template>
-<div class="saved_reservations w-100 h-100">
-  <v-container class="mt-16">
-    <v-overlay :value="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
-    <v-card class="rounded p-5" elevation="0">
+<div class="saved_reservations w-100 h-100 mt-16">
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+
+  <v-container>
+    <v-card class="p-5" flat>
       <v-icon>mdi-volume-high</v-icon>
       Pripravujeme automatické uloženie nedokončených rezervácií.
     </v-card>

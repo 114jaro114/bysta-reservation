@@ -58,17 +58,41 @@ class ReservationController extends Controller
     //update reservation
     public function update(Request $request)
     {
-        $updateDetails = [
-            'event_name' => $request->event_name,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+        $data = $request->data;
+        $dataContact = $data['usercontactmodel'];
+
+        $updateReservation = [
+            'event_name' => $data['event_name'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'nights' => $data['nights'],
+            'adults' => $data['adults'],
+            'childs_2_to_12' => $data['childs_2_to_12'],
+            'childs_to_2' => $data['childs_to_2'],
+            'cleaning_fee' => $data['cleaning_fee'],
+            'price_for_night' => $data['price_for_night'],
+            'total_persons' => $data['total_persons'],
+            'overall_price' => $data['overall_price'],
             'seen_changes_user' => '0'
         ];
-        $updateReservation = DB::table('reservations')
-                               ->where('id', $request->id)
-                               ->update($updateDetails);
 
-        $username = Reservation::where('id', $request->id)
+        $updateReservationUserContactInfo = [
+            'surname' => $dataContact['surname'],
+            'lastname' => $dataContact['lastname'],
+            'address' => $dataContact['address'],
+            'city' => $dataContact['city'],
+            'postcode' => $dataContact['postcode'],
+            'country' => $dataContact['country'],
+            'phone'  => $dataContact['phone']
+        ];
+
+        DB::table('reservations')->where('id', $data['id'])->update($updateReservation);
+
+        DB::table('reservations_user_contact_info')->where('reservation_id', $data['id'])->update($updateReservationUserContactInfo);
+
+        $username = Reservation::where('id', $data['id'])
                        ->select('username')
                        ->get();
 
@@ -77,7 +101,7 @@ class ReservationController extends Controller
                      ->select('id')
                      ->get();
 
-        $reservation = DB::table('reservations')->where('id', $request->id)->get();
+        $reservation = Reservation::with('usermodel', 'usercontactmodel')->where('id', $data['id'])->get();
 
         broadcast(new Reservations($reservation, $user_id[0]->id, 'updated'));
 

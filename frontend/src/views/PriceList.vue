@@ -1,96 +1,85 @@
 <template>
-<div class="price_list w-100 h-100">
-  <v-container class="mt-16 mb-4">
-    <v-card class="pt-3 pt-lg-5 pt-md-5" elevation="0">
-      <v-card-text class="p-0 text-center">
-        <v-overlay :value="overlay">
-          <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
+<div class="price_list w-100 h-100 mt-16">
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
 
-        <v-lazy :options="{
-                          threshold: .4
-                        }" transition="scale-transition">
-          <v-row justify="center" class="ml-0 mr-0">
-            <v-col cols="12" lg="6" md="6">
-              <v-card class="rounded" elevation="0">
-                <div class="pt-3" id="chart">
-                  <apexchart type="line" height="350" ref="dashedChart" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
-                </div>
+  <v-container>
+    <v-lazy :options="{
+        threshold: .4
+      }" transition="scale-transition">
 
-                <v-card-text class="pt-0">
-                  <div class="title font-weight-light mb-2">
-                    <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
-                  </div>
-                  <v-divider class="my-2"></v-divider>
-                  <v-icon class="mr-2" small>
-                    mdi-clock
-                  </v-icon>
-                  <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                  <span class="font-weight-bold">{{lastUpdate}}</span>
-                </v-card-text>
-              </v-card>
-            </v-col>
+      <v-row class="m-0">
+        <v-col class="p-0 pr-lg-2" cols="12" lg="6">
+          <v-card flat>
+            <div id="chart">
+              <apexchart type="line" height="350" :options="chartOptionsDashed" :series="seriesDashed"></apexchart>
+            </div>
+            <v-card-text class="pt-0">
+              <div class="title font-weight-light mb-2">
+                <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+              </div>
+              <v-divider class="my-2"></v-divider>
+              <v-icon class="mr-2" small>
+                mdi-clock
+              </v-icon>
+              <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+              <span class="font-weight-bold">{{lastUpdate}}</span>
+            </v-card-text>
+          </v-card>
+        </v-col>
 
-            <v-col cols="12" lg="6" md="6" sm="12">
-              <!-- :loading="loaderStateColumn" -->
-              <v-card class="rounded" elevation="0" loader-height="6">
-                <div class="pt-3" id="chart">
-                  <apexchart type="bar" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
-                </div>
+        <v-col class="p-0 pt-3 pt-lg-0 pl-lg-2" cols="12" lg="6">
+          <!-- :loading="loaderStateColumn" -->
+          <!-- loader-height="6" -->
+          <v-card flat>
+            <div id="chart">
+              <apexchart type="bar" height="350" :options="chartOptionsColumn" :series="seriesColumn"></apexchart>
+            </div>
+            <v-card-text class="pt-0">
+              <div class="title font-weight-light mb-2">
+                <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
+              </div>
+              <v-divider class="my-2"></v-divider>
+              <v-icon class="mr-2" small>
+                mdi-clock
+              </v-icon>
+              <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
+              <span class="font-weight-bold">{{lastUpdate}}</span>
+            </v-card-text>
+          </v-card>
+        </v-col>
 
-                <v-card-text class="pt-0">
-                  <div class="title font-weight-light mb-2">
-                    <span>Ceny </span><span class="font-weight-bold">pre jednotlivé kategórie </span><span>za každý mesiac</span>
-                  </div>
-                  <v-divider class="my-2"></v-divider>
-                  <v-icon class="mr-2" small>
-                    mdi-clock
-                  </v-icon>
-                  <span class="caption grey--text font-weight-light">Posledná aktualizácia: </span>
-                  <span class="font-weight-bold">{{lastUpdate}}</span>
-                </v-card-text>
-              </v-card>
-            </v-col>
+        <v-col class="p-0 pt-3 pr-lg-2" cols="12" lg="6">
+          <v-card flat>
+            <v-card-text class="p-5">
+              <v-row class="justify-center">
+                <v-icon class="pr-1">mdi-broom</v-icon>
+                <span class="font-weight-bold text-uppercase pt-1">Upratovanie</span>
+                <span></span>
+              </v-row>
+              <v-row class="justify-center">
+                <span>Poplatok +100€ k cene rezervácie.</span>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
 
-            <v-col cols="12" lg="12" md="12" sm="12">
-              <v-card elevation="0">
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12" lg="6" md="12" sm="12">
-                      <v-sheet class="p-4 mx-auto" rounded outlined>
-                        <v-row class="justify-center">
-                          <span>Upratovanie</span>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <v-icon large>mdi-broom</v-icon>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <span>Poplatok +100€ k cene rezervácie</span>
-                        </v-row>
-
-                      </v-sheet>
-                    </v-col>
-                    <v-col cols="12" lg="6" md="12" sm="12">
-                      <v-sheet class="p-4 mx-auto" rounded outlined>
-                        <v-row class="justify-center">
-                          <span>Rezervácia do 5 dospelích osôb</span>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <v-icon large>mdi-account-group</v-icon>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
-                        </v-row>
-                      </v-sheet>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-lazy>
-      </v-card-text>
-    </v-card>
+        <v-col class="p-0 pt-3 pl-lg-2" cols="12" lg="6">
+          <v-card flat>
+            <v-card-text class="p-5">
+              <v-row class="justify-center">
+                <v-icon class="pr-2">mdi-account-group</v-icon>
+                <span class="font-weight-bold text-uppercase pt-1">Rezervácia do 5 dospelích osôb</span>
+              </v-row>
+              <v-row class="justify-center">
+                <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-lazy>
   </v-container>
 </div>
 </template>
