@@ -46,33 +46,21 @@
           <v-container align="center" class="p-4 pt-3">
             <v-row align="center">
               <v-divider />
-              Alebo
+              <span class="ml-3 mr-3">alebo</span>
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
-              <v-btn fab small color="blue">
+              <v-btn fab small color="blue" disabled>
                 <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="red">
+              <v-btn class="ml-5" fab small color="red" disabled>
                 <v-icon color="white">
                   mdi-google
                 </v-icon>
               </v-btn>
-
-              <!-- <v-btn class="ml-5" fab small color="light-blue">
-                <v-icon color="white">
-                  mdi-twitter
-                </v-icon>
-              </v-btn>
-
-              <v-btn class="ml-5" fab small color="brown">
-                <v-icon color="white">
-                  mdi-github
-                </v-icon>
-              </v-btn> -->
             </v-row>
           </v-container>
         </v-card>

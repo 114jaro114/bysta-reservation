@@ -6,7 +6,7 @@
   <NavigationDrawer :drawer="drawer" />
 
   <router-view />
-  <v-fab-transition>
+  <v-fab-transition v-if="this.$store.getters['buttonToTopState'].state">
     <v-btn class="goToTop" v-scroll="onScroll" v-show="fab" fab small dark fixed bottom right color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
@@ -53,6 +53,16 @@
     </template>
   </v-snackbar>
 
+  <v-snackbar v-model="snackbarReservationInProgress" :multi-line="multiLine" color="success" bottom left>
+    <v-icon>mdi-check-circle</v-icon>
+    <span class="pl-1">{{snackbarTextReservationInProgress}}</span>
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" fab text small v-bind="attrs" @click="snackbarReservationInProgress = false">
+        <v-icon>mdi-close-circle</v-icon>
+      </v-btn>
+    </template>
+  </v-snackbar>
+
 
   <div v-if="$route.name != 'Login' && this.$route.name != 'Register' && this.$route.name != 'Welcome' && this.$route.name != 'ForgotPassword' && this.$route.name != 'ResetPassword' && this.$route.name != 'VerificationAccount'">
     <SpeedDial />
@@ -65,6 +75,7 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 import axios from 'axios';
+import moment from 'moment';
 import Toolbar from "@/components/Toolbar.vue";
 import Footer from "@/components/Footer.vue";
 import SpeedDial from "@/components/SpeedDial.vue";
@@ -86,6 +97,7 @@ export default {
     return {
       notifCount: 0,
       reservCount: 0,
+      savedReservCount: 0,
       snackbarUnreadMessages: false,
       snackbarNotifications: false,
       multiLine: true,
@@ -98,6 +110,9 @@ export default {
       snackbar_text: '',
       snackbar_color: '',
       drawer: false,
+
+      snackbarReservationInProgress: false,
+      snackbarTextReservationInProgress: '',
     }
   },
 
@@ -252,6 +267,21 @@ export default {
             }
           }
         })
+
+      // for saved_reservations
+      window.Echo.join('saved_reservation.' + localStorage.getItem("user_id"))
+        .listen('SavedReservations', (e) => {
+          if (this.$route.fullPath != '/saved_reservations') {
+            if (e.status == 'deleted') {
+              this.savedReservCount += 1;
+              this.$store.dispatch('savedReservationCounter', {
+                savedReservCounter: this.savedReservCount
+              });
+            } else {
+              this.getUncheckedSavedReservations();
+            }
+          }
+        })
     }
   },
   computed: {
@@ -317,6 +347,7 @@ export default {
         })
 
       this.getUncheckedReservations();
+      this.getUncheckedSavedReservations();
     }
     this.initDarkMode();
   },
@@ -325,7 +356,7 @@ export default {
     //do something after updating vue instance
     this.notifCount = this.$store.getters['notificationCounter'];
     this.reservCount = this.$store.getters['reservationCounter'];
-
+    this.savedReservCount = this.$store.getters['savedReservationCounter'];
     // const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
     // const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
     // const api3 = 'http://127.0.0.1:8000/api/rating';
@@ -424,6 +455,25 @@ export default {
         });
     },
 
+    getUncheckedSavedReservations() {
+      const api = `${process.env.VUE_APP_API_URL}/savedReservation/getUncheckedSavedReservationsUser`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+
+      //reservations counter
+      axios.get(api, config)
+        .then(res => {
+          this.savedReservCount = res.data
+          this.$store.dispatch('savedReservationCounter', {
+            savedReservCounter: res.data
+          });
+        });
+    },
+
     openNavigationDrawer(state) {
       this.drawer = state;
     },
@@ -471,6 +521,73 @@ export default {
       console.log(item);
       this.snackbarUnreadMessages = false;
       this.$router.push(`/messenger?name=${item.from_contact.name}`);
+    },
+  },
+
+  watch: {
+    $route(to, from) {
+      if (from.name == 'Reservation') {
+        if (this.$root.savedReservation.details.end_date == "" && this.$root.savedReservation.details.start_date == "") {
+          this.$root.savedReservation.details = undefined;
+          this.$root.savedReservation.contactInfos = undefined;
+        } else {
+          this.$root.savedReservation.details.event_name = 'inprogress'
+          const api = `${process.env.VUE_APP_API_URL}/savedReservation/store`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: "Bearer " + localStorage.getItem("authToken"),
+            },
+          };
+
+          axios.post(api, {
+              data: this.$root.savedReservation.details
+            }, config)
+            .then(res => {
+              this.getUncheckedSavedReservations();
+
+              const api = `${process.env.VUE_APP_API_URL}/savedReservation/savedReservationSavedUserContactInfo`;
+              const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
+              const config = {
+                headers: {
+                  Accept: "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("authToken"),
+                },
+              };
+
+              axios.post(api, {
+                    saved_reservation_id: res.data.id,
+                    user_id: res.data.user_id,
+                    data: this.$root.savedReservation.contactInfos
+                  },
+                  config
+                )
+                .then(res => {
+                  console.log(res.data);
+                })
+
+              // notif to user that he successfully created his reservation
+              axios.post(api2, {
+                  from: 1,
+                  recipient: this.$root.me.id,
+                  title: "Chata Byšta",
+                  subtitle: "Úspešne uloženie rozpracovanej rezervácie",
+                  text: `Vážený ${localStorage.getItem('username')}, rozpracovaná rezervácia bola úspešne uložená do časti 'Uložené rezervácie'. `,
+                  date: moment(new Date())
+                    .format('YYYY-MM-DD HH:mm'),
+                  status: "new",
+                }, config)
+                .then(() => {})
+
+              this.snackbarReservationInProgress = true;
+              this.snackbarTextReservationInProgress = "Rozpracovaná rezervácia bola úspešne uložená!";
+
+              this.$root.savedReservation.details = undefined;
+              this.$root.savedReservation.contactInfos = undefined;
+            })
+            .catch(err => console.log("nepodarilo sa pridat event", err));
+        }
+      }
     },
   }
 }

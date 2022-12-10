@@ -11,9 +11,14 @@ use App\Events\Reservations;
 
 class ReservationController extends Controller
 {
-    //get reservations
-    public function index()
-    {
+
+    public function allReservations() {
+      $reserv = Reservation::get();
+      return response()->json($reserv);
+    }
+
+    //get concrete reservations
+    public function getReservationsForUser() {
         $username = auth()->user()->name;
         if ($username == 'admin') {
           // return DB::table('reservations')->get();
@@ -27,8 +32,7 @@ class ReservationController extends Controller
     }
 
     //make reservation
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         Reservation::create([
             'event_name' => $request->event_name,
             'user_id' =>$request->user_id,
@@ -60,7 +64,7 @@ class ReservationController extends Controller
     {
         $data = $request->data;
         $dataContact = $data['usercontactmodel'];
-
+        // $country = $dataContact['country'];
         $updateReservation = [
             'event_name' => $data['event_name'],
             'start_date' => $data['start_date'],

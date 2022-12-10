@@ -6,27 +6,6 @@
   </v-overlay>
 
   <v-navigation-drawer class="mt-16" :value="drawer2" absolute temporary>
-    <!-- <v-list-item class="px-2">
-      <v-list-item-avatar size="52" class="mr-0 ml-0" style="left:8px;">
-        <AvatarImageComponent />
-      </v-list-item-avatar>
-      <v-list-item class="pl-5">
-        <span class="font-weight-bold text-uppercase">{{ username }}</span>
-      </v-list-item>
-    </v-list-item> -->
-
-    <!-- <v-list-item>
-      <v-list-item-title>
-        <v-btn block color="primary" to="/profile">
-          {{ username }}
-          <v-icon dark right>
-            mdi-pencil-circle-outline
-          </v-icon>
-        </v-btn>
-      </v-list-item-title>
-    </v-list-item> -->
-
-    <!-- <v-divider class="mb-0 mt-0"></v-divider> -->
     <v-list class="text-uppercase" nav dense>
       <v-list-item-group v-model="group" active-class="primary--text text--accent-4">
         <v-list-item to="/home">
@@ -56,7 +35,10 @@
           <v-list-item-title>Messenger</v-list-item-title>
         </v-list-item>
         <v-list-item to="/saved_reservations">
-          <v-icon>mdi-content-save-edit</v-icon>
+          <v-badge :content="this.$store.getters['savedReservationCounter']" :value="this.$store.getters['savedReservationCounter']" color="orange" overlap bordered>
+            <v-icon>mdi-content-save-edit</v-icon>
+          </v-badge>
+
           <v-list-item-title>Uložené rezervácie</v-list-item-title>
         </v-list-item>
         <v-list-item to="/price_list">

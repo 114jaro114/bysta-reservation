@@ -57,6 +57,10 @@ Broadcast::channel('reservation.{id}', function ($user, $id) {
     return $user->id === (int) $id;
 });
 
+Broadcast::channel('saved_reservation.{id}', function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
 // This is only for testing purposes
 Broadcast::channel('pchat', function ($user) {
     return $user;

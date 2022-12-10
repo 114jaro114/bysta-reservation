@@ -1,6 +1,6 @@
 <template>
 <div class="administration w-100 h-100 mt-16">
-  <v-tabs grow>
+  <v-tabs grow optional>
     <v-tab :to="tabs[0].route" exact>
       <v-badge :content="$store.getters['reservationCounter']" :value="$store.getters['reservationCounter']" color="orange">
         {{tabs[0].name}}

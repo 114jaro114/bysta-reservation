@@ -32,8 +32,8 @@
             <v-form ref="form" v-model="valid" lazy-validation>
 
               <v-card-text class="">
-                <v-text-field v-model="$root.me.email" :rules="emailRules" label="Email" tabindex="1" filled clearable required></v-text-field>
-                <v-textarea v-model="message" :rules="messageRules" :counter="1000" label="Správa" tabindex="1" filled clearable no-resize style="overflow:hidden"></v-textarea>
+                <v-text-field v-model="$root.me.email" :rules="emailRules" label="Email" tabindex="1" clearable filled rounded required></v-text-field>
+                <v-textarea v-model="message" :rules="messageRules" :counter="1000" label="Správa" tabindex="1" filled rounded clearable no-resize style="overflow:hidden"></v-textarea>
               </v-card-text>
 
               <v-divider class="mt-0 mb-0 ml-4 mr-4"></v-divider>

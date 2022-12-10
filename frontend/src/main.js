@@ -143,6 +143,11 @@ new Vue({
 
       envUrlNoApi: undefined,
 
+      savedReservation: {
+        details: undefined,
+        contactInfos: undefined
+      },
+
       friendships: {
         friends: undefined,
         friends_overlay: true,
@@ -157,6 +162,14 @@ new Vue({
         status: undefined,
         created_at: undefined,
         overlayAvatar: true,
+      },
+
+      prices: {
+        priceAdults: 18,
+        priceChildsto2: 0,
+        priceChilds2to12: 18,
+        priceCabinUnderSixPpl: 150,
+        cleaningFee: 100,
       },
 
       navigationDrawerLeft: {

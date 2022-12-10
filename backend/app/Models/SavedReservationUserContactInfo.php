@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SavedReservationUserContactInfo extends Model
 {
-  protected $table = 'saved_reservations_user_contact_info';
-  protected $guarded = [];
+    protected $table = 'saved_reservations_user_contact_info';
+    protected $guarded = [];
 }

@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
       <v-snackbar v-model="snackbar" :multi-line="multiLine" :color="snackbar_color" :timeout="snackbar_timeout" bottom left class="m-3">
         <v-icon>{{snackbar_icon}}</v-icon>
-        {{ text }}
+        <span class="pl-1">{{ text }}</span>
         <template v-slot:action="{ attrs }">
           <v-btn color="white" fab text small v-bind="attrs" @click="snackbar = false">
             <v-icon>mdi-close-circle</v-icon>
@@ -14,7 +14,7 @@
 
       <v-snackbar v-model="snackbarRegister" :multi-line="multiLine" color="success" bottom left class="m-3">
         <v-icon>mdi-check-circle</v-icon>
-        <span>Používateľský účet bol úspešne vytvorený! Na zadaný email bol odoslaný aktivačný link pre aktiváciu účtu.</span>
+        <span class="pl-1">Používateľský účet bol úspešne vytvorený! Na zadaný email bol odoslaný aktivačný link pre aktiváciu účtu.</span>
         <template v-slot:action="{ attrs }">
           <v-btn color="white" fab text small v-bind="attrs" @click="snackbarRegister = false">
             <v-icon>mdi-close-circle</v-icon>
@@ -24,7 +24,7 @@
 
       <v-snackbar v-model="snackbarActivateAcc" :multi-line="multiLine" color="success" bottom left class="m-3">
         <v-icon>mdi-check-circle</v-icon>
-        <span>Používateľský účet bol úspešne aktivovaný!</span>
+        <span class="pl-1">Používateľský účet bol úspešne aktivovaný!</span>
         <template v-slot:action="{ attrs }">
           <v-btn color="white" fab text small v-bind="attrs" @click="snackbarActivateAcc = false">
             <v-icon>mdi-close-circle</v-icon>
@@ -83,17 +83,17 @@
           <v-container align="center" class="p-4 pt-3">
             <v-row align="center">
               <v-divider />
-              <span class="ml-3 mr-3">Alebo</span>
+              <span class="ml-3 mr-3">alebo</span>
               <v-divider />
             </v-row>
             <v-row class="pt-1" style="justify-content: center">
-              <v-btn fab small color="blue" @click="AuthProvider('facebook')">
+              <v-btn fab small color="blue" @click="AuthProvider('facebook')" disabled>
                 <v-icon color="white">
                   mdi-facebook
                 </v-icon>
               </v-btn>
 
-              <v-btn class="ml-5" fab small color="red" @click="AuthProvider('google')">
+              <v-btn class="ml-5" fab small color="red" @click="AuthProvider('google')" disabled>
                 <v-icon color="white">
                   mdi-google
                 </v-icon>

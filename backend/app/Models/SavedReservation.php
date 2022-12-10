@@ -9,15 +9,15 @@ use App\Models\SavedReservationUserContactInfo;
 
 class SavedReservation extends Model
 {
-  protected $guarded = [];
+    protected $guarded = [];
 
-  public function usermodel()
-  {
-      return $this->belongsTo(User::class)->select('id', 'name', 'email', 'status', 'avatar', 'created_at');
-  }
+    public function usermodel()
+    {
+        return $this->belongsTo(User::class)->select('id', 'name', 'email', 'status', 'avatar', 'created_at');
+    }
 
-  public function usercontactmodel()
-  {
-      return $this->hasOne(SavedReservationUserContactInfo::class);
-  }
+    public function usercontactmodel()
+    {
+        return $this->hasOne(SavedReservationUserContactInfo::class);
+    }
 }

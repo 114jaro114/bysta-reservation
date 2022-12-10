@@ -205,24 +205,8 @@ export default {
     },
   },
 
-  mounted: function mounted() {
+  mounted() {
     this.getEvents();
-    const api = `${process.env.VUE_APP_API_URL}/auth/user`;
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken"),
-      },
-    };
-    axios.get(api, config)
-      .then((response) => {
-        if (response.data.avatar) {
-          this.avatarImageUrl = "http://127.0.0.1:8000/storage/user-avatar/" + response.data.avatar;
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
   },
 
   created() {
@@ -308,7 +292,7 @@ export default {
     },
 
     getEvents() {
-      const api = `${process.env.VUE_APP_API_URL}/reservation`;
+      const api = `${process.env.VUE_APP_API_URL}/allReservation`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -316,20 +300,18 @@ export default {
         },
       };
       axios.get(api, config)
-        .then(resp => {
+        .then(res => {
           //this code contains disabled dates in datepicker
           this.myloadingvariable = false;
           this.disabledDates = [];
           this.$emit('loaded-events', false);
 
-          for (var i = 0; i < resp.data.length; i++) {
-            var day1 = moment(resp.data[i].end_date);
-            var day2 = moment(resp.data[i].start_date);
+          for (var i = 0; i < res.data.length; i++) {
+            var day1 = moment(res.data[i].end_date);
+            var day2 = moment(res.data[i].start_date);
             var result = [moment({
               ...day2
             })];
-
-            console.log(result);
 
             while (day1.date() != day2.date()) {
               day2.add(1, 'day');
@@ -343,10 +325,10 @@ export default {
             }
           }
           // get data
-          this.test = resp.data;
+          this.test = res.data;
           // this.incId = this.test.length;
-          if (resp.data != undefined) {
-            this.incId = resp.data[resp.data.length - 1].id;
+          if (res.data != undefined) {
+            this.incId = res.data[res.data.length - 1].id;
           }
         })
         .catch(() => {});
@@ -360,7 +342,6 @@ export default {
       arrayDate.push(moment(this.range.start)
         .format('YYYY-MM-DDTHH:mm:ss'), moment(this.range.end)
         .format('YYYY-MM-DDTHH:mm:ss'))
-      console.log(arrayDate);
       this.$emit('array-dates', arrayDate);
       this.newEvent = {
         // event_id: "",
@@ -392,7 +373,6 @@ export default {
       this.$store.dispatch('successReservation', {
         success: true
       });
-      // console.log(this.newEvent);
     } else {
       this.$store.dispatch('successReservation', {
         success: false

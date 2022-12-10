@@ -15,7 +15,7 @@ class CreateSavedReservationsUserContactInfoTable extends Migration
     {
         Schema::create('saved_reservations_user_contact_info', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('reservation_id');
+          $table->string('saved_reservation_id');
           $table->string('user_id');
           $table->string('surname')->nullable();
           $table->string('lastname')->nullable();

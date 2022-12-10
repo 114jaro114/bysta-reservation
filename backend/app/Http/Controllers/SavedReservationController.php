@@ -7,7 +7,7 @@ use App\Models\SavedReservationUserContactInfo;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-// use App\Events\Reservations;
+use App\Events\SavedReservations;
 
 class SavedReservationController extends Controller
 {
@@ -21,43 +21,40 @@ class SavedReservationController extends Controller
     //make reservation
     public function store(Request $request)
     {
-        SavedReservation::updateOrCreate([
-            'event_name' => $request->event_name,
-            'user_id' =>$request->user_id,
-            'username' => $request->username,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'nights' => $request->nights,
-            'adults' => $request->adults,
-            'childs_2_to_12' => $request->childs2to12,
-            'childs_to_2' => $request->childsto2,
-            'cleaning_fee' => $request->cleaningFee,
-            'price_for_night' => $request->priceForNight,
-            'total_persons' => $request->totalPersons,
-            'overall_price' => $request->overallPrice,
-            'note' => $request->note
+        $data = $request->data;
+        $savedReservation = SavedReservation::updateOrCreate([
+            'user_id' => $data['user_id'],
+            'username' => $data['username'],
+            'event_name' => $data['event_name'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'nights' => $data['nights'],
+            'adults' => $data['adults'],
+            'childs_2_to_12' => $data['childs_2_to_12'],
+            'childs_to_2' => $data['childs_to_2'],
+            'cleaning_fee' => $data['cleaning_fee'],
+            'price_for_night' => $data['price_for_night'],
+            'total_persons' => $data['total_persons'],
+            'overall_price' => $data['overall_price'],
+            'seen_changes_user' => '0'
         ]);
 
-        $savedReservation = DB::table('saved_reservations')->where('start_date', $request->start_date)->get();
+        // $savedReservation = DB::table('saved_reservations')->where('start_date', $data['start_date'])->get();
+        //
+        broadcast(new SavedReservations($savedReservation, auth()->user()->id, 'created'));
 
-        // broadcast(new Reservations($reservation, '1', 'created'));
         return response()->json($savedReservation);
     }
 
-    //delete reservation
+    //delete saved reservation
     public function delete(Request $request)
     {
-        $user_id = SavedReservation::where('id', $request->id)
-                     ->select('user_id')
-                     ->get();
-
         $savedReservation = SavedReservation::where('id', $request->id)->get();
 
-        // broadcast(new Reservations($reservation, $user_id[0]->user_id, 'deleted'));
-
         SavedReservation::where('id', $request->id)->delete();
+        SavedReservationUserContactInfo::where('saved_reservation_id', $request->id)->delete();
 
         return response($savedReservation);
     }
@@ -84,16 +81,19 @@ class SavedReservationController extends Controller
 
     // reservation user contanct informácie
     public function savedReservationSavedUserContactInfo(Request $request) {
+
+      $data = $request->data;
+
       $savedReservation = SavedReservationUserContactInfo::updateOrCreate([
-        'reservation_id' => $request->reservation_id,
-        'user_id' => $request->user_id,
-        'surname' => $request->surname,
-        'lastname' => $request->lastname,
-        'address' => $request->address,
-        'city' => $request->city,
-        'postcode' => $request->postcode,
-        'country' => $request->country,
-        'phone' => $request->phone,
+        'saved_reservation_id' => $request['saved_reservation_id'],
+        'user_id' => $request['user_id'],
+        'surname' => $data['surname'],
+        'lastname' => $data['lastname'],
+        'address' => $data['address'],
+        'city' => $data['city'],
+        'postcode' => $data['postcode'],
+        'country' => $data['country'],
+        'phone'  => $data['phone']
       ]);
 
       return response()->json($savedReservation);

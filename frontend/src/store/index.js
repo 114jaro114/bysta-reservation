@@ -22,6 +22,10 @@ export default new Vuex.Store({
       state: false,
     },
 
+    buttonToTopState: {
+      state: false,
+    },
+
     autoDarkLightModeState: {
       state: false,
     },
@@ -40,6 +44,7 @@ export default new Vuex.Store({
 
     notificationCounter: 0,
     reservationCounter: 0,
+    savedReservationCounter: 0,
 
     updatedPassword: false,
 
@@ -107,6 +112,10 @@ export default new Vuex.Store({
       return state.bottomNavigationState
     },
 
+    buttonToTopState: state => {
+      return state.buttonToTopState
+    },
+
     autoDarkLightModeState: state => {
       return state.autoDarkLightModeState
     },
@@ -121,6 +130,10 @@ export default new Vuex.Store({
 
     reservationCounter: state => {
       return state.reservationCounter
+    },
+
+    savedReservationCounter: state => {
+      return state.savedReservationCounter
     },
 
     updatedPassword: state => {
@@ -187,6 +200,10 @@ export default new Vuex.Store({
       Vue.set(state.bottomNavigationState, 'state', payload.status);
     },
 
+    mutationButtonToTopState: (state, payload) => {
+      Vue.set(state.buttonToTopState, 'state', payload.status);
+    },
+
     mutationAutoDarkLightModeState: (state, payload) => {
       Vue.set(state.autoDarkLightModeState, 'state', payload.status);
     },
@@ -215,7 +232,9 @@ export default new Vuex.Store({
       state.reservationCounter = payload.reservCounter
     },
 
-
+    mutationSavedReservationCounter: (state, payload) => {
+      state.savedReservationCounter = payload.savedReservCounter
+    },
 
     mutationUpdatedPassword: (state, payload) => {
       state.updatedPassword = payload.state;
@@ -296,6 +315,10 @@ export default new Vuex.Store({
       context.commit('mutationBottomNavigationState', payload)
     },
 
+    buttonToTopState: (context, payload) => {
+      context.commit('mutationButtonToTopState', payload)
+    },
+
     autoDarkLightModeState: (context, payload) => {
       context.commit('mutationAutoDarkLightModeState', payload)
     },
@@ -310,6 +333,10 @@ export default new Vuex.Store({
 
     reservationCounter: (context, payload) => {
       context.commit('mutationReservationCounter', payload)
+    },
+
+    savedReservationCounter: (context, payload) => {
+      context.commit('mutationSavedReservationCounter', payload)
     },
 
     updatedPassword: (context, payload) => {

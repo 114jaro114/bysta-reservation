@@ -1,7 +1,7 @@
 <template>
 <div class="home w-100 h-100 mt-16">
   <v-tabs grow>
-    <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route">{{ tab.name }}</v-tab>
+    <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>{{ tab.name }}</v-tab>
   </v-tabs>
 
   <v-tabs-items v-model="activeTab" @change="updateRouter($event)" grow>

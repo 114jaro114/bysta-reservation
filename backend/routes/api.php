@@ -14,6 +14,7 @@ use App\Http\Controllers\FriendshipsController;
 use App\Http\Controllers\ValidateRegisterLogin;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SavedReservationController;
 use App\Http\Controllers\PricesController;
 use App\Http\Controllers\UserContactController;
 
@@ -102,7 +103,8 @@ Route::post('/calendar/update', [CalendarController::class, 'update']);
 Route::post('/calendar/delete', [CalendarController::class, 'destroy']);
 
 //reservations
-Route::get('/reservation', [ReservationController::class, 'index']);
+Route::get('/allReservation', [ReservationController::class, 'allReservations']);
+Route::get('/reservation', [ReservationController::class, 'getReservationsForUser']);
 Route::get('/checkPendingReservation/{username}', [ReservationController::class, 'checkPendingReservation']);
 Route::post('/reservation/store', [ReservationController::class, 'store']);
 Route::post('/reservation/update', [ReservationController::class, 'update']);

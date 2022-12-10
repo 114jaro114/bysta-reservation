@@ -88,8 +88,25 @@
                   </v-list-item-action>
 
                   <v-list-item-content>
-                    <v-list-item-title>Speed dial (<v-icon medium>mdi-web</v-icon>)</v-list-item-title>
+                    <v-list-item-title>Speed dial <v-icon medium>mdi-web</v-icon></v-list-item-title>
                     <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie speed dialu (len rozlíšenie webu)</v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </v-list-item-group>
+
+            <v-divider></v-divider>
+
+            <v-list-item-group v-model="btt" multiple active-class="">
+              <v-list-item>
+                <template v-slot:default="{ active }">
+                  <v-list-item-action>
+                    <v-switch color="primary" :input-value="active" inset></v-switch>
+                  </v-list-item-action>
+
+                  <v-list-item-content>
+                    <v-list-item-title>Tlačidlo na začiatok stránky <v-icon medium>mdi-arrow-up-circle</v-icon></v-list-item-title>
+                    <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie tlačidla "na začiatok stránky"</v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
               </v-list-item>
@@ -105,7 +122,7 @@
                   </v-list-item-action>
 
                   <v-list-item-content>
-                    <v-list-item-title>spodná navigačná lišta (<v-icon medium>mdi-cellphone-cog</v-icon>)</v-list-item-title>
+                    <v-list-item-title>Spodná navigačná lišta <v-icon medium>mdi-cellphone-settings</v-icon></v-list-item-title>
                     <v-list-item-subtitle>Zapnúť alebo vypnúť zobrazenie spodnej lišty (len pre mobily)</v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
@@ -182,6 +199,7 @@ export default {
       dlm: [],
       sd: [],
       bn: [],
+      btt: [],
 
       arraySwitchesSliders: [],
       //language
@@ -279,6 +297,18 @@ export default {
         status: false
       });
     }
+
+    if (JSON.parse(localStorage.getItem("button_to_top")) == true) {
+      this.btt.push(0);
+      this.$store.dispatch('buttonToTopState', {
+        status: true
+      });
+    } else {
+      this.btt.splice(0, 1);
+      this.$store.dispatch('buttonToTopState', {
+        status: false
+      });
+    }
   },
 
   methods: {
@@ -370,6 +400,18 @@ export default {
     } else {
       localStorage.setItem('bottom_navigation', false);
       this.$store.dispatch('bottomNavigationState', {
+        status: false
+      });
+    }
+
+    if (this.btt.length != 0) {
+      localStorage.setItem('button_to_top', true);
+      this.$store.dispatch('buttonToTopState', {
+        status: true
+      });
+    } else {
+      localStorage.setItem('button_to_top', false);
+      this.$store.dispatch('buttonToTopState', {
         status: false
       });
     }

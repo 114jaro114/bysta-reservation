@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-overlay v-if="overlayLogout == true" :value="overlayLogout" style="background: rgba(255,255,255,0.5);backdrop-filter: blur(5px);z-index:6">
+  <v-overlay v-if="overlayLogout == true" :value="overlayLogout" style="background: rgba(255,255,255,0.5);backdrop-filter: blur(5px);z-index:205">
     <span class="mr-3">Prebieha odhlásenie</span>
     <v-progress-circular indeterminate size="24" color="white"></v-progress-circular>
   </v-overlay>
@@ -1098,7 +1098,7 @@
       <v-menu :close-on-content-click="false" offset-y>
         <template v-slot:activator="{ on, attrs }">
           <div class="lang">
-            <v-btn class="p-0 ml-1" text rounded large v-bind="attrs" v-on="on">
+            <v-btn class="p-0" text rounded large v-bind="attrs" v-on="on">
               <div class="pt-1">
                 <div v-if="$root.language.selectedLang == '1'">
                   <CountryFlag :country="'gb'" size='normal' />

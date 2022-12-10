@@ -59,7 +59,7 @@
                 <span></span>
               </v-row>
               <v-row class="justify-center">
-                <span>Poplatok +100€ k cene rezervácie.</span>
+                <span>Poplatok +{{$root.prices.cleaningFee}}€ k cene rezervácie.</span>
               </v-row>
             </v-card-text>
           </v-card>
@@ -73,7 +73,7 @@
                 <span class="font-weight-bold text-uppercase pt-1">Rezervácia do 5 dospelích osôb</span>
               </v-row>
               <v-row class="justify-center">
-                <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je 150€.</span>
+                <span>Ak je počet osôb rezervácie menší ako 6, cena chaty za noc je {{$root.prices.priceCabinUnderSixPpl}}€.</span>
               </v-row>
             </v-card-text>
           </v-card>
