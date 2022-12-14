@@ -4,7 +4,7 @@
     <v-col xl="12" lg="12" md="12" sm="12" xs="12" class="pl-0 pr-0 pb-0">
       <v-row class="ml-0 mr-0 mb-3">
         <v-card class="w-100 rounded" elevation="0" min-height="336">
-          <v-tabs id="tabs" :vertical="vertical" class="verticalTabs vertical-tabs-border text-align-left">
+          <v-tabs id="tabs" :vertical="vertical" class="verticalTabs vertical-tabs-border text-align-left tabs-window-container">
             <!-- show-arrows -->
             <v-tab class="justify-content-start">
               Prehľad
@@ -1196,114 +1196,117 @@
       </v-row>
 
       <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// photos -->
-      <v-row class="ml-0 mr-0 mb-3">
-        <v-card class="w-100 rounded" elevation="0" min-height="245">
-          <v-toolbar elevation="0" dense>
-            <v-tabs v-model="tabPhotos">
-              <v-tab>
-                Fotky, na ktorých ste
-              </v-tab>
-              <v-tab>
-                Vaše fotky
-              </v-tab>
-              <v-tab>
-                Albumy
-              </v-tab>
-            </v-tabs>
-          </v-toolbar>
+      <v-row class="m-0 mb-3">
+        <v-col class="p-0" cols="12">
+          <v-card class="w-100 rounded" flat>
+            <v-toolbar elevation="0" dense>
+              <v-tabs v-model="tabPhotos">
+                <v-tab>
+                  Fotky, na ktorých ste
+                </v-tab>
+                <v-tab>
+                  Vaše fotky
+                </v-tab>
+                <v-tab>
+                  Albumy
+                </v-tab>
+              </v-tabs>
+            </v-toolbar>
 
-          <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" />
+            <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" />
 
-          <v-tabs-items v-model="tabPhotos">
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
-      </v-row>
+            <v-tabs-items class="tabs-window-container" v-model="tabPhotos">
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card>
+        </v-col>
+        <!-- </v-row> -->
+        <v-col class="p-0" cols="12">
+          <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// videos -->
+          <!-- <v-row class="ml-0 mr-0 mb-3"> -->
+          <v-card class="w-100 rounded mt-3" elevation="0">
+            <v-toolbar elevation="0" dense>
+              <v-tabs v-model="tabVideos">
+                <v-tab>
+                  Videá, na ktorých ste
+                </v-tab>
+                <v-tab>
+                  Vaše videá
+                </v-tab>
+              </v-tabs>
+            </v-toolbar>
 
-      <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// videos -->
-      <v-row class="ml-0 mr-0 mb-3">
-        <v-card class="w-100 rounded" elevation="0" min-height="245">
-          <v-toolbar elevation="0" dense>
-            <v-tabs v-model="tabVideos">
-              <v-tab>
-                Videá, na ktorých ste
-              </v-tab>
-              <v-tab>
-                Vaše videá
-              </v-tab>
-            </v-tabs>
-          </v-toolbar>
+            <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" />
 
-          <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" />
-
-          <v-tabs-items v-model="tabVideos">
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-list-item class="justify-center" disabled>
-                  <v-list-item-content class="p-2 pr-0 pl-0">
-                    <v-card class="rounded-lg card-statement" elevation="0">
-                      <span class="">Žiadne výsledky</span>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
+            <v-tabs-items class="tabs-window-container" v-model="tabVideos">
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-list-item class="justify-center" disabled>
+                    <v-list-item-content class="p-2 pr-0 pl-0">
+                      <v-card class="rounded-lg card-statement" elevation="0">
+                        <span class="">Žiadne výsledky</span>
+                      </v-card>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card>
+        </v-col>
       </v-row>
     </v-col>
   </v-row>
@@ -1435,5 +1438,11 @@ export default {
 
 div.tabs [role="tab"] {
   justify-content: flex-start;
+}
+
+.tabs-window-container .v-window__container {
+  height: auto !important;
+  min-height: auto;
+  padding-bottom: 0;
 }
 </style>

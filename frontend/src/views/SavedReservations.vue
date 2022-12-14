@@ -101,7 +101,7 @@
                     <v-divider></v-divider>
 
                     <v-list three-line subheader>
-                      <v-subheader class="p-0">Dátum a čas vytvorenia rezervácie</v-subheader>
+                      <v-subheader class="p-0">Dátum a čas uloženia rezervácie</v-subheader>
                       <v-list-item class="p-0">
                         <v-list-item-content>
                           <v-row>
@@ -123,15 +123,48 @@
                       <v-list-item class="p-0">
                         <v-list-item-content>
                           <v-row>
+                            <v-col cols="12" v-if="checkUsedDates(userDetailSavedReservation.start_date) || checkUsedDates(userDetailSavedReservation.end_date)">
+                              <v-card class="p-4 card-color-administration rounded-pill" flat>
+                                <v-row class="justify-center">
+                                  <v-col>
+                                    <div class="">
+                                      <v-icon class="red--text pr-1 mb-1">mdi-alert-circle</v-icon>
+                                      <span>Váš </span>
+                                      <span v-if="checkUsedDates(userDetailSavedReservation.start_date)">
+                                        <span>dátum príchodu </span>
+                                        <span class="red--text">{{formatDate(userDetailSavedReservation.start_date)}}</span>
+                                      </span>
+
+                                      <span v-if="checkUsedDates(userDetailSavedReservation.start_date) && checkUsedDates(userDetailSavedReservation.end_date)"> a </span>
+
+                                      <span v-if="checkUsedDates(userDetailSavedReservation.end_date)">
+                                        <span>dátum odchodu </span>
+                                        <span class="red--text">{{formatDate(userDetailSavedReservation.end_date)}}</span>
+                                      </span>
+                                      <span> je už obsadený.</span>
+                                    </div>
+                                  </v-col>
+                                </v-row>
+                              </v-card>
+                            </v-col>
                             <v-col cols="12" lg="6" md="6">
                               <v-card class="p-4 card-color-administration rounded-pill" flat>
                                 <v-row class="justify-center">
-                                  <span>Príchod</span>
+                                  <div class="">
+                                    <v-icon class="red--text pr-1 mb-1" v-if="checkUsedDates(userDetailSavedReservation.start_date)">mdi-alert-circle</v-icon>
+                                    <span>Príchod</span>
+                                  </div>
                                 </v-row>
                                 <v-row class="justify-center">
                                   <v-col>
-                                    <v-icon>mdi-calendar-start</v-icon>
-                                    <span class="pl-1">{{formatDate(userDetailSavedReservation.start_date)}}</span>
+                                    <div v-if="checkUsedDates(userDetailSavedReservation.start_date)">
+                                      <v-icon class="red--text">mdi-calendar-start</v-icon>
+                                      <span class="red--text pl-1">{{formatDate(userDetailSavedReservation.start_date)}}</span>
+                                    </div>
+                                    <div v-else>
+                                      <v-icon>mdi-calendar-start</v-icon>
+                                      <span class="pl-1">{{formatDate(userDetailSavedReservation.start_date)}}</span>
+                                    </div>
                                   </v-col>
                                 </v-row>
                                 <v-row class="justify-center">
@@ -145,12 +178,22 @@
                             <v-col cols="12" lg="6" md="6">
                               <v-card class="p-4 card-color-administration rounded-pill" flat>
                                 <v-row class="justify-center">
-                                  <span>Odchod</span>
+                                  <div class="">
+                                    <v-icon class="red--text pr-1 mb-1" v-if="checkUsedDates(userDetailSavedReservation.end_date)">mdi-alert-circle</v-icon>
+                                    <span>Odchod</span>
+                                  </div>
+
                                 </v-row>
                                 <v-row class="justify-center">
                                   <v-col>
-                                    <v-icon>mdi-calendar-end</v-icon>
-                                    <span class="pl-1">{{formatDate(userDetailSavedReservation.end_date)}}</span>
+                                    <div v-if="checkUsedDates(userDetailSavedReservation.end_date)">
+                                      <v-icon class="red--text">mdi-calendar-end</v-icon>
+                                      <span class="red--text pl-1">{{formatDate(userDetailSavedReservation.end_date)}}</span>
+                                    </div>
+                                    <div v-else>
+                                      <v-icon>mdi-calendar-end</v-icon>
+                                      <span class="pl-1">{{formatDate(userDetailSavedReservation.end_date)}}</span>
+                                    </div>
                                   </v-col>
                                 </v-row>
                                 <v-row class="justify-center">
@@ -230,11 +273,21 @@
             </template>
 
             <template v-slot:item.start_date="{ item }">
-              <span>{{ formatDate(item.start_date) }}</span>
+              <div v-if="checkUsedDates(item.start_date)">
+                <span class="red--text">{{formatDate(item.start_date)}}</span>
+              </div>
+              <div v-else>
+                <span>{{formatDate(item.start_date)}}</span>
+              </div>
             </template>
 
             <template v-slot:item.end_date="{ item }">
-              <span>{{ formatDate(item.end_date) }}</span>
+              <div v-if="checkUsedDates(item.end_date)">
+                <span class="red--text">{{formatDate(item.end_date)}}</span>
+              </div>
+              <div v-else>
+                <span>{{formatDate(item.end_date)}}</span>
+              </div>
             </template>
 
             <template v-slot:item.overall_price="{ item }">
@@ -409,6 +462,16 @@ export default {
   updated() {},
 
   methods: {
+    checkUsedDates(date) {
+      var count = 0;
+      this.$root.allUsedReservationDates.map(x => {
+        if (this.formatDate(x) == this.formatDate(date)) {
+          count++
+        }
+      })
+      return count
+    },
+
     formatDate(value) {
       return new Date(Date.parse(value)).toLocaleDateString('sk-SK')
     },

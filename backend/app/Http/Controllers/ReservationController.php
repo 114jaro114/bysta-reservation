@@ -8,6 +8,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Events\Reservations;
+use App\Events\AllUsedReservationDates;
+
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class ReservationController extends Controller
 {
@@ -53,10 +57,23 @@ class ReservationController extends Controller
         ]);
 
         $reservation = DB::table('reservations')->where('start_date', $request->start_date)->get();
-
         broadcast(new Reservations($reservation, '1', 'created'));
-        // $new_calendar = Reservation::create($request->all());
+
+        $period = CarbonPeriod::create($request->start_date, $request->end_date);
+        $dates = $period->toArray();
+        broadcast(new AllUsedReservationDates($dates));
+
         return response()->json($reservation);
+    }
+
+    private function generateDateRange(Carbon $start_date, Carbon $end_date) {
+        $dates = [];
+
+        for($date = $start_date->copy(); $date->lte($end_date); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        return $dates;
     }
 
     //update reservation
@@ -157,9 +174,6 @@ class ReservationController extends Controller
         }
     }
 
-
-
-
     // reservation user contanct informácie
 
     public function reservationUserContactInfo(Request $request) {
@@ -176,5 +190,18 @@ class ReservationController extends Controller
       ]);
 
       return response()->json($reservation);
+    }
+
+    public function getAllUsedReservationsDates() {
+      $allConvertedDates = [];
+      $allDates = Reservation::select('start_date', 'end_date')->get();
+      for ($i=0; $i < count($allDates); $i++) {
+        $period = CarbonPeriod::create($allDates[$i]->start_date, $allDates[$i]->end_date);
+        for ($x=0; $x < count($period->toArray()); $x++) {
+          array_push($allConvertedDates, $period->toArray()[$x]);
+        }
+      }
+
+      return response()->json($allConvertedDates);
     }
 }

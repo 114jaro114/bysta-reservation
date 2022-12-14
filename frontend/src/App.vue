@@ -153,6 +153,72 @@ export default {
           }
         })
 
+      window.Echo.join('dataAboutMe.' + localStorage.getItem("user_id"))
+        .listen('Me', (e) => {
+          this.$root.Posts.getAllPosts.allPosts.forEach((elem) => {
+            if (elem.user_id == e.user.id) {
+              elem.userpostmodel.avatar = e.user.avatar;
+            }
+          })
+
+          this.$root.profilePosts.getAllPosts.allPosts.forEach((elem) => {
+            if (elem.user_id == e.user.id) {
+              elem.userpostmodel.avatar = e.user.avatar;
+            }
+          })
+        })
+
+      // update posts
+      window.Echo.join('postdata')
+        .listen('PostsData', (e) => {
+          if (e.dataType == 'addNewPost') {
+            //add new post on beginning of array
+            this.$root.Posts.getAllPosts.allPosts.unshift(e.allDataPost[0]);
+          }
+
+          this.$root.Posts.getAllPosts.allPosts.forEach((elem, index) => {
+            if (elem.id == e.allDataPost[0].id) {
+
+              if (e.dataType == 'updatedPost') {
+                this.$root.Posts.getAllPosts.allPosts.splice(index, 1, e.allDataPost[0]);
+              }
+
+              if (e.dataType == 'deletedPost') {
+                this.$root.Posts.getAllPosts.allPosts.splice(index, 1);
+              }
+
+              if (e.dataType == 'updatedComment') {
+                this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
+              }
+
+              if (e.dataType == 'deletePostComment') {
+                this.$root.Posts.getAllPosts.allPosts[index].count_comments = e.allDataPost[0].count_comments;
+                this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
+              }
+
+              if (e.dataType == 'addUpdatePostReaction' || e.dataType == 'deletePostReaction') {
+                this.$root.Posts.getAllPosts.allPosts[index].postreactionmodel = e.allDataPost[0].postreactionmodel;
+                this.$root.Posts.getAllPosts.allPosts[index].count_reactions = e.allDataPost[0].count_reactions;
+                this.$root.Posts.getAllPosts.allPosts[index].like = e.allDataPost[0].like;
+                this.$root.Posts.getAllPosts.allPosts[index].heart = e.allDataPost[0].heart;
+                this.$root.Posts.getAllPosts.allPosts[index].funny = e.allDataPost[0].funny;
+                this.$root.Posts.getAllPosts.allPosts[index].surprise = e.allDataPost[0].surprise;
+                this.$root.Posts.getAllPosts.allPosts[index].sad = e.allDataPost[0].sad;
+                this.$root.Posts.getAllPosts.allPosts[index].angry = e.allDataPost[0].angry;
+              }
+
+              if (e.dataType == 'addUpdateCommentReaction' || e.dataType == 'deleteCommentReaction') {
+                this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
+              }
+
+              if (e.dataType == 'addPostShare' || e.dataType == 'deletePostShare') {
+                this.$root.Posts.getAllPosts.allPosts[index].postsharemodel = e.allDataPost[0].postsharemodel;
+                this.$root.Posts.getAllPosts.allPosts[index].count_shares = e.allDataPost[0].count_shares;
+              }
+            }
+          })
+        })
+
       window.Echo.join('friendship.' + localStorage.getItem("user_id"))
         .listen('Friendships', (e) => {
           let newFriendRequest = {
@@ -282,6 +348,13 @@ export default {
             }
           }
         })
+
+      window.Echo.join('reservations_dates')
+        .listen('AllUsedReservationDates', (e) => {
+          e.reservations_dates.map(value => {
+            this.$root.allUsedReservationDates.push(value);
+          })
+        });
     }
   },
   computed: {
@@ -357,6 +430,7 @@ export default {
     this.notifCount = this.$store.getters['notificationCounter'];
     this.reservCount = this.$store.getters['reservationCounter'];
     this.savedReservCount = this.$store.getters['savedReservationCounter'];
+
     // const api = 'http://127.0.0.1:8000/api/getAllUnreadMessages';
     // const api2 = `http://127.0.0.1:8000/api/getNotificationNew/${localStorage.getItem('user_id')}`;
     // const api3 = 'http://127.0.0.1:8000/api/rating';
@@ -518,7 +592,6 @@ export default {
     },
 
     selectDataAboutUser(item) {
-      console.log(item);
       this.snackbarUnreadMessages = false;
       this.$router.push(`/messenger?name=${item.from_contact.name}`);
     },
@@ -527,65 +600,65 @@ export default {
   watch: {
     $route(to, from) {
       if (from.name == 'Reservation') {
-        if (this.$root.savedReservation.details.end_date == "" && this.$root.savedReservation.details.start_date == "") {
-          this.$root.savedReservation.details = undefined;
-          this.$root.savedReservation.contactInfos = undefined;
-        } else {
-          this.$root.savedReservation.details.event_name = 'inprogress'
-          const api = `${process.env.VUE_APP_API_URL}/savedReservation/store`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-              Authorization: "Bearer " + localStorage.getItem("authToken"),
-            },
-          };
+        if (this.$root.savedReservation.details != undefined && this.$root.savedReservation.contactInfos != undefined) {
+          if (this.$root.savedReservation.details.end_date == "" && this.$root.savedReservation.details.start_date == "") {
+            this.$root.savedReservation.details = undefined;
+            this.$root.savedReservation.contactInfos = undefined;
+          } else {
+            this.$root.savedReservation.details.event_name = 'inprogress'
+            const api = `${process.env.VUE_APP_API_URL}/savedReservation/store`;
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            };
 
-          axios.post(api, {
-              data: this.$root.savedReservation.details
-            }, config)
-            .then(res => {
-              this.getUncheckedSavedReservations();
+            axios.post(api, {
+                data: this.$root.savedReservation.details
+              }, config)
+              .then(res => {
+                this.getUncheckedSavedReservations();
 
-              const api = `${process.env.VUE_APP_API_URL}/savedReservation/savedReservationSavedUserContactInfo`;
-              const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
-              const config = {
-                headers: {
-                  Accept: "application/json",
-                  Authorization: "Bearer " + localStorage.getItem("authToken"),
-                },
-              };
-
-              axios.post(api, {
-                    saved_reservation_id: res.data.id,
-                    user_id: res.data.user_id,
-                    data: this.$root.savedReservation.contactInfos
+                const api = `${process.env.VUE_APP_API_URL}/savedReservation/savedReservationSavedUserContactInfo`;
+                const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
+                const config = {
+                  headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("authToken"),
                   },
-                  config
-                )
-                .then(res => {
-                  console.log(res.data);
-                })
+                };
 
-              // notif to user that he successfully created his reservation
-              axios.post(api2, {
-                  from: 1,
-                  recipient: this.$root.me.id,
-                  title: "Chata Byšta",
-                  subtitle: "Úspešne uloženie rozpracovanej rezervácie",
-                  text: `Vážený ${localStorage.getItem('username')}, rozpracovaná rezervácia bola úspešne uložená do časti 'Uložené rezervácie'. `,
-                  date: moment(new Date())
-                    .format('YYYY-MM-DD HH:mm'),
-                  status: "new",
-                }, config)
-                .then(() => {})
+                axios.post(api, {
+                      saved_reservation_id: res.data.id,
+                      user_id: res.data.user_id,
+                      data: this.$root.savedReservation.contactInfos
+                    },
+                    config
+                  )
+                  .then(() => {})
 
-              this.snackbarReservationInProgress = true;
-              this.snackbarTextReservationInProgress = "Rozpracovaná rezervácia bola úspešne uložená!";
+                // notif to user that he successfully created his reservation
+                axios.post(api2, {
+                    from: 1,
+                    recipient: this.$root.me.id,
+                    title: "Chata Byšta",
+                    subtitle: "Úspešne uloženie rozpracovanej rezervácie",
+                    text: `Vážený ${localStorage.getItem('username')}, rozpracovaná rezervácia bola úspešne uložená do časti 'Uložené rezervácie'. `,
+                    date: moment(new Date())
+                      .format('YYYY-MM-DD HH:mm'),
+                    status: "new",
+                  }, config)
+                  .then(() => {})
 
-              this.$root.savedReservation.details = undefined;
-              this.$root.savedReservation.contactInfos = undefined;
-            })
-            .catch(err => console.log("nepodarilo sa pridat event", err));
+                this.snackbarReservationInProgress = true;
+                this.snackbarTextReservationInProgress = "Rozpracovaná rezervácia bola úspešne uložená!";
+
+                this.$root.savedReservation.details = undefined;
+                this.$root.savedReservation.contactInfos = undefined;
+              })
+              .catch(err => console.log("nepodarilo sa pridat event", err));
+          }
         }
       }
     },

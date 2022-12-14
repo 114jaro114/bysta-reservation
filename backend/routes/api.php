@@ -17,6 +17,8 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SavedReservationController;
 use App\Http\Controllers\PricesController;
 use App\Http\Controllers\UserContactController;
+use App\Http\Controllers\PostsController;
+
 
 use App\Http\Controllers\UpdateAccountSettingsController;
 use App\Traits\Friendable;
@@ -113,6 +115,9 @@ Route::post('/reservation/markAsRead', [ReservationController::class, 'markAsRea
 Route::get('/reservation/getUncheckedReservationsUser', [ReservationController::class, 'getUncheckedReservationsUser']);
 Route::post('/reservation/reservationUserContactInfo', [ReservationController::class, 'reservationUserContactInfo']);
 
+Route::get('/reservation/getAllUsedReservationsDates', [ReservationController::class, 'getAllUsedReservationsDates']);
+
+
 // saved reservation
 Route::get('/savedReservation', [SavedReservationController::class, 'index']);
 Route::get('/checkPendingSavedReservation/{username}', [SavedReservationController::class, 'checkPendingSavedReservation']);
@@ -201,6 +206,46 @@ Route::get('/accept_friend/{id}', [FriendshipsController::class, 'accept_friend'
 //social auth
 Route::post('/sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
 Route::get('/auth/{provider}/callback', [OAuthController::class, 'handleProviderCallback'])->where('provider', '.*');
+
+// apis for posts
+//posts add, update, delete, report, get
+Route::post('/add_post', [PostsController::class, 'add_post']);
+// test img send
+Route::post('/add_post_test', [PostsController::class, 'add_post_test']);
+//
+Route::post('/update_post', [PostsController::class, 'update_post']);
+Route::post('/delete_post', [PostsController::class, 'delete_post']);
+Route::post('/report_post', [PostsController::class, 'report_post']);
+
+Route::get('/getAllDataAboutPosts/{page}/{perPage}', [PostsController::class, 'getAllDataAboutPosts']);
+Route::get('/getAllDataAboutUserPosts/{id}/{page}/{perPage}', [PostsController::class, 'getAllDataAboutUserPosts']);
+Route::get('/get_number_of_user_posts', [PostsController::class, 'get_number_of_user_posts']);
+
+//posts_reactions add/update, delete, get
+Route::post('/add_post_reaction', [PostsController::class, 'add_post_reaction']);
+Route::post('/delete_post_reaction', [PostsController::class, 'delete_post_reaction']);
+
+//posts_shares add/update, delete, get
+Route::post('/add_post_share', [PostsController::class, 'add_post_share']);
+Route::post('/delete_post_share', [PostsController::class, 'delete_post_share']);
+
+//posts_comments add, update, delete, get
+Route::post('/add_post_comment', [PostsController::class, 'add_post_comment']);
+//answers_on_comments add, update, delete, get
+Route::post('/add_answer_on_comment', [PostsController::class, 'add_answer_on_comment']);
+//update, delete, report post comments and answer on post comments
+Route::post('/update_post_comment', [PostsController::class, 'update_post_comment']);
+Route::post('/delete_post_comment', [PostsController::class, 'delete_post_comment']);
+Route::post('/report_post_comment', [PostsController::class, 'report_post_comment']);
+
+//answers_reactions add/update, delete, get
+Route::post('/add_comment_reaction', [PostsController::class, 'add_comment_reaction']);
+Route::post('/delete_comment_reaction', [PostsController::class, 'delete_comment_reaction']);
+
+
+
+
+
 // Route::post('sociallogin/{provider}', [AuthController::class, 'SocialSignup']);
 // Route::post('auth/{provider}', [OutController::class, 'index'])->where('vue', '.*');
 // Route::post('auth/{provider}/callback', [OutController::class, 'index'])->where('vue', '.*');

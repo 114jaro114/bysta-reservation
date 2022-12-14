@@ -1,137 +1,143 @@
-<template>
-<v-container class="userprofile p-0">
-  <v-row class="ml-0 mr-0 mb-3" v-if="$root.profile.data.returnVariable == -1">
-    <v-card class="w-100 rounded" elevation="0">
-      <v-flex xs12 sm12>
-        <v-layout wrap column>
-          <v-flex xs12>
-            <v-sheet elevation="0" class="rounded d-flex justify-center" v-if="$root.profilePosts.getAllPosts.loadingPosts == true">
-              <v-chip-group v-if="$root.profilePosts.getAllPosts.loadingPosts == true">
-                <v-skeleton-loader class="slchip1" type="chip"></v-skeleton-loader>
-                <!-- <v-skeleton-loader class="slchip2" type="chip"></v-skeleton-loader>
-                <v-skeleton-loader class="slchip3" type="chip"></v-skeleton-loader> -->
-              </v-chip-group>
-            </v-sheet>
-            <v-sheet elevation="0" class="py-4 px-1 rounded d-flex justify-center" v-else>
-              <v-chip-group v-model="selectedChip" active-class="primary--text">
-                <v-dialog v-model="dialogNewPost" width="500">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-chip v-bind="attrs" v-on="on">
-                      <v-icon class="mr-1">
-                        mdi-image-edit
-                      </v-icon>
-                      Vytvoriť príspevok
-                    </v-chip>
-                  </template>
-
-                  <v-card>
-                    <v-toolbar dark color="primary" elevation="0">
-                      <v-toolbar-title>Nový príspevok</v-toolbar-title>
-                      <v-spacer />
-                      <v-btn icon dark @click="dialogNewPost = false; selectedChip = ''">
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-toolbar>
-
-                    <v-card-text class="pt-3 pb-0">
-                      <v-row class="p-2">
-                        <v-avatar color="primary" size="40" v-if="$root.me.overlayAvatar == true">
-                          <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
-                            <v-progress-circular indeterminate size="24" color="white"></v-progress-circular>
-                          </v-overlay>
-                        </v-avatar>
-
-                        <v-avatar color="primary" size="40" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
-                          <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
-                        </v-avatar>
-                        <v-avatar color="primary" size="40" v-else>
-                          <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
-                        </v-avatar>
-                        <span class="ml-1 m-auto">{{$root.me.name}}</span>
-                      </v-row>
-                      <v-row class="p-2 pb-0">
-                        <v-textarea v-model="textNewPost" clearable clear-icon="mdi-close-circle" label="Napíšte, čo si myslíte" value="This is clearable text." auto-grow filled rounded></v-textarea>
-                      </v-row>
-                      <v-row class="p-2 mt-0" v-if="showDragAndDropFile">
-                        <file-pond allowImageCrop={true} allowFileEncode={true} class="filepond" name="filepond" ref="pond" type="input" :files="files" v-on:removefile="handleFileRemoved" v-on:addfile="handleFileAdded"
-                          v-on:init="handleFilePondInit" style="width:100%" label-idle="Sem presuňte súbory..." allow-multiple="true" max-files="10" />
-                      </v-row>
-                    </v-card-text>
-
-                    <v-divider class="mt-0 mb-0"></v-divider>
-
-                    <v-row class="m-0 p-3">
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-btn class="mr-1" v-on="on" rounded outlined elevation="0" color="primary">
-                            <v-icon class="mr-1">mdi-account-multiple-plus</v-icon>
-                            <!-- Obrázok/video -->
-                          </v-btn>
-                        </template>
-                        <span>Označiť ľudí</span>
-                      </v-tooltip>
-
-                      <v-tooltip top>
-                        <template v-slot:activator="{ on }">
-                          <v-btn v-on="on" rounded elevation="0" color="primary" @click="showDragAndDropFile = !showDragAndDropFile">
-                            <v-icon class="mr-1">mdi-image-multiple</v-icon>
-                            <!-- Obrázok/video -->
-                          </v-btn>
-                        </template>
-                        <span>Pridať video/obrázok</span>
-                      </v-tooltip>
-                    </v-row>
-
-                    <v-divider class="mt-0 mb-0"></v-divider>
-
-                    <v-card-actions>
-                      <v-btn color="primary" :disabled="isDisabled && !textNewPost" @click="dialogNewPost = false; addPost()" block>
-                        Uverejniť
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-
-                <!-- <v-chip>
-                  <v-icon class="mr-1">
-                    mdi-emoticon-cool
-                  </v-icon>
-                  Pocit/aktivita
-                </v-chip>
-                <v-chip>
-                  <v-icon class="mr-1">
-                    mdi-video
-                  </v-icon>
-                  Živé video
-                </v-chip> -->
-              </v-chip-group>
-            </v-sheet>
-          </v-flex>
-        </v-layout>
+<template id="Posts">
+<v-container class="center">
+  <!-- <v-flex xs12 sm12>
+    <v-layout wrap column>
+      <v-flex xs12>
+        <v-sheet class="mx-auto mb-3 rounded" elevation="0">
+          <v-slide-group v-model="slideShow" class="pa-4" center-active>
+            <v-slide-item v-for="n in 15" :key="n" v-slot="{ active, toggle }">
+              <v-card :color="active ? 'primary' : 'grey lighten-1'" class="ma-4 rounded" height="200" width="120" @click="toggle" elevation="0">
+                <v-row class="fill-height" align="center" justify="center">
+                  <v-scale-transition>
+                    <v-icon v-if="active" color="white" size="48" v-text="'mdi-close-circle-outline'"></v-icon>
+                  </v-scale-transition>
+                </v-row>
+              </v-card>
+            </v-slide-item>
+          </v-slide-group>
+          <v-btn class="mb-3" medium rounded color="primary">
+            <v-icon class="mr-1">
+              mdi-open-in-new
+            </v-icon>
+            Zobraziť všetky príbehy
+          </v-btn>
+        </v-sheet>
       </v-flex>
-    </v-card>
-  </v-row>
+    </v-layout>
+  </v-flex> -->
+  <v-flex xs12 sm12>
+    <v-layout wrap column>
+      <v-flex xs12>
+        <v-sheet elevation="0" class="mb-3 py-4 px-1 rounded d-flex justify-center" v-if="$root.Posts.getAllPosts.loadingPosts == true">
+          <v-chip-group>
+            <v-skeleton-loader class="slchip1" type="chip"></v-skeleton-loader>
+            <!-- <v-skeleton-loader class="slchip2" type="chip"></v-skeleton-loader>
+            <v-skeleton-loader class="slchip3" type="chip"></v-skeleton-loader> -->
+          </v-chip-group>
+        </v-sheet>
+        <v-sheet elevation="0" class="mb-3 py-4 px-1 rounded d-flex justify-center" v-else>
+          <v-chip-group v-model="selectedChip" active-class="primary--text">
+            <v-dialog v-model="dialogNewPost" width="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip v-bind="attrs" v-on="on">
+                  <v-icon class="mr-1">
+                    mdi-image-edit
+                  </v-icon>
+                  Vytvoriť príspevok
+                </v-chip>
+              </template>
 
-  <v-row class="ml-0 mr-0 mb-3" v-if="$root.profilePosts.getAllPosts.loadingPosts == false && $root.profilePosts.getAllPosts.allPosts.length != '0'">
-    <v-card class="w-100 rounded" elevation="0">
-      <v-card-title>Príspevky</v-card-title>
-      <v-card-text class="p-0">
-        <v-tabs grow>
-          <!-- show-arrows -->
-          <v-tab>
-            <v-icon class="mr-1">mdi-menu</v-icon>Zobrazenie zoznamu
-          </v-tab>
-          <v-tab>
-            <v-icon class="mr-1">mdi-border-all</v-icon>Mriežkové zobrazenie
-          </v-tab>
-        </v-tabs>
-      </v-card-text>
-    </v-card>
-  </v-row>
+              <v-card>
+                <v-toolbar dark color="primary" elevation="0">
+                  <v-toolbar-title>Nový príspevok</v-toolbar-title>
+                  <v-spacer />
+                  <v-btn icon dark @click="dialogNewPost = false; selectedChip = ''">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </v-toolbar>
 
-  <v-progress-circular class="mt-3" v-if="$root.profilePosts.getAllPosts.loadingPosts" indeterminate size="24" color="primary"></v-progress-circular>
+                <v-card-text class="pt-3 pb-0">
+                  <v-row class="p-2">
+                    <v-avatar color="primary" size="40" v-if="$root.me.overlayAvatar == true">
+                      <v-overlay :value="$root.me.overlayAvatar" :absolute="true" :opacity="0">
+                        <v-progress-circular indeterminate size="24" color="white"></v-progress-circular>
+                      </v-overlay>
+                    </v-avatar>
 
-  <template v-for="(post_data, post_index) in $root.profilePosts.getAllPosts.allPosts">
+                    <v-avatar color="primary" size="40" v-else-if="$root.me.avatar == null && $root.me.overlayAvatar == false">
+                      <span v-if="$root.me.name != null" class="text-uppercase white--text">{{ $root.me.name.charAt(0) }}</span>
+                    </v-avatar>
+                    <v-avatar color="primary" size="40" v-else>
+                      <img :lazy-src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`" :src="`${$root.envUrlNoApi}/storage/user-avatar/${$root.me.avatar}`">
+                    </v-avatar>
+                    <span class="ml-1 m-auto">{{$root.me.name}}</span>
+                  </v-row>
+                  <v-row class="p-2 pb-0">
+                    <v-textarea v-model="textNewPost" clearable clear-icon="mdi-close-circle" label="Napíšte, čo si myslíte" value="This is clearable text." auto-grow filled rounded></v-textarea>
+                  </v-row>
+                  <v-row class="p-2 mt-0" v-if="showDragAndDropFile">
+                    <file-pond allowImageCrop={true} allowFileEncode={true} class="filepond" name="filepond" ref="pond" type="input" :files="files" v-on:removefile="handleFileRemoved" v-on:addfile="handleFileAdded" v-on:init="handleFilePondInit"
+                      style="width:100%" label-idle="Sem presuňte súbory..." allow-multiple="true" max-files="10" />
+                  </v-row>
+                </v-card-text>
+
+                <v-divider class="mt-0 mb-0"></v-divider>
+
+                <v-row class="m-0 p-3">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="mr-1" v-on="on" rounded outlined elevation="0" color="primary">
+                        <v-icon class="mr-1">mdi-account-multiple-plus</v-icon>
+                        <!-- Obrázok/video -->
+                      </v-btn>
+                    </template>
+                    <span>Označiť ľudí</span>
+                  </v-tooltip>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" rounded elevation="0" color="primary" @click="showDragAndDropFile = !showDragAndDropFile">
+                        <v-icon class="mr-1">mdi-image-multiple</v-icon>
+                        <!-- Obrázok/video -->
+                      </v-btn>
+                    </template>
+                    <span>Pridať video/obrázok</span>
+                  </v-tooltip>
+                </v-row>
+
+                <v-divider class="mt-0 mb-0"></v-divider>
+
+                <v-card-actions>
+                  <v-btn color="primary" :disabled="isDisabled && !textNewPost" @click="dialogNewPost = false; addPost()" block>
+                    Uverejniť
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+            <!-- <v-chip>
+              <v-icon class="mr-1">
+                mdi-emoticon-cool
+              </v-icon>
+              Pocit/aktivita
+            </v-chip>
+            <v-chip>
+              <v-icon class="mr-1">
+                mdi-video
+              </v-icon>
+              Živé video
+            </v-chip> -->
+          </v-chip-group>
+        </v-sheet>
+      </v-flex>
+    </v-layout>
+  </v-flex>
+
+  <v-overlay class="pt-16" style="margin-top:60vh" :value="$root.Posts.getAllPosts.loadingPosts" :absolute="true" :opacity="0">
+    <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+  </v-overlay>
+
+  <template v-for="(post_data, post_index) in $root.Posts.getAllPosts.allPosts">
     <v-flex class="mb-3" xs12 sm12 :key="post_index">
       <v-card class="mb-3 rounded" elevation="0">
         <v-list-item>
@@ -281,14 +287,15 @@
           <v-list-item-action>
             <v-menu left>
               <template v-slot:activator="{ on: menu, attrs }">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on: tooltip }">
-                    <v-btn icon fab small v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                <!-- <v-tooltip bottom>
+                  <template v-slot:activator="{ on: tooltip }"> -->
+                  <!-- ...tooltip,  -->
+                    <v-btn icon fab small v-bind="attrs" v-on="{ ...menu }">
                       <v-icon>mdi-dots-horizontal</v-icon>
                     </v-btn>
-                  </template>
+                  <!-- </template>
                   <span>Nastavenia príspevku</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </template>
               <v-list v-if=" post_data.userpostmodel.name == $root.me.name">
                 <v-list-item-group color="primary">
@@ -1380,14 +1387,15 @@
 
                       <v-menu left :close-on-content-click="true">
                         <template v-slot:activator="{ on: menu, attrs }">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                              <v-btn icon x-small v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                          <!-- <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }"> -->
+                             <!-- ...tooltip,  -->
+                              <v-btn icon x-small v-bind="attrs" v-on="{ ...menu }">
                                 <v-icon>mdi-dots-horizontal</v-icon>
                               </v-btn>
-                            </template>
+                            <!-- </template>
                             <span>Nastavenia komentára</span>
-                          </v-tooltip>
+                          </v-tooltip> -->
                         </template>
                         <v-list v-if="post_comment_data.userpostcommentmodel.name == $root.me.name">
                           <v-list-item-group color="primary">
@@ -1925,6 +1933,7 @@
                             </v-card>
                           </template>
                         </v-dialog>
+
                       </div>
                     </v-card>
                     <v-row class="w-100 ml-0 mr-0 mt-0">
@@ -2170,14 +2179,15 @@
 
                           <v-menu left>
                             <template v-slot:activator="{ on: menu, attrs }">
-                              <v-tooltip bottom>
-                                <template v-slot:activator="{ on: tooltip }">
-                                  <v-btn icon x-small v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                              <!-- <v-tooltip bottom>
+                                <template v-slot:activator="{ on: tooltip }"> -->
+                                 <!-- ...tooltip, -->
+                                  <v-btn icon x-small v-bind="attrs" v-on="{ ...menu }">
                                     <v-icon>mdi-dots-horizontal</v-icon>
                                   </v-btn>
-                                </template>
+                                <!-- </template>
                                 <span>Nastavenia komentára</span>
-                              </v-tooltip>
+                              </v-tooltip> -->
                             </template>
                             <v-list v-if=" answer_on_comment_data.useransweroncommentmodel.name == $root.me.name">
                               <v-list-item-group color="primary">
@@ -3125,22 +3135,23 @@
     </v-card>
   </v-dialog>
 
-  <v-row class="p-3" align="center" v-if="this.$root.profilePosts.getAllPosts.countActualPosts == this.$root.profilePosts.getAllPosts.countAllPosts
-                                          && this.$root.profilePosts.getAllPosts.countActualPosts != 0 && this.$root.profilePosts.getAllPosts.countAllPosts != 0
-                                          && this.$root.profilePosts.getAllPosts.loadingPosts == false">
+  <v-row class="p-3" align="center" v-if="((this.$root.Posts.getAllPosts.countActualPosts == this.$root.Posts.getAllPosts.countAllPosts)
+                                          || (this.$root.Posts.getAllPosts.countActualPosts < this.$root.Posts.getAllPosts.countAllPosts))
+                                          && this.$root.Posts.getAllPosts.countActualPosts != 0 && this.$root.Posts.getAllPosts.countAllPosts != 0
+                                          && this.$root.Posts.getAllPosts.loadingPosts == false">
     <v-divider />
     <v-btn class="ml-3 mr-3" small rounded text outlined color="primary" disabled>Všetko</v-btn>
     <v-divider />
   </v-row>
 
-  <v-row class="p-3" align="center" v-else-if="this.$root.profilePosts.getAllPosts.countActualPosts == 0 && this.$root.profilePosts.getAllPosts.countAllPosts == 0 && this.$root.profilePosts.getAllPosts.loadingPosts == false">
+  <v-row class="p-3" align="center" v-else-if="this.$root.Posts.getAllPosts.countActualPosts == 0 && this.$root.Posts.getAllPosts.countAllPosts == 0 && this.$root.Posts.getAllPosts.loadingPosts == false">
     <v-divider />
     <v-btn class="ml-3 mr-3" small rounded text outlined color="primary" disabled>Žiadne príspevky</v-btn>
     <v-divider />
   </v-row>
 
-  <scroll-loader :loader-method="scrollLoaderGetAllPosts" :loader-disable="$root.profilePosts.getAllPosts.loadingPaginate" v-else>
-      <v-progress-circular v-if="!$root.profilePosts.getAllPosts.loadingPaginate" indeterminate size="24" color="primary"></v-progress-circular>
+  <scroll-loader :loader-method="scrollLoaderGetAllPosts" :loader-disable="$root.Posts.getAllPosts.loadingPaginate" v-else>
+      <v-progress-circular v-if="!$root.Posts.getAllPosts.loadingPaginate" indeterminate size="24" color="primary"></v-progress-circular>
   </scroll-loader>
   </v-container>
   </template>
@@ -3194,7 +3205,7 @@
   FilePondPluginImageTransform
   )
   export default {
-    name: "Center",
+    name: "Posts",
     components: {
       'vue-plyr': VuePlyr,
       Picker,
@@ -3326,7 +3337,7 @@
         focusedInputAnswerOnComment: null,
         overlayDisplayFriendsPostComment: true,
 
-        page: this.$root.profilePosts.getAllPosts.countActualPosts,
+        page: this.$root.Posts.getAllPosts.countActualPosts,
         pageSize: 3,
         loadingNewPostData: false,
 
@@ -3378,7 +3389,7 @@
 
       scrollLoaderGetAllPosts() {
         this.loadingNewPostData = true;
-        const api = `${process.env.VUE_APP_API_URL}/getAllDataAboutUserPosts/${this.$route.params.user_id}/${this.$root.profilePosts.getAllPosts.countActualPosts}/${this.pageSize}`;
+        const api = `${process.env.VUE_APP_API_URL}/getAllDataAboutPosts/${this.$root.Posts.getAllPosts.countActualPosts}/${this.pageSize}`;
         const config = {
           headers: {
             Accept: "application/json",
@@ -3387,10 +3398,9 @@
         };
         axios.get(api, config)
           .then(res => {
-            console.log(res.data);
             if (res.data[0].length != 0) {
-              this.$root.profilePosts.getAllPosts.countActualPosts += res.data[0].length;
-              this.$root.profilePosts.getAllPosts.allPosts = [...this.$root.profilePosts.getAllPosts.allPosts, ...res.data[0]]
+              this.$root.Posts.getAllPosts.countActualPosts += res.data[0].length;
+              this.$root.Posts.getAllPosts.allPosts = [...this.$root.Posts.getAllPosts.allPosts, ...res.data[0]]
             }
             this.loadingNewPostData = false;
           });
@@ -3524,11 +3534,11 @@
       clearAnswerOnComment() {
         this.textNewAnswerOnComment = '';
         this.itemsPostComment = false;
-        for (var x = 0; x < this.$root.profilePosts.getAllPosts.allPosts.length; x++) {
-          for (var y = 0; y < this.$root.profilePosts.getAllPosts.allPosts[x].postcommentmodel.length; y++) {
-            document.getElementById(`itemsPostComment${this.$root.profilePosts.getAllPosts.allPosts[x].postcommentmodel[y].id}`).style.display = 'none';
-            for (var z = 0; z < this.$root.profilePosts.getAllPosts.allPosts[x].postcommentmodel[y].answeroncommentmodel.length; z++) {
-              document.getElementById(`itemsPostComment${this.$root.profilePosts.getAllPosts.allPosts[x].postcommentmodel[y].answeroncommentmodel[z].comment_id}`).style.display = 'none';
+        for (var x = 0; x < this.$root.Posts.getAllPosts.allPosts.length; x++) {
+          for (var y = 0; y < this.$root.Posts.getAllPosts.allPosts[x].postcommentmodel.length; y++) {
+            document.getElementById(`itemsPostComment${this.$root.Posts.getAllPosts.allPosts[x].postcommentmodel[y].id}`).style.display = 'none';
+            for (var z = 0; z < this.$root.Posts.getAllPosts.allPosts[x].postcommentmodel[y].answeroncommentmodel.length; z++) {
+              document.getElementById(`itemsPostComment${this.$root.Posts.getAllPosts.allPosts[x].postcommentmodel[y].answeroncommentmodel[z].comment_id}`).style.display = 'none';
             }
           }
         }
@@ -3664,7 +3674,8 @@
           } else if (this.post_data_img_video[1] == 'mp4') {
             type = 'video';
           }
-          this.$refs.pondPost.addFile(`${this.$root.envUrlNoApi}/storage/post_img_video/${this.post_data_img_video[0]}`)
+
+          this.$refs.pondPost.addFile(`http://127.0.0.1:8000/storage/post_img_video/${this.post_data_img_video[0]}`)
           .then((file) => {
             file.file.name = type;
               // File has been added
@@ -3759,7 +3770,9 @@
         }
 
         axios.post(api, formData, config)
-          .then(() => {})
+          .then(() => {
+            this.$root.navigationDrawerLeft.numberOfUserPosts += 1;
+          })
           .catch((error) => {
             console.log(error)
           })
@@ -3778,7 +3791,9 @@
           },
           config
         )
-        .then(() => {})
+        .then(() => {
+          this.$root.navigationDrawerLeft.numberOfUserPosts -= 1;
+        })
         .catch((error) => {
           console.log(error)
         })
@@ -4231,7 +4246,7 @@
         }
       },
       page (value) {
-        this.$root.profilePosts.getAllPosts.loadingPaginate = value > this.$root.profilePosts.getAllPosts.countPosts
+        this.$root.Posts.getAllPosts.loadingPaginate = value > this.$root.Posts.getAllPosts.countPosts
       }
     },
 
@@ -4243,63 +4258,17 @@
       // update posts
       window.Echo.join('postdata')
         .listen('PostsData', (e) => {
-          if (e.dataType == 'addNewPost') {
-            //add new post on beginning of array
-            this.$root.profilePosts.getAllPosts.allPosts.unshift(e.allDataPost[0]);
-          }
-
-          this.$root.profilePosts.getAllPosts.allPosts.forEach((elem, index) => {
-            if (elem.id == e.allDataPost[0].id) {
-
-              if (e.dataType == 'updatedPost') {
-                this.$root.profilePosts.getAllPosts.allPosts.splice(index, 1, e.allDataPost[0]);
-              }
-
-              if (e.dataType == 'deletedPost') {
-                this.$root.profilePosts.getAllPosts.allPosts.splice(index, 1);
-              }
-
-              if (e.dataType == 'updatedComment') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
-              }
-
-              if (e.dataType == 'deletePostComment') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].count_comments = e.allDataPost[0].count_comments;
-                this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
-              }
-
-              if (e.dataType == 'addUpdatePostReaction' || e.dataType == 'deletePostReaction') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].postreactionmodel = e.allDataPost[0].postreactionmodel;
-                this.$root.profilePosts.getAllPosts.allPosts[index].count_reactions = e.allDataPost[0].count_reactions;
-                this.$root.profilePosts.getAllPosts.allPosts[index].like = e.allDataPost[0].like;
-                this.$root.profilePosts.getAllPosts.allPosts[index].heart = e.allDataPost[0].heart;
-                this.$root.profilePosts.getAllPosts.allPosts[index].funny = e.allDataPost[0].funny;
-                this.$root.profilePosts.getAllPosts.allPosts[index].surprise = e.allDataPost[0].surprise;
-                this.$root.profilePosts.getAllPosts.allPosts[index].sad = e.allDataPost[0].sad;
-                this.$root.profilePosts.getAllPosts.allPosts[index].angry = e.allDataPost[0].angry;
-              }
-
-              if (e.dataType == 'addUpdateCommentReaction' || e.dataType == 'deleteCommentReaction') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
-              }
-
-              if (e.dataType == 'addPostShare' || e.dataType == 'deletePostShare') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].postsharemodel = e.allDataPost[0].postsharemodel;
-                this.$root.profilePosts.getAllPosts.allPosts[index].count_shares = e.allDataPost[0].count_shares;
-              }
-            }
-          });
-
-          this.$root.profilePosts.getAllPosts.allPosts.forEach((elem, index) => {
+          console.log(e);
+          this.$root.Posts.getAllPosts.allPosts.forEach((elem, index) => {
             if (elem.id == e.allDataPost[0].id) {
               if (e.dataType == 'addPostComment' || e.dataType == 'addAnswerOnComment') {
-                this.$root.profilePosts.getAllPosts.allPosts[index].count_comments = e.allDataPost[0].count_comments;
+                this.$root.Posts.getAllPosts.allPosts[index].count_comments = e.allDataPost[0].count_comments;
                 // if (e.dataType == 'addAnswerOnComment') {
-                  // this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel.forEach((elem2, index2) => {
+                  // this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel.forEach((elem2, index2) => {
                     // if (elem2.id == e.post_comment_id) {
                       // console.log("dnu");
-                      // this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel[index2] = e.allDataPost[0].postcommentmodel[index2];
-                      this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
+                      // this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel[index2] = e.allDataPost[0].postcommentmodel[index2];
+                      this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel = e.allDataPost[0].postcommentmodel;
                       setTimeout(function() {
                         var length = document.getElementsByClassName("answers_on_comments" + e.post_comment_id).length;
                         if (length != 0) {
@@ -4314,7 +4283,7 @@
                     // }
                   // })
                 // } else {
-                //   this.$root.profilePosts.getAllPosts.allPosts[index].postcommentmodel.push(e.allDataPost[0].postcommentmodel[e.post_comment_id-1]);
+                //   this.$root.Posts.getAllPosts.allPosts[index].postcommentmodel.push(e.allDataPost[0].postcommentmodel[e.post_comment_id-1]);
                 // }
               }
             }
@@ -4324,53 +4293,53 @@
   }
   </script>
 
-<style >
-.filepond--credits {
+  <style>
+  .filepond--credits {
   display: none;
-}
+  }
 
-.slchip1 .v-skeleton-loader__chip {
+  .slchip1 .v-skeleton-loader__chip {
   width: 164.11px;
   margin: 4px 8px 4px 0px;
-}
+  }
 
-.slchip2 .v-skeleton-loader__chip {
+  .slchip2 .v-skeleton-loader__chip {
   width: 130.59px;
   margin: 4px 8px 4px 0px;
-}
+  }
 
-.slchip3 .v-skeleton-loader__chip {
+  .slchip3 .v-skeleton-loader__chip {
   width: 115.81px;
   margin: 4px 8px 4px 0px;
-}
+  }
 
-.text-field-comment {
+  .text-field-comment {
   padding-left: 4px !important;
   padding-right: 4px !important;
 
-}
+  }
 
-.theme--light.card-comments {
+  .theme--light.card-comments {
   background-color: #f5f5f5 !important;
-}
+  }
 
-.theme--dark.card-comments {
+  .theme--dark.card-comments {
   background-color: #363636 !important;
-}
+  }
 
-.v-list-item__content>:not(:last-child) {
+  .v-list-item__content>:not(:last-child) {
   margin-bottom: 0;
-}
+  }
 
-.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo) .v-input__prepend-inner {
+  .v-text-field--enclosed.v-input--dense:not(.v-text-field--solo) .v-input__prepend-inner {
   margin-top: 6px !important;
-}
+  }
 
-.arrow-d-none {
-  display: none !important;
-}
+  .arrow-d-none {
+    display: none !important;
+  }
 
-.arrow-d-block {
-  display: block !important;
-}
-</style>
+  .arrow-d-block {
+    display: block !important;
+  }
+  </style>

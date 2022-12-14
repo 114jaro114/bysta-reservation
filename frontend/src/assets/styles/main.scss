@@ -6,7 +6,7 @@
 @import 'scrollbar.scss';
 @import 'autofill.scss';
 @import 'language.scss';
-
+@import 'success_animation.scss';
 body::-webkit-scrollbar {
   display: none;
   height: 100vh;
@@ -70,9 +70,9 @@ button:focus {
   border-color: #363636;
 }
 
-.v-tabs-slider-wrapper {
-  height: 2px !important;
-}
+// .v-tabs-slider-wrapper {
+//   height: 2px !important;
+// }
 
 .v-slide-group__prev {
   flex: unset !important;

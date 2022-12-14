@@ -44,7 +44,7 @@
       </template>
 
       <v-card class="rounded">
-        <v-list-item-content class="justify-center p-0 pt-1">
+        <v-list-item-content class="justify-center pt-1">
           <!-- <div class="mx-auto text-center"> -->
           <v-list class="pt-0 pb-0 mb-0 text-center" width="310">
             <v-list-item class="pt-0"
@@ -126,12 +126,29 @@
                       </v-list-item-title>
                       <v-list-item-subtitle class="pl-1 text-left">
                         <span>
-                          <!-- minutes -->
-                          <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 60">
+                          <!-- seconds -->
+                          <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 60">
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) > 1">
-                                  Pred {{Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)}} minútami
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 1">
+                                  Pred {{Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000)}} sekundami
+                                </span>
+                                <span v-else>
+                                  Pred 1 sekundou
+                                </span>
+                              </v-btn>
+                            </template>
+                            <span>
+                              <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
+                            </span>
+                          </v-tooltip>
+                          <!-- minutes -->
+                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 3600">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 119">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 60)}} minútami
                                 </span>
                                 <span v-else>
                                   Pred 1 minútou
@@ -140,16 +157,16 @@
                             </template>
                             <span>
                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                             </span>
                           </v-tooltip>
 
                           <!-- hours -->
-                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 1440">
+                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 86400">
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/60) > 1">
-                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/60)}} hodinami
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 7199">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 3600)}} hodinami
                                 </span>
                                 <span v-else>
                                   Pred 1 hodinou
@@ -158,16 +175,16 @@
                             </template>
                             <span>
                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                             </span>
                           </v-tooltip>
 
                           <!-- days -->
-                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 43200">
+                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 604800">
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/1440) > 1">
-                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/1440)}} dňami
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 172799">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 86400)}} dňami
                                 </span>
                                 <span v-else>
                                   Pred 1 dňom
@@ -176,16 +193,34 @@
                             </template>
                             <span>
                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
+                            </span>
+                          </v-tooltip>
+
+                          <!-- weeks -->
+                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 2419200">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 1209599">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 604800)}} týždňami
+                                </span>
+                                <span v-else>
+                                  Pred 1 týždňom
+                                </span>
+                              </v-btn>
+                            </template>
+                            <span>
+                              <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                             </span>
                           </v-tooltip>
 
                           <!-- months -->
-                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 525600">
+                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 29030400">
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/43200) > 1">
-                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/43200)}} mesiacmi
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 4838399">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                 </span>
                                 <span v-else>
                                   Pred 1 mesiacom
@@ -194,7 +229,7 @@
                             </template>
                             <span>
                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                             </span>
                           </v-tooltip>
 
@@ -202,8 +237,8 @@
                           <v-tooltip bottom v-else>
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/525600) > 1">
-                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/525600)}} rokmi
+                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 58060799">
+                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 29030400)}} rokmi
                                 </span>
                                 <span v-else>
                                   Pred 1 rokom
@@ -212,7 +247,7 @@
                             </template>
                             <span>
                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                             </span>
                           </v-tooltip>
                         </span>
@@ -297,7 +332,7 @@
                       </v-col>
                       <v-col cols="12" xl="6" lg="6" md="12" sm="12" xs="12" class="pl-0 pr-0 pb-0">
                         <v-row class="ml-0 mr-0 mb-3">
-                          <v-card class="w-100 rounded" elevation="0" min-height="200">
+                          <v-card class="w-100 rounded" elevation="0" min-height="140">
                             <v-card-text class="p-0">
                               <v-subheader>Žiadosti o priateľstvo</v-subheader>
 
@@ -331,7 +366,7 @@
                                     </v-list-item-avatar>
                                   </v-badge>
                                   <v-list-item-content>
-                                    <v-card class="p-2 rounded-lg card-comments" elevation="0">
+                                    <v-card class="p-2 rounded-lg" elevation="0">
                                       <v-list-item-title class="d-flex justify-start text-subtitle-2 font-weight-bold p-0 pl-1">
                                         <v-chip small>
                                           <v-icon left class="mr-1" small>mdi-account-circle-outline</v-icon>{{item.name}}
@@ -349,12 +384,29 @@
                                       </v-list-item-title>
                                       <v-list-item-subtitle class="pl-1 text-left">
                                         <span>
-                                          <!-- minutes -->
-                                          <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 60">
+                                          <!-- seconds -->
+                                          <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 60">
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) > 1">
-                                                  Pred {{Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)}} minútami
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 1">
+                                                  Pred {{Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000)}} sekundami
+                                                </span>
+                                                <span v-else>
+                                                  Pred 1 sekundou
+                                                </span>
+                                              </v-btn>
+                                            </template>
+                                            <span>
+                                              <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
+                                            </span>
+                                          </v-tooltip>
+                                          <!-- minutes -->
+                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 3600">
+                                            <template v-slot:activator="{ on, attrs }">
+                                              <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 119">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 60)}} minútami
                                                 </span>
                                                 <span v-else>
                                                   Pred 1 minútou
@@ -363,16 +415,16 @@
                                             </template>
                                             <span>
                                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                                             </span>
                                           </v-tooltip>
 
                                           <!-- hours -->
-                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 1440">
+                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 86400">
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/60) > 1">
-                                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/60)}} hodinami
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 7199">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 3600)}} hodinami
                                                 </span>
                                                 <span v-else>
                                                   Pred 1 hodinou
@@ -381,16 +433,16 @@
                                             </template>
                                             <span>
                                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                                             </span>
                                           </v-tooltip>
 
                                           <!-- days -->
-                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 43200">
+                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 604800">
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/1440) > 1">
-                                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/1440)}} dňami
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 172799">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 86400)}} dňami
                                                 </span>
                                                 <span v-else>
                                                   Pred 1 dňom
@@ -399,16 +451,34 @@
                                             </template>
                                             <span>
                                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
+                                            </span>
+                                          </v-tooltip>
+
+                                          <!-- weeks -->
+                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 2419200">
+                                            <template v-slot:activator="{ on, attrs }">
+                                              <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 1209599">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 604800)}} týždňami
+                                                </span>
+                                                <span v-else>
+                                                  Pred 1 týždňom
+                                                </span>
+                                              </v-btn>
+                                            </template>
+                                            <span>
+                                              <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                                             </span>
                                           </v-tooltip>
 
                                           <!-- months -->
-                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000) < 525600">
+                                          <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) < 29030400">
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/43200) > 1">
-                                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/43200)}} mesiacmi
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 4838399">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                                 </span>
                                                 <span v-else>
                                                   Pred 1 mesiacom
@@ -417,7 +487,7 @@
                                             </template>
                                             <span>
                                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                                             </span>
                                           </v-tooltip>
 
@@ -425,8 +495,8 @@
                                           <v-tooltip bottom v-else>
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                                <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/525600) > 1">
-                                                  Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 60000)/525600)}} rokmi
+                                                <span v-if="Math.round((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) > 58060799">
+                                                  Pred {{Math.round(((new Date().getTime() - new Date(item.updated_at).getTime()) / 1000) / 29030400)}} rokmi
                                                 </span>
                                                 <span v-else>
                                                   Pred 1 rokom
@@ -435,7 +505,7 @@
                                             </template>
                                             <span>
                                               <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                              <span class="align-middle">{{new Date(Date.parse(item.updated_at)).toLocaleString()}}</span>
+                                              <span class="align-middle">{{formatCreated(item.updated_at)}}</span>
                                             </span>
                                           </v-tooltip>
                                         </span>
@@ -450,7 +520,7 @@
                       </v-col>
                       <v-col cols="12" xl="6" lg="6" md="12" sm="12" xs="12" class="pl-lg-3 pl-xl-3 pl-md-3 pl-0 pr-0 pb-0" min-height="245">
                         <v-row class="ml-0 mr-0 mb-3">
-                          <v-card class="w-100 rounded" elevation="0" min-height="200">
+                          <v-card class="w-100 rounded" elevation="0" min-height="140">
                             <v-card-text class="p-0">
                               <v-subheader>Ľudia, ktorých možno poznáte</v-subheader>
 
@@ -660,12 +730,29 @@
                           <v-list-item-subtitle class="text-left primary--text font-weight-bold p-0 pl-1 pt-1" v-text="item.text" v-else></v-list-item-subtitle>
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -674,16 +761,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -692,16 +779,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -710,16 +797,34 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -728,7 +833,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -736,8 +841,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -746,7 +851,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -854,12 +959,29 @@
                           <v-list-item-subtitle class="text-left grey--text font-weight-bold p-0 pl-1 pt-1" v-text="item.text" v-else></v-list-item-subtitle>
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -868,16 +990,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -886,16 +1008,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -904,16 +1026,34 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -922,7 +1062,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -930,8 +1070,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -940,7 +1080,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -988,12 +1128,29 @@
 
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -1002,16 +1159,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -1020,16 +1177,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -1038,16 +1195,34 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -1056,7 +1231,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -1064,8 +1239,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -1074,7 +1249,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -1443,12 +1618,29 @@
                           </v-list-item-subtitle>
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -1457,16 +1649,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -1475,16 +1667,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -1492,16 +1684,35 @@
                                   </v-btn>
                                 </template>
                                 <span>
-                                  <v-icon class="mr-1" small color="white">mdi-clock</v-icon>{{item.created_at.toLocaleString()}}
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -1510,7 +1721,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -1518,8 +1729,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -1528,7 +1739,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -1633,12 +1844,29 @@
                           <v-list-item-subtitle class="text-left grey--text font-weight-bold p-0 pl-1 pt-1" v-text="item.text" v-else></v-list-item-subtitle>
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -1647,16 +1875,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -1665,16 +1893,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -1683,16 +1911,34 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -1701,7 +1947,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -1709,8 +1955,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -1719,7 +1965,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -1770,12 +2016,29 @@
 
                           <v-list-item-subtitle class="pl-1 text-left">
                             <span>
-                              <!-- minutes -->
-                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 60">
+                              <!-- seconds -->
+                              <v-tooltip bottom v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 60">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) > 1">
-                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)}} minútami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1">
+                                      Pred {{Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000)}} sekundami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 sekundou
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+                              <!-- minutes -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 3600">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 119">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 60)}} minútami
                                     </span>
                                     <span v-else>
                                       Pred 1 minútou
@@ -1784,16 +2047,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- hours -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 1440">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 86400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/60)}} hodinami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 7199">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 3600)}} hodinami
                                     </span>
                                     <span v-else>
                                       Pred 1 hodinou
@@ -1802,16 +2065,16 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- days -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 43200">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 604800">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/1440)}} dňami
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 172799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 86400)}} dňami
                                     </span>
                                     <span v-else>
                                       Pred 1 dňom
@@ -1820,16 +2083,34 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
+                                </span>
+                              </v-tooltip>
+
+                              <!-- weeks -->
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 2419200">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 1209599">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 604800)}} týždňami
+                                    </span>
+                                    <span v-else>
+                                      Pred 1 týždňom
+                                    </span>
+                                  </v-btn>
+                                </template>
+                                <span>
+                                  <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
                               <!-- months -->
-                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000) < 525600">
+                              <v-tooltip bottom v-else-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) < 29030400">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/43200)}} mesiacmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 4838399">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 2419200)}} mesiacmi
                                     </span>
                                     <span v-else>
                                       Pred 1 mesiacom
@@ -1838,7 +2119,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
 
@@ -1846,8 +2127,8 @@
                               <v-tooltip bottom v-else>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn v-bind="attrs" v-on="on" x-small text rounded plain class="d-flex justify-start pl-0">
-                                    <span v-if="Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600) > 1">
-                                      Pred {{Math.floor(Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 60000)/525600)}} rokmi
+                                    <span v-if="Math.round((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) > 58060799">
+                                      Pred {{Math.round(((new Date().getTime() - new Date(item.created_at).getTime()) / 1000) / 29030400)}} rokmi
                                     </span>
                                     <span v-else>
                                       Pred 1 rokom
@@ -1856,7 +2137,7 @@
                                 </template>
                                 <span>
                                   <v-icon left class="mr-1 align-middle" small color="white">mdi-clock-outline</v-icon>
-                                  <span class="align-middle">{{new Date(Date.parse(item.created_at)).toLocaleString()}}</span>
+                                  <span class="align-middle">{{formatCreated(item.created_at)}}</span>
                                 </span>
                               </v-tooltip>
                             </span>
@@ -1940,7 +2221,7 @@ export default {
 
         let data = {
           avatar: e.message.from_contact.avatar,
-          created_at: e.message.created_at.toLocaleString(),
+          created_at: new Date(e.message.created_at).toLocaleString(),
           email: e.message.from_contact.email,
           from: e.message.from,
           id: e.message.id,
@@ -1950,7 +2231,7 @@ export default {
           text: e.message.text,
           to: e.message.to,
           totalUnreadMsgTo: e.message.totalUnreadMsgTo,
-          updated_at: e.message.updated_at.toLocaleString(),
+          updated_at: new Date(e.message.updated_at).toLocaleString(),
         }
 
         if (this.$route.fullPath != `/messenger?name=${e.message.from_contact.name}`) {
@@ -1986,7 +2267,54 @@ export default {
     this.notifications = this.$store.getters['notificationCounter'];
   },
 
+  watch: {
+    testDates: {
+      handler: function() {
+        console.log("handler");
+      }
+    }
+  },
+
   methods: {
+    testDates(value) {
+      var now = moment(new Date()); //todays date
+      var end = moment(value); // another date
+      var duration = moment.duration(now.diff(end));
+      var seconds = duration.asSeconds();
+      var minutes = duration.asMinutes();
+      var hours = duration.asHours();
+      var days = duration.asDays();
+      var weeks = duration.asWeeks();
+      var months = duration.asMonths();
+      var years = duration.asYears();
+
+      if (seconds < 60) {
+        return seconds;
+      } else if (seconds < 3600) {
+        return minutes;
+      } else if (seconds < 86400) {
+        return hours;
+      } else if (seconds < 604800) {
+        return days;
+      } else if (seconds < 2419200) {
+        return weeks;
+      } else if (seconds < 29030400) {
+        return months;
+      } else {
+        return years;
+      }
+    },
+
+    formatDate(value) {
+      return new Date(Date.parse(value)).toLocaleDateString('sk-SK')
+    },
+
+    formatCreated(value) {
+      return new Date(Date.parse(value)).toLocaleString('sk-SK', {
+        timeZone: 'UTC'
+      })
+    },
+
     //set language
     setlang(item) {
       localStorage.setItem('language', item.name);

@@ -110,6 +110,9 @@ window.Echo = new Echo({
   }
 })
 
+import ScrollLoader from 'vue-scroll-loader'
+Vue.use(ScrollLoader)
+
 // import scss file
 require('@/assets/styles/main.scss');
 
@@ -143,6 +146,8 @@ new Vue({
 
       envUrlNoApi: undefined,
 
+      allUsedReservationDates: [],
+
       savedReservation: {
         details: undefined,
         contactInfos: undefined
@@ -170,6 +175,26 @@ new Vue({
         priceChilds2to12: 18,
         priceCabinUnderSixPpl: 150,
         cleaningFee: 100,
+      },
+
+      Posts: {
+        getAllPosts: {
+          allPosts: undefined,
+          loadingPosts: true,
+          loadingPaginate: true,
+          countActualPosts: undefined,
+          countAllPosts: undefined,
+        },
+      },
+
+      profilePosts: {
+        getAllPosts: {
+          allPosts: undefined,
+          loadingPosts: true,
+          loadingPaginate: true,
+          countActualPosts: undefined,
+          countAllPosts: undefined,
+        },
       },
 
       navigationDrawerLeft: {
@@ -355,6 +380,40 @@ new Vue({
             this.navigationDrawerRight.countMyFriendshipRequests = res.data;
           });
       },
+
+      // posts
+      getAllDataAboutposts() {
+        const api = `${process.env.VUE_APP_API_URL}/getAllDataAboutPosts/0/3`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.Posts.getAllPosts.allPosts = res.data[0];
+            this.Posts.getAllPosts.countAllPosts = res.data[1];
+            this.Posts.getAllPosts.countActualPosts = res.data[0].length;
+            this.Posts.getAllPosts.loadingPosts = false;
+            this.Posts.getAllPosts.loadingPaginate = false;
+          });
+      },
+
+      // all used dates in reservations
+      getAllUsedReservationsDates() {
+        const api = `${process.env.VUE_APP_API_URL}/reservation/getAllUsedReservationsDates`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            this.allUsedReservationDates = res.data;
+          });
+      },
     },
 
     async created() {
@@ -362,6 +421,8 @@ new Vue({
       if (isLoggedIn()) {
         this.getDataOfMe();
         this.getAllFriends();
+
+        this.getAllUsedReservationsDates();
         // NavigationDrawerLeft
         this.getNumberOfFriends();
         // Toolbar
@@ -373,6 +434,7 @@ new Vue({
         this.getFewNewestNotifications();
         //navigationDrawerCenter
         this.getCountMyFriendshipRequests();
+        this.getAllDataAboutposts();
       }
     },
     // social_auth,

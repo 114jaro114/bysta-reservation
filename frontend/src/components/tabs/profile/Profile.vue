@@ -109,15 +109,18 @@
           <!-- <v-divider class="mt-0 mb-0" /> -->
           <v-card-text class="mb-3 p-0">
             <v-row class="position-relative ml-0 mr-0 mt-3">
-              <v-col v-for="n in 9" :key="n" class="p-1 d-flex child-flex" cols="4">
-                <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`" :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`" aspect-ratio="1" class="grey lighten-2">
-                  <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
+              <v-col v-for="(image, index) in photoGallery" :key="'photoGallery' + index" class="d-flex child-flex container_images p-1" cols="4" lg="4" md="4" sm="4" style="overflow: hidden">
+                <v-card class="card_images" elevation="0" tile>
+                  <v-img style="cursor: pointer" class="zoom" :lazy-src="image.thumb" :src="image.thumb" aspect-ratio="1" @click="openGallery(index)">
+                    <template v-slot:placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-card>
               </v-col>
+              <LightBox ref="lightbox" :media="photoGallery" :show-caption="true" :show-light-box="false" closable />
             </v-row>
           </v-card-text>
         </v-card>
@@ -277,7 +280,7 @@
       </v-row>
     </v-col>
     <v-col xl="8" lg="8" md="12" sm="12" xs="12" class="pl-lg-3 pl-xl-3 pl-md-3 pl-0 pr-0 pb-0" min-height="245">
-      <!-- <ProfileUserPosts /> -->
+      <ProfileUserPosts />
     </v-col>
   </v-row>
 </v-container>
@@ -286,18 +289,21 @@
 <script>
 import axios from 'axios';
 // import _ from 'lodash';
-// import ProfileUserPosts from "@/components/ProfileUserPosts.vue";
+import ProfileUserPosts from "@/components/ProfileUserPosts.vue";
+import LightBox from 'vue-it-bigger'
+import('vue-it-bigger/dist/vue-it-bigger.min.css') // when using webpack
 export default {
   name: "About",
   props: [],
   components: {
-    // ProfileUserPosts
+    ProfileUserPosts,
+    LightBox
   },
   data() {
     return {
       selectedChip: '',
-      // textNewPost: null,
-      // dialogNewPost: false,
+      textNewPost: null,
+      dialogNewPost: false,
       showDragAndDropFile: false,
       files: [],
       urls: [],
@@ -308,42 +314,102 @@ export default {
       isFriendOrNoOrMe: '',
       isFriendOrNoOrMe_overlay: true,
       userDataProfile: null,
+      photoGallery: [{ // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=15",
+        src: "https://picsum.photos/500/300?image=15",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=15",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=20",
+        src: "https://picsum.photos/500/300?image=20",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=20",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=25",
+        src: "https://picsum.photos/500/300?image=25",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=25",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=30",
+        src: "https://picsum.photos/500/300?image=30",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=30",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=35",
+        src: "https://picsum.photos/500/300?image=35",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=35",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=40",
+        src: "https://picsum.photos/500/300?image=40",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=40",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=45",
+        src: "https://picsum.photos/500/300?image=45",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=45",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=50",
+        src: "https://picsum.photos/500/300?image=50",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=50",
+      }, { // For an image
+        type: 'image', // Can be omitted for image
+        thumb: "https://picsum.photos/500/300?image=55",
+        src: "https://picsum.photos/500/300?image=55",
+        caption: '', // Optional
+        srcset: "https://picsum.photos/500/300?image=55",
+      }, ],
     }
   },
 
   updated() {},
 
   created() {
-    // this.getAllDataAboutposts();
-    // this.removeDataFromCreatedMain();
+    this.getAllDataAboutposts();
+    this.removeDataFromCreatedMain();
   },
 
-  // watch: {
-  //   '$route.params.user_id'() {
-  //     this.getAllDataAboutposts();
-  //   }
-  // },
+  watch: {
+    '$route.params.user_id'() {
+      this.getAllDataAboutposts();
+    }
+  },
 
   methods: {
-    // getAllDataAboutposts() {
-    //   this.$root.profilePosts.getAllPosts.loadingPosts = true;
-    //   this.$root.profilePosts.getAllPosts.loadingPaginate = true;
-    //   const api = `${process.env.VUE_APP_API_URL}/getAllDataAboutUserPosts/${this.$route.params.user_id}/0/1`;
-    //   const config = {
-    //     headers: {
-    //       Accept: "application/json",
-    //       Authorization: "Bearer " + localStorage.getItem("authToken"),
-    //     },
-    //   };
-    //   axios.get(api, config)
-    //     .then(res => {
-    //       this.$root.profilePosts.getAllPosts.allPosts = res.data[0];
-    //       this.$root.profilePosts.getAllPosts.countAllPosts = res.data[1];
-    //       this.$root.profilePosts.getAllPosts.countActualPosts = res.data[0].length;
-    //       this.$root.profilePosts.getAllPosts.loadingPosts = false;
-    //       this.$root.profilePosts.getAllPosts.loadingPaginate = false;
-    //     });
-    // },
+    openGallery(index) {
+      this.$refs.lightbox.showImage(index)
+    },
+
+    getAllDataAboutposts() {
+      this.$root.profilePosts.getAllPosts.loadingPosts = true;
+      this.$root.profilePosts.getAllPosts.loadingPaginate = true;
+      const api = `${process.env.VUE_APP_API_URL}/getAllDataAboutUserPosts/${this.$route.params.user_id}/0/1`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"),
+        },
+      };
+      axios.get(api, config)
+        .then(res => {
+          this.$root.profilePosts.getAllPosts.allPosts = res.data[0];
+          this.$root.profilePosts.getAllPosts.countAllPosts = res.data[1];
+          this.$root.profilePosts.getAllPosts.countActualPosts = res.data[0].length;
+          this.$root.profilePosts.getAllPosts.loadingPosts = false;
+          this.$root.profilePosts.getAllPosts.loadingPaginate = false;
+        });
+    },
+
     getListOfUserFriends() {
       this.$root.profile.friendships.friends_overlay = true;
       const api = `${process.env.VUE_APP_API_URL}/friendshipsProfile/${this.$route.params.user_id}`;
@@ -361,11 +427,11 @@ export default {
         });
     },
 
-    // removeDataFromCreatedMain() {
-    //   this.$root.profilePosts.getAllPosts.allPosts = undefined;
-    //   this.$root.profilePosts.getAllPosts.countAllPosts = undefined;
-    //   this.$root.profilePosts.getAllPosts.countActualPosts = undefined;
-    // },
+    removeDataFromCreatedMain() {
+      this.$root.profilePosts.getAllPosts.allPosts = undefined;
+      this.$root.profilePosts.getAllPosts.countAllPosts = undefined;
+      this.$root.profilePosts.getAllPosts.countActualPosts = undefined;
+    },
 
     getFriendProfileData(item) {
       this.$router.push(`/profile/${item.id}`);

@@ -56,7 +56,8 @@
                                         <v-icon class="pr-1" small>mdi-clock</v-icon> <span>Čaká sa</span>
                                       </v-chip>
                                       <v-chip :color="getColor(item)" dark v-else>
-                                        <v-icon class="pr-1" small>mdi-check-circle</v-icon> <span>Akceptované</span>
+                                        <v-icon class="pr-1" small>mdi-check-circle</v-icon>
+                                        <span>Akceptované</span>
                                       </v-chip>
                                     </template>
                                     <template v-slot:item="{ item }">
@@ -64,7 +65,8 @@
                                         <v-icon class="pr-1" small>mdi-clock</v-icon> <span>Čaká sa</span>
                                       </v-chip>
                                       <v-chip :color="getColor(item)" dark v-else>
-                                        <v-icon class="pr-1" small>mdi-check-circle</v-icon> <span>Akceptované</span>
+                                        <v-icon class="pr-1" small>mdi-check-circle</v-icon>
+                                        <span>Akceptované</span>
                                       </v-chip>
                                     </template>
                                   </v-select>
@@ -78,6 +80,8 @@
 
                         <v-list class="pt-0 pb-0" three-line subheader>
                           <v-subheader class="p-0">Zmeniť dátum a čas rezervácie</v-subheader>
+
+                          <CalendarAdministration :adminEditReservation="adminEditReservation" />
                           <v-list-item class="p-0">
                             <v-list-item-content class="pt-0 pb-0">
                               <v-row>
@@ -392,11 +396,13 @@
             </template>
 
             <template v-slot:item.event_name="{ item }">
-              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
-                <v-icon class="pr-1" small>mdi-clock</v-icon> <span>Čaká sa</span>
+              <v-chip :color="getColor(item.event_name)" v-if="item.event_name == 'rezervácia'" small>
+                <v-icon class="pr-1" small>mdi-clock</v-icon>
+                <span>Čaká sa</span>
               </v-chip>
               <v-chip :color="getColor(item.event_name)" dark v-else small>
-                <v-icon class="pr-1" small>mdi-check-circle</v-icon> <span>Akceptované</span>
+                <v-icon class="pr-1" small>mdi-check-circle</v-icon>
+                <span>Akceptované</span>
               </v-chip>
             </template>
 
@@ -436,12 +442,14 @@
                       <v-subheader class="p-0">Status rezervácie</v-subheader>
                       <v-list-item class="p-0">
                         <v-list-item-content class="pb-0 pt-0">
-                          <v-btn class="card-color-administration p-3" :color="getColor(userDetailReservation.event_name)" block rounded large>
-                            <span :color="getColor(userDetailReservation.event_name)" dark v-if="userDetailReservation.event_name == 'rezervácia'" large>
-                              <v-icon class="pr-1" small>mdi-clock</v-icon> <span>Čaká sa</span>
+                          <v-btn class="card-color-administration p-3" :color="getColor(userDetailReservation.event_name)" dark block rounded large>
+                            <span :color="getColor(userDetailReservation.event_name)" v-if="userDetailReservation.event_name == 'rezervácia'" large>
+                              <v-icon class="pr-1 mb-1">mdi-clock</v-icon>
+                              <span>Čaká sa</span>
                             </span>
-                            <span :color="getColor(userDetailReservation.event_name)" dark v-else large>
-                              <v-icon class="pr-1" small>mdi-check-circle</v-icon> <span>Akceptované</span>
+                            <span :color="getColor(userDetailReservation.event_name)" v-else large>
+                              <v-icon class="pr-1 mb-1" small>mdi-check-circle</v-icon>
+                              <span>Akceptované</span>
                             </span>
                           </v-btn>
                         </v-list-item-content>
@@ -610,10 +618,12 @@
 
             <template v-slot:item.event_name="{ item }">
               <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
-                <v-icon class="pr-1" small>mdi-clock</v-icon> <span>Čaká sa</span>
+                <v-icon class="pr-1" small>mdi-clock</v-icon>
+                <span>Čaká sa</span>
               </v-chip>
               <v-chip :color="getColor(item.event_name)" dark v-else small>
-                <v-icon class="pr-1" small>mdi-check-circle</v-icon> <span>Akceptované</span>
+                <v-icon class="pr-1" small>mdi-check-circle</v-icon>
+                <span>Akceptované</span>
               </v-chip>
             </template>
 
@@ -660,6 +670,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
+import CalendarAdministration from '../../CalendarAdministration.vue'
 // import CountryFlag from 'vue-country-flag';
 // import world_countries from '../../../assets/world_countries/world.json'
 
@@ -667,6 +678,7 @@ export default {
   name: "MojeRezervacie",
   components: {
     VueTelInputVuetify,
+    CalendarAdministration
     // CountryFlag
   },
   data() {
@@ -933,7 +945,6 @@ export default {
   watch: {
     adminEditReservation: {
       handler: function() {
-        console.log(this.adminEditReservation.usercontactmodel.country);
         this.updateTable(this.adminEditReservation, 'edit');
         //console.log("HERE");
         this.adminEditReservationLoader = true;
@@ -980,7 +991,7 @@ export default {
 
     showDetail(item) {
       this.dialogShowDetail = true;
-      this.userDetailReservation = item;
+      this.userDetailReservation = item
       this.updateTable(item, 'detail');
     },
 

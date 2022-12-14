@@ -91,6 +91,11 @@ const routes = [{
         name: 'Domov',
         component: require('../components/tabs/home/Domov.vue')
           .default
+      }, {
+        path: '/home/prispevky',
+        name: 'Prispevky',
+        component: require('../components/tabs/home/Prispevky.vue')
+          .default
       },
       {
         path: '/home/lokalita',

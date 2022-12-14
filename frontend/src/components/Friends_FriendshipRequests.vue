@@ -14,7 +14,7 @@
   <v-divider v-if="!$vuetify.theme.dark" class="mt-0 mb-0" />
 
   <div v-if="btnFriends == true">
-    <div class="p-0 pt-1" v-if="$root.friendships.friends && btnFriends == true">
+    <div class="p-0" v-if="$root.friendships.friends && btnFriends == true">
       <v-card class="rounded" elevation="0">
         <v-list-item-content class="justify-center pt-1 pb-0">
           <div class="mx-auto text-center">
@@ -126,7 +126,7 @@
   </div>
   <!-- friendsip requests -->
   <div v-else>
-    <div class="p-0 pt-1" v-if="$root.toolbar.friendRequests.friendRequests">
+    <div class="p-0" v-if="$root.toolbar.friendRequests.friendRequests">
       <v-card class="rounded" elevation="0">
         <v-list-item-content class="justify-center pt-1 pb-0">
           <div class="mx-auto text-center">

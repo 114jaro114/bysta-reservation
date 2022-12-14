@@ -27,14 +27,18 @@ export default {
         route: '/home'
       }, {
         id: 2,
+        name: 'Prispevky',
+        route: '/home/prispevky'
+      }, {
+        id: 3,
         name: 'Lokalita',
         route: '/home/lokalita'
       }, {
-        id: 3,
+        id: 4,
         name: 'Vybavenie',
         route: '/home/vybavenie'
       }, {
-        id: 4,
+        id: 5,
         name: 'Recenzie',
         route: '/home/recenzie'
       }, ],

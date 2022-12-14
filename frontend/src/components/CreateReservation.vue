@@ -254,43 +254,45 @@
                 <!-- <v-row justify="center">
                 <v-col cols="12" sm="12" md="12" lg="6"> -->
                 <v-card-text>
-                  <v-row justify="center" class="mt-3">
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled rounded required></v-text-field>
-                    </v-col>
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-row justify="center" class="mt-3">
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" :rules="surnameRules" :error-messages="errorMessages" label="Meno" clearable filled rounded required></v-text-field>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled rounded required></v-text-field>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" :rules="lastnameRules" :error-messages="errorMessages" label="Priezvisko" clearable filled rounded required></v-text-field>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" :rules="addressRules" label="Adresa" counter="25" clearable filled rounded required></v-text-field>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                        <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" :rules="addressRules" label="Adresa" counter="25" clearable filled rounded required></v-text-field>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" :rules="cityRules" label="Mesto" clearable filled rounded required></v-text-field>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" :rules="cityRules" label="Mesto" clearable filled rounded required></v-text-field>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" :rules="postcodeRules" label="PSČ" clearable filled rounded required></v-text-field>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                        <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" :rules="postcodeRules" label="PSČ" clearable filled rounded required></v-text-field>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-autocomplete :menu-props="autocompleteMenuProps()" ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :rules="countryRules" :items="countries" label="Krajina" clearable filled rounded required>
-                      </v-autocomplete>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                        <v-autocomplete :menu-props="autocompleteMenuProps()" ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :rules="countryRules" :items="countries" label="Krajina" clearable filled rounded
+                          required>
+                        </v-autocomplete>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <VueTelInputVuetify class="mobpho" v-model="reservation.details.phone" :rules="myPhoneRules" :preferred-countries="['svk']" :valid-characters-only="true" @input="onInput" label="Mobilné číslo" placeholder="" filled rounded
-                        clearable>
-                      </VueTelInputVuetify>
-                    </v-col>
+                      <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                        <VueTelInputVuetify class="mobpho" v-model="reservation.contactInfos.phone.number" :rules="myPhoneRules" :preferred-countries="['svk']" @input="onInput" label="Mobilné číslo" placeholder="" filled rounded clearable>
+                        </VueTelInputVuetify>
+                      </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-textarea v-model="reservation.details.note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled rounded clearable auto-grow>
-                      </v-textarea>
-                    </v-col>
-                  </v-row>
+                      <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                        <v-textarea v-model="reservation.details.note" :rules="noteRules" label=" Poznámka" rows="1" counter="50" filled rounded clearable auto-grow>
+                        </v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-card-text>
               </v-card>
 
@@ -346,7 +348,7 @@
                     </v-col>
 
                     <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <VueTelInputVuetify class="mobpho" v-model="reservation.details.phone" label="Mobilné číslo" placeholder="" filled rounded readonly></VueTelInputVuetify>
+                      <VueTelInputVuetify class="mobpho" v-model="reservation.contactInfos.phone.number" label="Mobilné číslo" placeholder="" filled rounded readonly></VueTelInputVuetify>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
@@ -487,6 +489,16 @@
       <v-container class="p-0">
         <v-card class="rounded p-3 d-flex align-center w-100" elevation="0" min-height="88vh">
           <v-row class="w-100">
+            <v-col cols="12">
+              <div class="success-checkmark">
+                <div class="check-icon">
+                  <span class="icon-line line-tip"></span>
+                  <span class="icon-line line-long"></span>
+                  <div class="icon-circle"></div>
+                  <div class="icon-fix"></div>
+                </div>
+              </div>
+            </v-col>
             <v-col cols="12">
               <h1 class="font-weight-bold">Ďakujeme Vám za rezerváciu.</h1>
             </v-col>
@@ -630,21 +642,20 @@ export default {
         contactInfos: {
           reservation_id: '',
           user_id: '',
-          surname: '',
-          lastname: '',
-          address: '',
-          city: '',
-          postcode: '',
-          country: '',
-          phone: '',
+          surname: null,
+          lastname: null,
+          address: null,
+          city: null,
+          postcode: null,
+          country: null,
+          phone: {
+            number: '',
+            valid: false,
+            country: undefined,
+          },
         },
       },
 
-      phone: {
-        number: '',
-        valid: false,
-        country: undefined,
-      },
       formHasErrors: false,
 
       surnameRules: [
@@ -674,6 +685,7 @@ export default {
 
       myPhoneRules: [
         v => !!v || 'Mobilné číslo je povinné',
+        v => v && this.reservation.contactInfos.phone.valid || 'Neplatný formát čísla'
       ],
 
       noteRules: [
@@ -690,6 +702,7 @@ export default {
       rowContactForm: '',
       overlay: true,
       successCreatedReservation: false,
+      valid: true,
     }
   },
 
@@ -710,7 +723,7 @@ export default {
           this.reservation.contactInfos.city = res.data[0].city;
           this.reservation.contactInfos.postcode = res.data[0].postcode;
           this.reservation.contactInfos.country = res.data[0].country;
-          this.reservation.contactInfos.phone = res.data[0].phone;
+          this.reservation.contactInfos.phone.number = res.data[0].phone;
         }
       });
 
@@ -725,11 +738,16 @@ export default {
     const api3 = `${process.env.VUE_APP_API_URL}/checkContactForm`;
     axios.get(api3, config)
       .then(res => {
+        console.log(res.data);
         this.rowContactForm = res.data;
       });
   },
 
   methods: {
+    validate() {
+      return this.$refs.form.validate();
+    },
+
     formatDate(value) {
       return new Date(Date.parse(value)).toLocaleDateString('sk-SK')
     },
@@ -764,9 +782,9 @@ export default {
       valid,
       country
     }) {
-      this.phone.number = number.international;
-      this.phone.valid = valid;
-      this.phone.country = country && country.name;
+      this.reservation.contactInfos.phone.number = number.international;
+      this.reservation.contactInfos.phone.valid = valid;
+      this.reservation.contactInfos.phone.country = country && country.name;
     },
 
     autocompleteMenuProps() {
@@ -828,11 +846,12 @@ export default {
         this.reservation.contactInfos.city == null ||
         this.reservation.contactInfos.postcode == null ||
         this.reservation.contactInfos.country == null ||
-        this.reservation.contactInfos.phone == null
+        this.reservation.contactInfos.phone.number == null || this.reservation.contactInfos.phone.valid == false
       ) {
         this.step3 = false;
         this.snackbar = true;
         this.text = "Je potrebné vyplniť kontaktné údaje!";
+        this.validate();
       } else {
         if (this.rowContactForm == "0") {
           this.contactFormDialog = true;
@@ -861,7 +880,7 @@ export default {
               city: this.reservation.contactInfos.city,
               postcode: this.reservation.contactInfos.postcode,
               country: this.reservation.contactInfos.country,
-              phone: this.reservation.contactInfos.phone,
+              phone: this.reservation.contactInfos.phone.number,
             },
             config
           )
@@ -1144,7 +1163,7 @@ export default {
                   city: this.reservation.contactInfos.city,
                   postcode: this.reservation.contactInfos.postcode,
                   country: this.reservation.contactInfos.country,
-                  phone: this.reservation.details.phone,
+                  phone: this.reservation.contactInfos.phone.number,
                 },
                 config
               )
@@ -1179,54 +1198,19 @@ export default {
             this.successCreatedReservation = true;
             this.overlay = false;
             this.text = "Rezervácia bola úspešne vytvorená!";
-
+            //no adding reservation to saved reservation after reservation is successfully created.
+            this.$root.savedReservation.details = undefined;
+            this.$root.savedReservation.contactInfos = undefined;
           })
           .catch(err => console.log("nepodarilo sa pridat event", err));
       } else {
         alert("mas chyby");
       }
     },
-
-    //contact format
-    addressCheck() {
-      // this.errorMessages = this.address && !this.name ?
-      //   `Hey! I'm required` :
-      //   ''
-
-      return false
-    },
-    resetForm() {
-      this.errorMessages = []
-      this.formHasErrors = false
-
-      Object.keys(this.form)
-        .forEach(f => {
-          this.$refs[f].reset()
-        })
-    },
-    submit() {
-      this.formHasErrors = false
-
-      Object.keys(this.form)
-        .forEach(f => {
-          if (!this.form[f]) this.formHasErrors = true
-
-          this.$refs[f].validate(true)
-        })
-    },
   },
 
   computed: {
-    form() {
-      return {
-        name: this.name,
-        address: this.reservation.contactInfos.address,
-        city: this.reservation.contactInfos.city,
-        state: this.state,
-        zip: this.zip,
-        country: this.reservation.contactInfos.country,
-      }
-    },
+
   },
 
   watch: {
@@ -1252,7 +1236,6 @@ export default {
 
   updated() {
     //do something after updating vue instance
-
     this.reservation.details.nights = String(moment(this.reservation.details.end_date, 'YYYY-MM-DD').diff(moment(this.reservation.details.start_date, 'YYYY-MM-DD'), 'days'));
     this.reservation.details.total_persons = String(this.reservation.details.adults + this.reservation.details.childs_2_to_12 + this.reservation.details.childs_to_2);
 
@@ -1264,23 +1247,6 @@ export default {
     } else {
       this.reservation.details.overall_price = String(this.$root.prices.priceCabinUnderSixPpl * this.reservation.details.nights + this.reservation.details.cleaning_fee);
     }
-    // this.countDaysBetweemTwoDates = moment(this.reservation.details.end_date, 'YYYY-MM-DD')
-    //   .diff(moment(this.reservation.details.start_date, 'YYYY-MM-DD'), 'days');
-    // if (this.countDaysBetweemTwoDates > 1) {
-    //   this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noci';
-    // } else {
-    //   this.headers[4].text = 'Cena/' + this.countDaysBetweemTwoDates + 'noc';
-    // }
-
-    // if (this.reservation.counter1 + this.reservation.counter2 > 5) {
-    //   this.overallPrice = this.$root.prices.cleaningFee + this.reservation.counter1 * this.$root.prices.priceAdults * this.countDaysBetweemTwoDates + this.reservation.counter2 * this.$root.prices.priceChilds2to12 * this.countDaysBetweemTwoDates +
-    //     this.reservation.counter3 *
-    //     this
-    //     .$root.prices.priceChildsto2 * this
-    //     .countDaysBetweemTwoDates;
-    // } else {
-    //   this.overallPrice = (this.$root.prices.priceCabinUnderSixPpl * this.countDaysBetweemTwoDates) + this.$root.prices.cleaningFee;
-    // }
   }
 }
 </script>

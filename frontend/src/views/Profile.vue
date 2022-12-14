@@ -6,7 +6,7 @@
 
   <div v-else>
     <v-container v-if="isFriendOrNoOrMe == -1">
-      <v-card elevation="0">
+      <v-card flat rounded>
         <div class="title-photo position-relative">
           <div v-for="(image, index) in media" :key="'media' + index" class="d-flex child-flex container_images" cols="12" lg="4" md="4" sm="6" style="overflow: hidden">
             <v-card class="card_images" elevation="0" tile>
@@ -634,5 +634,10 @@ img {
 
 .profile {
   min-height: 100vh;
+}
+
+.title-photo .v-card>*:first-child:not(.v-btn):not(.v-chip):not(.v-avatar) {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 </style>
