@@ -3,6 +3,7 @@
   <v-overlay :value="overlay">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
+
   <v-row justify="center" class="m-0" v-if="successCreatedReservation == false">
     <div class="text-center">
       <v-dialog v-model="contactFormDialog" max-width="290">
@@ -64,35 +65,39 @@
 
           <v-stepper-items class="h-100">
             <v-stepper-content step="1">
-              <div class="mb-1" v-if="this.$store.getters['pendingReservation'] != 0">
-                <v-icon class="mb-1" color="orange">mdi-information</v-icon>
-                <span>
-                  Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
-                </span>
-              </div>
-              <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
-              <Calendar @loaded-events="loadedEvents" @array-dates="arrayDates" />
-              <div class="pt-3" v-if="this.$store.getters['pendingReservation'] == 0">
-                <v-btn color="accent" disabled class="mr-2" outlined>
-                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-                </v-btn>
+              <v-card class="rounded" elevation="0">
+                <v-card-text class="p-2">
+                  <div class="mb-1" v-if="this.$store.getters['pendingReservation'] != 0">
+                    <v-icon class="mb-1" color="orange">mdi-information</v-icon>
+                    <span>
+                      Pred pridaním ďalšej rezervácie Vám musí byť potvrdená aktuálna rezervácia. Po jej potvrdení budete môcť vytvoriť ďalšiu.
+                    </span>
+                  </div>
+                  <!-- <v-card class="m-3" :loading="myloadingvariable"> -->
+                  <Calendar @loaded-events="loadedEvents" @array-dates="arrayDates" />
+                  <div class="pt-3" v-if="this.$store.getters['pendingReservation'] == 0">
+                    <v-btn color="accent" disabled class="mr-2" outlined>
+                      <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                    </v-btn>
 
-                <v-slide-y-transition>
-                  <v-btn color="primary" class="anim" @click="checkStatus(); toTop()">
-                    Pokračovať
-                    <v-icon class="arrow">mdi-arrow-right</v-icon>
-                  </v-btn>
-                </v-slide-y-transition>
-              </div>
-              <div class="pt-3" v-else>
-                <v-btn color="accent" disabled class="mr-2" outlined>
-                  <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
-                </v-btn>
+                    <v-slide-y-transition>
+                      <v-btn color="primary" class="anim" @click="checkStatus(); toTop()">
+                        Pokračovať
+                        <v-icon class="arrow">mdi-arrow-right</v-icon>
+                      </v-btn>
+                    </v-slide-y-transition>
+                  </div>
+                  <div class="pt-3" v-else>
+                    <v-btn color="accent" disabled class="mr-2" outlined>
+                      <v-icon>mdi-arrow-left-thick</v-icon>Krok späť
+                    </v-btn>
 
-                <v-btn color="primary" @click="checkStatus()" disabled>
-                  Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
-                </v-btn>
-              </div>
+                    <v-btn color="primary" @click="checkStatus()" disabled>
+                      Pokračovať<v-icon>mdi-arrow-right-thick</v-icon>
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
             </v-stepper-content>
 
             <v-stepper-content step="2">
@@ -314,128 +319,154 @@
 
             <v-stepper-content step="4">
               <v-card class="rounded" elevation="0">
-                <v-card-title class="justify-center">Rekapitulácia</v-card-title>
                 <v-card-text>
-                  <v-row align="center">
+                  <v-list three-line subheader>
+                    <v-subheader class="p-0">Kontaktné údaje</v-subheader>
+                    <v-list-item class="p-0">
+                      <v-list-item-content>
+                        <!-- <v-row align="center">
                     <v-divider />
                     <span class="font-weight-bold">Kontaktné údaje</span>
                     <v-divider />
-                  </v-row>
-                  <v-row justify="center">
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" label="Meno" filled rounded readonly></v-text-field>
-                    </v-col>
+                  </v-row> -->
+                        <v-row justify="center">
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="reservation.contactInfos.surname" v-model="reservation.contactInfos.surname" label="Meno" filled rounded readonly></v-text-field>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" label="Priezvisko" filled rounded readonly></v-text-field>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="reservation.contactInfos.lastname" v-model="reservation.contactInfos.lastname" label="Priezvisko" filled rounded readonly></v-text-field>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" label="Adresa" filled rounded readonly></v-text-field>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                            <v-text-field ref="reservation.contactInfos.address" v-model="reservation.contactInfos.address" label="Adresa" filled rounded readonly></v-text-field>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" label="Mesto" filled rounded readonly></v-text-field>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-text-field ref="reservation.contactInfos.city" v-model="reservation.contactInfos.city" label="Mesto" filled rounded readonly></v-text-field>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
-                      <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" label="PSČ" filled rounded readonly></v-text-field>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0">
+                            <v-text-field ref="reservation.contactInfos.postcode" v-model="reservation.contactInfos.postcode" label="PSČ" filled rounded readonly></v-text-field>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <v-autocomplete ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :items="countries" label="Krajina" filled rounded readonly>
-                      </v-autocomplete>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <v-autocomplete ref="reservation.contactInfos.country" v-model="reservation.contactInfos.country" :items="countries" label="Krajina" filled rounded readonly>
+                            </v-autocomplete>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
-                      <VueTelInputVuetify class="mobpho" v-model="reservation.contactInfos.phone.number" label="Mobilné číslo" placeholder="" filled rounded readonly></VueTelInputVuetify>
-                    </v-col>
+                          <v-col cols="12" sm="12" md="6" lg="6" class="pt-0 pb-0">
+                            <VueTelInputVuetify class="mobpho" v-model="reservation.contactInfos.phone.number" label="Mobilné číslo" placeholder="" filled rounded readonly></VueTelInputVuetify>
+                          </v-col>
 
-                    <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
-                      <div v-if="reservation.details.note == null">
-                        <v-textarea value="-" label=" Poznámka" rows="1" filled rounded readonly auto-grow>
-                        </v-textarea>
-                      </div>
-                      <div v-else>
-                        <v-textarea v-model="reservation.details.note" label=" Poznámka" rows="1" filled rounded readonly auto-grow>
-                        </v-textarea>
-                      </div>
-                    </v-col>
-                  </v-row>
+                          <v-col cols="12" sm="12" md="12" lg="12" class="pt-0 pb-0">
+                            <div v-if="reservation.details.note == null">
+                              <v-textarea value="-" label=" Poznámka" rows="1" filled rounded readonly auto-grow>
+                              </v-textarea>
+                            </div>
+                            <div v-else>
+                              <v-textarea v-model="reservation.details.note" label=" Poznámka" rows="1" filled rounded readonly auto-grow>
+                              </v-textarea>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
 
-                  <v-row align="center">
+                  <v-divider />
+
+                  <v-list three-line subheader>
+                    <v-subheader class="p-0">Dátum a čas príchodu a odchodu</v-subheader>
+                    <v-list-item class="p-0">
+                      <v-list-item-content>
+                        <!-- <v-row align="center">
                     <v-divider />
                     <span class="font-weight-bold">Dátum a čas príchodu a odchodu</span>
                     <v-divider />
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" lg="6" md="6">
-                      <v-card class="p-4 card-color-reservation rounded-pill" flat>
-                        <v-row class="justify-center">
-                          <span>Príchod</span>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <v-col>
-                            <v-icon>mdi-calendar-start</v-icon>
-                            <span class="pl-1">{{reservation.details.start_date}}</span>
+                  </v-row> -->
+                        <v-row>
+                          <v-col cols="12" lg="6" md="6">
+                            <v-card class="p-4 card-color-reservation rounded-pill" flat>
+                              <v-row class="justify-center">
+                                <span>Príchod</span>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-calendar-start</v-icon>
+                                  <span class="pl-1">{{reservation.details.start_date}}</span>
+                                </v-col>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-clock-start</v-icon>
+                                  <span class="pl-1">{{reservation.details.start_time}}</span>
+                                </v-col>
+                              </v-row>
+                            </v-card>
+                          </v-col>
+                          <v-col cols="12" lg="6" md="6">
+                            <v-card class="p-4 card-color-reservation rounded-pill" flat>
+                              <v-row class="justify-center">
+                                <span>Odchod</span>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-calendar-end</v-icon>
+                                  <span class="pl-1">{{reservation.details.end_date}}</span>
+                                </v-col>
+                              </v-row>
+                              <v-row class="justify-center">
+                                <v-col>
+                                  <v-icon>mdi-clock-end</v-icon>
+                                  <span class="pl-1">{{reservation.details.end_time}}</span>
+                                </v-col>
+                              </v-row>
+                            </v-card>
                           </v-col>
                         </v-row>
-                        <v-row class="justify-center">
-                          <v-col>
-                            <v-icon>mdi-clock-start</v-icon>
-                            <span class="pl-1">{{reservation.details.start_time}}</span>
-                          </v-col>
-                        </v-row>
-                      </v-card>
-                    </v-col>
-                    <v-col cols="12" lg="6" md="6">
-                      <v-card class="p-4 card-color-reservation rounded-pill" flat>
-                        <v-row class="justify-center">
-                          <span>Odchod</span>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <v-col>
-                            <v-icon>mdi-calendar-end</v-icon>
-                            <span class="pl-1">{{reservation.details.end_date}}</span>
-                          </v-col>
-                        </v-row>
-                        <v-row class="justify-center">
-                          <v-col>
-                            <v-icon>mdi-clock-end</v-icon>
-                            <span class="pl-1">{{reservation.details.end_time}}</span>
-                          </v-col>
-                        </v-row>
-                      </v-card>
-                    </v-col>
-                  </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
 
-                  <v-row align="center">
+                  <v-divider />
+
+                  <v-list three-line subheader>
+                    <v-subheader class="p-0">Počet osôb</v-subheader>
+                    <v-list-item class="p-0">
+                      <v-list-item-content>
+
+                        <!-- <v-row align="center">
                     <v-divider />
                     <span class="font-weight-bold">Počet osôb</span>
                     <v-divider />
-                  </v-row>
+                  </v-row> -->
 
-                  <v-row class="m-0">
-                    <v-col class="pl-0 pr-0">
-                      <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
-                        <template v-slot:header="{ props: { headers } }">
-                          <thead>
-                            <tr>
-                              <th v-for="(h, i) in headers" :key="i">
-                                <v-tooltip bottom v-if="i != 3">
-                                  <template v-slot:activator="{ on }">
-                                    <span v-on="on">{{h.text}}</span>
-                                  </template>
-                                  <span>{{headerTooltips[i - 1]}}</span>
-                                </v-tooltip>
-                                <span v-if="i == 3">{{h.text}}</span>
-                              </th>
-                            </tr>
-                          </thead>
-                        </template>
-                      </v-data-table>
-                    </v-col>
-                  </v-row>
+                        <v-row class="m-0">
+                          <v-col class="pl-0 pr-0">
+                            <v-data-table :headers="headers" :items="prices" class="elevation-0" disable-sort hide-default-header hide-default-footer :mobile-breakpoint="0" @click:row="handleClick">
+                              <template v-slot:header="{ props: { headers } }">
+                                <thead>
+                                  <tr>
+                                    <th v-for="(h, i) in headers" :key="i">
+                                      <v-tooltip bottom v-if="i != 3">
+                                        <template v-slot:activator="{ on }">
+                                          <span v-on="on">{{h.text}}</span>
+                                        </template>
+                                        <span>{{headerTooltips[i - 1]}}</span>
+                                      </v-tooltip>
+                                      <span v-if="i == 3">{{h.text}}</span>
+                                    </th>
+                                  </tr>
+                                </thead>
+                              </template>
+                            </v-data-table>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+
                   <v-dialog v-model="dialogOrderDetail" fullscreen hide-overlay transition="dialog-bottom-transition">
                     <template v-slot:activator="{ on: menu, attrs }">
                       <v-btn align="left" color="orange" elevation="2" v-bind="attrs" v-on="{ ...menu }" medium>
@@ -486,7 +517,7 @@
 
   <v-row justify="center" class="m-0" v-else>
     <v-col class="p-0">
-      <v-container class="p-0">
+      <v-container>
         <v-card class="rounded p-3 d-flex align-center w-100" elevation="0" min-height="88vh">
           <v-row class="w-100">
             <v-col cols="12">
@@ -505,13 +536,26 @@
             <v-col cols="12">
               <span>Vašu rezerváciu sa budeme snažiť potvrdiť čo najrýchlejšie. Detail Vašej rezervácie je možné si pozrieť v časti Administrácia.</span>
             </v-col>
-            <v-col cols="12">
-              <v-slide-y-transition>
-                <v-btn color="primary" class="anim" to="/administration">
-                  <span>Do administrácie</span>
-                  <v-icon class="arrow">mdi-arrow-right</v-icon>
-                </v-btn>
-              </v-slide-y-transition>
+            <v-col cols="12" lg="6" md="6" sm="6">
+              <div class="d-flex justify-center justify-lg-end justify-md-end">
+                <v-slide-y-transition>
+                  <v-btn color="primary" class="anim" to="/reservation" @click="resetDataAndGoToStart">
+
+                    <v-icon class="arrowľ">mdi-arrow-left</v-icon>
+                    <span>Nová rezervácia</span>
+                  </v-btn>
+                </v-slide-y-transition>
+              </div>
+            </v-col>
+            <v-col cols="12" lg="6" md="6" sm="6">
+              <div class="d-flex justify-center justify-lg-start justify-md-start">
+                <v-slide-y-transition>
+                  <v-btn color="primary" class="anim" to="/administration">
+                    <span>Do administrácie</span>
+                    <v-icon class="arrow">mdi-arrow-right</v-icon>
+                  </v-btn>
+                </v-slide-y-transition>
+              </div>
             </v-col>
           </v-row>
         </v-card>
@@ -547,9 +591,7 @@ export default {
     return {
       isActive: false,
       e1: 1,
-      rules: [
-
-      ],
+      rules: [],
       step1: true,
       step2: true,
       step3: true,
@@ -738,12 +780,21 @@ export default {
     const api3 = `${process.env.VUE_APP_API_URL}/checkContactForm`;
     axios.get(api3, config)
       .then(res => {
-        console.log(res.data);
         this.rowContactForm = res.data;
       });
   },
 
   methods: {
+    resetDataAndGoToStart() {
+      this.overlay = true;
+      this.e1 = 1;
+      this.step1 = true;
+      this.successCreatedReservation = false;
+      this.$store.dispatch('pendingReservation', {
+        count: 1
+      });
+    },
+
     validate() {
       return this.$refs.form.validate();
     },
@@ -1140,13 +1191,21 @@ export default {
             priceForNight: this.$root.prices.priceAdults,
             totalPersons: this.reservation.details.total_persons,
             overallPrice: this.reservation.details.overall_price,
-            note: this.reservation.details.note
+            note: this.reservation.details.note,
+            // user contact infos
+            surname: this.reservation.contactInfos.surname,
+            lastname: this.reservation.contactInfos.lastname,
+            address: this.reservation.contactInfos.address,
+            city: this.reservation.contactInfos.city,
+            postcode: this.reservation.contactInfos.postcode,
+            country: this.reservation.contactInfos.country,
+            phone: this.reservation.contactInfos.phone.number,
           }, config)
-          .then(res => {
+          .then(() => {
             this.getUncheckedReservations();
 
-            const api = `${process.env.VUE_APP_API_URL}/reservation/reservationUserContactInfo`;
-            const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
+            // const api = `${process.env.VUE_APP_API_URL}/reservation/reservationUserContactInfo`;
+            const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
             const config = {
               headers: {
                 Accept: "application/json",
@@ -1154,23 +1213,8 @@ export default {
               },
             };
 
-            axios.post(api, {
-                  reservation_id: res.data[0].id,
-                  user_id: res.data[0].user_id,
-                  surname: this.reservation.contactInfos.surname,
-                  lastname: this.reservation.contactInfos.lastname,
-                  address: this.reservation.contactInfos.address,
-                  city: this.reservation.contactInfos.city,
-                  postcode: this.reservation.contactInfos.postcode,
-                  country: this.reservation.contactInfos.country,
-                  phone: this.reservation.contactInfos.phone.number,
-                },
-                config
-              )
-              .then(() => {})
-
             //notif to user that he successfully created his reservation
-            axios.post(api2, {
+            axios.post(api, {
                 from: 1,
                 recipient: this.$root.me.id,
                 title: "Chata Byšta",
@@ -1183,7 +1227,7 @@ export default {
               .then(() => {})
 
             //notif to admin that any user made new reservation
-            axios.post(api2, {
+            axios.post(api, {
                 from: this.$root.me.id,
                 recipient: 1,
                 title: "Nová rezervácia",

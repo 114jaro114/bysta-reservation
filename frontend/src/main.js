@@ -66,11 +66,6 @@ Vue.use(Vuebar);
 //translate
 // import i18n from "./i18n";
 
-// Calendar
-// import VCalendar from 'v-calendar';
-//
-// // Use v-calendar & v-date-picker components
-// Vue.use(VCalendar);
 
 //gallery
 import Lightbox from '@morioh/v-lightbox'
@@ -113,6 +108,7 @@ window.Echo = new Echo({
 import ScrollLoader from 'vue-scroll-loader'
 Vue.use(ScrollLoader)
 
+import moment from 'moment';
 // import scss file
 require('@/assets/styles/main.scss');
 
@@ -130,6 +126,13 @@ new Vue({
     store,
     i18n,
     data: {
+      calendar: {
+        disabledDates: [],
+        disabledDatesCopy: [],
+        calendarData: [],
+        calendarDataCopy: [],
+      },
+
       language: {
         countries: [{
             name: "sk",
@@ -414,6 +417,48 @@ new Vue({
             this.allUsedReservationDates = res.data;
           });
       },
+
+      getEvents() {
+        const api = `${process.env.VUE_APP_API_URL}/allReservation`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        };
+        axios.get(api, config)
+          .then(res => {
+            //this code contains disabled dates in datepicker
+            this.calendar.disabledDates = [];
+
+            for (var i = 0; i < res.data.length; i++) {
+              var day1 = moment(res.data[i].end_date);
+              var day2 = moment(res.data[i].start_date);
+              var result = [moment({
+                ...day2
+              })];
+
+              while (day1.date() != day2.date()) {
+                day2.add(1, 'day');
+                result.push(moment({
+                  ...day2
+                }));
+              }
+
+              result.map(x => {
+                this.calendar.disabledDates.push(x.format("YYYY-MM-DD"))
+              })
+
+              result.map(x => {
+                this.calendar.disabledDatesCopy.push(x.format("YYYY-MM-DD"))
+              })
+            }
+            // get data
+            this.calendar.calendarData = res.data;
+            this.calendar.calendarDataCopy = res.data;
+          })
+          .catch(() => {});
+      },
     },
 
     async created() {
@@ -422,6 +467,7 @@ new Vue({
         this.getDataOfMe();
         this.getAllFriends();
 
+        this.getEvents();
         this.getAllUsedReservationsDates();
         // NavigationDrawerLeft
         this.getNumberOfFriends();

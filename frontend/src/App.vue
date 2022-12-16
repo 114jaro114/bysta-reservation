@@ -5,7 +5,7 @@
 
   <NavigationDrawer :drawer="drawer" />
 
-  <router-view />
+  <router-view :key="$route.fullPath" />
   <v-fab-transition v-if="this.$store.getters['buttonToTopState'].state">
     <v-btn class="goToTop" v-scroll="onScroll" v-show="fab" fab small dark fixed bottom right color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
@@ -365,7 +365,19 @@ export default {
 
   mounted() {
     //do something after mounting vue instance
-    localStorage.setItem('language', 'Slovenský jazyk');
+    if (!(localStorage.getItem('language'))) {
+      localStorage.setItem('language', 'sk');
+      this.$root.language.selectedLang = 0;
+      this.$i18n.locale = 'sk';
+    }
+
+    if (localStorage.getItem('language') == 'sk') {
+      this.$root.language.selectedLang = 0;
+      this.$i18n.locale = 'sk';
+    } else {
+      this.$root.language.selectedLang = 1;
+      this.$i18n.locale = 'rn';
+    }
 
     const theme = localStorage.getItem("dark_theme");
     if (theme) {
@@ -615,13 +627,13 @@ export default {
             };
 
             axios.post(api, {
-                data: this.$root.savedReservation.details
+                data: this.$root.savedReservation.details,
+                data2: this.$root.savedReservation.contactInfos
               }, config)
-              .then(res => {
+              .then(() => {
                 this.getUncheckedSavedReservations();
 
-                const api = `${process.env.VUE_APP_API_URL}/savedReservation/savedReservationSavedUserContactInfo`;
-                const api2 = `${process.env.VUE_APP_API_URL}/sendNotification`;
+                const api = `${process.env.VUE_APP_API_URL}/sendNotification`;
                 const config = {
                   headers: {
                     Accept: "application/json",
@@ -629,17 +641,8 @@ export default {
                   },
                 };
 
-                axios.post(api, {
-                      saved_reservation_id: res.data.id,
-                      user_id: res.data.user_id,
-                      data: this.$root.savedReservation.contactInfos
-                    },
-                    config
-                  )
-                  .then(() => {})
-
                 // notif to user that he successfully created his reservation
-                axios.post(api2, {
+                axios.post(api, {
                     from: 1,
                     recipient: this.$root.me.id,
                     title: "Chata Byšta",

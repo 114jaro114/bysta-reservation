@@ -52,7 +52,7 @@
         </template> -->
 
         <template v-slot:footer>
-          <div class="text-center p-2 pt-0 border-t rounded-b-lg">
+          <div class="text-center p-2">
             <v-divider class="mt-0"></v-divider>
             <v-btn color="primary" @click="moveToToday" class="mr-3">
               Dnes
@@ -60,20 +60,21 @@
             <v-btn color="primary" @click="resetDate" outlined>
               Resetovať výber
             </v-btn>
-            <v-divider></v-divider>
+
+            <v-divider />
+
+            <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+              <v-icon class="mb-1" color="orange">mdi-rectangle</v-icon>
+              <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+            </v-col>
+
+            <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+              <v-icon class="mb-1" color="red">mdi-rectangle</v-icon>
+              <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+            </v-col>
           </div>
         </template>
       </DatePicker2>
-      <v-row class="justify-center m-0">
-        <v-col class="pt-0" cols="12" lg="6" md="12" sm="12">
-          <v-icon color="orange">mdi-rectangle</v-icon>
-          <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
-        </v-col>
-        <v-col class="pt-0" cols="12" lg="6" md="12" sm="12">
-          <v-icon color="red">mdi-rectangle</v-icon>
-          <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
-        </v-col>
-      </v-row>
     </v-card>
   </v-container>
 </div>
@@ -210,8 +211,9 @@ export default {
   },
 
   created() {
-    window.Echo.join('reservation.' + this.$root.me.id)
+    window.Echo.join('reservation.' + localStorage.getItem("user_id"))
       .listen('Reservations', (e) => {
+        console.log("calendar echo");
         if (this.$route.fullPath == '/reservation') {
           if (e.status == 'deleted') {
             this.test.map((d, i) => {
@@ -241,6 +243,11 @@ export default {
                 }
               }
             }
+
+            this.$store.dispatch('pendingReservation', {
+              count: 0
+            });
+
           } else {
             if (e.reservation[0].event_name == 'rezervované') {
               this.$store.dispatch('pendingReservation', {
@@ -489,4 +496,16 @@ export default {
 .vc-time-picker {
   text-align: center;
 }
+
+.theme--dark .vc-time-picker.vc-bordered {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.theme--light .vc-time-picker.vc-bordered {
+    border-color: rgba(0, 0, 0, 0.12) !important;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
 </style>

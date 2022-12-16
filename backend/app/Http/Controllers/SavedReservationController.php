@@ -14,7 +14,7 @@ class SavedReservationController extends Controller
     //get reservations
     public function index()
     {
-        $savedReservation = SavedReservation::with('usermodel', 'usercontactmodel')->where('username', '=', auth()->user()->name)->get();
+        $savedReservation = SavedReservation::with('usermodel', 'usercontactmodel')->where('user_id', '=', auth()->user()->id)->get();
         return response()->json($savedReservation);
     }
 
@@ -22,7 +22,8 @@ class SavedReservationController extends Controller
     public function store(Request $request)
     {
         $data = $request->data;
-        $savedReservation = SavedReservation::updateOrCreate([
+
+        $savedReservation = SavedReservation::Create([
             'user_id' => $data['user_id'],
             'username' => $data['username'],
             'event_name' => $data['event_name'],
@@ -41,11 +42,23 @@ class SavedReservationController extends Controller
             'seen_changes_user' => '0'
         ]);
 
-        // $savedReservation = DB::table('saved_reservations')->where('start_date', $data['start_date'])->get();
-        //
+        $data2 = $request->data2;
+        $phone = $data2['phone'];
+        SavedReservationUserContactInfo::Create([
+          'saved_reservation_id' => strval($savedReservation['id']),
+          'user_id' => strval($savedReservation['user_id']),
+          'surname' => $data2['surname'],
+          'lastname' => $data2['lastname'],
+          'address' => $data2['address'],
+          'city' => $data2['city'],
+          'postcode' => $data2['postcode'],
+          'country' => $data2['country'],
+          'phone'  => $phone['number']
+        ]);
+
         broadcast(new SavedReservations($savedReservation, auth()->user()->id, 'created'));
 
-        return response()->json($savedReservation);
+        return response()->json();
     }
 
     //delete saved reservation
@@ -80,22 +93,22 @@ class SavedReservationController extends Controller
     }
 
     // reservation user contanct informácie
-    public function savedReservationSavedUserContactInfo(Request $request) {
-
-      $data = $request->data;
-
-      $savedReservation = SavedReservationUserContactInfo::updateOrCreate([
-        'saved_reservation_id' => $request['saved_reservation_id'],
-        'user_id' => $request['user_id'],
-        'surname' => $data['surname'],
-        'lastname' => $data['lastname'],
-        'address' => $data['address'],
-        'city' => $data['city'],
-        'postcode' => $data['postcode'],
-        'country' => $data['country'],
-        'phone'  => $data['phone']
-      ]);
-
-      return response()->json($savedReservation);
-    }
+    // public function savedReservationSavedUserContactInfo(Request $request) {
+    //   $data = $request->data;
+    //   $res_id = $request->saved_reservation_id;
+    //   $user_id = $request->user_id;
+    //   $test = SavedReservationUserContactInfo::updateOrCreate([
+    //     'saved_reservation_id' => $res_id,
+    //     'user_id' => $user_id,
+    //     'surname' => $data['surname'],
+    //     'lastname' => $data['lastname'],
+    //     'address' => $data['address'],
+    //     'city' => $data['city'],
+    //     'postcode' => $data['postcode'],
+    //     'country' => $data['country'],
+    //     'phone'  => $data['phone']
+    //   ]);
+    //
+    //   return response()->json($res_id);
+    // }
 }

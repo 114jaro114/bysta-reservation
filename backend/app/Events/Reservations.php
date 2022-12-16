@@ -40,10 +40,10 @@ class Reservations implements ShouldBroadcast
         return new PresenceChannel('reservation.' . $this->user_id);
     }
 
-    // public function broadcastWith()
-    // {
-    //     $this->friendship->load('fromUser');
-    //
-    //     return ["friendship" => $this->friendship];
-    // }
+    public function broadcastWith()
+    {
+      $this->reservation->load('usermodel', 'usercontactmodel');
+
+      return ["reservation" => $this->reservation, "user_id" => $this->user_id, "status" => $this->status];
+    }
 }

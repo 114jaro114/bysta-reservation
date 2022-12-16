@@ -43,6 +43,9 @@
                       </v-toolbar>
                       <!-- start admin edit reservation -->
                       <v-container v-if="adminEditReservation != null">
+                        <!-- <v-overlay :value="overlayCalendar">
+                          <v-progress-circular indeterminate size="64"></v-progress-circular>
+                        </v-overlay> -->
                         <v-list class="p-0">
                           <v-subheader class="p-0">Status Rezervácie</v-subheader>
                           <v-list-item class="p-0">
@@ -81,8 +84,42 @@
                         <v-list class="pt-0 pb-0" three-line subheader>
                           <v-subheader class="p-0">Zmeniť dátum a čas rezervácie</v-subheader>
 
-                          <CalendarAdministration :adminEditReservation="adminEditReservation" />
-                          <v-list-item class="p-0">
+                          <!-- <CalendarAdministration @loaded-events="loadedEvents" :adminEditReservation="adminEditReservation" :currentEvents="currentEvents" /> -->
+                          <DatePicker2 ref="DatePicker2" v-model="range" :is-dark="$vuetify.theme.dark" color="blue" mode="dateTime" is24hr :locale="$i18n.locale" :model-config="modelConfig" is-range :attributes='attrs'
+                            :disabled-dates="disabledDates" :timezone="timezone" is-expanded>
+                            <!-- :min-date='new Date()' -->
+                            <template v-slot:footer>
+                              <div class="text-center pt-0">
+                                <v-divider class="mt-0"></v-divider>
+                                <v-btn color="primary" @click="moveToToday" class="mr-3">
+                                  Dnes
+                                </v-btn>
+                                <v-btn color="primary" @click="resetDate" outlined>
+                                  Resetovať výber
+                                </v-btn>
+
+                                <v-divider />
+
+                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                                  <v-icon class="mb-1" color="blue">mdi-rectangle</v-icon>
+                                  <span>Aktuálna rezervácie, ktorá <span class="font-weight-bold"> je v procese editovania.</span></span>
+                                </v-col>
+
+                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                                  <v-icon class="mb-1" color="orange">mdi-rectangle</v-icon>
+                                  <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+                                </v-col>
+
+                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                                  <v-icon class="mb-1" color="red">mdi-rectangle</v-icon>
+                                  <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+                                </v-col>
+                              </div>
+                            </template>
+                          </DatePicker2>
+
+
+                          <!-- <v-list-item class="p-0">
                             <v-list-item-content class="pt-0 pb-0">
                               <v-row>
                                 <v-col class="pb-0" cols="12" sm="6">
@@ -120,7 +157,7 @@
                                 </v-col>
                               </v-row>
                             </v-list-item-content>
-                          </v-list-item>
+                          </v-list-item> -->
                         </v-list>
 
                         <v-divider></v-divider>
@@ -259,7 +296,7 @@
                           </v-list-item>
                         </v-list>
 
-                        <v-divider></v-divider>
+                        <v-divider />
 
                         <v-list three-line subheader>
                           <v-subheader class="p-0">Zmena počtu osôb</v-subheader>
@@ -396,7 +433,7 @@
             </template>
 
             <template v-slot:item.event_name="{ item }">
-              <v-chip :color="getColor(item.event_name)" v-if="item.event_name == 'rezervácia'" small>
+              <v-chip :color="getColor(item.event_name)" dark v-if="item.event_name == 'rezervácia'" small>
                 <v-icon class="pr-1" small>mdi-clock</v-icon>
                 <span>Čaká sa</span>
               </v-chip>
@@ -670,7 +707,8 @@
 import axios from 'axios';
 import moment from 'moment';
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify.vue"
-import CalendarAdministration from '../../CalendarAdministration.vue'
+import DatePicker2 from 'v-calendar/lib/components/date-picker.umd'
+// import CalendarAdministration from '../../CalendarAdministration.vue'
 // import CountryFlag from 'vue-country-flag';
 // import world_countries from '../../../assets/world_countries/world.json'
 
@@ -678,11 +716,29 @@ export default {
   name: "MojeRezervacie",
   components: {
     VueTelInputVuetify,
-    CalendarAdministration
+    DatePicker2
+    // CalendarAdministration
     // CountryFlag
   },
   data() {
     return {
+      // DatePicker2
+      disabledDates: [],
+      disabledDatesCopy: [],
+      calendarData: [],
+      calendarDataCopy: [],
+      range: {
+        start: '',
+        end: '',
+      },
+
+      timezone: '',
+
+      modelConfig: {
+        type: 'string',
+        mask: 'iso',
+      },
+
       // Snackbar
       multiLine: true,
       snackbarEdit: false,
@@ -904,33 +960,193 @@ export default {
 
       // countries: world_countries,
 
-      test: []
+      test: [],
+      overlayCalendar: true,
     }
   },
 
   created() {
     window.Echo.join('reservation.' + localStorage.getItem("user_id"))
       .listen('Reservations', (e) => {
-        console.log("echo here");
+        console.log(e);
         if (this.$route.fullPath == '/administration') {
           if (e.user_id == 1) {
             this.markAsRead();
             if (e.status == 'created') {
-              this.currentEvents.push(e.reservation[0])
+              this.currentEvents.push(e.reservation)
+
+              // calendar add new disabled dates after add new reservation
+              var day1 = moment(e.reservation.end_date);
+              var day2 = moment(e.reservation.start_date);
+              var result = [moment({
+                ...day2
+              })];
+
+              while (day1.date() != day2.date()) {
+                day2.add(1, 'day');
+                result.push(moment({
+                  ...day2
+                }));
+              }
+
+              result.map(x => {
+                this.disabledDates.push(x.format("YYYY-MM-DD"))
+              })
+
+              result.map(x => {
+                this.disabledDatesCopy.push(x.format("YYYY-MM-DD"))
+              })
+
+              this.calendarData = [];
+              this.calendarData.push(...this.currentEvents)
+              this.calendarDataCopy = [];
+              this.calendarDataCopy.push(...this.currentEvents)
             }
+
+            if (e.status == 'updated') {
+              this.calendarData.map((event, index) => {
+                if (event.id == e.reservation.id) {
+                  this.calendarData.splice(index, 1, e.reservation);
+
+                  // remove old dates
+                  var oldDay1 = moment(event.end_date);
+                  var oldDay2 = moment(event.start_date);
+                  var oldResult = [moment({
+                    ...oldDay2
+                  })];
+
+                  while (oldDay1.date() != oldDay2.date()) {
+                    oldDay2.add(1, 'day');
+                    oldResult.push(moment({
+                      ...oldDay2
+                    }));
+                  }
+
+                  var oldDisabledDates = [];
+                  oldResult.map(x => {
+                    oldDisabledDates.push(x.format("YYYY-MM-DD"))
+                  })
+
+                  // for disabled dates
+                  this.disabledDates.map((dd, idd) => {
+                    oldDisabledDates.map(odd => {
+                      if (dd == odd) {
+                        this.disabledDates.splice(idd, 1);
+                      }
+                    })
+                  })
+
+                  // for copy of disabled dates
+                  this.disabledDatesCopy.map((dd, idd) => {
+                    oldDisabledDates.map(odd => {
+                      if (dd == odd) {
+                        this.disabledDatesCopy.splice(idd, 1);
+                      }
+                    })
+                  })
+
+                  // add new dates
+                  var newDay1 = moment(e.reservation.end_date);
+                  var newDay2 = moment(e.reservation.start_date);
+                  var newResult = [moment({
+                    ...newDay2
+                  })];
+
+                  while (newDay1.date() != newDay2.date()) {
+                    newDay2.add(1, 'day');
+                    newResult.push(moment({
+                      ...newDay2
+                    }));
+                  }
+
+                  var newDisabledDates = [];
+                  newResult.map(x => {
+                    newDisabledDates.push(x.format("YYYY-MM-DD"))
+                  })
+
+                  // for disabled dates
+                  newDisabledDates.map(ndd => {
+                    this.disabledDates.push(ndd)
+                  })
+
+                  // for copy of disabled dates
+                  newDisabledDates.map(ndd => {
+                    this.disabledDatesCopy.push(ndd)
+                  })
+                }
+              })
+
+              this.calendarDataCopy.map((event, index) => {
+                if (event.id == e.reservation.id) {
+                  this.calendarDataCopy.splice(index, 1, e.reservation);
+                }
+              })
+            }
+
+            if (e.status == 'deleted') {
+              this.calendarData.map((event, index) => {
+                if (event.id == e.reservation.id) {
+                  this.calendarData.splice(index, 1);
+
+                  // remove dates when removed concrete reservation
+                  var day1 = moment(event.end_date);
+                  var day2 = moment(event.start_date);
+                  var result = [moment({
+                    ...day2
+                  })];
+
+                  while (day1.date() != day2.date()) {
+                    day2.add(1, 'day');
+                    result.push(moment({
+                      ...day2
+                    }));
+                  }
+
+                  var dates = [];
+                  result.map(x => {
+                    dates.push(x.format("YYYY-MM-DD"))
+                  })
+
+                  // for disabled dates
+                  this.disabledDates.map((dd, idd) => {
+                    dates.map(d => {
+                      if (dd == d) {
+                        this.disabledDates.splice(idd, 1);
+                      }
+                    })
+                  })
+
+                  // for copy of disabled dates
+                  this.disabledDatesCopy.map((dd, idd) => {
+                    dates.map(d => {
+                      if (dd == d) {
+                        this.disabledDatesCopy.splice(idd, 1);
+                      }
+                    })
+                  })
+                }
+              })
+
+              this.calendarDataCopy.map((event, index) => {
+                if (event.id == e.reservation.id) {
+                  this.calendarDataCopy.splice(index, 1);
+                }
+              })
+            }
+            // else other user as admin
           } else {
             this.markAsRead();
             if (e.status == 'updated') {
               this.currentEvents.map((event, index) => {
-                if (event.id == e.reservation[0].id) {
-                  this.currentEvents.splice(index, 1, e.reservation[0]);
+                if (event.id == e.reservation.id) {
+                  this.currentEvents.splice(index, 1, e.reservation);
                 }
               })
             }
 
             if (e.status == 'deleted') {
               this.currentEvents.map((event, index) => {
-                if (event.id == e.reservation[0].id) {
+                if (event.id == e.reservation.id) {
                   this.currentEvents.splice(index, 1);
                 }
               })
@@ -940,13 +1156,81 @@ export default {
       })
   },
 
-  computed: {},
+  computed: {
+    attrs() {
+      return [
+        // Today attribute
+        {
+          key: 'today',
+          dot: {
+            style: {
+              color: 'white',
+              borderColor: 'red'
+            }
+          },
+          dates: new Date(),
+        },
+        // Attributes for todos
+        ...this.calendarData.map(todo => ({
+          key: todo.id,
+          dates: {
+            start: todo.start_date,
+            end: todo.end_date
+          },
+          customData: todo,
+          order: todo.id,
+          highlight: {
+            start: {
+              color: this.color(todo.event_name),
+              fillMode: 'solid'
+            },
+            base: {
+              color: this.color(todo.event_name),
+              fillMode: 'light'
+            },
+            end: {
+              color: this.color(todo.event_name),
+              fillMode: 'solid'
+            },
+            opacity: todo.isComplete ? 0.3 : 1,
+          },
+          contentStyle: {
+            color: 'white', // White text
+          },
+          contentHoverStyle: {
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            cursor: 'pointer',
+          },
+          popover: {
+            slot: 'add-todo',
+            dayPopover: 'haha',
+            label: todo.event_name + ' - používateľ ' + todo.username,
+            visibility: 'click',
+          },
+        })),
+      ];
+    },
+  },
+
+  updated() {},
 
   watch: {
+    range() {
+      if (this.range.start != '' && this.range.end != '') {
+        this.adminEditReservation.start_date = moment(this.range.start)
+          .format("YYYY-MM-DD");
+        this.adminEditReservation.end_date = moment(this.range.end)
+          .format("YYYY-MM-DD");
+        this.adminEditReservation.start_time = moment(this.range.start)
+          .format('HH:mm:ss');
+        this.adminEditReservation.end_time = moment(this.range.end)
+          .format('HH:mm:ss');
+      }
+    },
+
     adminEditReservation: {
       handler: function() {
         this.updateTable(this.adminEditReservation, 'edit');
-        //console.log("HERE");
         this.adminEditReservationLoader = true;
         setTimeout(() => {
           this.adminEditReservationLoader = false;
@@ -962,6 +1246,27 @@ export default {
   },
 
   methods: {
+    color(e) {
+      if (e == 'rezervácia') {
+        return 'orange'
+      } else {
+        return 'red'
+      }
+    },
+    moveToToday() {
+      this.$refs.DatePicker2.move(new Date());
+    },
+    resetDate() {
+      this.range = {
+        start: this.adminEditReservation.start_date + 'T' + this.adminEditReservation.start_time,
+        end: this.adminEditReservation.end_date + 'T' + this.adminEditReservation.end_time
+      };
+    },
+
+    loadedEvents(loading) {
+      this.overlayCalendar = loading;
+    },
+
     autocompleteMenuProps() {
       // default properties copied from the vuetify-autocomplete docs
       let defaultProps = {
@@ -1008,6 +1313,36 @@ export default {
           this.currentEvents = res.data;
           this.searched = this.currentEvents;
           this.overlay = false;
+
+          this.disabledDates = [];
+
+          this.$emit('loaded-events', false);
+
+          for (var i = 0; i < res.data.length; i++) {
+            var day1 = moment(res.data[i].end_date);
+            var day2 = moment(res.data[i].start_date);
+            var result = [moment({
+              ...day2
+            })];
+
+            while (day1.date() != day2.date()) {
+              day2.add(1, 'day');
+              result.push(moment({
+                ...day2
+              }));
+            }
+
+            result.map(x => {
+              this.disabledDates.push(x.format("YYYY-MM-DD"))
+            })
+
+            result.map(x => {
+              this.disabledDatesCopy.push(x.format("YYYY-MM-DD"))
+            })
+          }
+          // get data
+          this.calendarData = res.data;
+          this.calendarDataCopy = res.data;
         })
     },
 
@@ -1201,6 +1536,50 @@ export default {
     },
 
     editItem(item) {
+      // add dates to actual selected reservation
+      this.range = {
+        start: item.start_date + 'T' + item.start_time,
+        end: item.end_date + 'T' + item.end_time
+      };
+      // calendar count disabled dates with actual selected reservation
+      var day1 = moment(item.end_date);
+      var day2 = moment(item.start_date);
+      var result = [moment({
+        ...day2
+      })];
+
+      while (day1.date() != day2.date()) {
+        day2.add(1, 'day');
+        result.push(moment({
+          ...day2
+        }));
+      }
+
+      var dates = [];
+      result.map(x => {
+        dates.push(x.format("YYYY-MM-DD"))
+      })
+
+      this.disabledDates = [];
+      this.disabledDates.push(...this.disabledDatesCopy)
+
+      dates.map(value1 => {
+        this.disabledDates.map((value2, index2) => {
+          if (value2 == value1) {
+            this.disabledDates.splice(index2, 1);
+          }
+        })
+      })
+
+      this.calendarData = [];
+      this.calendarData.push(...this.calendarDataCopy);
+
+      this.calendarData.map((d, i) => {
+        if (d.id == item.id) {
+          this.calendarData.splice(i, 1)
+        }
+      })
+      // ----------------------------------------------
       this.adminEditReservationOriginal = {
         ...item
       };
@@ -1363,5 +1742,13 @@ export default {
 
 ::v-deep .select-stat-reserv .v-label {
     top: 13px !important;
+}
+
+::v-deep .theme--dark .vc-time-picker.vc-bordered {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+::v-deep .theme--light .vc-time-picker.vc-bordered {
+    border-color: rgba(0, 0, 0, 0.12) !important;
 }
 </style>

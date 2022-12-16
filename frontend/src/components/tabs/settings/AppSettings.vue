@@ -211,12 +211,15 @@ export default {
     if (!(localStorage.getItem('language'))) {
       localStorage.setItem('language', 'sk');
       this.$root.language.selectedLang = 0;
+      this.$i18n.locale = 'sk';
     }
 
     if (localStorage.getItem('language') == 'sk') {
       this.$root.language.selectedLang = 0;
+      this.$i18n.locale = 'sk';
     } else {
       this.$root.language.selectedLang = 1;
+      this.$i18n.locale = 'rn';
     }
 
     if (this.windowWidth <= 480) {

@@ -41,8 +41,8 @@ class SavedReservations implements ShouldBroadcast
 
     // public function broadcastWith()
     // {
-    //     $this->friendship->load('fromUser');
-    //
-    //     return ["friendship" => $this->friendship];
+    //   $this->saved_reservation->load('usermodel', 'usercontactmodel');
+    // 
+    //   return ["saved_reservation" => $this->reservation, "user_id" => $this->user_id, "status" => $this->status];
     // }
 }

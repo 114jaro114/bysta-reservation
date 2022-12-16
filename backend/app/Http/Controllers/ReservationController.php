@@ -37,7 +37,7 @@ class ReservationController extends Controller
 
     //make reservation
     public function store(Request $request) {
-        Reservation::create([
+        $data = Reservation::create([
             'event_name' => $request->event_name,
             'user_id' =>$request->user_id,
             'username' => $request->username,
@@ -56,14 +56,25 @@ class ReservationController extends Controller
             'note' => $request->note
         ]);
 
-        $reservation = DB::table('reservations')->where('start_date', $request->start_date)->get();
-        broadcast(new Reservations($reservation, '1', 'created'));
+        $userInfoData = ReservationUserContactInfo::create([
+          'reservation_id' => $data['id'],
+          'user_id' => $data['user_id'],
+          'surname' => $request->surname,
+          'lastname' => $request->lastname,
+          'address' => $request->address,
+          'city' => $request->city,
+          'postcode' => $request->postcode,
+          'country' => $request->country,
+          'phone' => $request->phone,
+        ]);
+
+        broadcast(new Reservations($data, '1', 'created'));
 
         $period = CarbonPeriod::create($request->start_date, $request->end_date);
         $dates = $period->toArray();
         broadcast(new AllUsedReservationDates($dates));
 
-        return response()->json($reservation);
+        return response()->json();
     }
 
     private function generateDateRange(Carbon $start_date, Carbon $end_date) {
@@ -137,6 +148,7 @@ class ReservationController extends Controller
                      ->get();
 
         $reservation = Reservation::where('id', $request->id)->get();
+        ReservationUserContactInfo::where('reservation_id', $request->id)->delete();
 
         broadcast(new Reservations($reservation, $user_id[0]->user_id, 'deleted'));
 
