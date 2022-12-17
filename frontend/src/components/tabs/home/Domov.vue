@@ -18,9 +18,9 @@
               <!-- <lightbox :cells="3" :items="images"></lightbox> -->
               <v-container class="m-0">
                 <v-row>
-                  <v-col v-for="(image, index) in media" :key="'media4' + index" class="d-flex child-flex container_images p-1" cols="12" lg="4" md="4" sm="6" style="overflow: hidden">
+                  <v-col v-for="(image, index) in media" :key="'media4' + index" class="d-flex child-flex container_images p-1" cols="4" lg="4" md="4" sm="4" style="overflow: hidden">
                     <v-card class="card_images" elevation="0" tile>
-                      <v-img style="cursor: pointer" class="zoom" :lazy-src="image.thumb" :src="image.thumb" aspect-ratio="1.5" @click="openGallery(index)">
+                      <v-img style="cursor: pointer" class="zoom" :lazy-src="image.thumb" :src="image.thumb" aspect-ratio="1" @click="openGallery(index)">
                         <template v-slot:placeholder>
                           <v-row class="fill-height ma-0" align="center" justify="center">
                             <v-progress-circular indeterminate color="primary"></v-progress-circular>

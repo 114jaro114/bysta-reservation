@@ -133,8 +133,8 @@
     </v-layout>
   </v-flex>
 
-  <v-overlay class="pt-16" style="margin-top:60vh" :value="$root.Posts.getAllPosts.loadingPosts" :absolute="true" :opacity="0">
-    <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+  <v-overlay :value="$root.Posts.getAllPosts.loadingPosts" :absolute="true" :opacity="0">
+    <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
   </v-overlay>
 
   <template v-for="(post_data, post_index) in $root.Posts.getAllPosts.allPosts">

@@ -97,26 +97,26 @@
                                 <v-btn color="primary" @click="resetDate" outlined>
                                   Resetovať výber
                                 </v-btn>
-
                                 <v-divider />
-
-                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
-                                  <v-icon class="mb-1" color="blue">mdi-rectangle</v-icon>
-                                  <span>Aktuálna rezervácie, ktorá <span class="font-weight-bold"> je v procese editovania.</span></span>
-                                </v-col>
-
-                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
-                                  <v-icon class="mb-1" color="orange">mdi-rectangle</v-icon>
-                                  <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
-                                </v-col>
-
-                                <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
-                                  <v-icon class="mb-1" color="red">mdi-rectangle</v-icon>
-                                  <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
-                                </v-col>
                               </div>
                             </template>
                           </DatePicker2>
+                          <div class="pl-1 pr-1">
+                            <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                              <v-icon class="mb-1" color="blue">mdi-rectangle</v-icon>
+                              <span>Aktuálna rezervácie, ktorá <span class="font-weight-bold"> je v procese editovania.</span></span>
+                            </v-col>
+
+                            <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                              <v-icon class="mb-1" color="orange">mdi-rectangle</v-icon>
+                              <span>Rezervácia je na tieto dni už vytvorená, avšak ešte <span class="font-weight-bold"> nie je akceptovaná.</span></span>
+                            </v-col>
+
+                            <v-col class="p-0" cols="12" lg="12" md="12" sm="12">
+                              <v-icon class="mb-1" color="red">mdi-rectangle</v-icon>
+                              <span>Rezervácia bola na tieto dni vytvorená a aktuálne <span class="font-weight-bold"> už je akceptovaná.</span></span>
+                            </v-col>
+                          </div>
 
 
                           <!-- <v-list-item class="p-0">

@@ -1,7 +1,7 @@
 <template>
 <div class="profile mt-16 pb-16">
   <v-overlay :value="isFriendOrNoOrMe_overlay" :absolute="true" :opacity="0" v-if="isFriendOrNoOrMe_overlay == true">
-    <v-progress-circular indeterminate size="24" color="primary"></v-progress-circular>
+    <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
   </v-overlay>
 
   <div v-else>
@@ -21,7 +21,7 @@
           </div>
           <LightBox ref="lightbox" :media="media" :show-caption="true" :show-light-box="false" closable />
 
-          <v-btn class="position-absolute m-2" style="right:0;bottom:0" text color="white" outlined rounded>
+          <v-btn class="position-absolute m-2" style="right:0;bottom:0" color="white" outlined rounded>
             Upraviť titulnú fotku
           </v-btn>
 
@@ -60,7 +60,7 @@
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on: onTooltip }">
                           <v-btn v-bind="attrs" v-on="{ ...onTooltip, ...onDialog}" class="position-absolute" style="bottom: -5px; right: -5px; z-index: 1" height="25px" width="25px" elevation="0" fab offset-x="20" offset-y="15">
-                            <v-icon size="18px">mdi-camera</v-icon>
+                            <v-icon small>mdi-camera</v-icon>
                           </v-btn>
                         </template>
                         <span>Pridať profilovú fotku</span>
@@ -75,7 +75,7 @@
                       <v-tooltip bottom>
                         <template class="image-upload" v-slot:activator="{ on: onTooltip }">
                           <v-btn v-bind="attrs" v-on="{ ...onTooltip, ...onDialog}" class="position-absolute" style="bottom: -5px; right: -5px; z-index: 1" height="25px" width="25px" elevation="0" fab for="file-input" offset-x="20" offset-y="15">
-                            <v-icon size="18px">mdi-camera</v-icon>
+                            <v-icon small>mdi-camera</v-icon>
                           </v-btn>
                         </template>
                         <span>Zmeniť profilovú fotku</span>
@@ -129,10 +129,10 @@
                       </v-row> -->
                       <img class="rounded-circle" ref="image">
                       <v-divider class="mt-0 mb-0" />
-                      <v-row class="m-0 p-3 justify-center">
-                        <v-btn :disabled="disabledIfvatarNotExist" color="primary" @click="deleteAvatar()">Odstrániť profilovú fotku</v-btn>
-                        <v-spacer />
-                        <v-btn :disabled="disabledSlidersAndBtn" color="primary" @click="updateAvatar()">Uložiť</v-btn>
+                      <v-row class="m-0 p-3 d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around">
+                        <v-btn :disabled="disabledIfvatarNotExist" color="primary" @click="deleteAvatar()">Odstrániť profilovku</v-btn>
+                        <!-- <v-spacer /> -->
+                        <v-btn class="mt-1 mt-lg-0 mt-md-0 mt-sm-0" :disabled="disabledSlidersAndBtn" color="primary" @click="updateAvatar()">Uložiť</v-btn>
                       </v-row>
                     </div>
                   </v-card>
@@ -639,5 +639,13 @@ img {
 .title-photo .v-card>*:first-child:not(.v-btn):not(.v-chip):not(.v-avatar) {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+}
+
+.theme--light.v-btn.v-btn--has-bg {
+  background-color: #fff;
+}
+
+.theme--dark.v-btn.v-btn--has-bg {
+  background-color: #1E1E1E;
 }
 </style>

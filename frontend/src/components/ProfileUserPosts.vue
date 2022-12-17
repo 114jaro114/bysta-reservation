@@ -129,7 +129,10 @@
     </v-card>
   </v-row>
 
-  <v-progress-circular class="mt-3" v-if="$root.profilePosts.getAllPosts.loadingPosts" indeterminate size="24" color="primary"></v-progress-circular>
+  <!-- <v-progress-circular class="mt-3" v-if="$root.profilePosts.getAllPosts.loadingPosts" indeterminate size="24" color="primary"></v-progress-circular> -->
+  <v-overlay :value="$root.profilePosts.getAllPosts.loadingPosts" :absolute="true" :opacity="0">
+    <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
+  </v-overlay>
 
   <template v-for="(post_data, post_index) in $root.profilePosts.getAllPosts.allPosts">
     <v-flex class="mb-3" xs12 sm12 :key="post_index">

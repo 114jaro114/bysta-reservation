@@ -216,56 +216,56 @@
                     <v-spacer></v-spacer>
                     <div v-if="isFriendOrNoOrMe == -1">
                       <!-- me -->
-                      <div v-if="$root.me.id == dataAboutUserOnHover.id">
-                        <v-btn class="ml-3" color="primary" outlined rounded>
+                      <div class="d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around" v-if="$root.me.id == dataAboutUserOnHover.id">
+                        <v-btn color="primary" outlined rounded>
                           <v-icon small class="mr-1">mdi-account</v-icon>
                           Vy
                         </v-btn>
-                        <v-btn class="ml-3" color="primary" rounded :to="'/profile/'+$root.me.id">
+                        <v-btn color="primary" rounded :to="'/profile/'+$root.me.id">
                           <v-icon small class="mr-1">mdi-forum</v-icon>
                           Zobraziť môj profil
                         </v-btn>
                       </div>
                       <!-- my friends -->
-                      <div v-else>
-                        <v-btn class="ml-3" color="primary" outlined rounded>
+                      <div class="d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around" v-else>
+                        <v-btn color="primary" outlined rounded>
                           <v-icon small class="mr-1">mdi-account-check</v-icon>
                           Priatelia
                         </v-btn>
-                        <v-btn class="ml-3" color="primary" rounded :to="'/messenger?name='+dataAboutUserOnHover.name">
+                        <v-btn color="primary" rounded :to="'/messenger?name='+dataAboutUserOnHover.name">
                           <v-icon small class="mr-1">mdi-forum</v-icon>
                           Správa
                         </v-btn>
                       </div>
                     </div>
                     <div v-else>
-                      <div v-if="$root.me.id == dataAboutUserOnHover.id">
-                        <v-btn class="ml-3" color="primary" outlined rounded>
+                      <div class="d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around" v-if="$root.me.id == dataAboutUserOnHover.id">
+                        <v-btn color="primary" outlined rounded>
                           <v-icon small class="mr-1">mdi-account</v-icon>
                           Vy
                         </v-btn>
-                        <v-btn class="ml-3" color="primary" rounded :to="'/profile/'+$root.me.id">
+                        <v-btn color="primary" rounded :to="'/profile/'+$root.me.id">
                           <v-icon small class="mr-1">mdi-forum</v-icon>
                           Zobraziť môj profil
                         </v-btn>
                       </div>
-                      <div v-else-if="isFriendOrNoOrMe == 1">
-                        <v-btn class="ml-3" color="primary" outlined rounded>
+                      <div class="d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around" v-else-if="isFriendOrNoOrMe == 1">
+                        <v-btn color="primary" outlined rounded>
                           <v-icon small class="mr-1">mdi-account-check</v-icon>
                           Priatelia
                         </v-btn>
-                        <v-btn class="ml-3" color="primary" rounded :to="'/messenger?name='+dataAboutUserOnHover.name">
+                        <v-btn color="primary" rounded :to="'/messenger?name='+dataAboutUserOnHover.name">
                           <v-icon small class="mr-1">mdi-forum</v-icon>
                           Správa
                         </v-btn>
                       </div>
                       <!-- if no friends -->
-                      <div v-else>
-                        <v-btn class="ml-3" color="primary" rounded>
+                      <div class="d-flex justify-center justify-lg-space-around justify-md-space-around justify-sm-space-around" v-else>
+                        <v-btn color="primary" rounded>
                           <v-icon small class="mr-1">mdi-account-plus</v-icon>
                           Pridať priateľa
                         </v-btn>
-                        <v-btn class="ml-3" color="primary" outlined rounded disabled>
+                        <v-btn color="primary" outlined rounded disabled>
                           <v-icon small class="mr-1">mdi-forum</v-icon>
                           Správa
                         </v-btn>

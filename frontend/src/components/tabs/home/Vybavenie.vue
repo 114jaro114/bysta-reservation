@@ -10,7 +10,7 @@
             <v-toolbar class="rounded-top" color="primary" flat dark>
               <v-row align="center">
                 <v-divider />
-                <span>5 spální · 16 lôžok · 1 kúpeľňa + wc</span>
+                <span class="pl-1 pr-1">5 spální · 16 lôžok · 1 kúpeľňa + wc</span>
                 <v-divider />
               </v-row>
             </v-toolbar>
@@ -20,7 +20,7 @@
 
               <v-row align="center">
                 <v-divider />
-                1. poschodie
+                <span class="pl-1 pr-1">1. poschodie</span>
                 <v-divider />
               </v-row>
               <v-row>
@@ -63,7 +63,7 @@
 
               <v-row align="center">
                 <v-divider />
-                2. poschodie
+                <span class="pl-1 pr-1">2. poschodie</span>
                 <v-divider />
               </v-row>
 
@@ -125,7 +125,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Spoločenská miestnosť
+                <span class="pl-1 pr-1">Spoločenská miestnosť</span>
                 <v-divider />
               </v-row>
 
@@ -209,7 +209,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Kuchyňa a jedáleň
+                <span class="pl-1 pr-1">Kuchyňa a jedáleň</span>
                 <v-divider />
               </v-row>
 
@@ -345,7 +345,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Kúpeľňa
+                <span class="pl-1 pr-1">Kúpeľňa</span>
                 <v-divider />
               </v-row>
 
@@ -431,7 +431,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Spálne
+                <span class="pl-1 pr-1">Spálne</span>
                 <v-divider />
               </v-row>
 
@@ -479,7 +479,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Kúrenie a ohrev vody
+                <span class="pl-1 pr-1">Kúrenie a ohrev vody</span>
                 <v-divider />
               </v-row>
 
@@ -517,7 +517,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Parkovanie
+                <span class="pl-1 pr-1">Parkovanie</span>
                 <v-divider />
               </v-row>
 
@@ -534,7 +534,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Služby
+                <span class="pl-1 pr-1">Služby</span>
                 <v-divider />
               </v-row>
 
@@ -567,7 +567,7 @@
 
               <v-row align="center">
                 <v-divider />
-                Nezaradené
+                <span class="pl-1 pr-1">Nezaradené</span>
                 <v-divider />
               </v-row>
 

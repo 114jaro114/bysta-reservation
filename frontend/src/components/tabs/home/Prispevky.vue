@@ -1,14 +1,6 @@
 <template>
 <div class="prispevky">
-  <v-container>
-    <v-row justify="center" class="m-0">
-      <v-col class="p-0">
-        <!-- <v-card class="rounded" elevation="0"> -->
-        <Posts />
-        <!-- </v-card> -->
-      </v-col>
-    </v-row>
-  </v-container>
+  <Posts />
 </div>
 </template>
 <script>

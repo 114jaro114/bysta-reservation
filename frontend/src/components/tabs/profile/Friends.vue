@@ -26,7 +26,6 @@ export default {
       //search new friends
       search: '',
       friends: [],
-      overlay: true,
       friendshipRequests: false,
     }
   },
